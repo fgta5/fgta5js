@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+
+		<style>
+			body {
+				overscroll-behavior-y: contain;
+			}
+		</style>
+
+
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
+
+	</head>
+	<body>
+		<header>
+			<h1>Modal</h1>
+		</header>
+		
+		<main>
+			<p>
+				<h3>Static Process Masking</h3>
+				Menutup halaman dengan masking layer, menunggu proses sampai selesai.
+				<button id="btn_staticmask">Open</button>
+			</p>	
+
+			<p>
+				<h3>Informative Process Masking</h3>
+				Seperti static process masking, namun dengan menginfokan proses yang sedang terjadi.
+				<button id="btn_infomask">Open</button>
+			</p>
+			
+			<p>
+				<h3>Progressbar Masking</h3>
+				Menutup halaman dengan masking layer, dengan menampilkan progressbar.
+				<button id="btn_progressmask">Open</button>
+			</p>
+
+			<p>
+				<h3>Stay Opened Progressbar Masking</h3>
+				Seperti progressbar masking, namun pada saat selesai progressbar masih tinggal di layar, 
+				dan perlu di close oleh user.
+				<button id="btn_stayprogressmask">Open</button>
+			</p>
+
+
+			<p>
+				<h3>Interupted Progressbar Masking</h3>
+				Seperti progressbar masking, namun pada proses terjadi kesalahan, sehingga proses berhenti.
+				<button id="btn_interuptedprogressmask">Open</button>
+			</p>
+
+		</main>
+
+		<hr>
+		<a href="/">index</a>
+
+		<div id="fgta5-loading-pagemask">
+			<div style="font-family: system-ui, sans-serif">
+				Please Wait ...
+			</div>
+		</div>
+	</body>
+
+
+	<script type="module">
+		import Page from './src/demo-modal.mjs'
+
+		window.addEventListener("load", async (event) => {
+			var $page = new Page();
+			await $page.main();
+
+			var pagemask = document.getElementById('fgta5-loading-pagemask')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		});
+	</script>
+</html>

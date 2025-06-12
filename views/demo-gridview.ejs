@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+
+		<style>
+			body {
+				overscroll-behavior-y: contain;
+				user-select: none
+			}
+
+			@media screen and (max-width: 500px) { 
+				html, body, input, button {
+					font-size: 20px;
+				}
+			}
+		</style>
+
+
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/demo-gridview.css" />
+	</head>
+	<body>
+		<header>
+			<h1>GridView</h1>
+		</header>
+		
+		<main>
+
+			<input id="txt_search">
+			<table id="tbl_data" fgta5-component="Gridview">
+				<thead>
+					<tr data-header>
+						<th data-checkbox></th>
+						<th data-autonumber>no</th>
+						<th binding="nama" sorting="true">Nama</th>
+						<th binding="alamat">Alamat</th>
+						<th binding="kota" sorting="true" formatter="">Kota</th>
+						<th binding="phone">Phone</th>
+					</tr>
+				</thead>
+			</table>
+
+
+			
+		</main>
+
+		<hr>
+		<a href="/">index</a>
+		
+		<div id="fgta5-loading-pagemask">
+			<div style="font-family: system-ui, sans-serif">
+				Please Wait ...
+			</div>
+		</div>
+	</body>
+
+
+	<script type="module">
+		import Page from './src/demo-gridview.mjs'
+
+		window.addEventListener("load", async (event) => {
+			var $page = new Page();
+			await $page.main();
+
+			var pagemask = document.getElementById('fgta5-loading-pagemask')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		});
+	</script>
+</html>

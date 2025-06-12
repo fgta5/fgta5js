@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   transform="translate(0 3)"
+   width="12"
+   height="12"
+   stroke="currentColor"
+   stroke-linecap="round"
+   version="1.1"
+   viewBox="0 0 24 24"
+   id="svg6"
+   sodipodi:docname="timepicker.svg"
+   inkscape:version="1.4 (1:1.4+202410161351+e7c3feb100)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="47.317229"
+     inkscape:cx="5.8646714"
+     inkscape:cy="6.2239486"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="m 12.338712,12.141872 0.01403,-6.532169"
+     fill="none"
+     stroke-width="1.02"
+     id="path4"
+     style="stroke-width:2;stroke-dasharray:none"
+     inkscape:transform-center-x="0.0069846"
+     inkscape:transform-center-y="-3.3843385" />
+  <path
+     d="M 8.4231958,14.469078 12.133452,12.482929"
+     fill="none"
+     stroke-width="1.02"
+     id="path4-3"
+     style="stroke-width:2.4;stroke-dasharray:none"
+     inkscape:transform-center-x="1.8382002"
+     inkscape:transform-center-y="1.0504942" />
+  <ellipse
+     style="fill:none;stroke:#d4aa00;stroke-width:1.6;stroke-dasharray:none"
+     id="path1"
+     cx="12.004084"
+     cy="11.98295"
+     rx="10.102029"
+     ry="9.9963589" />
+  <path
+     d="M 1.8825208,11.644541 C 2.5686718,-1.31443 21.156674,-1.635711 22.142876,11.452558"
+     fill="none"
+     stroke-width="1.02"
+     id="path4-36"
+     style="stroke-width:2.4;stroke-dasharray:none"
+     inkscape:transform-center-x="0.0069846"
+     inkscape:transform-center-y="-12.910466"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="M 22.115326,11.629017 C 21.671125,25.322093 2.2340194,25.248155 1.8981753,12.136026"
+     fill="none"
+     stroke-width="1.02"
+     id="path4-36-7"
+     style="stroke-width:2.4;stroke-dasharray:none"
+     inkscape:transform-center-x="0.23812335"
+     inkscape:transform-center-y="12.890579"
+     sodipodi:nodetypes="cc" />
+</svg>

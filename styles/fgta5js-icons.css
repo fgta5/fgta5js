@@ -1,0 +1,15 @@
+
+.fgta5-icon-info {
+	background: url(./../images/icon-dialog-info.svg) no-repeat center center;
+}
+
+.fgta5-icon-error {
+	background: url(./../images/icon-dialog-error.svg) no-repeat center center;
+}
+.fgta5-icon-warning {
+	background: url(./../images/icon-dialog-warning.svg) no-repeat center center;
+}
+.fgta5-icon-question {
+	background: url(./../images/icon-dialog-question.svg) no-repeat center center;
+}
+

@@ -1,0 +1,82 @@
+.fgta5-checkbox {
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 0.9rem auto;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+}
+
+.fgta5-checkbox[permanent-disabled="true"] {
+  color: var(--fgta5-color-checkbox-disabled-text)
+}
+
+
+.fgta5-checkbox-input {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+
+ 
+  font: inherit;
+  color: currentColor;
+  width: 0.93rem; /*15px*/
+  height: 0.93rem /*15px*/;
+  border: 1px solid var(--fgta5-color-input-line);
+  /* transform: translateY(2px);   */
+
+  display: grid;
+  place-content: center;
+
+  cursor: pointer;
+
+}
+
+.fgta5-checkbox-input[changed="true"] {
+  /* border: 1px solid var(--fgta5-color-editmode-line); */
+  border-left: 2px solid var(--fgta5-color-editmode-line);
+}
+
+
+.fgta5-checkbox-input:focus {
+  outline: 1px solid var(--fgta5-color-editmode-line);
+  border: 1px solid var(--fgta5-color-editmode-line);
+  outline-offset: 0;
+}
+
+
+.fgta5-checkbox-input::before {
+  content: "";
+  width: 0.56rem;
+  height: 0.56rem;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 0.56rem 0.56rem var(--fgta5-color-checkbox-checked);
+ 
+}
+
+.fgta5-checkbox-input:checked::before {
+  transform: scale(1);
+}
+
+
+.fgta5-checkbox-input[permanent-disabled="true"] {
+  background-color: var(--fgta5-color-checkbox-disabled);
+}
+
+.fgta5-checkbox-input[permanent-disabled="true"]:checked::before {
+  box-shadow: inset 9px 9px var(--fgta5-color-checkbox-checked-disabled);;
+}
+
+
+
+.fgta5-checkbox-input[editmode="true"]:not([permanent-disabled]),
+.fgta5-checkbox-input[editmode="true"][permanent-disabled=false]
+{
+  background-color: var(--fgta5-color-editmode-bg);
+}

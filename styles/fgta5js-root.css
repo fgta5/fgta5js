@@ -1,0 +1,33 @@
+:root {
+	--fgta5-color-editmode-bg: var(--color-editmode-bg, rgb(255, 207, 118));
+	--fgta5-color-editmode-line: var(--color-editmode-line, rgb(60, 89, 255));
+
+	--fgta5-color-inputerror-bg: var(--color-inputerror-bg, rgb(255, 184, 184));
+	--fgta5-color-inputerror-line: var(--color-inputerror-line, red);
+	--fgta5-color-inputerror-text: var(--color-inputerror-text, darkred);
+
+	--fgta5-color-input-line: var(--color-input-line, #ccc);
+	--fgta5-color-input-disabled: var(--color-input-disabled, rgb(200, 200, 200));
+	--fgta5-color-input-descr-text: var(--color-input-descr-text, rgb(97, 97, 97));
+	
+	--fgta5-color-checkbox-checked: var(--color-checkbox-checked, rgb(0, 0, 0));
+	--fgta5-color-checkbox-checked-disabled: var(--color-checkbox-disabled, rgb(136, 136, 136));
+	--fgta5-color-checkbox-disabled: var(--color-checkbox-disabled, rgb(200, 200, 200));
+	--fgta5-color-checkbox-disabled-text: var(--color-checkbox-disabled, rgb(136, 136, 136));
+
+
+
+	--fgta-cbo-head-bgcolor: rgb(30, 30, 30);
+	--fgta-cbo-head-color: white;
+	--fgta-cbo-head-height: 40px;
+	--fgta-cbo-thead-height: 26px;
+	--fgta-cbo-thead-bgcolor: rgb(97, 97, 79);
+	--fgta-cbo-thead-color: white;
+
+
+
+}
+
+
+
+

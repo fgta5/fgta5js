@@ -1,0 +1,421 @@
+.fgta5-entry-container {
+	display: flex;
+	flex-direction: column;
+	border: none;
+	padding: 0;
+	flex-grow: 1
+}
+
+.fgta5-entry-container[fgta5-component="Datepicker"] {
+	width: 8rem; /* default width untuk datepicker */
+}
+
+.fgta5-entry-container[fgta5-component="Timepicker"] {
+	width: 5rem; /* default width untuk timepicker */
+}
+
+.fgta5-entry-container[fgta5-component="Combobox"] {
+	width: 15rem; /* default width untuk combobox */
+}
+
+
+.fgta5-entry-label[disabled] {
+	opacity: 0.5;
+}
+
+.fgta5-entry-label[required]::after {
+	content: '*';
+	margin-left: 2px;
+	color: red;
+	opacity: 1 !important;
+}
+
+
+.fgta5-entry-input-wrapper {
+	border: none;
+	border-bottom: 1px solid var(--fgta5-color-input-line);
+	padding: 0;
+	display: flex;
+	position: relative;
+}
+
+.fgta5-entry-input-wrapper[editmode="true"]:focus-within {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line);
+} 
+
+.fgta5-entry-input-wrapper[editmode="false"]:focus-within {
+	border-bottom: 1px solid var(--fgta5-color-input-line);
+} 
+
+.fgta5-entry-input-wrapper[editmode="true"][disabled]:focus-within {
+	border-bottom: 1px solid var(--fgta5-color-input-line);
+} 
+
+
+.fgta5-entry-input[character-case="uppercase"] {
+	text-transform: uppercase;
+}
+
+.fgta5-entry-input[character-case="lowercase"] {
+	text-transform: lowercase;
+}
+
+.fgta5-entry-display,
+.fgta5-entry-input {
+	border: none;
+	border-bottom: 1px solid transparent;
+	border-left: 2px solid transparent;
+	outline: none;
+	margin: 0;
+	flex-grow: 1;
+	width: calc(100% - 10px);
+	padding: 5px 5px 3px 5px; /* Padding untuk kenyamanan */
+	transition: border-color 0.3s ease, background-color 0.3s linear; /* Animasi transisi */
+}
+
+
+.fgta5-entry-display::placeholder,
+.fgta5-entry-input::placeholder {
+	text-transform: lowercase;
+	font-style: italic;
+}
+
+.fgta5-entry-display[disabled],
+.fgta5-entry-input[disabled] {
+	background-color: var(--fgta5-color-input-disabled) !important;
+}
+
+.fgta5-entry-display[editmode="true"]:not([disabled]),
+.fgta5-entry-input[editmode="true"]:not([disabled]) {
+	background-color: var(--fgta5-color-editmode-bg) !important;
+}
+
+.fgta5-entry-display[editmode="true"][invalid]:not([disabled]),
+.fgta5-entry-input[editmode="true"][invalid]:not([disabled]) {
+	background-color: var(--fgta5-color-inputerror-bg) !important;
+}
+
+.fgta5-entry-display[editmode="true"]:not([disabled]):focus,
+.fgta5-entry-input[editmode="true"]:not([disabled]):focus {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
+}
+
+.fgta5-entry-display[editmode="false"]:not([disabled]):focus,
+.fgta5-entry-input[editmode="false"]:not([disabled]):focus {
+	border-bottom: 1px solid var(--fgta5-color-input-line); 
+}
+
+.fgta5-entry-display[changed="true"],
+.fgta5-entry-input[changed="true"] {
+	border-left: 2px solid var(--fgta5-color-editmode-line);
+}
+
+
+
+.fgta5-entry-display[type="number"]::-webkit-outer-spin-button, 
+.fgta5-entry-display[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.fgta5-entry-display[fgta5-component="Numberbox"] {
+	text-align: right;
+}
+
+.fgta5-entry-display[fgta5-component="Datepicker"] {
+	padding-right: 1.875rem;
+}
+
+.fgta5-entry-display[fgta5-component="Timepicker"] {
+	padding-right: 1.875rem;
+}
+
+.fgta5-entry-display[fgta5-component="Combobox"] {
+	padding-right: 1.875rem;
+}
+
+
+
+
+.fgta5-entry-lastvalue {
+	display: none;
+}
+
+.fgta5-entry-error {
+	color: var(--fgta5-color-inputerror-text);
+	font-size: 0.8rem;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.fgta5-entry-description {
+	font-size: 0.7rem;
+	color: var(--fgta5-color-input-descr-text);
+	margin-top: 3px;
+}
+
+
+.fgta5-entry-button-filebox, 
+.fgta5-entry-button-combobox, 
+.fgta5-entry-button-datepicker {
+	background-color: transparent;
+	position: absolute;
+	border: 0;
+	cursor: pointer;
+	height: 100%;
+	width: 1.875rem; /* 30px; */
+	margin-top: 0px;
+	margin-bottom: 0px;	
+	right: 0;
+	outline: 0;
+	padding: 0;
+}
+
+
+
+.fgta5-entry-button-filebox[editmode="false"],
+.fgta5-entry-button-combobox[editmode="false"] {
+	cursor: default;
+}
+
+.fgta5-entry-button-filebox[editmode="true"],
+.fgta5-entry-button-combobox[editmode="true"] {
+	cursor: pointer;
+}
+
+
+.fgta5-entry-button-filebox:disabled,
+.fgta5-entry-button-combobox:disabled {
+    display: none;
+}
+
+.fgta5-entry-button-filebox > svg,
+.fgta5-entry-button-datepicker > svg {
+	pointer-events: none;
+	width: 0.75rem;
+	height: 0.75rem;
+	margin-bottom: 3px;
+}
+
+.fgta5-entry-input-filebox {
+	position: absolute;
+	width: 1.875rem;
+	height: 100%;
+    right: 0;
+	top: 0;
+    opacity: 0;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	outline: 0;
+	cursor: pointer;
+}
+
+
+.fgta5-entry-input-datepicker {
+	position: absolute;
+    width: 8rem;
+	height: 100%;
+    right: 0;
+	left: calc(-8rem + 1.875rem);
+    top: 0;
+    opacity: 0;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	outline: 0;
+}
+
+
+.fgta5-entry-input-datepicker[picker="filebox"],
+.fgta5-entry-input-datepicker[picker="time"] {
+	width: 5rem;
+	min-width: 5rem;
+	max-width: 5rem;
+	left: calc(-5rem + 1.875rem);
+}
+
+.fgta5-entry-input-datepicker::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%; 
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.fgta5-entry-input-wrapper:focus-within > .fgta5-entry-display-filebox[editmode="true"]:not([disabled]), 
+.fgta5-entry-input-wrapper:focus-within > .fgta5-entry-display-datepicker[editmode="true"]:not([disabled]) {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
+}
+
+.fgta5-entry-input-wrapper:focus-within > .fgta5-entry-display-filebox[editmode="false"],
+.fgta5-entry-input-wrapper:focus-within > .fgta5-entry-display-datepicker[editmode="false"] {
+	border-bottom: 1px solid var(--fgta5-color-input-line); 
+}
+
+.fgta5-entry-input-wrapper:focus-within:has(button:active) > .fgta5-entry-filebox[editmode="true"], 
+.fgta5-entry-input-wrapper:focus-within:has(button:focus) > .fgta5-entry-filebox[editmode="true"], 
+.fgta5-entry-input-wrapper:focus-within:has(button:active) > .fgta5-entry-display[editmode="true"], 
+.fgta5-entry-input-wrapper:focus-within:has(button:focus) > .fgta5-entry-display[editmode="true"]
+{
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
+} 
+
+
+.fgta5-combobox-dialog {
+	border: 0;
+	outline: none; 
+	position: fixed;
+	opacity: 0;
+	height: 100vh;
+	width: calc(100vw + 19px + 19px);
+	top: 0; left: 0; bottom: 0; right: 0;
+	transform: scale(0.5);
+    transition: opacity 0.5s ease, transform 0.3s ease; 
+	user-select: none; 
+	padding: 0;
+	max-height: 100vh;
+	max-width: 100vw;
+}
+
+.fgta5-combobox-dialog[showed="true"] {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.fgta5-combobox-dialog[removing] {
+	opacity: 0;
+	transform:translateX(-100vw)
+}
+
+
+.fgta5-combobox-dialog::backdrop {
+	opacity: 0;
+	transition: opacity 0.5s ease-out;
+	background-color: rgba(0, 0, 0); /* Masking gelap */
+	padding: 5px;
+}
+
+
+.fgta5-combobox-dialog[showed="true"]::backdrop {
+	opacity: 0.6;
+} 
+
+.fgta5-combobox-dialog[removing]::backdrop {
+	opacity: 0;
+} 
+
+.fgta5-combobox-dialog-head {
+	position: sticky;
+    top: 0;
+    padding: 0 5px 0 10px;
+	background: var(--fgta-cbo-head-bgcolor);
+	color: var(--fgta-cbo-head-color);
+	height: var(--fgta-cbo-head-height);
+	transition: box-shadow 0.3s ease-in-out; /* Transisi bayangan */
+	display: flex;
+    align-items: center;
+	
+}
+
+.fgta5-combobox-dialog-head > button {
+	filter: invert(100%);
+	cursor: pointer;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	margin-left: auto;
+	padding: 0;
+	width: 24px;
+	height: 24px;
+}
+
+.fgta5-combobox-dialog-head.scrolled {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Efek bayangan saat di-scroll */
+}
+
+
+.fgta5-combobox-dialog table {
+    border-spacing: 0; /* Sama seperti cellspacing="5" */
+	margin: 0;
+	width: 100%;
+}
+
+.fgta5-combobox-dialog thead {
+	position: sticky;
+	top: calc(var(--fgta-cbo-head-height));
+	height: var(--fgta-cbo-thead-height);
+	background-color: var(--fgta-cbo-thead-bgcolor);
+	color: var(--fgta-cbo-thead-color);
+	
+}
+
+.fgta5-combobox-dialog thead > tr > td {
+	border-bottom: 1px solid red;
+}
+
+
+.fgta5-combobox-dialog tfoot {
+	position: sticky;
+	bottom: 0px;
+	height: 30px;
+	background-color: white;
+	border-top: 1px solid black;
+}
+
+.fgta5-combobox-dialog tbody tr td {
+	display: block;
+	padding: 10px 0 10px 0px;
+	cursor: pointer;
+}
+
+.fgta5-combobox-dialog tbody tr:first-child td {
+    margin-top: 10px;
+
+}
+
+.fgta5-combobox-dialog tbody tr td:first-child {
+	padding-left: 10px;
+}
+
+
+.fgta5-combobox-dialog tbody td:hover {
+	background-color: antiquewhite;
+}
+
+
+.fgta5-combobox-dialog-filter {
+	display: flex;
+	margin: 10px;
+	column-gap: 10px;
+}
+
+.fgta5-combobox-dialog-filter input::placeholder {
+	text-transform: lowercase;
+	font-style: italic;
+}
+
+.fgta5-combobox-dialog-nextbutton {
+	margin: 10px 10px 50px 10px;
+}
+
+
+.fgta-combobox-option-row td {
+	border-bottom: 1px dotted #ccc;
+}
+
+
+.fgta-combobox-option-row[selected] td {
+	font-weight: bold;
+	/* pointer-events: none; */
+	cursor: default;
+}
+
+.fgta-combobox-option-row[value=""] td {
+	font-style: italic;
+	color:#606060;
+}
+

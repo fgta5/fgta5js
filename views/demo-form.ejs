@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+
+		<style>
+			body {
+				overscroll-behavior-y: contain;
+				user-select: none
+			}
+
+			@media screen and (max-width: 500px) { 
+				html, body, input, button {
+					font-size: 20px;
+				}
+			}
+		</style>
+
+
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/demo-form.css" />
+	</head>
+	<body>
+		<header>
+			<h1>Form</h1>
+		</header>
+		
+		<main>
+			<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap; margin-bottom: 20px;">
+				<div>
+					<button id="btn_edittogle">Togle Edit State</button>
+					<button id="btn_reset">Reset</button>
+					<button id="btn_save">Save</button>
+					<button id="btn_new">New</button>
+				</div>
+
+				<div>
+					<button id="btn_testvalidation">Test Form Validation</button>
+					<button id="btn_testdised">Test Disabled/Enabled</button>
+					<button id="btn_clearerror">Clear Error</button>
+				</div>
+			</div>
+
+
+			<h2 id="txtState">Edit/View</h2>
+			<form id="myform" locked="true">
+				<div style="display: flex; column-gap: 10px; row-gap: 16px; flex-wrap: wrap;">
+
+
+					<% if (true) { %> 		
+					<!-- Textbox -->			
+					<div class="demo-input-field" field="obj_nama">
+						<label for="obj_nama">Nama</label>
+						<input id="obj_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
+							required
+							value="agung" 
+							style="background-color: aquamarine; "
+							character-case="uppercase"
+							required minlength="3" maxlength="15" validator="" 
+							binding="nama"
+							
+							description="isi dengan nama anda, minimal 3 karakter, maksimal 15 karakter"
+							invalid-message="Nama harus diisi, minimal 3 karakter, maksimal 15 karakter"
+							invalid-message-required="Nama harus diisi"
+							invalid-message-minlength="Nama minimal 3 karakter"
+							invalid-message-maxlength="Nama maksimal 15 karakter"
+							>
+					</div>
+					<% } %> 
+
+
+					<% if (true) { %> 
+					<!-- Checkbox -->		
+					<div class="demo-input-field" field="obj_disabled">
+						<label for="obj_disabled">Disabled</label>
+						<input id="obj_disabled" fgta5-component="Checkbox" type="checkbox" binding="isdisabled">
+					</div>
+					<% } %> 
+
+
+					<% if (true) { %> 
+					<div class="demo-input-field" field="obj_alamat">
+						<label for="obj_alamat">Alamat</label>
+						<input id="obj_alamat"  fgta5-component="Textbox" placeholder="alamat anda" autocomplete="off" spellcheck="false" 
+							required minlength="3" maxlength="90" 
+							binding="alamat"
+							invalid-message="Alamat harus diisi, minimal 3 karakter, maksimal 90 karakter"
+							>
+					</div>
+					<% } %> 
+
+					<% if (true) { %> 
+					<div class="demo-input-field" field="obj_nilai">
+						<label for="obj_nilai">Nilai</label>
+						<input id="obj_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" 
+							style="background-color: aquamarine;"
+							min="50" max="200" maxlength="6" decimal="2" validator=""
+							binding="nilai" 
+							value="100"
+							description="isi dengan angka, 50 s/d 200"
+							invalid-message="nilai harus dalam range 50 s/d 200"
+						>
+					</div> 
+					<% } %> 
+
+					<% if (true) { %> 
+					<div class="demo-input-field" field="obj_tanggal">
+						<label for="obj_tanggal">Tanggal</label>
+						<input id="obj_tanggal" fgta5-component="Datepicker" placeholder="dd MMM yyyy" autocomplete="off" spellcheck="false" 
+							required
+							min="2025-06-02" x-max="2025-06-27"
+							x-value="2025-05-18"
+							binding="tanggal"
+							description="isi tanggal anda"
+							x-invalid-message="tanggal harus dalam range 2025-05-17 s/d 2025-05-27"
+							>
+					</div>
+					<% } %> 
+
+					<% if (true) { %> 
+					<div class="demo-input-field" field="obj_jam">
+						<label for="obj_jam">Jam</label>
+						<input id="obj_jam" fgta5-component="Timepicker" placeholder="hh:mm" autocomplete="off" spellcheck="false" 
+							required
+							x-min="08:00" x-max="12:00"
+							x-value="09:20"
+							binding="jam"
+							description="isi jam"
+							invalid-message="jam harus dalam range 08:00 s/d 12:00"
+							>
+					</div>
+					<% } %> 
+					
+					<% if (true) { %> 
+					<div class="demo-input-field" field="obj_kota">
+						<label for="obj_kota">Kota</label>
+						<input id="obj_kota" fgta5-component="Combobox" placeholder="pilih kota" autocomplete="off" spellcheck="false" 
+							no-required
+							binding="kota"
+							description="kota alamat domisili"
+							invalid-message="kota harus diisi"
+							>
+						<!-- <datalist for="obj_kota">
+							<option value="JKT">Jakarta</option>
+							<option value="MGL">Magelang</option>
+							<option value="JGJ">Jogjakarta</option>	
+							<option value="SLG">Salatiga</option>
+							<option value="SLO">Solo</option>
+						</datalist> -->
+					</div>
+					<% } %> 
+
+
+					<% if (true) { %> 
+					<div class="demo-input-field" field="obj_file">
+						<label for="obj_file">File</label>
+						<input id="obj_file" fgta5-component="Filebox"
+						required
+						placeholder="file" binding="file"
+						>
+					</div>
+					<% } %> 	
+
+				</div>
+			</form>
+
+			
+
+
+
+		</main>
+
+		<hr>
+		<a href="/">index</a>
+
+		<div id="fgta5-loading-pagemask">
+			<div style="font-family: system-ui, sans-serif">
+				Please Wait ...
+			</div>
+		</div>
+	</body>
+
+
+	<script type="module">
+		import Page from './src/demo-form.mjs'
+
+		window.addEventListener("load", async (event) => {
+			var $page = new Page();
+			await $page.main();
+
+			var pagemask = document.getElementById('fgta5-loading-pagemask')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		});
+	</script>
+</html>

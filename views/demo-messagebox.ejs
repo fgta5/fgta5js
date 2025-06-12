@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+
+		<style>
+			body {
+				overscroll-behavior-y: contain;
+				user-select: none
+			}
+		</style>
+
+
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/demo-messagebox.css" />
+	</head>
+	<body>
+		<header>
+			<h1>Messagebox</h1>
+		</header>
+		
+		<main>
+
+			<p>
+				<h3>Default Messagebox</h3>
+				Menampilkan plain Messagebox dengan tombol Ok
+				<button id="btn_msgbox_show">Open</button>
+			</p>
+
+			<p>
+				<h3>Info Messagebox</h3>
+				Menampilkan Messagebox dengan icon info dan tombol Ok
+				<button id="btn_msgbox_info">Open</button>
+			</p>
+
+			<p>
+				<h3>Warning Messagebox</h3>
+				Menampilkan Messagebox dengan icon warning dan tombol Ok
+				<button id="btn_msgbox_warn">Open</button>
+			</p>
+
+			<p>
+				<h3>Error Messagebox</h3>
+				Menampilkan Messagebox dengan icon error dan tombol Ok
+				<button id="btn_msgbox_error">Open</button>
+			</p>
+
+			<p>
+				<h3>Default Confirmation</h3>
+				Menampilkan Konfirmasi, untuk dipilih Ok atau Cancel
+				<button id="btn_msgbox_confirm">Open</button>
+			</p>
+
+			<p>
+				<h3>Custom Confirmation</h3>
+				Menampilkan Konfirmasi, dengan custom icon dan buttons
+				<button id="btn_msgbox_choose">Open</button>
+			</p>
+
+
+		</main>
+
+		<hr>
+		<a href="/">index</a>
+		
+		<div id="fgta5-loading-pagemask">
+			<div style="font-family: system-ui, sans-serif">
+				Please Wait ...
+			</div>
+		</div>
+	</body>
+
+
+	<script type="module">
+		import Page from './src/demo-messagebox.mjs'
+
+		window.addEventListener("load", async (event) => {
+			var $page = new Page();
+			await $page.main();
+
+			var pagemask = document.getElementById('fgta5-loading-pagemask')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		});
+	</script>
+</html>
