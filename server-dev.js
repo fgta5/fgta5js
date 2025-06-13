@@ -2,12 +2,12 @@ import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
 import express from 'express';
 import favicon from 'serve-favicon';
+import * as data from './server-data.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-
-
+const sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) };
 
 app.set('view engine', 'ejs');
 
@@ -70,7 +70,7 @@ app.get('/release/:page', function(req, res) {
 app.post('/getdata', async (req, res) => {
 	
 	var test_max_row = 20
-	var sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) };
+	
 	
 	// siapkan template data untuk result
 	var jsonresult = {
@@ -114,6 +114,41 @@ app.post('/getdata', async (req, res) => {
 	res.send(JSON.stringify(jsonresult))
 })
 
+
+app.post('/getdata-persons', async (req, res) => {
+	const { searchtext, limit, offset } = req.body;
+
+	var hasil
+	if (searchtext!='' && searchtext!=null) {
+ 		hasil = data.persons.filter(person => person.nama.toLowerCase().includes(searchtext));
+	} else {
+		hasil = data.persons
+	}
+	
+
+
+	var start = offset ?? 0
+	var max_rows = limit=='' || limit==0 || limit=='0' || limit==null ? 10 : limit
+
+	var result = {searchtext: searchtext, limit: max_rows, nextoffset: null, data:[]}
+	var i
+	for (i=start; i<start+max_rows; i++) {
+		var person = hasil[i]
+		if (person==null) {
+			break
+		}
+		result.data.push(person)
+	}
+	
+	var nextoffset = i
+	if (hasil[nextoffset]!=null) {
+		result.nextoffset = nextoffset
+	}
+
+	await sleep(1000)
+	res.send(JSON.stringify(result))
+
+})
 
 app.listen(3000);
 console.log('Server is listening on port 3000');

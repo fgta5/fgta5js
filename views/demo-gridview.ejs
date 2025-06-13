@@ -17,6 +17,10 @@
 					font-size: 20px;
 				}
 			}
+
+			dialog {
+				outline: none;
+			}
 		</style>
 
 
@@ -35,21 +39,32 @@
 		
 		<main>
 
-			<input id="txt_search">
-			<table id="tbl_data" fgta5-component="Gridview">
+			<div style="display: flex; column-gap: 5px;">
+
+				<div style="width: 200px;">
+					<input id="txt_search" placeholder="searchtext">
+				</div>
+				<button id="btn_search">Search</button>
+				<div style="flex-grow: 1;"></div>
+				<button id="btn_remove">Remove Selected</button>
+			</div>
+
+			<table id="tbl_data" fgta5-component="Gridview" class="demo-gridview">
 				<thead>
-					<tr data-header>
-						<th data-checkbox></th>
-						<th data-autonumber>no</th>
-						<th binding="nama" sorting="true">Nama</th>
+					<tr data-header key="nama">
+						<th rowselector></th>
+						<th autonumber>no</th>
+						<th data-name="nama" binding="nama" sorting="true">Nama</th>
+						<th data-name="namalengkap" binding="nama">Nama Lengkap</th>
 						<th binding="alamat">Alamat</th>
 						<th binding="kota" sorting="true" formatter="">Kota</th>
-						<th binding="phone">Phone</th>
+						<th data-name="phone" binding="phone">Phone</th>
 					</tr>
 				</thead>
 			</table>
 
 
+			
 			
 		</main>
 

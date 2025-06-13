@@ -17,6 +17,10 @@ export default class Button extends Component {
 		this.Element.addEventListener(event, callback)
 	}
 
+	click() {
+		this.Element.click()
+	}
+
 }
 
 function Construct(self, id) {

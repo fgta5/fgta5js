@@ -512,7 +512,7 @@ function Combobox_createDialog(self, dialog) {
 	dialog.appendChild(btnnext)
 	
 	
-	dialog.setNext = (nextoffset, limit) => {
+	dialog.SetNext = (nextoffset, limit) => {
 		btnnext.nextoffset = nextoffset
 		btnnext.limit = limit
 		if (nextoffset!=null && nextoffset!=0) {
@@ -645,7 +645,7 @@ function Combobox_Search(self, searchtext, limit, offset) {
 		} else {
 			execute_selecting = true
 			Combobox_ClearOptions(self, tbody)
-			dialog.setNext(null)
+			dialog.SetNext(null)
 		}
 	}
 	

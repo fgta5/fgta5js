@@ -1,48 +1,15 @@
-/* .fgta5-gridview {
-
-} */
-
-.fgta5-gridview-row[data-selected] td {
-	background-color: rgba(187, 187, 255, 0.411);
+.demo-gridview {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-.fgta5-gridview-row:hover {
-	background-color: aquamarine;
+
+
+@media screen and (max-width: 500px) {
+	/* kolom yang tidak muncul di mobile */
+	.demo-gridview th[data-name="namalengkap"],
+	.demo-gridview td[data-name="namalengkap"] {
+        display: none;
+    }
 }
 
-/* .fgta5-gridview-cell {
-} */
-
-.fgta5-gridview-rowcheckbox {
-	display: block;
-	position: relative;
-	padding-left: 35px;
-	margin-bottom: 12px;
-	cursor: pointer;
-	font-size: 22px;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.fgta5-gridview-rowcheckbox input {
-	position: absolute;
-	opacity: 0;
-	cursor: pointer;
-	height: 0;
-	width: 0;
-}
-
-.fgta5-gridview-rowcheckbox span {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 25px;
-	width: 25px;
-	background-color: #eee;
-}
-
-/* .fgta5-gridview-checkmark {
-	
-} */

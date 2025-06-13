@@ -69,6 +69,7 @@ function Textbox_construct(self, id) {
 
 	// setup container
 	container.setAttribute('fgta5-component', 'Textbox')
+	container.setAttribute('input-id', id)
 	
 
 	// setup wrapper
@@ -82,7 +83,10 @@ function Textbox_construct(self, id) {
 	}
 
 	// label
-	label.classList.add('fgta5-entry-label')
+	if (label!=null) {
+		label.classList.add('fgta5-entry-label')
+	}
+	
 
 	// set input value
 	self._setLastValue(self.Value)

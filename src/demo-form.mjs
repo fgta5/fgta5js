@@ -143,7 +143,7 @@ function obj_kota_selecting(evt) {
 		for (var row of result.data) {
 			evt.detail.addRow(row.value, row.text, row)
 		}
-		dialog.setNext(result.nextoffset, result.limit)
+		dialog.SetNext(result.nextoffset, result.limit)
 		cbo.Wait(false)
 	})
 	

@@ -1,3 +1,132 @@
 .fgta5-gridview {
-    margin: 0
+  width: 100%;
+}
+
+.fgta5-gridview th {
+  text-align: left;
+  background-color: #ccc;
+}
+
+.fgta5-gridview th > div {
+  display: flex;
+  align-items: flex-start;
+}
+
+.fgta5-gridview th div {
+  display: inline-block;
+  height: 1rem;
+}
+
+.fgta5-gridview th div svg {
+  transform: translateY(2px);
+}
+
+.fgta5-gridview th[rowselector],
+.fgta5-gridview td[rowselector] {
+  width: 0.93rem;
+}
+
+.fgta5-gridview th[autonumber],
+.fgta5-gridview td[autonumber] {
+  text-align: right;
+}
+
+.fgta5-gridview-head {
+  padding: 5px;
+}
+
+
+
+.fgta5-gridview-cell {
+  padding: 5px;
+}
+
+.fgta5-gridview thead th {
+  font-size: 0.8rem;
+}
+
+.fgta5-gridview thead tr:last-child th {
+  border-bottom: 1px solid #ccc;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.fgta5-gridview tbody tr td:first-child,
+.fgta5-gridview tfoot tr td:first-child,
+.fgta5-gridview thead tr th:first-child {
+  padding-left: 10px;
+}
+
+.fgta5-gridview tbody tr td:last-child,
+.fgta5-gridview tfoot tr td:last-child,
+.fgta5-gridview thead tr th:last-child {
+  padding-right: 10px;
+}
+
+
+.fgta5-gridview-sortbutton {
+  width: 0.80rem;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.fgta5-gridview-row td {
+  border-bottom: 1px dotted #ccc;
+} 
+
+.fgta5-gridview-row[data-selected] td {
+	background-color: rgba(187, 187, 255, 0.411);
+}
+
+.fgta5-gridview-row:hover {
+	background-color: aquamarine;
+}
+
+
+
+.fgta5-gridview-checkbox {
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: 0.9rem auto;
+    /* gap: 0.4rem; */
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1.1rem;
+}
+
+.fgta5-gridview-checkbox input[type="checkbox"]{
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: #fff;
+    /* Not removed via appearance */
+    margin: 0;
+
+
+    font: inherit;
+    color: currentColor;
+    width: 0.93rem; /*15px*/
+    height: 0.93rem /*15px*/;
+    border: 1px solid var(--fgta5-color-input-line);
+    /* transform: translateY(2px);   */
+
+    display: grid;
+    place-content: center;
+
+    cursor: pointer;
+}
+
+.fgta5-gridview-checkbox input[type="checkbox"]::before {
+  content: "";
+  width: 0.56rem;
+  height: 0.56rem;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 0.56rem 0.56rem var(--fgta5-color-checkbox-checked);
+ 
+}
+
+.fgta5-gridview-checkbox input[type="checkbox"]:checked::before {
+  transform: scale(1);
 }
