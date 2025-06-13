@@ -141,7 +141,7 @@ async function search(criteria, limit, offset, sort) {
 
 	var mask = $fgta5.Modal.Mask()
 	const loader = new $fgta5.Dataloader() 
-	loader.Load('http://localhost:3000/getdata-persons', args, (err, result)=>{
+	loader.Load('/getdata-persons', args, (err, result)=>{
 		tbl_data.AddRows(result.data)
 		tbl_data.SetNext(result.nextoffset, result.limit)
 		mask.close();

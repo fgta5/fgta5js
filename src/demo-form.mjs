@@ -139,7 +139,7 @@ function obj_kota_selecting(evt) {
 
 	cbo.Wait()
 	cbo.AbortHandler = () => { loader.Abort() }	
-	loader.Load('http://localhost:3000/getdata', args, (err, result)=>{
+	loader.Load('/getdata', args, (err, result)=>{
 		for (var row of result.data) {
 			evt.detail.addRow(row.value, row.text, row)
 		}
