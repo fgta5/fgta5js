@@ -8,6 +8,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 const sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) };
+const dynamicSort = (data, criteria) => {
+    return data.sort((a, b) => {
+        for (const key of Object.keys(criteria)) {
+            const order = criteria[key] === 'asc' ? 1 : -1;
+            const compare = a[key].localeCompare(b[key]) * order;
+            if (compare !== 0) return compare; // Prioritaskan field dengan perbedaan
+        }
+        return 0; // Jika semua field sama, tidak mengubah urutan
+    });
+};
+
 
 app.set('view engine', 'ejs');
 
@@ -116,15 +127,23 @@ app.post('/getdata', async (req, res) => {
 
 
 app.post('/getdata-persons', async (req, res) => {
-	const { searchtext, limit, offset } = req.body;
+	const { searchtext, limit, offset, sort } = req.body;
 
-	var hasil
+	var rawdata
 	if (searchtext!='' && searchtext!=null) {
- 		hasil = data.persons.filter(person => person.nama.toLowerCase().includes(searchtext));
+ 		rawdata = data.persons.filter(person => person.nama.toLowerCase().includes(searchtext));
 	} else {
-		hasil = data.persons
+		rawdata = data.persons
 	}
 	
+	//console.log(sort)
+	// sort hasilnya
+	var hasil = [...rawdata]
+	if (Object.keys(sort).length>0) {
+		dynamicSort(hasil, sort)
+	} 
+
+
 
 
 	var start = offset ?? 0
@@ -145,7 +164,7 @@ app.post('/getdata-persons', async (req, res) => {
 		result.nextoffset = nextoffset
 	}
 
-	await sleep(1000)
+	await sleep(300)
 	res.send(JSON.stringify(result))
 
 })

@@ -31,6 +31,12 @@
   text-align: right;
 }
 
+.fgta5-gridview td[data-nextoffset] {
+  padding-top: 10px;
+  padding-bottom: 15px;
+}
+
+
 .fgta5-gridview-head {
   padding: 5px;
 }
@@ -40,6 +46,11 @@
 .fgta5-gridview-cell {
   padding: 5px;
 }
+
+.fgta5-gridview thead {
+  position: sticky;
+  top: 0;
+} 
 
 .fgta5-gridview thead th {
   font-size: 0.8rem;

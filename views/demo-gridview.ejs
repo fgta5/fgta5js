@@ -44,9 +44,13 @@
 				<div style="width: 200px;">
 					<input id="txt_search" placeholder="searchtext">
 				</div>
-				<button id="btn_search">Search</button>
+				<button id="btn_search" style="outline: none; border: none; background-color: transparent; cursor: pointer; transform: translateY(3px) translateX(-32px);">
+					<img src="images/icon-search.svg" style="width: 18px; height: 18px;" >
+				</button>
 				<div style="flex-grow: 1;"></div>
-				<button id="btn_remove">Remove Selected</button>
+				<button id="btn_remove" style="outline: none; border: none; background-color: transparent; cursor: pointer; transform: translateY(3px)">
+					<img src="images/icon-trash.svg" style="width: 18px; height: 18px;" >
+				</button>
 			</div>
 
 			<table id="tbl_data" fgta5-component="Gridview" class="demo-gridview">
@@ -56,8 +60,8 @@
 						<th autonumber>no</th>
 						<th data-name="nama" binding="nama" sorting="true">Nama</th>
 						<th data-name="namalengkap" binding="nama">Nama Lengkap</th>
-						<th binding="alamat">Alamat</th>
-						<th binding="kota" sorting="true" formatter="">Kota</th>
+						<th data-name="alamat" binding="alamat">Alamat</th>
+						<th data-name="kota" binding="kota" sorting="true" formatter="">Kota</th>
 						<th data-name="phone" binding="phone">Phone</th>
 					</tr>
 				</thead>

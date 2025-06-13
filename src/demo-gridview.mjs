@@ -17,14 +17,27 @@ async function main(self, args) {
 	tbl_data.addEventListener('cellclick', evt=>{ tbl_data_cellclick(self, evt) })
 	tbl_data.addEventListener('rowrender', evt=>{ tbl_data_rowrender(self, evt) })
 	tbl_data.addEventListener('rowremoving', async evt=>{ await tbl_data_removing(self, evt) })
-	tbl_data.addEventListener('nextdata', async evt=>{ await tbl_data_nextdata(self, evt) })
+	tbl_data.addEventListener('nextdata', async evt=>{ tbl_data_nextdata(self, evt) })
+	tbl_data.addEventListener('sorting', async evt=>{ tbl_data_sorting(self, evt) })
 
+
+	txt_search.addEventListener('keydown', (evt)=>{
+		if (evt.key == 'Enter') {
+			var searchtext = txt_search.Value
+			if (searchtext.trim()!='') {
+				btn_search.click()
+			}
+		}
+		
+	})
 
 	btn_search.addEventListener('click', (evt)=>{
 		var searchtext = txt_search.Value
-
-		tbl_data.Clear()		
-		search(searchtext)
+		tbl_data.Clear()
+		tbl_data.SetCriteria({
+			searchtext: searchtext
+		})		
+		search(tbl_data.Criteria)
 	})
 
 
@@ -49,7 +62,8 @@ function tbl_data_rowrender(self, evt) {
 	var value = tdphone.getAttribute('data-value')
 	
 	var btn = document.createElement('button')
-	btn.innerHTML = 'clk'
+	btn.classList.add('phone_button')
+	btn.innerHTML = `<img src="images/icon-phone.svg" style="width: 18px; height: 18px;" >`
 	btn.addEventListener('click', (evt)=>{
 		console.log(value)
 		evt.stopPropagation()
@@ -82,6 +96,7 @@ async function tbl_data_removing(self, evt) {
 		tr.remove()
 	} else {
 		console.log('tidak berhasil remove dari database')
+		$fgta5.MessageBox.Error("simulasi ada baris yang tidak bisa dihapus")
 	}
 	tr.MarkProcessing(false)
 
@@ -98,7 +113,15 @@ async function tbl_data_removing(self, evt) {
 
 
 
-async function search(searchtext, limit, offset) {
+async function search(criteria, limit, offset, sort) {
+	var searchtext = criteria.searchtext
+
+	// cek sorting
+	if (sort===undefined) {
+		sort = tbl_data.GetSort()
+	}
+
+	console.log(sort)
 	var args = {
 		method: 'POST',
 		headers: {
@@ -108,23 +131,36 @@ async function search(searchtext, limit, offset) {
 			searchtext: searchtext,
 			offset: offset,
 			limit: limit,
+			sort: sort
 		})
 	}
+
+	
+
+
 
 	var mask = $fgta5.Modal.Mask()
 	const loader = new $fgta5.Dataloader() 
 	loader.Load('http://localhost:3000/getdata-persons', args, (err, result)=>{
 		tbl_data.AddRows(result.data)
-		tbl_data.SetNext(searchtext, result.nextoffset, result.limit)
+		tbl_data.SetNext(result.nextoffset, result.limit)
 		mask.close();
 	})
 }
 
 function tbl_data_nextdata(self, evt) {
-	var searchtext = evt.detail.searchtext
+	var criteria = evt.detail.criteria
 	var limit = evt.detail.limit
 	var nextoffset = evt.detail.nextoffset
-	// console.log(searchtext, limit, nextoffset)
+	search(criteria, limit, nextoffset)
 
-	search(searchtext, limit, nextoffset)
+	// tbl_data.Scroll()
+}
+
+function tbl_data_sorting(self, evt) {
+	var criteria = tbl_data.Criteria
+
+	tbl_data.Clear()
+	search(criteria, undefined, undefined, evt.detail.sort)
+	
 }

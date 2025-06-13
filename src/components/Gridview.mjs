@@ -11,6 +11,8 @@ const ATTR_VALUE = 'data-value'
 const ATTR_ROWKEY = 'key'
 const ATTR_ROWKEYVALUE = 'keyvalue'
 const ATTR_ROWPROCESSING = 'data-rowprocessing'
+const ATTR_MAINHEADROW = 'data-mainrowhead' // menandai row utama header (berisi contol sorting)
+const ATTR_LINENUMBER = "linenumber"
 
 const TYPE_ROWSELECTOR = 'rowselector'
 const TYPE_AUTONUMBER = 'autonumber'
@@ -96,17 +98,19 @@ export default class Gridview extends Component {
 		this.Nodes.Tbody.innerHTML = ''
 	}
 
-	SetNext(searchtext, nextoffset, limit)  {
-		GridView_SetNext(this, searchtext, nextoffset, limit)
-		// btnnext.nextoffset = nextoffset
-		// btnnext.limit = limit
-		// if (nextoffset!=null && nextoffset!=0) {
-		// 	btnnext.style.display = 'inline-block'
-		// } else {
-		// 	btnnext.style.display = 'none'
-		// }
+	SetNext(nextoffset, limit)  {
+		GridView_SetNext(this, nextoffset, limit)
 	}
 
+	GetSort() {
+		return GridView_GetSort(this)
+	}
+
+	#criteria = {}
+	get Criteria() { return this.#criteria } 
+	SetCriteria(criteria) {
+		this.#criteria = criteria
+	}
 }
 
 
@@ -207,6 +211,8 @@ function Gridview_getColumns(self) {
 
 function Gridview_setupHeader(self, columns) {
 	var tr = document.createElement('tr')
+	tr.setAttribute(ATTR_MAINHEADROW, '')
+
 	for (let column of columns) {
 		var th = document.createElement('th')
 
@@ -346,11 +352,15 @@ function GridView_AddRow(self, row, tbody) {
 		if (column.type==TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
 			chk.addEventListener('change', (evt)=>{ Gridview_rowCheckboxChange(self, evt) })
-
 			td.appendChild(chk)
 			td.setAttribute(ATTR_ROWSELECTOR, '')
 		} else if (column.type==TYPE_AUTONUMBER) {
+			var linenumber = GridView_getLastLineNumber(self)
+
+			linenumber++
 			td.setAttribute(ATTR_AUTONUMBER, '')
+			td.setAttribute(ATTR_LINENUMBER, linenumber)
+			td.innerHTML = linenumber
 			td.addEventListener('click', (evt)=>{ GridView_cellClick(self, td, tr) })
 		} else {
 			var value = row[column.binding]
@@ -410,13 +420,7 @@ function Gridview_sort(self, btn) {
 
 	// ambil semua kolom yang di sort
 	var tr = btn.closest('tr')
-	var ths = tr.querySelectorAll(`th[${ATTR_SORTING}]`)
-	var sort = {}
-	for (var th of ths) {
-		var sorting = th.getAttribute(ATTR_SORTING)
-		var binding = th.getAttribute(ATTR_BINDING)
-		sort[binding] = sorting
-	}
+	var sort = GridView_GetSort(self, tr)
 
 	self.Listener.dispatchEvent(SortingEvent({
 		detail: {sort: sort}
@@ -474,7 +478,7 @@ function GridView_HasRowPendingProcess(self) {
 }
 
 
-function GridView_SetNext(self, searchtext, nextoffset, limit) {
+function GridView_SetNext(self, nextoffset, limit) {
 	var nextoffsetcontainer = self.Nodes.Tfoot.querySelector('tr[data-nextoffset]')
 	if (nextoffsetcontainer!=null) {
 		nextoffsetcontainer.remove()
@@ -487,12 +491,12 @@ function GridView_SetNext(self, searchtext, nextoffset, limit) {
 		var td = document.createElement('td')
 		var next = document.createElement('a')
 
-		next.innerHTML = 'Next Data'
+		next.innerHTML = 'load next data'
 		next.setAttribute('href', 'javascript:void(0)')
 		next.addEventListener('click', (evt)=>{
 			self.Listener.dispatchEvent(NextDataEvent({
 				detail: {
-					searchtext: searchtext,
+					criteria: self.Criteria,
 					nextoffset: nextoffset,
 					limit: limit
 				}
@@ -512,3 +516,33 @@ function GridView_SetNext(self, searchtext, nextoffset, limit) {
 	} 
 }
 
+function  GridView_GetSort(self, tr) {
+	if (tr==null) {
+		tr = self.Nodes.Thead.querySelector(`tr[${ATTR_MAINHEADROW}]`)
+	}
+
+	var ths = tr.querySelectorAll(`th[${ATTR_SORTING}]`)
+	var sort = {}
+	for (var th of ths) {
+		var sorting = th.getAttribute(ATTR_SORTING)
+		var binding = th.getAttribute(ATTR_BINDING)
+		sort[binding] = sorting
+	}
+
+	return sort
+}
+
+
+function GridView_getLastLineNumber(self) {
+	var lastrow = self.Nodes.Tbody.querySelector('tr:last-child td[autonumber]')
+	if (lastrow==null) {
+		return 0
+	}
+
+	var lastlinenumber = lastrow.getAttribute(ATTR_LINENUMBER)
+	if (lastlinenumber==null) {
+		return 0
+	}
+
+	return Number(lastlinenumber)
+}

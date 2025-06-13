@@ -7,9 +7,18 @@
 
 @media screen and (max-width: 500px) {
 	/* kolom yang tidak muncul di mobile */
-	.demo-gridview th[data-name="namalengkap"],
-	.demo-gridview td[data-name="namalengkap"] {
+	.demo-gridview tr [autonumber],
+	.demo-gridview tr [data-name="namalengkap"],
+	.demo-gridview tr [data-name="alamat"] {
         display: none;
     }
 }
 
+
+.demo-gridview tr [data-name="phone"] {
+	width: 60px;
+}
+
+.phone_button {
+	outline: none; border: none; background-color: transparent; cursor: pointer; transform: translateY(3px)
+}
