@@ -3,6 +3,14 @@ const btn_remove = new $fgta5.Button('btn_remove')
 const btn_search = new  $fgta5.Button('btn_search')
 const txt_search = new  $fgta5.Textbox('txt_search')
 
+
+const ICON_PHONE = `<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<path d="M21.76 16.56H9.92L8.48 20H5.92L2 26.4h28L26.08 20h-2.56zm-5.04 2.64a5.12 3.328 0 0 1 5.12 3.328 5.12 3.328 0 0 1-5.12 3.328 5.12 3.328 0 0 1-5.14-3.328 5.12 3.328 0 0 1 5.14-3.328z" fill="currentColor"/>
+<path d="M19.03 7.24c-3.38-.5-8.4-.41-10.07-.17-1.66.24-4.4 1.92-4.74 3.94-.41 2.44 1.46 4.73 4.18 5.12s5.29-1.26 5.7-3.69c.11-.66.06-1.34-.17-1.98 2.8-.16 5.86.37 9.22 1.76-.25.43-.42.9-.51 1.38-.41 2.44 1.46 4.73 4.18 5.12s5.29-1.26 5.7-3.69c.38-2.22-1.16-4.37-3.61-5.01-3.24-1.29-6.54-2.24-9.85-2.73z" fill="currentColor"/>
+</svg>`
+
+
 export default class Page {
 	async main(args) {
 		await main(this, args)
@@ -63,7 +71,7 @@ function tbl_data_rowrender(self, evt) {
 	
 	var btn = document.createElement('button')
 	btn.classList.add('phone_button')
-	btn.innerHTML = `<img src="images/icon-phone.svg" style="width: 18px; height: 18px;" >`
+	btn.innerHTML = ICON_PHONE
 	btn.addEventListener('click', (evt)=>{
 		console.log(value)
 		evt.stopPropagation()

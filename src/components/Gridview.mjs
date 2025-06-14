@@ -397,10 +397,14 @@ function GridView_AddRow(self, row, tbody) {
 			if (value!=null) {
 				if (column.formatter!=null) {
 					try {
-						eval(`value=${column.formatter}`)
+					// 	eval(`value=${column.formatter}`)
+						const func = Gridview_createFunction(column.formatter, value);
+						value = func(value)
 					} catch (err) {
 						console.error(err)
 					}
+					
+
 				}
 				td.innerHTML = value
 				
@@ -588,7 +592,23 @@ function GridView_getLastLineNumber(self) {
 }
 
 
-function decimal (value, precision)  { 
+function Gridview_createFunction(expression) {
+    const match = expression.match(/(\w+)\(([^)]+)\)/);
+    if (!match) return null;
+
+    const [, funcName, args] = match;
+    const parsedArgs = args.split(",").map(arg => parseFloat(arg.trim()));
+
+    if (funcName === "decimal") {
+        return (v) => Gridview_formatDecimal(v, parsedArgs[1]);
+    } else if (funcName === 'checkmark') {
+		return (v) => Gridview_formatCheckmark(v)
+	}
+    return null;
+}
+
+
+function Gridview_formatDecimal (value, precision)  { 
 	const formatterFixed = new Intl.NumberFormat('en-US', {
 		minimumFractionDigits: precision,
 		maximumFractionDigits: precision
@@ -596,7 +616,7 @@ function decimal (value, precision)  {
 	return formatterFixed.format(value)
 }
 
-function checkmark(value) {
+function Gridview_formatCheckmark(value) {
 	const yes = ICON_YES
 	const no = ICON_NO
 
