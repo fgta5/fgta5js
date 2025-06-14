@@ -26,6 +26,7 @@ const ATTR_EDITMODE = 'editmode'
 const ATTR_SHOWED = 'showed'
 const ATTR_REMOVING = 'removing'
 const ATTR_SELECTED = 'selected'
+const ATTR_INDEX = 'data-index'
 
 const DEF_LIMIT = 30
 
@@ -218,6 +219,10 @@ function Combobox_construct(self, id) {
 		}, 200);
     });
 
+	dialog.addEventListener('close', (evt)=>{
+		Combobox_dialogClose(self)
+	})
+
 	
 
 	// datalist
@@ -312,6 +317,27 @@ function Combobox_setDisabled(self, v) {
 	}
 }
 
+function Combobox_markSelected(self, tr) {
+	tr.setAttribute(ATTR_SELECTED, '')
+	
+	setTimeout(()=>{
+		let d = tr.getAttribute('data-none')
+ 		if (d=='') {
+			// taruh paling atas
+			// TODO: geser TR di awal tbody
+		} else {
+			// geser tr ke atas atau setelah none 
+			const dialog = self.Nodes.Dialog
+			const tbody = dialog.getElementsByTagName('tbody')[0]
+			const none = tbody.querySelector('tr[data-none]')
+			if (none!=null) {
+				none.after(tr)	
+			}
+		}
+	}, 100)
+	
+}
+
 
 function Combobox_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
@@ -356,7 +382,11 @@ function Combobox_createOptionRow(self, value, text, data) {
 		Combobox_resetSelected(self)
 
 		// tandai baris yang sekarang dilih
-		tr.setAttribute(ATTR_SELECTED, '')
+		if (text=='none') {
+			console.log('add none row option')
+		}
+
+		Combobox_markSelected(self, tr)
 
 
 		self.Nodes.Input.value = value
@@ -386,7 +416,7 @@ function Combobox_createOptionRow(self, value, text, data) {
 	// tandai baris pilihan ini jika merupakan opsi yang dipilih user saat ini
 	var valueselected=self.Value??''
 	if (value==valueselected) {
-		tr.setAttribute(ATTR_SELECTED, '')
+		Combobox_markSelected(self, tr)
 	}
 
 
@@ -396,9 +426,9 @@ function Combobox_createOptionRow(self, value, text, data) {
 function Combobox_createStaticOptions(self, dialog, datalist) {
 	const options = datalist.getElementsByTagName("option");
 	
-	var thead = dialog.getElementsByTagName('thead')[0]
-	var tbody = dialog.getElementsByTagName('tbody')[0]
-	var tfoot = dialog.getElementsByTagName('tfoot')[0]
+	const thead = dialog.getElementsByTagName('thead')[0]
+	const tbody = dialog.getElementsByTagName('tbody')[0]
+	const tfoot = dialog.getElementsByTagName('tfoot')[0]
 	var defaultOption = null
 	
 	thead.style.display='none'
@@ -410,6 +440,7 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 	if (!self.IsRequired()) {
 		var tr = Combobox_createOptionRow(self, '', 'none', {})
 		tr.setAttribute('data-none', '')
+		tr.setAttribute(ATTR_INDEX, 0)
 		tbody.appendChild(tr)
 	}
 
@@ -428,7 +459,11 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 			}
 		}
 
-		tbody.appendChild(Combobox_createOptionRow(self, value, text, { option: option }))
+		var idx = tbody.rows.length - 1
+		var tr = Combobox_createOptionRow(self, value, text, { option: option })
+		
+		tr.setAttribute(ATTR_INDEX, idx)
+		tbody.appendChild(tr)
 	}
 
 	return {
@@ -630,7 +665,9 @@ function Combobox_Search(self, searchtext, limit, offset) {
 			if (none==null) {
 				var tr = Combobox_createOptionRow(self, '', 'none', {})
 				tr.setAttribute('data-none', '')
+				tr.setAttribute(ATTR_INDEX, 0)
 				tbody.prepend(tr)
+				console.log('add none')
 			}
 		}
 	}
@@ -665,7 +702,9 @@ function Combobox_Search(self, searchtext, limit, offset) {
 				limit: limit, 
 				offset: offset,
 				addRow: (value, text, data) => {
+					var idx = tbody.rows.length - 1
 					var tr = Combobox_createOptionRow(self, value, text, data)
+					tr.setAttribute(ATTR_INDEX, idx)
 					tbody.appendChild(tr)
 				}
 			}
@@ -779,8 +818,52 @@ function Combobox_Wait(self, iswaiting) {
 
 
 function Combobox_resetSelected(self) {
-	var prevselected = self.Nodes.Dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
+	// ambil baris yang dipilih sebelumnya
+	const prevselected = self.Nodes.Dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
 	if (prevselected != null) {
+
+		// kemablikan ke urutan sesuai index
+		const idx = prevselected.getAttribute(ATTR_INDEX)	
+		if (idx!='' && idx!=null) {
+			const index = Number(idx)
+			const tbody = prevselected.closest('tbody')
+			const trs = tbody.querySelectorAll('tr')
+			for (var tr of trs) {
+				var rowidx = tr.getAttribute(ATTR_INDEX) ?? 0
+				var rowindex = Number(rowidx)
+				if (rowindex==0) continue
+				if (rowindex==index) continue
+
+				if (index<rowindex) {
+					tr.insertAdjacentElement("beforebegin", prevselected);
+					break
+				}
+			}
+		}	
+
+		// remove status selected
 		prevselected.removeAttribute(ATTR_SELECTED)
 	}
+}
+
+
+function Combobox_dialogClose(self) {
+	// kembalikan yang saat ini di select ke baris semula
+	// const dialog = self.Nodes.Dialog
+	// const selected = dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
+	// const idx = selected.getAttribute(ATTR_INDEX)
+	// if (idx!='' && idx!=null) {
+	// 	const tbody = dialog.getElementsByTagName('tbody')[0]
+	// 	const trs = tbody.querySelectorAll('tr')
+	// 	for (var tr of trs) {
+	// 		var rowidx = tr.getAttribute(ATTR_INDEX) ?? 0
+	// 		if (rowidx==0) continue
+
+	// 		if (idx>rowidx) {
+	// 			tr.after(selected)
+	// 			break
+	// 		}
+	// 	}
+	// }
+
 }

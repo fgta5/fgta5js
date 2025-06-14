@@ -33,7 +33,7 @@ async function main(self, args) {
 
 	btn_search.addEventListener('click', (evt)=>{
 		var searchtext = txt_search.Value
-		tbl_data.Clear()
+		// tbl_data.Clear()
 		tbl_data.SetCriteria({
 			searchtext: searchtext
 		})		
@@ -72,6 +72,14 @@ function tbl_data_rowrender(self, evt) {
 
 	tdphone.innerHTML = ''
 	tdphone.appendChild(btn)
+
+
+	// cek disabled
+	var disCol = tr.querySelector('td[data-name="disabled"]')
+	var disVal = disCol.getAttribute('data-value')
+	if (disVal==='1') {
+		tr.setAttribute('data-disabled', '')
+	}
 
 	
 }
@@ -142,6 +150,9 @@ async function search(criteria, limit, offset, sort) {
 	var mask = $fgta5.Modal.Mask()
 	const loader = new $fgta5.Dataloader() 
 	loader.Load('/getdata-persons', args, (err, result)=>{
+		if (offset===undefined) {
+			tbl_data.Clear()
+		}
 		tbl_data.AddRows(result.data)
 		tbl_data.SetNext(result.nextoffset, result.limit)
 		mask.close();
@@ -160,7 +171,7 @@ function tbl_data_nextdata(self, evt) {
 function tbl_data_sorting(self, evt) {
 	var criteria = tbl_data.Criteria
 
-	tbl_data.Clear()
+	// tbl_data.Clear()
 	search(criteria, undefined, undefined, evt.detail.sort)
 	
 }

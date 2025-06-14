@@ -57,12 +57,14 @@
 				<thead>
 					<tr data-header key="nama">
 						<th rowselector></th>
-						<th autonumber>no</th>
-						<th data-name="nama" binding="nama" sorting="true">Nama</th>
-						<th data-name="namalengkap" binding="nama">Nama Lengkap</th>
+						<th autonumber>No</th>
+						<th data-name="nama" binding="nama" sorting="true">Nama Lengkap</th>
+						<th data-name="namalengkap" binding="nama">Nama</th>
 						<th data-name="alamat" binding="alamat">Alamat</th>
-						<th data-name="kota" binding="kota" sorting="true" formatter="">Kota</th>
+						<th data-name="kota" binding="kota" sorting="true">Kota</th>
+						<th data-name="amount" binding="amount" sorting="true" formatter="decimal(value, 0)" text-align="right">Amount</th>
 						<th data-name="phone" binding="phone">Phone</th>
+						<th data-name="disabled" binding="disabled" formatter="checkmark(value)" text-align="center">Disabled</th>
 					</tr>
 				</thead>
 			</table>

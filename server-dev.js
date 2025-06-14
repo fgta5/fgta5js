@@ -12,12 +12,40 @@ const dynamicSort = (data, criteria) => {
     return data.sort((a, b) => {
         for (const key of Object.keys(criteria)) {
             const order = criteria[key] === 'asc' ? 1 : -1;
-            const compare = a[key].localeCompare(b[key]) * order;
+            const valueA = a[key];
+            const valueB = b[key];
+
+            let compare;
+            if (typeof valueA === "number" && typeof valueB === "number") {
+                // Jika kedua nilai angka, gunakan perbandingan numerik
+                compare = (valueA - valueB) * order;
+            } else {
+                // Jika bukan angka, anggap sebagai string dan gunakan localeCompare
+                compare = String(valueA).localeCompare(String(valueB)) * order;
+            }
+
             if (compare !== 0) return compare; // Prioritaskan field dengan perbedaan
         }
         return 0; // Jika semua field sama, tidak mengubah urutan
     });
 };
+const getRandomFactored = (min, max, factor) => {
+	factor = factor ?? 1000
+    return Math.floor(Math.random() * ((max - min) / factor + 1)) * factor + min;
+}
+const randomBitWithProbability = (probability) => {
+    return Math.random() < probability ? 1 : 0;
+}
+
+
+
+/* tambahkan beberapa data */
+for (let person of data.persons) {
+	person.amount = getRandomFactored(10000, 1000000, 1000)
+	person.disabled = randomBitWithProbability(0.3)
+}
+
+
 
 
 app.set('view engine', 'ejs');
@@ -156,6 +184,7 @@ app.post('/getdata-persons', async (req, res) => {
 		if (person==null) {
 			break
 		}
+
 		result.data.push(person)
 	}
 	

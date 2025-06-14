@@ -5,6 +5,7 @@ const ATTR_AUTONUMBER = 'autonumber'
 const ATTR_BINDING = 'binding'
 const ATTR_SORTING = 'sorting'
 const ATTR_FORMATTER = 'formatter'
+const ATTR_TEXTALIGN = 'text-align'
 const ATTR_ROWSELECTED = 'data-selected'
 const ATTR_COLNAME = 'data-name'
 const ATTR_VALUE = 'data-value'
@@ -20,26 +21,37 @@ const TYPE_STANDARD = 'standard'
 
 const ICON_UNSORT = `<?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-<path d="m2.1656 5.2663 3.8057-4.6994 3.8057 4.6994z"/>
-<path d="m2.1656 6.6955 3.8057 4.6994 3.8057-4.6994z"/>
+<path d="m2.1656 5.2663 3.8057-4.6994 3.8057 4.6994z" fill="currentColor"/>
+<path d="m2.1656 6.6955 3.8057 4.6994 3.8057-4.6994z" fill="currentColor"/>
 </svg>`
 
 const ICON_SORTASC = `<?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-<path d="m2.1943 9.1198 3.8057-6.5338 3.8057 6.5338z"/>
+<path d="m2.1943 9.1198 3.8057-6.5338 3.8057 6.5338z" fill="currentColor"/>
 </svg>`
 
 const ICON_SORTDESC = `<?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-<path d="m2.1943 2.586 3.8057 6.5338 3.8057-6.5338z"/>
+<path d="m2.1943 2.586 3.8057 6.5338 3.8057-6.5338z" fill="currentColor"/>
 </svg>
 `
+
+const ICON_YES = `<svg width="1rem" height="1rem" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+<circle cx="15" cy="15" r="12" stroke="currentColor" stroke-width="1" fill="none" />
+<circle cx="15" cy="15" r="8" fill="currentColor" />
+</svg>`
+
+const ICON_NO = `<svg width="1rem" height="1rem" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+<circle cx="15" cy="15" r="12" stroke="currentColor" stroke-width="1" fill="none" />
+</svg>`
 
 const CellClickEvent = (data) => { return new CustomEvent('cellclick', data) }
 const RowRenderEvent = (data) => { return new CustomEvent('rowrender', data) }
 const RowRemovingEvent = (data) => { return new CustomEvent('rowremoving', data) }
 const SortingEvent = (data) => { return new CustomEvent('sorting', data) }
 const NextDataEvent = (data) => { return new CustomEvent('nextdata', data) }
+
+
 
 
 export default class Gridview extends Component {
@@ -171,6 +183,7 @@ function Gridview_getColumns(self) {
 		var binding = th.getAttribute(ATTR_BINDING)
 		var name = th.getAttribute(ATTR_COLNAME)
 		var formatter = th.getAttribute(ATTR_FORMATTER)
+		var textalign = (th.getAttribute(ATTR_TEXTALIGN) ?? '').toLowerCase()
 		var sorting = (th.getAttribute(ATTR_SORTING) ?? '').toLowerCase() === "true" ? true : false
 		var cssclass = th.getAttribute('class')
 		var cssstyle = th.getAttribute('style')
@@ -193,6 +206,7 @@ function Gridview_getColumns(self) {
 		column.binding = binding
 		column.name = name 
 		column.formatter = formatter
+		column.textalign = textalign=='' ? 'left' : textalign
 		column.sorting = sorting
 		column.html = html
 
@@ -221,6 +235,7 @@ function Gridview_setupHeader(self, columns) {
 		setAttributeIfNotNull(th, ATTR_COLNAME, column.name)
 
 		th.classList.add('fgta5-gridview-head')
+		th.setAttribute(ATTR_TEXTALIGN, column.textalign)
 
 		if (column.type==TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
@@ -234,23 +249,34 @@ function Gridview_setupHeader(self, columns) {
 			th.innerHTML = column.html
 		} else {
 
-			var container = document.createElement('div')
-
-			// tambahkan button sorting, jika ada property sorting==true 
 			if (column.sorting) {
-				let sortbtn = document.createElement('div')
+				var container = document.createElement('span')
+				container.setAttribute('container', '')
+				container.setAttribute(ATTR_TEXTALIGN, column.textalign)
+
+				let sortbtn = document.createElement('button')
 				sortbtn.innerHTML = ICON_UNSORT
-				sortbtn.classList.add('fgta5-gridview-sortbutton')
 				sortbtn.setAttribute(ATTR_SORTING, '')
 				sortbtn.setAttribute(ATTR_BINDING, column.binding)
 				sortbtn.addEventListener('click', (evt)=>{ Gridview_sort(self, sortbtn) })
+
+				var text = document.createElement('div')
+				text.innerHTML = column.html
+
 				container.appendChild(sortbtn)
+				container.appendChild(text)
+
+				th.classList.add('fgta5-gridview-colwithbutton')
+				th.appendChild(container)
+
+			} else {
+
+				var text = document.createTextNode(column.html)
+				th.appendChild(text)
 			}
 		
-			var text = document.createElement('div')
-			text.innerHTML = column.html
-			container.appendChild(text)
-			th.appendChild(container)
+			
+			
 			
 		}
 
@@ -346,9 +372,12 @@ function GridView_AddRow(self, row, tbody) {
 
 		setAttributeIfNotNull(td, 'class', column.cssclass)
 		setAttributeIfNotNull(td, ATTR_COLNAME, column.name)
+		setAttributeIfNotNull(td, ATTR_BINDING, column.binding)
+		setAttributeIfNotNull(td, ATTR_FORMATTER, column.formatter)
+		setAttributeIfNotNull(td, ATTR_TEXTALIGN, column.textalign)
 
 		td.classList.add('fgta5-gridview-cell')
-
+	
 		if (column.type==TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
 			chk.addEventListener('change', (evt)=>{ Gridview_rowCheckboxChange(self, evt) })
@@ -364,14 +393,25 @@ function GridView_AddRow(self, row, tbody) {
 			td.addEventListener('click', (evt)=>{ GridView_cellClick(self, td, tr) })
 		} else {
 			var value = row[column.binding]
+			td.setAttribute(ATTR_VALUE, value)
 			if (value!=null) {
+				if (column.formatter!=null) {
+					try {
+						eval(`value=${column.formatter}`)
+					} catch (err) {
+						console.error(err)
+					}
+				}
 				td.innerHTML = value
-				td.setAttribute(ATTR_VALUE, value)
+				
 			} else {
 				td.innerHTML = ''
 			}
 			td.addEventListener('click', (evt)=>{ GridView_cellClick(self, td, tr) })
 		}
+
+		
+	
 		tr.appendChild(td)
 	}
 
@@ -545,4 +585,32 @@ function GridView_getLastLineNumber(self) {
 	}
 
 	return Number(lastlinenumber)
+}
+
+
+function decimal (value, precision)  { 
+	const formatterFixed = new Intl.NumberFormat('en-US', {
+		minimumFractionDigits: precision,
+		maximumFractionDigits: precision
+	});
+	return formatterFixed.format(value)
+}
+
+function checkmark(value) {
+	const yes = ICON_YES
+	const no = ICON_NO
+
+	if (value===undefined || value===null) {
+		return no
+	}
+
+	if (value===false) {
+		return no
+	}
+
+	if (value=='0' || value=='' ||value=='-' || value==0) {
+		return no
+	}
+
+	return yes
 }
