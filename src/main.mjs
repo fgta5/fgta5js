@@ -12,8 +12,14 @@ import Combobox from './components/Combobox.mjs';
 import Filebox from './components/Filebox.mjs';
 import Dataloader from './components/DataLoader.mjs';	
 import Gridview from './components/Gridview.mjs';	
+import AppManager from './components/AppManager.mjs'
+import Application from './components/Application.mjs';
 
 import * as Validators from './components/Validators.mjs';
+
+
+
+
 
 
 
@@ -32,7 +38,9 @@ const fgta5 = {
 	MessageBoxButton: MessageBoxButton,
 	Modal: Modal,
 	Dataloader: Dataloader,
-	Gridview: Gridview
+	Gridview: Gridview,
+	AppManager: AppManager,
+	Application: Application
 }
 
 

@@ -1,0 +1,88 @@
+.fgta5-app-head {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--fgta5-app-header-height);
+	background-color: black;
+	color: white;
+	font-size: 1.2rem;
+	font-weight: bold;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 0 0.5rem 0 0.5rem;
+}	
+
+.fgta5-app-main {
+	margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 1rem 1rem
+}
+
+
+.fgta5-button-head {
+	display: block;
+	text-decoration: none;
+	width: 1.2rem;
+	height: 1.2rem;
+	min-width: 1.2rem;
+	min-height: 1.2rem;
+	color: white;
+}
+
+
+
+.fgta5-appmanager-nav {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+	opacity: 0;
+	transform: translateX(100%);
+	transition: opacity 0.5s ease, transform 0.3s ease; 
+	box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+.fgta5-appmanager-nav[showed] {
+	transform: translateX(0);
+	opacity: 1;
+}
+
+.fgta5-appmanager-nav div[header] {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--fgta5-app-header-height);
+	background-color: #aaa;
+	color: white;
+	font-size: 1.2rem;
+	font-weight: bold;
+
+	display: flex;
+	justify-content: space-between;
+
+	align-items: center;
+
+	padding: 0 0.5rem 0 0.5rem;
+	
+}
+
+.fgta5-appmanager-nav div[main] {
+	margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 1rem 1rem
+}
+
+.fgta5-iframe {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	border: none;
+	outline: none;
+	margin: 0;
+	padding: 0;
+}

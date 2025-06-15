@@ -55,12 +55,14 @@ app.use(express.json());
 
 
 app.use('/dist', express.static('dist'))
+app.use('/fonts', express.static('fonts'))
 app.use('/images', express.static('images'))
 app.use('/src', express.static('src'))
 app.use('/styles', express.static('styles'))
 
 
 app.use('/:env/dist', express.static('dist'))
+app.use('/:env/fonts', express.static('fonts'))
 app.use('/:env/images', express.static('images'))
 app.use('/:env/src', express.static('src'))
 app.use('/:env/styles', express.static('styles'))
