@@ -27,6 +27,7 @@ export default class Component {
 	static get ICON_MENU() { return ICON_MENU }
 	static get ICON_CLOSE() { return ICON_CLOSE }
 	static get ACTION_SHOWMENU()  { return 'showmenu' }
+	static get ACTION_APPLICATIONLOADED() { return 'applicationloaded' }
 
 	constructor(id) {
 		if (id!=undefined) {

@@ -1,7 +1,7 @@
 import Component from "./Component.mjs"
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
-
+const ID_TITLE = 'application-title'
 
 export default class Application extends Component {
 	constructor(id) {
@@ -34,6 +34,17 @@ function Application_construct(self) {
 	window.addEventListener("load", (event) => {
 		console.log('application loaded.')
 	})
+
+	window.addEventListener("message", (evt) => {
+		const args = evt.data
+		if (args.action!=undefined) {
+			var action = args.action
+			if (action==Component.ACTION_APPLICATIONLOADED) {
+				document.title = args.module.title
+				document.getElementById(ID_TITLE).innerHTML =  args.module.title
+			}
+		}
+	})
 }
 
 
@@ -43,7 +54,8 @@ function Application_createHeader(self, head) {
 		Application_ShowMenu(self)
 	})
 
-	title.innerHTML = 'application title'
+	title.id = ID_TITLE
+	title.innerHTML = 'loading ...'
 
 	head.appendChild(title)
 	head.appendChild(btnmenu)

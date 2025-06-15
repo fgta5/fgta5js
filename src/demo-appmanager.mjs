@@ -6,57 +6,74 @@ export default class Page {
 	}
 }
 
+const programs = {
+	account: new $fgta5.ModuleData({type:'module', title:'Account', name:'account', icon: 'images/iconprograms/map.png'}),
+	departement: new $fgta5.ModuleData({type:'module', title:'Departemen', name:'departement', icon: 'images/iconprograms/mcfly.png'}),
+	lokasi: new $fgta5.ModuleData({type:'module', title:'Lokasi', name:'lokasi', icon: 'images/iconprograms/medicine.png'}),
+	periode: new $fgta5.ModuleData({type:'module', title:'Periode', name:'periode', icon: 'images/iconprograms/mountaint.png'}),
+	jurnal: new $fgta5.ModuleData({type:'module', title:'Jurnal Umum', name:'jurnal', icon: 'images/iconprograms/packman.png', disabled:true}),
+	payment: new $fgta5.ModuleData({type:'module', title:'Pembayaran', name:'payment', icon: 'images/iconprograms/photo.png'}),
+	hutang: new $fgta5.ModuleData({type:'module', title:'Hutang', name:'hutang', icon: 'images/iconprograms/pin.png'}),
+	user: new $fgta5.ModuleData({type:'module', title:'User', name:'user', icon: 'images/iconprograms/pizza.png'}),
+	group: new $fgta5.ModuleData({type:'module', title:'Group', naem:'group', icon: 'images/iconprograms/speakers.png'})
+}
+
 
 async function main(self, args) {
-	const mdls = document.querySelectorAll('#recentmodules a')	
-	for (let md of mdls) {
-		md.addEventListener('click', ()=>{
-			var module = md.getAttribute('data-module')
-			var title = md.innerHTML
-			var param = {
-				type: 'module',
-				title: title,
-				module: module
-			}
-			appmgr.OpenModule(param)
-		})
-	}
+	// const mdls = document.querySelectorAll('#recentmodules a')	
+	// for (let md of mdls) {
+	// 	md.addEventListener('click', ()=>{
+	// 		var module = md.getAttribute('data-module')
+	// 		var title = md.innerHTML
+	// 		var param = {
+	// 			type: 'module',
+	// 			title: title,
+	// 			module: module
+	// 		}
+	// 		appmgr.OpenModule(param)
+	// 	})
+	// }
+
+
+
 
 	appmgr.SetMenu([
 		{
-			type: 'group',
 			title: 'Accounting',
 			items: [
 				{
-					type: 'group',
 					title: 'Master data',
 					items: [
-						{type:'module', title:'Account', module:'account'},
-						{type:'module', title:'Departemen', module:'departement'},
-						{type:'module', title:'Lokasi', module:'lokasi'},
-						{type:'module', title:'Periode', module:'periode'}
+						programs.account,
+						programs.departement,
+						programs.lokasi,
+						programs.periode
 					]
 				},
 				{
-					type: 'group',
 					title: 'Transaksi',
 					items: [
-						{type:'module', title:'Jurnal Umum', module:'jurnal'},
-						{type:'module', title:'Pembayaran', module:'payment'},
-						{type:'module', title:'Hutang', module:'hutang'}
+						programs.jurnal,
+						programs.payment,
+						programs.hutang
 					]
 				}
 			]
 		},
 		{
-			type: 'group',
 			title: 'Administrator',
 			items: [
-				{type:'module', title:'User'},
-				{type:'module', title:'Group'}
+				programs.user,
+				programs.group
 			]
 		}
 	])
+
+		appmgr.SetFavourite([
+			programs.account,
+			programs.jurnal,
+			programs.user,
+		])
 }
 
 

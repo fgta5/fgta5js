@@ -14,6 +14,7 @@ import Dataloader from './components/DataLoader.mjs';
 import Gridview from './components/Gridview.mjs';	
 import AppManager from './components/AppManager.mjs'
 import Application from './components/Application.mjs';
+import ModuleData from './components/ModuleData.mjs'
 
 import * as Validators from './components/Validators.mjs';
 
@@ -40,7 +41,8 @@ const fgta5 = {
 	Dataloader: Dataloader,
 	Gridview: Gridview,
 	AppManager: AppManager,
-	Application: Application
+	Application: Application,
+	ModuleData: ModuleData
 }
 
 
