@@ -11,6 +11,7 @@ const ATTR_MENUICONTEXT = 'data-icontext'
 const ATTR_GRIDAREA = 'data-gridarea'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
+const CLS_BUTTONMENU = 'fgta5-button-menu'
 
 const TXT_FAVOURITE = 'Favourite Programs'
 const TXT_RECENT = 'Recent Programs'
@@ -144,6 +145,7 @@ function AppManager_createMenu(self, nav) {
 	const txtsearch = document.createElement('input')
 	const btnsearch = document.createElement('button')
 	
+	
 	const menuboard = document.createElement('div')
 	
 
@@ -169,6 +171,13 @@ function AppManager_createMenu(self, nav) {
 	toppanel.appendChild(toppanel_center)
 	toppanel.appendChild(toppanel_right)
 
+
+	// home
+	const btnhome = self.CreateSvgButton(ICON_HOME, CLS_BUTTONMENU, ()=>{
+		AppManager_showHome(self)
+	})
+
+	toppanel_left.appendChild(btnhome)
 	
 	// search
 	txtsearch.setAttribute('placeholder', 'search module')
@@ -379,6 +388,48 @@ function AppManager_CreateGroupIcon(self, group) {
 	return container
 }
 
+
+function AppManager_CreateActionIcon(self, buttondata, fn_action) {
+	const container = document.createElement('div')
+	const icon = document.createElement('div')
+	const text = document.createElement('div')
+	
+	container.setAttribute(ATTR_MENUICONCONTAINER, '')
+	if (buttondata.disabled) {
+		container.setAttribute('disabled', '')
+	}
+
+
+	icon.setAttribute(ATTR_MENUICONIMAGE, '')
+	if (buttondata.icon!=null) {
+		// tampilkan icon sesuai data
+		icon.style.backgroundImage = `url('${buttondata.icon}')`
+	} else {
+		// tampilkan icon standard
+		icon.style.backgroundImage = `url('data:image/svg+xml,${encodeURIComponent(Component.ICON_ACTION)}')`
+	}
+
+	text.innerHTML = buttondata.title
+	text.setAttribute(ATTR_MENUICONTEXT, '')
+
+
+	container.appendChild(icon)
+	container.appendChild(text)
+
+	icon.addEventListener('click', ()=>{
+		icon.style.animation = 'iconClicked 0.4s forwards'
+		setTimeout(()=>{
+			icon.style.animation = 'unset'
+		}, 400)
+		setTimeout(()=>{
+			if (typeof fn_action === 'function') {
+				fn_action()
+			}
+		}, 200)
+	})
+
+	return container
+}
 
 
 

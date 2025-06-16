@@ -18,10 +18,13 @@ const ICON_CLOSE = `<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.
   </g>
 </svg>`
 
-const ICON_BACK = `<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
+const ICON_BACK = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
 <path d="m5.5873 1.1684-2.515 3.0773 2.515 3.0773" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.3229"/>
 </svg>`
 
+const ICON_ACTION = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
+<path d="m3.4777 0.49839-1.3861 4.1094h1.945l-1.2743 3.3919 3.7782-4.663h-1.9226l1.252-2.8383z"/>
+</svg>`
 
 
 export default class Component {
@@ -31,6 +34,7 @@ export default class Component {
 	static get ICON_MENU() { return ICON_MENU }
 	static get ICON_CLOSE() { return ICON_CLOSE }
 	static get ICON_BACK() { return ICON_BACK }
+	static get ICON_ACTION() { return ICON_ACTION }
 
 	static get ACTION_SHOWMENU()  { return 'showmenu' }
 	static get ACTION_APPLICATIONLOADED() { return 'applicationloaded' }

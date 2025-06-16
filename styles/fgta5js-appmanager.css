@@ -29,8 +29,17 @@
 	min-width: 1.2rem;
 	min-height: 1.2rem;
 	color: white;
+	padding: 5px;
 }
 
+.fgta5-button-menu {
+	display: block;
+	text-decoration: none;
+	width: 2rem;
+	height: 2rem;
+	color: rgb(165, 165, 165);
+	padding: 5px;
+}
 
 
 .fgta5-appmanager-nav {
@@ -72,8 +81,13 @@
 }
 
 .fgta5-appmanager-nav div[main] {
-	margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 1rem 1rem
+	padding: calc(var(--fgta5-app-header-height) + 1rem) 1rem 1rem 1rem;
+	height: calc(100vh - var(--fgta5-app-header-height) + 3rem);
+	overflow-y: scroll;
+	
 }
+
+
 
 .fgta5-iframe {
 	position: fixed;
@@ -118,6 +132,7 @@
 		display: flex;
 		row-gap: 1rem;
 		column-gap: 1rem;
+		flex-wrap: wrap;
 	}
 }
 
@@ -215,7 +230,11 @@
 	grid-area: center;
 	display: flex;	
 	justify-content: center;
+	align-items: end;
+	padding: 5px;
 }
+
+
 
 .fgta5-menu-toppanel [data-gridarea="right"] {
 	grid-area: right;
@@ -231,6 +250,11 @@
 			"left right"
 			"center center";
 		grid-template-columns: 50% 50%;
+		row-gap: 20px;
+	}
+
+	.fgta5-menu-toppanel [data-gridarea="center"] input {
+		flex-grow: 1;
 	}
 
 }
