@@ -6,42 +6,29 @@ export default class Page {
 	}
 }
 
+
+// sample program list
 const programs = {
-	account: new $fgta5.ModuleData({type:'module', title:'Account', name:'account', icon: 'images/iconprograms/map.png'}),
-	departement: new $fgta5.ModuleData({type:'module', title:'Departemen', name:'departement', icon: 'images/iconprograms/mcfly.png'}),
-	lokasi: new $fgta5.ModuleData({type:'module', title:'Lokasi', name:'lokasi', icon: 'images/iconprograms/medicine.png'}),
-	periode: new $fgta5.ModuleData({type:'module', title:'Periode', name:'periode', icon: 'images/iconprograms/mountaint.png'}),
-	jurnal: new $fgta5.ModuleData({type:'module', title:'Jurnal Umum', name:'jurnal', icon: 'images/iconprograms/packman.png', disabled:true}),
-	payment: new $fgta5.ModuleData({type:'module', title:'Pembayaran', name:'payment', icon: 'images/iconprograms/photo.png'}),
-	hutang: new $fgta5.ModuleData({type:'module', title:'Hutang', name:'hutang', icon: 'images/iconprograms/pin.png'}),
-	user: new $fgta5.ModuleData({type:'module', title:'User', name:'user', icon: 'images/iconprograms/pizza.png'}),
-	group: new $fgta5.ModuleData({type:'module', title:'Group', naem:'group', icon: 'images/iconprograms/speakers.png'})
+	account: new $fgta5.ModuleData({name:'account', title:'Account', icon: 'images/iconprograms/map.png'}),
+	departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'images/iconprograms/mcfly.png'}),
+	lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'images/iconprograms/medicine.png'}),
+	periode: new $fgta5.ModuleData({name:'periode', title:'Periode', icon: 'images/iconprograms/mountain.png'}),
+	jurnal: new $fgta5.ModuleData({name:'jurnal', title:'Jurnal Umum', icon: 'images/iconprograms/packman.png', disabled:true}),
+	payment: new $fgta5.ModuleData({name:'payment', title:'Pembayaran', icon: 'images/iconprograms/photo.png'}),
+	hutang: new $fgta5.ModuleData({name:'hutang', title:'Hutang', icon: 'images/iconprograms/pin.png'}),
+	user: new $fgta5.ModuleData({name:'user', title:'User', icon: 'images/iconprograms/pizza.png'}),
+	group: new $fgta5.ModuleData({name:'group', title:'Group', icon: 'images/iconprograms/speakers.png'})
 }
 
 
 async function main(self, args) {
-	// const mdls = document.querySelectorAll('#recentmodules a')	
-	// for (let md of mdls) {
-	// 	md.addEventListener('click', ()=>{
-	// 		var module = md.getAttribute('data-module')
-	// 		var title = md.innerHTML
-	// 		var param = {
-	// 			type: 'module',
-	// 			title: title,
-	// 			module: module
-	// 		}
-	// 		appmgr.OpenModule(param)
-	// 	})
-	// }
-
-
-
-
 	appmgr.SetMenu([
 		{
 			title: 'Accounting',
+			border: false,
 			items: [
 				{
+					icon: 'images/icon-food.svg',
 					title: 'Master data',
 					items: [
 						programs.account,
@@ -52,6 +39,7 @@ async function main(self, args) {
 				},
 				{
 					title: 'Transaksi',
+					border: false,
 					items: [
 						programs.jurnal,
 						programs.payment,
@@ -62,6 +50,7 @@ async function main(self, args) {
 		},
 		{
 			title: 'Administrator',
+			border: false,
 			items: [
 				programs.user,
 				programs.group
@@ -69,11 +58,9 @@ async function main(self, args) {
 		}
 	])
 
-		appmgr.SetFavourite([
-			programs.account,
-			programs.jurnal,
-			programs.user,
-		])
+	// set program favourite	
+	appmgr.SetFavourite(['account', 'jurnal', 'user'])
+
 }
 
 

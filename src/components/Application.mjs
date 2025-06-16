@@ -33,6 +33,10 @@ function Application_construct(self) {
 
 	window.addEventListener("load", (event) => {
 		console.log('application loaded.')
+		window.parent.postMessage({
+			action: Component.ACTION_APPLICATIONLOADED
+		}, '*')
+
 	})
 
 	window.addEventListener("message", (evt) => {
