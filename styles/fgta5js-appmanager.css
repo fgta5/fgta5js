@@ -37,7 +37,7 @@
 	text-decoration: none;
 	width: 2rem;
 	height: 2rem;
-	color: rgb(165, 165, 165);
+	color: var(--fgta5-app-buttonmenu-color);
 	padding: 5px;
 }
 
@@ -80,11 +80,18 @@
 	align-items: center;
 
 	padding: 0 0.5rem 0 0.5rem;
+
+	transition: box-shadow 0.3s ease-in-out; /* Animasi shadow */
+
 	
 }
 
+.fgta5-fixheader-scrolled {
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
 .fgta5-appmanager-nav div[main] {
-	padding: calc(var(--fgta5-app-header-height) + 1rem) 0 1rem 0;
+	padding: calc(var(--fgta5-app-header-height) + 1rem) 0 3rem 0;
 	overflow-y: scroll;
 	width: 100%;
 }
@@ -127,6 +134,10 @@
 		display: grid;
 		grid-template-columns: repeat(4, 1fr); /* 4 kolom dengan lebar sama */
     	gap: 10px; /* Jarak antar elemen */
+
+		/* Memusatkan konten di dalam setiap grid cell */
+		align-items: center; /* Vertikal */
+		justify-items: center; /* Horizontal */
 	}
 
 }
@@ -135,10 +146,10 @@
 /* khusus desktop */
 @media screen and (min-width: 501px) { 
 	.fgta5-menu {
-		display: flex;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr)); /* Kolom fleksibel */
 		row-gap: 1rem;
 		column-gap: 1rem;
-		flex-wrap: wrap;
 	}
 }
 
@@ -219,6 +230,43 @@
 }
 
 
+.fgta5-menu-footer {
+	left: 0;
+	height: 2.5rem;
+	border-top: 1px solid #eee;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@media screen and (max-width: 500px) { 
+	.fgta5-menu-footer {
+		font-size: 0.7rem;
+	}
+}
+
+.fgta5-menu-footer > a {
+	display: flex;
+	align-items: center;
+	column-gap: 0.5rem;
+	text-decoration: none;
+	color: black;
+	height: 1rem;
+	line-height: 1rem;
+	padding: 5px;
+}
+
+
+.fgta5-menu-footer > a div[icon] {
+	width: 1rem;
+	height: 1rem;
+}
+
+
 
 
 .fgta5-menu-toppanel {
@@ -230,6 +278,7 @@
 .fgta5-menu-toppanel [data-gridarea="left"] {
 	grid-area: left;
 	display: flex;
+	gap: 0.5rem
 }
 
 .fgta5-menu-toppanel [data-gridarea="center"] {
@@ -240,14 +289,57 @@
 	padding: 5px;
 }
 
-
-
 .fgta5-menu-toppanel [data-gridarea="right"] {
 	grid-area: right;
 	display: flex;
 	justify-content: right;
+	gap: 0.5rem
 	
 }
+
+.fgta5-menu-search {
+	display: flex;
+	position: relative;
+	border-bottom: 1px solid #a3a3a3;
+	margin-bottom: 1px;
+}
+
+.fgta5-menu-search:focus-within  {
+	border-bottom: 2px solid #5c5c5c;
+	margin-bottom: 0;
+}
+
+.fgta5-menu-search *:focus {
+	border: none !important;
+	margin-bottom: 0 !important;
+}
+
+.fgta5-menu-search input {
+	outline: none;
+	border: none;
+	padding-right: 1.8rem; 
+	background-color: transparent;
+	height: 1.5rem;
+	margin-bottom: 0;
+}
+
+.fgta5-menu-search button {
+	border: none;
+    outline: none;
+    width: 2rem;
+    background-color: transparent;
+    position: absolute;
+    right: 0;
+    top: 0.2rem;
+ 	color: var(--fgta5-app-buttonmenu-color);
+	margin-bottom: 0;
+}
+
+
+
+
+
+
 
 /* khusus mobile */
 @media screen and (max-width: 500px) { 
@@ -259,8 +351,12 @@
 		row-gap: 20px;
 	}
 
-	.fgta5-menu-toppanel [data-gridarea="center"] input {
+	.fgta5-menu-search {
 		flex-grow: 1;
+	}
+
+	.fgta5-menu-search button {
+		top: 0
 	}
 
 }

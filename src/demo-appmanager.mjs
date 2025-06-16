@@ -130,6 +130,35 @@ async function main(self, args) {
 	// set program favourite	
 	appmgr.SetFavourite(['account', 'jurnal', 'user'])
 
+	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
+
+
+	appmgr.addEventListener('logout', (evt)=>{
+		// do something when logout
+		console.log('logout action')
+		console.log(evt.detail)
+	})
+
+	appmgr.addEventListener('openprofile', (evt)=>{
+		// do something when logout
+		console.log('open user profule')
+		console.log(evt.detail)
+	})
+
+	appmgr.addEventListener('opensetting', (evt)=>{
+		// do something when logout
+		console.log('open setting')
+		console.log(evt.detail)
+	})
+
+
+	appmgr.addEventListener('action', (evt)=>{
+		// click program, dll
+		console.log('action triggered')
+		console.log(evt.detail)
+	})
+	
+
 }
 
 

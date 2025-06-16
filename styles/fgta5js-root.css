@@ -25,7 +25,9 @@
 	--fgta-cbo-thead-color: white;
 
 
-	--fgta5-app-header-height: 2.5rem
+	--fgta5-app-header-height: 2.5rem;
+
+	--fgta5-app-buttonmenu-color: rgb(165, 165, 165);
 }
 
 

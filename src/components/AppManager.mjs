@@ -28,6 +28,12 @@ const ICON_HOME = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://
 const ICON_DIRDEF = '<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg"><rect x=".4961" y="3.9307" width="7.5035" height="4.0689"/><path d="m0.4961 3.2521h7.5035l1e-7 -0.71184h-4.2386l-0.87664-1.3525h-2.3883z"/><rect x="5.8727" y="5.303" width="1.2058" height="1.1077" fill="#fff"/></svg>'
 
 
+const ActionEvent = (data) => { return new CustomEvent('action', data) }
+const LogoutEvent = (data) => { return new CustomEvent('logout', data) }
+const OpenProfileEvent = (data) => { return new CustomEvent('openprofile', data) }
+const OpenSettingEvent = (data) => { return new CustomEvent('opensetting', data) }
+
+
 export default class AppManager extends Component {
 	constructor(id) {
 		super(id)
@@ -60,8 +66,17 @@ export default class AppManager extends Component {
 		AppManager_OpenModule(this, module)
 	}
 
-
+	#userdata
+	get User() { return this.#userdata }
+	SetUser(data) {
+		this.#userdata = data
+		AppManager_SetUser(this, data)
+	}
 	
+
+	addEventListener(evt, callback) {
+		this.Listener.addEventListener(evt, callback)
+	}
 }
 
 function AppManager_construct(self) {
@@ -87,8 +102,13 @@ function AppManager_construct(self) {
 	nav.classList.add('fgta5-appmanager-nav')
 
 	AppManager_createHeader(self, head)
-	const {MenuBoard} = AppManager_createMenu(self, nav)
+	const {MenuBoard, MenuFooter, ProfileButton, LogoutButton} = AppManager_createMenu(self, nav)
 
+	// self.Nodes.MenuFooter = footer
+	// self.Nodes.ProfileButton = btnprofile
+
+
+	self.Listener = new EventTarget()
 	self.Nodes = {
 		Head: head,
 		Nav: nav,
@@ -97,7 +117,10 @@ function AppManager_construct(self) {
 		Favourite: favourite,
 		Recent: recent,
 		Currentuser: currentuser,
-		MenuBoard: MenuBoard
+		MenuBoard: MenuBoard,
+		MenuFooter: MenuFooter, 
+		ProfileButton: ProfileButton,
+		LogoutButton: LogoutButton
 	}
 
 }
@@ -116,13 +139,13 @@ function AppManager_listenMessage(self) {
 }
 
 
-function headButton(self, svg, fn_click) {
+function AppManager_createHeadButton(self, svg, fn_click) {
 	return self.CreateSvgButton(svg, CLS_BUTTONHEAD, fn_click )
 }
 
 function AppManager_createHeader(self, head) {
 	const title = document.createElement('span')
-	const btnmenu = headButton(self, Component.ICON_MENU, ()=>{
+	const btnmenu = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{
 		AppManager_ShowMenu(self)
 	})
 
@@ -134,9 +157,9 @@ function AppManager_createHeader(self, head) {
 
 function AppManager_createMenu(self, nav) {
 	const menuhead = document.createElement('div')
-	const btnmenureset = headButton(self, Component.ICON_MENU, ()=>{ AppManager_ResetMenu(self) })
+	const btnmenureset = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{ AppManager_ResetMenu(self) })
 	const divcenter = document.createElement('div')
-	const btnclose = headButton(self, Component.ICON_CLOSE, ()=>{ AppManager_closeMenu(self) })
+	const btnclose = AppManager_createHeadButton(self, Component.ICON_CLOSE, ()=>{ AppManager_closeMenu(self) })
 	const main = document.createElement('div')
 	const toppanel = document.createElement('div')
 	const toppanel_left = document.createElement('div')
@@ -144,9 +167,11 @@ function AppManager_createMenu(self, nav) {
 	const toppanel_right = document.createElement('div')
 	const txtsearch = document.createElement('input')
 	const btnsearch = document.createElement('button')
+	const btnlogout = document.createElement('a')
 	
 	
 	const menuboard = document.createElement('div')
+	const footer = document.createElement('div')
 	
 
 	// header
@@ -157,12 +182,25 @@ function AppManager_createMenu(self, nav) {
 	divcenter.innerHTML = 'Menu'
 
 
+	// footer
+	footer.classList.add('hidden')
+	footer.classList.add('fgta5-menu-footer')
+	footer.appendChild(btnlogout)
+
+
+
 	// main
 	main.setAttribute('main', '')
 	main.appendChild(toppanel)
 	main.appendChild(menuboard)
-
-
+	main.appendChild(footer)
+	main.addEventListener('scroll', ()=>{
+		 if (main.scrollTop > 10) {
+			menuhead.classList.add('fgta5-fixheader-scrolled')
+		 } else {
+			menuhead.classList.remove('fgta5-fixheader-scrolled')
+		 }
+	})
 
 
 	// top panel: home, search, logout, profile
@@ -177,9 +215,20 @@ function AppManager_createMenu(self, nav) {
 		AppManager_showHome(self)
 	})
 
-	toppanel_left.appendChild(btnhome)
+	// setting
+	const btnsetting = self.CreateSvgButton(Component.ICON_SETTING, CLS_BUTTONMENU, ()=>{
+		AppManager_openSetting(self)
+	})
+	
 	
 	// search
+	const menusearch = document.createElement('div')
+	menusearch.classList.add('fgta5-menu-search')
+	menusearch.appendChild(txtsearch)
+	menusearch.appendChild(btnsearch)
+
+	txtsearch.classList.add('fgta5-menu-search')
+	txtsearch.setAttribute('name', 'menusearch')
 	txtsearch.setAttribute('placeholder', 'search module')
 	txtsearch.addEventListener('keydown', (evt)=>{
 		if (evt.key=='Enter') {
@@ -187,39 +236,53 @@ function AppManager_createMenu(self, nav) {
 		}
 	})
 
-	btnsearch.innerHTML = 'Search'
+	btnsearch.classList.add('fgta5-menu-search')
+	btnsearch.innerHTML = Component.ICON_SEARCH
 	btnsearch.addEventListener('click', (evt)=>{
+		txtsearch.focus()
 		AppManager_searchModule(self, txtsearch.value)
 	})
 
+
+	// user
+	const btnprofile = self.CreateSvgButton(Component.ICON_USER, CLS_BUTTONMENU)
+	btnprofile.classList.add('hidden')
+	
+
 	// toppanel content
 	toppanel_left.setAttribute(ATTR_GRIDAREA, 'left')
-	
+	toppanel_left.appendChild(btnhome)
+	toppanel_left.appendChild(btnsetting)
 	
 	toppanel_center.setAttribute(ATTR_GRIDAREA, 'center')
-	toppanel_center.appendChild(txtsearch)
-	toppanel_center.appendChild(btnsearch)
+	toppanel_center.appendChild(menusearch)
+
 
 	toppanel_right.setAttribute(ATTR_GRIDAREA, 'right')
-
-
+	toppanel_right.appendChild(btnprofile)
 
 
 	// main menuboard
 	menuboard.classList.add('fgta5-menu')
-	
 
 
-	// footer
-
+	// button logout
+	btnlogout.innerHTML = `<div icon>${Component.ICON_LOGOUT}</div><div>Sign Out</div>`
+	btnlogout.setAttribute('href', 'javascript:void(0)')
 
 
 	// setup nav
 	nav.appendChild(main)
 	nav.appendChild(menuhead)
 
+
+
+
 	return {
-		MenuBoard: menuboard
+		MenuBoard: menuboard,
+		MenuFooter: footer,
+		ProfileButton: btnprofile,
+		LogoutButton: btnlogout
 	}
 }	
 
@@ -259,9 +322,30 @@ function AppManager_OpenModule(self, module) {
 			newframe.contentWindow.postMessage({
 				action: Component.ACTION_APPLICATIONLOADED,
 				module: {
-					title: module.title
+					title: module.title,
+					name: modulename
 				}
 			}, '*')
+
+			// saat module pertama di load
+			self.Listener.dispatchEvent(ActionEvent({
+				detail: {
+					name: 'moduleloaded',
+					modulename: modulename,
+					title: module.title,
+					iframe: newframe
+				}
+			}))
+
+			// module terbuka
+			self.Listener.dispatchEvent(ActionEvent({
+				detail: {
+					name: 'moduleopened',
+					modulename: modulename,
+					title: module.title,
+					iframe: newframe
+				}
+			}))
 		}
 
 		iframes.appendChild(newframe)
@@ -274,6 +358,16 @@ function AppManager_OpenModule(self, module) {
 			var fname = f.getAttribute(ATTR_MODULENAME)
 			if (fname==modulename) {
 				f.classList.remove('hidden')
+
+				// module terbuka
+				self.Listener.dispatchEvent(ActionEvent({
+					detail: {
+						name: 'moduleopened',
+						modulename: modulename,
+						title: module.title,
+						iframe: f
+					}
+				}))
 			} else {
 				f.classList.add('hidden')
 			}
@@ -389,50 +483,6 @@ function AppManager_CreateGroupIcon(self, group) {
 }
 
 
-function AppManager_CreateActionIcon(self, buttondata, fn_action) {
-	const container = document.createElement('div')
-	const icon = document.createElement('div')
-	const text = document.createElement('div')
-	
-	container.setAttribute(ATTR_MENUICONCONTAINER, '')
-	if (buttondata.disabled) {
-		container.setAttribute('disabled', '')
-	}
-
-
-	icon.setAttribute(ATTR_MENUICONIMAGE, '')
-	if (buttondata.icon!=null) {
-		// tampilkan icon sesuai data
-		icon.style.backgroundImage = `url('${buttondata.icon}')`
-	} else {
-		// tampilkan icon standard
-		icon.style.backgroundImage = `url('data:image/svg+xml,${encodeURIComponent(Component.ICON_ACTION)}')`
-	}
-
-	text.innerHTML = buttondata.title
-	text.setAttribute(ATTR_MENUICONTEXT, '')
-
-
-	container.appendChild(icon)
-	container.appendChild(text)
-
-	icon.addEventListener('click', ()=>{
-		icon.style.animation = 'iconClicked 0.4s forwards'
-		setTimeout(()=>{
-			icon.style.animation = 'unset'
-		}, 400)
-		setTimeout(()=>{
-			if (typeof fn_action === 'function') {
-				fn_action()
-			}
-		}, 200)
-	})
-
-	return container
-}
-
-
-
 function AppManager_SetMenu(self, data) {
 	self.RootIcons = AppManager_ReadMenu(self, data)
 	AppManager_PopulageMenuIcons(self, self.RootIcons)
@@ -517,8 +567,21 @@ function AppManager_PopulageMenuIcons(self, icons, parent) {
 
 async function AppManager_searchModule(self, searchtext) {
 	if (searchtext.trim()=='') {
+		if (self.previousSearch===undefined) {
+			self.previousSearch=''
+			return
+		}
+
+		if (searchtext==self.previousSearch) {
+			return
+		}
+
+		self.previousSearch=''
+		AppManager_ResetMenu(self)
 		return
 	}
+
+	self.previousSearch=searchtext
 
 	const menuboard = self.Nodes.MenuBoard
 	const modules = self.Modules
@@ -540,4 +603,54 @@ async function AppManager_searchModule(self, searchtext) {
 			}
 		}
 	}
+}
+
+function AppManager_SetUser(self, data) {
+	const btnprofile = self.Nodes.ProfileButton
+	const btnlogout = self.Nodes.LogoutButton
+
+	// munculkan footer menu untuk logout
+	self.Nodes.MenuFooter.classList.remove('hidden')
+
+	// munculkan profile icon
+	btnprofile.classList.remove('hidden')
+	btnprofile.addEventListener('click', (evt)=>{
+		AppManager_profileClick(self)
+	})
+
+
+	btnlogout.addEventListener('click', (evt)=>{
+		AppManager_logout(self)
+	})
+	// munculkan nama di home
+	self.Nodes.Currentuser.innerHTML = data.displayname
+
+}
+
+
+function AppManager_profileClick(self) {
+	self.Listener.dispatchEvent(OpenProfileEvent({
+		detail: {
+			user: self.User,
+		}
+	}))
+}
+
+async function AppManager_logout(self) {
+	var ret = await $fgta5.MessageBox.Confirm("are you sure to log out ?")
+	if (ret=='ok') {
+		self.Listener.dispatchEvent(LogoutEvent({
+			detail: {
+				user: self.User,
+			}
+		}))
+	}
+}
+
+async function AppManager_openSetting(self) {
+	self.Listener.dispatchEvent(OpenSettingEvent({
+		detail: {
+			user: self.User,
+		}
+	}))
 }
