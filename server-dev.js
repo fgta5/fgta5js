@@ -80,6 +80,7 @@ app.get('/debug/:page', function(req, res) {
 	const pageName = req.params.page;
 	res.render(pageName, {
 		title: pageName + ' - fgta5js Debug',
+		env: 'debug',
 		script: 'head-script-dev.ejs',
 		style: 'head-style-dev.ejs'
 	}, (err, html)=>{
@@ -97,6 +98,7 @@ app.get('/release/:page', function(req, res) {
 	const pageName = req.params.page;
 	res.render(pageName, {
 		title: pageName + ' - fgta5form Build',
+		env: 'release',
 		script: 'head-script-build.ejs',
 		style: 'head-style-build.ejs'
 	}, (err, html)=>{

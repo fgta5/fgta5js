@@ -13,6 +13,7 @@ const ATTR_SHORTCUT_ICON = 'data-icon'
 const ATTR_SHORTCUT_TITLE = 'data-title'
 const ATTR_SHORTCUT_INFO = 'data-info'
 const ATTR_SHORTCUT_CLOSE = 'data-buttonclose'
+const ATTR_DRAGOVER = 'data-dragover'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
 const CLS_BUTTONMENU = 'fgta5-button-menu'
@@ -30,7 +31,11 @@ const ActionEvent = (data) => { return new CustomEvent('action', data) }
 const LogoutEvent = (data) => { return new CustomEvent('logout', data) }
 const OpenProfileEvent = (data) => { return new CustomEvent('openprofile', data) }
 const OpenSettingEvent = (data) => { return new CustomEvent('opensetting', data) }
+const AddToFavouriteEvent = (data) => { return new CustomEvent('addtofavourite', data) }
 
+
+let current_dragged_modulename
+let current_drag_action
 
 export default class AppManager extends Component {
 	constructor(id) {
@@ -442,11 +447,16 @@ function AppManager_SetFavourite(self, data)	 {
 
 	favourite.before(title)
 	favourite.classList.add('fgta5-menu')
+	favourite.classList.add('fgta5-favourite')
+	favourite.addEventListener('dragover', (evt)=>{ AppManager_FavouriteDragOver(self, evt, favourite) })
+	favourite.addEventListener('dragleave', (evt)=>{ AppManager_FavouriteDragLeave(self, evt, favourite) })
+	favourite.addEventListener('drop', (evt)=>{ AppManager_FavouriteDrop(self, evt, favourite)  })
 
-	for (var modulename of data) {
+	for (let modulename of data) {
 		var module = self.Modules[modulename]
 		if (module!=null) {
-			var mi = AppManager_CreateModuleIcon(self, module.data)
+			let mi = AppManager_CreateModuleIcon(self, module.data)
+			AppManager_setAsFavouriteIcon(self, mi, modulename, favourite)
 			favourite.appendChild(mi)
 		}
 	}
@@ -459,6 +469,7 @@ function AppManager_CreateModuleIcon(self, module) {
 	const icon = document.createElement('div')
 	const text = document.createElement('div')
 	
+	container.setAttribute('name', module.name)
 	container.setAttribute(ATTR_MENUICONCONTAINER, '')
 	if (module.disabled) {
 		container.setAttribute('disabled', '')
@@ -767,11 +778,13 @@ function AppManager_createOpenedShortcut(self, module, iframe, id) {
 
 	shortcut.id = id
 	shortcut.classList.add('fgta5-openedmodule-shortcut')
+	shortcut.setAttribute('draggable', 'true')
 	shortcut.appendChild(icon)
 	shortcut.appendChild(title)
 	shortcut.appendChild(info)
 	shortcut.appendChild(closebutton)
 	shortcut.addEventListener('click', (evt)=>{ AppManager_OpenModule(self, module) })
+	shortcut.addEventListener('dragstart', (evt)=>{ AppManager_DragModule(self, evt, module) })
 
 
 	icon.setAttribute(ATTR_SHORTCUT_ICON, '')
@@ -802,3 +815,81 @@ function AppManager_createOpenedShortcut(self, module, iframe, id) {
 
 	return shortcut
 }
+
+function AppManager_DragModule(self, evt, module) {
+	current_drag_action = 'addtofave'
+	evt.dataTransfer.setData('modulename', module.name);
+	current_dragged_modulename = module.name
+}
+
+function AppManager_FavouriteDragOver(self, evt, favourite) {
+	if (current_drag_action=='addtofave') {
+		var exist = favourite.querySelector(`[name="${current_dragged_modulename}"]`)
+		if (exist==null) {
+			evt.preventDefault()
+			favourite.setAttribute(ATTR_DRAGOVER, '')
+		}
+	} 
+	// else if (current_drag_action=='removefromfave') {
+	// 	favourite.setAttribute(ATTR_DRAGOVER, '')
+	// }
+
+}
+
+function AppManager_FavouriteDragLeave(self, evt, favourite) {
+	favourite.removeAttribute(ATTR_DRAGOVER)
+}
+
+function AppManager_FavouriteDrop(self, evt, favourite) {
+	favourite.removeAttribute(ATTR_DRAGOVER)
+
+	const modulename = evt.dataTransfer.getData('modulename');
+	if (modulename=='') {
+		return
+	}
+
+	var exist = favourite.querySelector(`[name="${modulename}"]`)
+	if (exist==null) {
+		evt.preventDefault()
+		const module = self.Modules[modulename]
+		let mi = AppManager_CreateModuleIcon(self, module.data)
+		AppManager_setAsFavouriteIcon(self, mi, modulename, favourite)
+		favourite.prepend(mi)
+		self.Listener.dispatchEvent(AddToFavouriteEvent({
+			detail: {
+				modulename: modulename,
+			}
+		}))
+	}
+}
+
+function AppManager_setAsFavouriteIcon(self, mi, modulename, favourite) {
+	mi.setAttribute('draggable', 'true')
+	mi.addEventListener('dragstart', (evt)=>{
+		current_drag_action = 'removefromfave'
+		evt.dataTransfer.setData('modulename', modulename);
+	})
+
+	self.Nodes.Main.addEventListener('dragover', (evt)=>{
+		if (current_drag_action=='removefromfave') {
+			evt.preventDefault()
+			evt.dataTransfer.dropEffect = "copy"
+		}
+
+	})
+
+	self.Nodes.Main.addEventListener('dragleave', (evt)=>{
+		if (current_drag_action=='removefromfave') {
+
+		}
+	})
+
+	self.Nodes.Main.addEventListener('drop', (evt)=>{
+		if (current_drag_action=='removefromfave') {
+			evt.preventDefault()
+			// evt.target.remove()
+			console.log('hapus')
+		}
+	})	
+}
+

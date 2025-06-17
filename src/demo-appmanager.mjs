@@ -70,7 +70,7 @@ async function main(self, args) {
 	])
 
 	// set program favourite	
-	appmgr.SetFavourite(['crud01', 'account', 'jurnal', 'user'])
+	appmgr.SetFavourite(['crud01', 'account',  'periode', 'jurnal', 'user'])
 
 	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 

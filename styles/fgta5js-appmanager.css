@@ -135,6 +135,18 @@
 }
 
 
+@media screen and (min-width: 501px) { 
+	.fgta5-favourite {
+		padding: 5px;
+		border: 3px solid transparent
+	}
+
+	.fgta5-favourite[data-dragover] {
+		border: 3px dashed #5d7bff;
+		background-color: #5d7bff53;
+	}
+}
+
 
 .fgta5-iframe {
 	position: fixed;
