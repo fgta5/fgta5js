@@ -46,8 +46,24 @@
 
 
 	<script type="module">
+		/*
 		import Page from './src/demo-appmanager.mjs'
+		window.addEventListener("load", async (event) => {
+			var $page = new Page();
+			await $page.main();
 
+			var pagemask = document.getElementById('loadingindicator')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		});
+		*/
+	</script>
+
+	<script type="module">
+		import Page from './dist/demo-appmanager-v1.0.0-min.js'
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();
 			await $page.main();

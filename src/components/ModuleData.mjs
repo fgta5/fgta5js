@@ -4,6 +4,7 @@ export default class {
 		this.#title = param.title
 		this.#disabled = param.disabled
 		this.#icon = param.icon
+		this.#url = param.url
 	}
 
 	#name
@@ -17,4 +18,7 @@ export default class {
 
 	#icon
 	get icon() { return this.#icon==null ? 'images/iconprograms/www.png' : this.#icon }
+
+	#url 
+	get url() { return this.#url }
 }

@@ -4,7 +4,7 @@ const btnFooterShow = new $fgta5.Button('btnFooterShow')
 const btnFooterHide = new $fgta5.Button('btnFooterHide')
 
 
-export default class Page {
+export default class MyApp extends CrudApplication {
 	async main(args) {
 		await main(this, args)
 	}
@@ -27,4 +27,40 @@ async function main(self, args) {
 		line.innerHTML = `baris ${i}`
 		app.Nodes.Main.appendChild(line)
 	}
+
+
+	// const header = crud.connect({
+	// 	apis: {
+	// 		create: '',
+	// 		retrieve: '',
+	// 		update: '',
+	// 		delete: '' 
+	// 	},
+	// 	keyfields: ['id']
+	// })
+
+
+
+	// var result = await header.retrieve({
+	// 	criteria: {
+	// 		id: '1234'
+	// 	},
+	// 	paging: {
+	// 		offset: 0,
+	// 		limit: 30
+	// 	},
+	// 	columns: ['id', 'nama', 'alamat', 'kota']
+	// })
+
+	// // misal untuk edit row
+	// result.rows[0]['nama'] = 'joni'
+
+
+	// // edit row
+	// await header.update(rows[0])
+
+
+	// // crud.delete('header', row)
+
+	// // crud.create('header', data)
 }

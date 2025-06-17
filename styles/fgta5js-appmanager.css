@@ -17,7 +17,7 @@
 }	
 
 .fgta5-app-main {
-	margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 1rem 1rem
+	margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 2rem 1rem
 }
 
 .fgta5-app-footer {
@@ -40,7 +40,7 @@
 	}
 
 	.fgta5-app-main[data-withfooter] {
-		padding-bottom: 5.5rem;
+		margin-bottom: 5.5rem;
 	}
 }
 
@@ -50,7 +50,7 @@
 	}
 
 	.fgta5-app-main[data-withfooter] {
-		padding-bottom: 3rem;
+		margin-bottom: 3.5rem;
 	}
 }
 

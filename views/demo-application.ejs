@@ -16,21 +16,46 @@
 	</head>
 	<body>
 		<main id="myapp">
-			myapp	
-			<input type="text">
+			Contoh Applikasi sederhana
+			<!-- <div id="" data-panel>
+				<table>
 
-			<button id="btnFooterShow">Show Footer</button>
-			<button id="btnFooterHide">Hide Footer</button>
+				</table>
+			</div>
+
+			<div id="" data-panel>
+				<form>
+
+				</form>
+				<div data-detail>
+					<button data-panel-id="app-detil">Detil</button>
+					<button data-panel-id="app-record">Record</button>
+					<button data-panel-id="app-log">Log</button>
+				</div>
+				<div data-footerbutton>
+					<button id="btnEdit">Edit</button>
+					<button id="btnNew">New</button>
+					<button id="btnSave">Save</button>
+					<button id="btnDelete">Delete</button>
+				</div>
+			</div>
+
+			<div id="" data-panel>
+
+			</div> -->
+
+
+
 
 		</main>
 	</body>
 
 
 	<script type="module">
-		import Page from './src/demo-application.mjs'
+		import MyApp from './src/demo-application.mjs'
 		window.addEventListener("load", async (event) => {
-			var $page = new Page();
-			await $page.main();
+			var $app = new MyApp();
+			await $app.main();
 		});
 	</script>
 </html>

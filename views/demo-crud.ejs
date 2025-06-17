@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/demo-application.css" />
+	</head>
+	<body>
+		<main id="myapp">
+			CRUD
+			<div id="dynamicload">loading content ...</div>
+		</main>	
+
+	</body>
+
+
+	<script type="module">
+		/*
+		import MyApp from './src/demo-crud.mjs'
+		window.addEventListener("load", async (event) => {
+			var $app = new MyApp();
+			await $app.main();
+		});
+		*/
+		import MyApp from './dist/demo-crud-v1.0.0-min.js'
+		window.addEventListener("load", async (event) => {
+			var $app = new MyApp();
+			await $app.main();
+		});
+	</script>
+</html>			

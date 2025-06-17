@@ -379,7 +379,7 @@ async function AppManager_OpenModule(self, module) {
 	const iframes = self.Nodes.IFrames
 	const modulename = module.name
 
-	self.Nodes.IFrames.classList.remove('hidden')
+	
 
 	const qry = `iframe[${ATTR_MODULENAME}="${modulename}"]`
 	const ifr = iframes.querySelector(qry)
@@ -387,17 +387,30 @@ async function AppManager_OpenModule(self, module) {
 		// buka iframe baru
 		const mask = $fgta5.Modal.Mask('Please wait...')
 
+		var url = module.url ?? 'demo-application'
 		let newframe = document.createElement('iframe')
 		newframe.classList.add('fgta5-iframe')
 		newframe.classList.add('hidden')
 		newframe.setAttribute(ATTR_MODULENAME, modulename)
-		newframe.src = 'demo-application'
-		newframe.onload = () => {
+		
+		newframe.onload = (evt) => {
 			AppManager_iframeLoaded(self, newframe, module)
 			newframe.classList.remove('hidden')
 			mask.close()
 		}
-		iframes.appendChild(newframe)
+
+		fetch(url)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`HTTP Error: ${response.status}`);
+				}
+				newframe.src = url
+				iframes.appendChild(newframe)
+				self.Nodes.IFrames.classList.remove('hidden')
+			}).catch(error => {
+				$fgta5.MessageBox.Error(error)
+				mask.close()
+			});
 	} else {	
 		// tampilkan iframe
 		// hide semua iframe kecuali iframe yang akan dibuka
@@ -410,6 +423,7 @@ async function AppManager_OpenModule(self, module) {
 				f.classList.add('hidden')
 			}
 		} 
+		self.Nodes.IFrames.classList.remove('hidden')
 	}
 }
 
