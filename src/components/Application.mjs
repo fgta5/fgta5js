@@ -53,14 +53,25 @@ function Application_construct(self) {
 
 
 function Application_createHeader(self, head) {
+	const divleft = document.createElement('div')
 	const title = document.createElement('span')
+
 	const btnmenu = self.CreateSvgButton(Component.ICON_MENU, CLS_BUTTONHEAD, ()=>{
 		Application_ShowMenu(self)
 	})
 
+	const btnhome = self.CreateSvgButton(Component.ICON_HOME, CLS_BUTTONHEAD, ()=>{
+		Application_ShowHome(self)
+	})
+
+
+
+	divleft.appendChild(btnhome)
+
 	title.id = ID_TITLE
 	title.innerHTML = 'loading ...'
 
+	head.appendChild(divleft)
 	head.appendChild(title)
 	head.appendChild(btnmenu)
 }
@@ -69,4 +80,10 @@ function Application_ShowMenu(self) {
 	window.parent.postMessage({
 		action: Component.ACTION_SHOWMENU
 	}, '*')
+}
+
+function Application_ShowHome(self) {
+	window.parent.postMessage({
+		action: Component.ACTION_SHOWHOME
+	}, '*')	
 }

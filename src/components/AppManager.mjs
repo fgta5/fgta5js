@@ -3,27 +3,25 @@ import Component from "./Component.mjs"
 const ATTR_NAVSHOWED = 'showed'
 const ATTR_MODULENAME = 'data-module'
 const ATTR_FAVOURITE = "data-favourite"
-const ATTR_RECENTMODULE = 'data-recentmodule'
+const ATTR_OPENEDMODULE = 'data-openedmodule'
 const ATTR_CURRENTUSER = 'data-currentuser'
 const ATTR_MENUICONCONTAINER = 'data-iconcontainer'
 const ATTR_MENUICONIMAGE = 'data-iconimage'
 const ATTR_MENUICONTEXT = 'data-icontext'
 const ATTR_GRIDAREA = 'data-gridarea'
+const ATTR_SHORTCUT_ICON = 'data-icon'
+const ATTR_SHORTCUT_TITLE = 'data-title'
+const ATTR_SHORTCUT_INFO = 'data-info'
+const ATTR_SHORTCUT_CLOSE = 'data-buttonclose'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
 const CLS_BUTTONMENU = 'fgta5-button-menu'
+const CLS_SHORTCUTBUTTONCLOSE = 'fgta5-button-shorcutclose'
 
 const TXT_FAVOURITE = 'Favourite Programs'
-const TXT_RECENT = 'Recent Programs'
+const TXT_OPENED = 'Opened Programs'
 
-
-const ICON_HOME = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
-<g fill="currentColor">
-<rect x="4.2337" y="3.9367" width="3.0541" height="4.063"/>
-<rect x="1.2121" y="3.9367" width=".9332" height="4.0184"/>
-<path d="m4.2479 1.0276 3.7518 3.4383-7.5035-1e-7z"/>
-<rect x="1.6787" y="3.9367" width="3.2135" height="1.4646"/>
-</g>`
+const C_SHORTCUT_PREFIX = 'fgta5-sch-mod-'
 
 const ICON_DIRDEF = '<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg"><rect x=".4961" y="3.9307" width="7.5035" height="4.0689"/><path d="m0.4961 3.2521h7.5035l1e-7 -0.71184h-4.2386l-0.87664-1.3525h-2.3883z"/><rect x="5.8727" y="5.303" width="1.2058" height="1.1077" fill="#fff"/></svg>'
 
@@ -64,6 +62,7 @@ export default class AppManager extends Component {
 
 	OpenModule(module) {
 		AppManager_OpenModule(this, module)
+		AppManager_closeMenu(this)
 	}
 
 	#userdata
@@ -87,7 +86,7 @@ function AppManager_construct(self) {
 	const iframes = document.createElement('div')
 	const nav = document.createElement('nav')
 	const favourite = main.querySelector(`div[${ATTR_FAVOURITE}]`)
-	const recent = main.querySelector(`div[${ATTR_RECENTMODULE}]`)
+	
 	const currentuser = main.querySelector(`div[${ATTR_CURRENTUSER}]`)
 	
 	main.after(head)
@@ -102,10 +101,9 @@ function AppManager_construct(self) {
 	nav.classList.add('fgta5-appmanager-nav')
 
 	AppManager_createHeader(self, head)
-	const {MenuBoard, MenuFooter, ProfileButton, LogoutButton} = AppManager_createMenu(self, nav)
+	const {Opened} = AppManager_createOpenedBoard(self, main)
+	const {MenuBoard, MenuFooter, ProfileButton, LogoutButton, MenuResetButton} = AppManager_createMenuBoard(self, nav)
 
-	// self.Nodes.MenuFooter = footer
-	// self.Nodes.ProfileButton = btnprofile
 
 
 	self.Listener = new EventTarget()
@@ -115,12 +113,13 @@ function AppManager_construct(self) {
 		Main: main,
 		IFrames: iframes,
 		Favourite: favourite,
-		Recent: recent,
+		Opened: Opened,
 		Currentuser: currentuser,
 		MenuBoard: MenuBoard,
 		MenuFooter: MenuFooter, 
 		ProfileButton: ProfileButton,
-		LogoutButton: LogoutButton
+		LogoutButton: LogoutButton,
+		MenuResetButton: MenuResetButton
 	}
 
 }
@@ -131,12 +130,23 @@ function AppManager_listenMessage(self) {
 			var action = evt.data.action
 			if (action==Component.ACTION_SHOWMENU) {
 				AppManager_ShowMenu(self)
-			} if (action==Component.ACTION_APPLICATIONLOADED) {
-				// applikasi di iframe terbuka
+			} else if (action==Component.ACTION_SHOWHOME) {
+				AppManager_showHome(self)
+			} else if (action==Component.ACTION_APPLICATIONLOADED) {
+				// applikasi client di iframe terbuka
 			}
 		}
 	})
+
+
+	window.history.pushState(null, "", window.location.href);
+	window.addEventListener("popstate", function(evt) {
+		evt.preventDefault()
+		window.history.pushState(null, "", window.location.href);
+	});
 }
+
+
 
 
 function AppManager_createHeadButton(self, svg, fn_click) {
@@ -155,7 +165,7 @@ function AppManager_createHeader(self, head) {
 	head.appendChild(btnmenu)
 }
 
-function AppManager_createMenu(self, nav) {
+function AppManager_createMenuBoard(self, nav) {
 	const menuhead = document.createElement('div')
 	const btnmenureset = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{ AppManager_ResetMenu(self) })
 	const divcenter = document.createElement('div')
@@ -172,11 +182,15 @@ function AppManager_createMenu(self, nav) {
 	
 	const menuboard = document.createElement('div')
 	const footer = document.createElement('div')
+	const divleft = document.createElement('div')
+
 	
+	// divleft untuk button reset
+	divleft.appendChild(btnmenureset)
 
 	// header
 	menuhead.setAttribute('header', '')
-	menuhead.appendChild(btnmenureset)
+	menuhead.appendChild(divleft)
 	menuhead.appendChild(divcenter)
 	menuhead.appendChild(btnclose)
 	divcenter.innerHTML = 'Menu'
@@ -211,7 +225,7 @@ function AppManager_createMenu(self, nav) {
 
 
 	// home
-	const btnhome = self.CreateSvgButton(ICON_HOME, CLS_BUTTONMENU, ()=>{
+	const btnhome = self.CreateSvgButton(Component.ICON_HOME, CLS_BUTTONMENU, ()=>{
 		AppManager_showHome(self)
 	})
 
@@ -282,7 +296,8 @@ function AppManager_createMenu(self, nav) {
 		MenuBoard: menuboard,
 		MenuFooter: footer,
 		ProfileButton: btnprofile,
-		LogoutButton: btnlogout
+		LogoutButton: btnlogout,
+		MenuResetButton: btnmenureset
 	}
 }	
 
@@ -304,7 +319,63 @@ function AppManager_closeMenu(self) {
 	nav.removeAttribute(ATTR_NAVSHOWED)
 }
 
-function AppManager_OpenModule(self, module) {
+
+function AppManager_iframeLoaded(self, iframe, module) {
+	// client iframe kirim message ke parent window
+	// informasi bahwa client sudah selesai di load
+	iframe.contentWindow.postMessage({
+		action: Component.ACTION_APPLICATIONLOADED,
+		module: {
+			title: module.title,
+			name: module.name
+		}
+	}, '*')
+
+	// saat module pertama di load
+	self.Listener.dispatchEvent(ActionEvent({
+		detail: {
+			name: 'moduleloaded',
+			modulename: module.name,
+			title: module.title,
+			iframe: iframe
+		}
+	}))
+
+	// module terbuka
+	self.Listener.dispatchEvent(ActionEvent({
+		detail: {
+			name: 'moduleopened',
+			modulename: module.name,
+			title: module.title,
+			iframe: iframe
+		}
+	}))
+
+	// tambahkan di recent app
+	AppManager_addOpenedModule(self, iframe, module)
+}
+
+function AppManager_iframeReOpen(self, iframe, module) {
+	// tampilkan iframe
+	iframe.classList.remove('hidden')
+
+	// module terbuka
+	self.Listener.dispatchEvent(ActionEvent({
+		detail: {
+			name: 'moduleopened',
+			modulename: module.name,
+			title: module.title,
+			iframe: iframe
+		}
+	}))
+
+	// untuk geser shortcut ke awal
+	AppManager_addOpenedModule(self, iframe, module)
+}
+
+
+
+async function AppManager_OpenModule(self, module) {
 	const iframes = self.Nodes.IFrames
 	const modulename = module.name
 
@@ -314,42 +385,19 @@ function AppManager_OpenModule(self, module) {
 	const ifr = iframes.querySelector(qry)
 	if (ifr==null) {
 		// buka iframe baru
+		const mask = $fgta5.Modal.Mask('Please wait...')
+
 		let newframe = document.createElement('iframe')
 		newframe.classList.add('fgta5-iframe')
+		newframe.classList.add('hidden')
 		newframe.setAttribute(ATTR_MODULENAME, modulename)
 		newframe.src = 'demo-application'
 		newframe.onload = () => {
-			newframe.contentWindow.postMessage({
-				action: Component.ACTION_APPLICATIONLOADED,
-				module: {
-					title: module.title,
-					name: modulename
-				}
-			}, '*')
-
-			// saat module pertama di load
-			self.Listener.dispatchEvent(ActionEvent({
-				detail: {
-					name: 'moduleloaded',
-					modulename: modulename,
-					title: module.title,
-					iframe: newframe
-				}
-			}))
-
-			// module terbuka
-			self.Listener.dispatchEvent(ActionEvent({
-				detail: {
-					name: 'moduleopened',
-					modulename: modulename,
-					title: module.title,
-					iframe: newframe
-				}
-			}))
+			AppManager_iframeLoaded(self, newframe, module)
+			newframe.classList.remove('hidden')
+			mask.close()
 		}
-
 		iframes.appendChild(newframe)
-		
 	} else {	
 		// tampilkan iframe
 		// hide semua iframe kecuali iframe yang akan dibuka
@@ -357,24 +405,12 @@ function AppManager_OpenModule(self, module) {
 		for (var f of frames) {
 			var fname = f.getAttribute(ATTR_MODULENAME)
 			if (fname==modulename) {
-				f.classList.remove('hidden')
-
-				// module terbuka
-				self.Listener.dispatchEvent(ActionEvent({
-					detail: {
-						name: 'moduleopened',
-						modulename: modulename,
-						title: module.title,
-						iframe: f
-					}
-				}))
+				AppManager_iframeReOpen(self, f, module)
 			} else {
 				f.classList.add('hidden')
 			}
 		} 
 	}
-
-
 }
 
 
@@ -473,7 +509,7 @@ function AppManager_CreateGroupIcon(self, group) {
 		}, 400)
 
 		setTimeout(()=>{
-			AppManager_PopulageMenuIcons(self, group.icons, group.parent)
+			AppManager_PopulateMenuIcons(self, group.icons, group.parent)
 		}, 200)
 	})
 
@@ -485,12 +521,12 @@ function AppManager_CreateGroupIcon(self, group) {
 
 function AppManager_SetMenu(self, data) {
 	self.RootIcons = AppManager_ReadMenu(self, data)
-	AppManager_PopulageMenuIcons(self, self.RootIcons)
+	AppManager_PopulateMenuIcons(self, self.RootIcons)
 }
 
 
 function AppManager_ResetMenu(self) {
-	AppManager_PopulageMenuIcons(self, self.RootIcons)
+	AppManager_PopulateMenuIcons(self, self.RootIcons)
 
 }
 
@@ -535,9 +571,9 @@ function AppManager_ReadMenu(self, data) {
 	return icons
 }
 
-function AppManager_PopulageMenuIcons(self, icons, parent) {
+function AppManager_PopulateMenuIcons(self, icons, parent) {
 	const menuboard = self.Nodes.MenuBoard
-
+	const menureset = self.Nodes.MenuResetButton
 
 	/* tambahkan back icon jika belum ada */
 	if (parent!=null) {
@@ -552,6 +588,14 @@ function AppManager_PopulageMenuIcons(self, icons, parent) {
 			di.isbackIcon = true
 			icons.unshift(di)
 		}
+
+		// munculkan tombol reset menu kiri atas
+		menureset.classList.remove('hidden')
+
+	} else {
+		// sembunyikan tombol reset menu kiri atas
+		menureset.classList.add('hidden')
+
 	}
 	
 
@@ -627,7 +671,6 @@ function AppManager_SetUser(self, data) {
 
 }
 
-
 function AppManager_profileClick(self) {
 	self.Listener.dispatchEvent(OpenProfileEvent({
 		detail: {
@@ -653,4 +696,95 @@ async function AppManager_openSetting(self) {
 			user: self.User,
 		}
 	}))
+}
+
+function AppManager_createOpenedBoard(self, main) {
+	const opened = main.querySelector(`div[${ATTR_OPENEDMODULE}]`)
+	const title = document.createElement('div')
+	
+
+	opened.classList.add('fgta5-openedmodule')
+
+	title.innerHTML = `${TXT_OPENED}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
+	title.classList.add('fgta5-appmanager-home-subtitle')
+	title.classList.add('hidden')
+
+	opened.classList.add('hidden')
+	opened.before(title)
+	opened.hide = () => {
+		title.classList.add('hidden')
+		opened.classList.add('hidden')
+	}
+
+	opened.show = () => {
+		title.classList.remove('hidden')
+		opened.classList.remove('hidden')
+	}
+
+	return {
+		Opened: opened
+	}
+}
+
+function AppManager_addOpenedModule(self, iframe, module) {
+	const opened = self.Nodes.Opened
+	const id = `${C_SHORTCUT_PREFIX}-${module.name}`
+	const shortcut = document.getElementById(id)
+	if (shortcut==null) {
+		// tambahkan di awal
+		const newshortcut = AppManager_createOpenedShortcut(self, module, iframe, id)
+		opened.prepend(newshortcut)
+	} else {
+		// geser di awal
+		opened.prepend(shortcut);
+	}
+
+	opened.show()
+}
+
+
+function AppManager_createOpenedShortcut(self, module, iframe, id) {
+	const opened = self.Nodes.Opened
+	const shortcut = document.createElement('div')
+	const icon = document.createElement('div') 
+	const title = document.createElement('div')
+	const info = document.createElement('div')
+	const closebutton = document.createElement('a')
+
+	shortcut.id = id
+	shortcut.classList.add('fgta5-openedmodule-shortcut')
+	shortcut.appendChild(icon)
+	shortcut.appendChild(title)
+	shortcut.appendChild(info)
+	shortcut.appendChild(closebutton)
+	shortcut.addEventListener('click', (evt)=>{ AppManager_OpenModule(self, module) })
+
+
+	icon.setAttribute(ATTR_SHORTCUT_ICON, '')
+	icon.innerHTML = '&nbsp;'
+	if (module.icon!=null) {
+		icon.style.backgroundImage = `url('${module.icon}')`
+	}
+
+	title.setAttribute(ATTR_SHORTCUT_TITLE, '')	
+	title.innerHTML = module.title
+
+	info.setAttribute(ATTR_SHORTCUT_INFO, '')
+	info.innerHTML = 'idle'
+
+
+	var btn = self.CreateSvgButton(Component.ICON_CLOSE, CLS_SHORTCUTBUTTONCLOSE, (evt)=>{
+		evt.stopPropagation()
+		iframe.remove()
+		shortcut.remove()
+
+		if (opened.childNodes.length==0) {
+			opened.hide()
+		}
+	})
+
+	closebutton.setAttribute(ATTR_SHORTCUT_CLOSE, '')
+	closebutton.appendChild(btn)
+
+	return shortcut
 }

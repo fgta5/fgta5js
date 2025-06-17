@@ -13,13 +13,21 @@
 
 		<link rel="stylesheet" href="./styles/demo.css" />
 		<link rel="stylesheet" href="./styles/demo-appmanager.css" />
+
+
+		<style>
+			#loadingindicator {
+				position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #fff;
+				transition: opacity 0.5s ease, visibility 0.5s ease;
+			}
+		</style>
 	</head>
 	<body>
 		<main id="appmain">
 			<h1>Welcome,</h1>
 			<div data-currentuser></div>
 			<div data-favourite></div>
-			<div data-recentmodule></div>
+			<div data-openedmodule></div>
 			
 			<!--
 			<div style="font-weight: bold">Favourite Programs</div>
@@ -29,9 +37,9 @@
 				<a href="javascript:void(0)" data-module="hutang">Hutang</a>
 			</div> -->
 		</main>
-		<div id="fgta5-loading-pagemask">
+		<div id="loadingindicator">
 			<div style="font-family: system-ui, sans-serif">
-				Please Wait ...
+				Loading ...
 			</div>
 		</div>
 	</body>
@@ -44,7 +52,7 @@
 			var $page = new Page();
 			await $page.main();
 
-			var pagemask = document.getElementById('fgta5-loading-pagemask')
+			var pagemask = document.getElementById('loadingindicator')
 			pagemask.style.opacity = 0
 			pagemask.style.visibility = 'hidden'
 			setTimeout(()=>{

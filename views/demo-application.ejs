@@ -17,30 +17,17 @@
 	<body>
 		<main id="myapp">
 			myapp	
-
+			<input type="text">
 
 		</main>
-		<div id="fgta5-loading-pagemask">
-			<div style="font-family: system-ui, sans-serif">
-				Please Wait ...
-			</div>
-		</div>
 	</body>
 
 
 	<script type="module">
 		import Page from './src/demo-application.mjs'
-
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();
 			await $page.main();
-
-			var pagemask = document.getElementById('fgta5-loading-pagemask')
-			pagemask.style.opacity = 0
-			pagemask.style.visibility = 'hidden'
-			setTimeout(()=>{
-				pagemask.parentNode.removeChild(pagemask)
-			}, 500);
 		});
 	</script>
 </html>

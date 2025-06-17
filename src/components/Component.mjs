@@ -59,6 +59,14 @@ const ICON_SETTING = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w
 </svg>`
 
 
+const ICON_HOME = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
+<g fill="currentColor">
+<rect x="4.2337" y="3.9367" width="3.0541" height="4.063"/>
+<rect x="1.2121" y="3.9367" width=".9332" height="4.0184"/>
+<path d="m4.2479 1.0276 3.7518 3.4383-7.5035-1e-7z"/>
+<rect x="1.6787" y="3.9367" width="3.2135" height="1.4646"/>
+</g>`
+
 export default class Component {
 	Id;
 	Element;
@@ -71,8 +79,10 @@ export default class Component {
 	static get ICON_LOGOUT() { return ICON_LOGOUT }
 	static get ICON_SEARCH() { return ICON_SEARCH }
 	static get ICON_SETTING() { return ICON_SETTING }
+	static get ICON_HOME() { return ICON_HOME }
 
 	static get ACTION_SHOWMENU()  { return 'showmenu' }
+	static get ACTION_SHOWHOME() { return 'showhome' }
 	static get ACTION_APPLICATIONLOADED() { return 'applicationloaded' }
 
 	constructor(id) {
@@ -104,8 +114,8 @@ function Component_CreateSvgButton(self, svg, classname, fn_click) {
 	btn.setAttribute('href', 'javascript:void(0)')
 
 	if (typeof fn_click === 'function') {
-		btn.addEventListener('click', ()=>{
-			fn_click()
+		btn.addEventListener('click', (evt)=>{
+			fn_click(evt)
 		})
 	}
 	

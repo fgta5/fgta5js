@@ -54,6 +54,9 @@ const programs = {
 }
 
 
+const ProfileModule = new $fgta5.ModuleData({name:'profile', title:'My Profile', icon: 'images/iconprograms/toaster.png'})
+const SettingModule = new $fgta5.ModuleData({name:'setting', title:'Setting', icon: 'images/iconprograms/train.png'})
+
 async function main(self, args) {
 	appmgr.SetMenu([
 		{
@@ -143,12 +146,14 @@ async function main(self, args) {
 		// do something when logout
 		console.log('open user profule')
 		console.log(evt.detail)
+		appmgr.OpenModule(ProfileModule)
 	})
 
 	appmgr.addEventListener('opensetting', (evt)=>{
 		// do something when logout
 		console.log('open setting')
 		console.log(evt.detail)
+		appmgr.OpenModule(SettingModule)
 	})
 
 
