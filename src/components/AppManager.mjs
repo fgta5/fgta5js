@@ -1,4 +1,5 @@
 import Component from "./Component.mjs"
+import ModuleData from "./ModuleData.mjs"
 
 const ATTR_NAVSHOWED = 'showed'
 const ATTR_MODULENAME = 'data-module'
@@ -17,10 +18,15 @@ const ATTR_DRAGOVER = 'data-dragover'
 const ATTR_LABEL = 'data-label'
 const ATTR_ICON = 'data-icon'
 const ATTR_MAINBUTTON = 'data-mainbutton'
+const ATTR_DRAGGABLE = 'draggable'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
 const CLS_BUTTONMENU = 'fgta5-button-menu'
 const CLS_SHORTCUTBUTTONCLOSE = 'fgta5-button-shorcutclose'
+const CLS_HIDDEN = 'hidden'
+
+const EVT_CLICK = 'click'
+const EVT_DRAGSTART = 'dragstart'
 
 const TXT_FAVOURITE = 'Favourite Programs'
 const TXT_OPENED = 'Opened Programs'
@@ -36,6 +42,7 @@ const OpenProfileEvent = (data) => { return new CustomEvent('openprofile', data)
 const OpenSettingEvent = (data) => { return new CustomEvent('opensetting', data) }
 const AddToFavouriteEvent = (data) => { return new CustomEvent('addtofavourite', data) }
 const RemoveFromFavouriteEvent = (data) => { return new CustomEvent('removefavourite', data) }
+
 
 let current_dragged_modulename
 let current_drag_action
@@ -55,6 +62,13 @@ export default class AppManager extends Component {
 	get Modules() { return this.#modules }
 
 
+	#title
+	get Title() { return this.#title }
+	SetTitle(title) {
+		this.#title = title
+		AppManager_SetTitle(this, title)
+	}
+
 	SetMenu(data) {
 		AppManager_SetMenu(this, data)
 	}
@@ -69,8 +83,8 @@ export default class AppManager extends Component {
 		AppManager_SetFavourite(this, data)
 	}
 
-	OpenModule(module) {
-		AppManager_OpenModule(this, module)
+	async OpenModule(module) {
+		await AppManager_OpenModule(this, module)
 		AppManager_closeMenu(this)
 	}
 
@@ -90,30 +104,34 @@ export default class AppManager extends Component {
 function AppManager_construct(self) {
 	console.log('constructiong application manager')
 
+	const title = document.createElement('span')
 	const main = self.Element  
 	const head = document.createElement('header')
 	const iframes = document.createElement('div')
 	const nav = document.createElement('nav')
 	const favourite = main.querySelector(`div[${ATTR_FAVOURITE}]`)
 	const trahsbox = document.createElement('div')
-	
 	const currentuser = main.querySelector(`div[${ATTR_CURRENTUSER}]`)
+	const btnmenu = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{
+		AppManager_ShowMenu(self)
+	})
 	
 	main.after(head)
 	head.after(iframes)
 	iframes.after(nav)
-	
+
+	title.innerHTML = 'Application Manager' // default title, nanti diganti dengan SetTitle
+
 
 	head.classList.add('fgta5-app-head')
+	head.appendChild(title)
+	head.appendChild(btnmenu)
 
 	main.classList.add('fgta5-app-main')
-
 	nav.classList.add('fgta5-appmanager-nav')
 
-	AppManager_createHeader(self, head)
 	const {Opened} = AppManager_createOpenedBoard(self, main)
 	const {MenuBoard, MenuFooter, ProfileButton, LogoutButton, MenuResetButton} = AppManager_createMenuBoard(self, nav)
-
 
 
 	self.Listener = new EventTarget()
@@ -130,7 +148,8 @@ function AppManager_construct(self) {
 		ProfileButton: ProfileButton,
 		LogoutButton: LogoutButton,
 		MenuResetButton: MenuResetButton,
-		TrashBox: trahsbox
+		TrashBox: trahsbox,
+		Title: title
 	}
 
 }
@@ -164,17 +183,10 @@ function AppManager_createHeadButton(self, svg, fn_click) {
 	return self.CreateSvgButton(svg, CLS_BUTTONHEAD, fn_click )
 }
 
-function AppManager_createHeader(self, head) {
-	const title = document.createElement('span')
-	const btnmenu = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{
-		AppManager_ShowMenu(self)
-	})
-
-	title.innerHTML = 'header'
-
-	head.appendChild(title)
-	head.appendChild(btnmenu)
+function AppManager_SetTitle(self, title) {
+	self.Nodes.Title.innerHTML = title
 }
+
 
 function AppManager_createMenuBoard(self, nav) {
 	const menuhead = document.createElement('div')
@@ -208,7 +220,7 @@ function AppManager_createMenuBoard(self, nav) {
 
 
 	// footer
-	footer.classList.add('hidden')
+	footer.classList.add(CLS_HIDDEN)
 	footer.classList.add('fgta5-menu-footer')
 	footer.appendChild(btnlogout)
 
@@ -263,7 +275,7 @@ function AppManager_createMenuBoard(self, nav) {
 
 	btnsearch.classList.add('fgta5-menu-search')
 	btnsearch.innerHTML = Component.ICON_SEARCH
-	btnsearch.addEventListener('click', (evt)=>{
+	btnsearch.addEventListener(EVT_CLICK, (evt)=>{
 		txtsearch.focus()
 		AppManager_searchModule(self, txtsearch.value)
 	})
@@ -271,7 +283,7 @@ function AppManager_createMenuBoard(self, nav) {
 
 	// user
 	const btnprofile = self.CreateSvgButton(Component.ICON_USER, CLS_BUTTONMENU)
-	btnprofile.classList.add('hidden')
+	btnprofile.classList.add(CLS_HIDDEN)
 	
 
 	// toppanel content
@@ -322,7 +334,7 @@ function AppManager_ShowMenu(self) {
 
 function AppManager_showHome(self) {
 	AppManager_closeMenu(self)
-	self.Nodes.IFrames.classList.add('hidden')
+	self.Nodes.IFrames.classList.add(CLS_HIDDEN)
 }
 
 function AppManager_closeMenu(self) {
@@ -368,7 +380,7 @@ function AppManager_iframeLoaded(self, iframe, module) {
 
 function AppManager_iframeReOpen(self, iframe, module) {
 	// tampilkan iframe
-	iframe.classList.remove('hidden')
+	iframe.classList.remove(CLS_HIDDEN)
 
 	// module terbuka
 	self.Listener.dispatchEvent(ActionEvent({
@@ -401,12 +413,12 @@ async function AppManager_OpenModule(self, module) {
 		var url = module.url ?? 'demo-application'
 		let newframe = document.createElement('iframe')
 		newframe.classList.add('fgta5-iframe')
-		newframe.classList.add('hidden')
+		newframe.classList.add(CLS_HIDDEN)
 		newframe.setAttribute(ATTR_MODULENAME, modulename)
 		
 		newframe.onload = (evt) => {
 			AppManager_iframeLoaded(self, newframe, module)
-			newframe.classList.remove('hidden')
+			newframe.classList.remove(CLS_HIDDEN)
 			mask.close()
 		}
 
@@ -417,7 +429,7 @@ async function AppManager_OpenModule(self, module) {
 				}
 				newframe.src = url
 				iframes.appendChild(newframe)
-				self.Nodes.IFrames.classList.remove('hidden')
+				self.Nodes.IFrames.classList.remove(CLS_HIDDEN)
 			}).catch(error => {
 				$fgta5.MessageBox.Error(error)
 				mask.close()
@@ -431,10 +443,10 @@ async function AppManager_OpenModule(self, module) {
 			if (fname==modulename) {
 				AppManager_iframeReOpen(self, f, module)
 			} else {
-				f.classList.add('hidden')
+				f.classList.add(CLS_HIDDEN)
 			}
 		} 
-		self.Nodes.IFrames.classList.remove('hidden')
+		self.Nodes.IFrames.classList.remove(CLS_HIDDEN)
 	}
 }
 
@@ -467,7 +479,7 @@ function AppManager_SetFavourite(self, data)	 {
 	trashbox.appendChild(trashlabel)
 
 	trahscontainer.classList.add('fgta5-favourite-trashcontainer')
-	trahscontainer.classList.add('hidden')
+	trahscontainer.classList.add(CLS_HIDDEN)
 	trahscontainer.appendChild(trashbox)
 	self.Nodes.Head.after(trahscontainer)
 
@@ -502,9 +514,12 @@ function AppManager_CreateModuleIcon(self, module) {
 		container.setAttribute('disabled', '')
 	}
 
+	icon.setAttribute(ATTR_MENUICONIMAGE, '')
 	if (module.icon!=null) {
 		icon.setAttribute(ATTR_MENUICONIMAGE, '')
 		icon.style.backgroundImage = `url('${module.icon}')`
+	} else {
+		icon.innerHTML = ModuleData.ICON_DEFAULT
 	}
 
 	text.innerHTML = module.title
@@ -514,7 +529,7 @@ function AppManager_CreateModuleIcon(self, module) {
 	container.appendChild(icon)
 	container.appendChild(text)
 
-	icon.addEventListener('click', ()=>{
+	icon.addEventListener(EVT_CLICK, ()=>{
 		self.OpenModule(module)
 		icon.style.animation = 'iconClicked 0.2s forwards'
 		setTimeout(()=>{
@@ -553,7 +568,7 @@ function AppManager_CreateGroupIcon(self, group) {
 	container.appendChild(icon)
 	container.appendChild(text)
 
-	icon.addEventListener('click', ()=>{
+	icon.addEventListener(EVT_CLICK, ()=>{
 		icon.style.animation = 'iconClicked 0.4s forwards'
 		
 		setTimeout(()=>{
@@ -587,8 +602,8 @@ function AppManager_ReadMenu(self, data) {
 	for (var node of data) {
 		if (node instanceof $fgta5.ModuleData) {
 			// module
-			var module = node
-			var mi = AppManager_CreateModuleIcon(self, module)
+			let module = node
+			let mi = AppManager_CreateModuleIcon(self, module)
 			icons.push(mi)
 
 			// set keyword
@@ -642,11 +657,11 @@ function AppManager_PopulateMenuIcons(self, icons, parent) {
 		}
 
 		// munculkan tombol reset menu kiri atas
-		menureset.classList.remove('hidden')
+		menureset.classList.remove(CLS_HIDDEN)
 
 	} else {
 		// sembunyikan tombol reset menu kiri atas
-		menureset.classList.add('hidden')
+		menureset.classList.add(CLS_HIDDEN)
 
 	}
 	
@@ -706,16 +721,16 @@ function AppManager_SetUser(self, data) {
 	const btnlogout = self.Nodes.LogoutButton
 
 	// munculkan footer menu untuk logout
-	self.Nodes.MenuFooter.classList.remove('hidden')
+	self.Nodes.MenuFooter.classList.remove(CLS_HIDDEN)
 
 	// munculkan profile icon
-	btnprofile.classList.remove('hidden')
-	btnprofile.addEventListener('click', (evt)=>{
+	btnprofile.classList.remove(CLS_HIDDEN)
+	btnprofile.addEventListener(EVT_CLICK, (evt)=>{
 		AppManager_profileClick(self)
 	})
 
 
-	btnlogout.addEventListener('click', (evt)=>{
+	btnlogout.addEventListener(EVT_CLICK, (evt)=>{
 		AppManager_logout(self)
 	})
 	// munculkan nama di home
@@ -759,18 +774,18 @@ function AppManager_createOpenedBoard(self, main) {
 
 	title.innerHTML = `${TXT_OPENED}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
 	title.classList.add('fgta5-appmanager-home-subtitle')
-	title.classList.add('hidden')
+	title.classList.add(CLS_HIDDEN)
 
-	opened.classList.add('hidden')
+	opened.classList.add(CLS_HIDDEN)
 	opened.before(title)
 	opened.hide = () => {
-		title.classList.add('hidden')
-		opened.classList.add('hidden')
+		title.classList.add(CLS_HIDDEN)
+		opened.classList.add(CLS_HIDDEN)
 	}
 
 	opened.show = () => {
-		title.classList.remove('hidden')
-		opened.classList.remove('hidden')
+		title.classList.remove(CLS_HIDDEN)
+		opened.classList.remove(CLS_HIDDEN)
 	}
 
 	return {
@@ -805,19 +820,20 @@ function AppManager_createOpenedShortcut(self, module, iframe, id) {
 
 	shortcut.id = id
 	shortcut.classList.add('fgta5-openedmodule-shortcut')
-	shortcut.setAttribute('draggable', 'true')
+	shortcut.setAttribute(ATTR_DRAGGABLE, 'true')
 	shortcut.appendChild(icon)
 	shortcut.appendChild(title)
 	shortcut.appendChild(info)
 	shortcut.appendChild(closebutton)
-	shortcut.addEventListener('click', (evt)=>{ AppManager_OpenModule(self, module) })
-	shortcut.addEventListener('dragstart', (evt)=>{ AppManager_DragModule(self, evt, module) })
+	shortcut.addEventListener(EVT_CLICK, async (evt)=>{ await AppManager_OpenModule(self, module) })
+	shortcut.addEventListener(EVT_DRAGSTART, (evt)=>{ AppManager_DragModule(self, evt, module) })
 
 
 	icon.setAttribute(ATTR_SHORTCUT_ICON, '')
-	icon.innerHTML = '&nbsp;'
 	if (module.icon!=null) {
 		icon.style.backgroundImage = `url('${module.icon}')`
+	} else {
+		icon.innerHTML = ModuleData.ICON_DEFAULT
 	}
 
 	title.setAttribute(ATTR_SHORTCUT_TITLE, '')	
@@ -894,17 +910,17 @@ function AppManager_setAsFavouriteIcon(self, mi, modulename, favourite) {
 	const trahsbox = self.Nodes.TrashBox
 	const trashbutton = trahsbox.querySelector(`[${ATTR_MAINBUTTON}]`)
 
-	mi.setAttribute('draggable', 'true')
-	mi.addEventListener('dragstart', (evt)=>{
+	mi.setAttribute(ATTR_DRAGGABLE, 'true')
+	mi.addEventListener(EVT_DRAGSTART, (evt)=>{
 		drop_valid = false
 		current_drag_action = 'removefromfave'
 		evt.dataTransfer.setData('modulename', modulename);
-		trahsbox.classList.remove('hidden')
+		trahsbox.classList.remove(CLS_HIDDEN)
 	})
 
 	mi.addEventListener('dragend', (evt)=>{
 		setTimeout(()=>{
-			trahsbox.classList.add('hidden')
+			trahsbox.classList.add(CLS_HIDDEN)
 			trashbutton.removeAttribute(ATTR_DRAGOVER)
 		}, 100)
 	})

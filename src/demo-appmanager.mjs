@@ -9,7 +9,7 @@ export default class Page {
 
 // sample program list
 const programs = {
-	account: new $fgta5.ModuleData({name:'account', title:'Account', icon: 'images/iconprograms/map.png'}),
+	account: new $fgta5.ModuleData({name:'account', title:'Account'}),
 	departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'images/iconprograms/mcfly.png'}),
 	lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'images/iconprograms/medicine.png'}),
 	periode: new $fgta5.ModuleData({name:'periode', title:'Periode', icon: 'images/iconprograms/mountain.png'}),
@@ -27,6 +27,11 @@ const ProfileModule = new $fgta5.ModuleData({name:'profile', title:'My Profile',
 const SettingModule = new $fgta5.ModuleData({name:'setting', title:'Setting', icon: 'images/iconprograms/train.png'})
 
 async function main(self, args) {
+	
+	const appmain = document.getElementById('appmain')
+	appmain.classList.add('hidden')
+
+	appmgr.SetTitle('apps manager')
 	appmgr.SetMenu([
 		{
 			title: 'Accounting',
@@ -74,6 +79,12 @@ async function main(self, args) {
 
 	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 
+
+	await appmgr.OpenModule(programs.crud01)
+	setTimeout(()=>{
+		appmain.classList.remove('hidden')
+	}, 1000)
+	
 
 	appmgr.addEventListener('logout', (evt)=>{
 		// do something when logout

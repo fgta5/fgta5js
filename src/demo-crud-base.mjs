@@ -13,14 +13,16 @@ const app = new $fgta5.Application('myapp')
 
 
 export default class BasicProgram {
-
 	get Application() { return app }
-
 	async main(args) {
 		await main(this, args)
 	}
+
+	
 }
 
 async function main(args) {
 	console.log('ini basic program')
+
+	
 } 

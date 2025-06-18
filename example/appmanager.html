@@ -7,6 +7,28 @@
 		<script src="https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/dist/fgta5js-v1.0.0-min.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/dist/fgta5js-v1.0.0-min.css" />
 		<style>
+			@import url("https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/fonts/karla.css");
+
+			* {
+				font-family: "Karla";  
+			}
+
+
+			body {
+				background-color: white;
+				overscroll-behavior-y: contain;
+				user-select: none;
+				padding: 0px;
+				margin: 0px;
+				overscroll-behavior: contain;
+				font-size: 14px;
+			}
+
+			dialog {
+				outline: none;
+				border: none;
+			}
+
 			#loadingindicator {
 				position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #fff;
 				transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -54,6 +76,8 @@
 
 			])
 
+			appmgr.SetFavourite(['periode', 'lokasi'])
+			appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 		}
 
 
@@ -67,7 +91,7 @@
 		}
 
 		const programs = {
-			account: new $fgta5.ModuleData({name:'account', title:'Account', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/map.png', url: 'https://js.fgta.net'}),
+			account: new $fgta5.ModuleData({name:'account', title:'Account', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/map.png', url: 'https://js.fgta.net/debug/demo-application'}),
 			departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/mcfly.png', url: 'https://js.fgta.net/debug/demo-application'}),
 			lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/medicine.png', url: 'https://js.fgta.net/debug/demo-application'}),
 			periode: new $fgta5.ModuleData({name:'periode', title:'Periode', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/mountain.png', url: 'https://js.fgta.net/debug/demo-application'}),

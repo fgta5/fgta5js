@@ -1,0 +1,9 @@
+	// load dynamic content
+	var response = await fetch('demo-crud-include')
+	if (!response.ok) {
+		console.error(`HTTP Error: ${response.status}`)
+	}
+
+	const data = await response.text(); 
+	const div = document.getElementById('dynamicload')
+	div.innerHTML = data

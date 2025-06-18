@@ -65,7 +65,8 @@ const ICON_HOME = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://
 <rect x="1.2121" y="3.9367" width=".9332" height="4.0184"/>
 <path d="m4.2479 1.0276 3.7518 3.4383-7.5035-1e-7z"/>
 <rect x="1.6787" y="3.9367" width="3.2135" height="1.4646"/>
-</g>`
+</g>
+</svg>`
 
 
 const ICON_TRASH = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
