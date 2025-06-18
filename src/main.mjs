@@ -15,6 +15,8 @@ import Gridview from './components/Gridview.mjs';
 import AppManager from './components/AppManager.mjs'
 import Application from './components/Application.mjs';
 import ModuleData from './components/ModuleData.mjs'
+import Section from './components/Section.mjs'
+import SectionCarousell from './components/SectionCarousell.mjs'
 
 import * as Validators from './components/Validators.mjs';
 
@@ -42,7 +44,9 @@ const fgta5 = {
 	Gridview: Gridview,
 	AppManager: AppManager,
 	Application: Application,
-	ModuleData: ModuleData
+	ModuleData: ModuleData,
+	Section: Section,
+	SectionCarousell: SectionCarousell
 }
 
 

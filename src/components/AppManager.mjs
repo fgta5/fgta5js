@@ -492,7 +492,7 @@ function AppManager_SetFavourite(self, data)	 {
 	favourite.addEventListener('drop', (evt)=>{ AppManager_FavouriteDrop(self, evt, favourite)  })
 
 	for (let modulename of data) {
-		var module = self.Modules[modulename]
+		let module = self.Modules[modulename]
 		if (module!=null) {
 			let mi = AppManager_CreateModuleIcon(self, module.data)
 			AppManager_setAsFavouriteIcon(self, mi, modulename, favourite)

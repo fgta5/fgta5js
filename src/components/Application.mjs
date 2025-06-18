@@ -1,6 +1,9 @@
 import Component from "./Component.mjs"
+import Section from './Section.mjs'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
+
+
 const ID_TITLE = 'application-title'
 const ATTR_WITHFOOTER = 'data-withfooter'
 
@@ -10,6 +13,12 @@ export default class App extends Component {
 		super(id)
 		App_construct(this)
 	}
+
+	// #sections = {}
+	// get Sections() { return this.#sections}
+	// RenderSection() {
+		// App_RenderSection(this)
+	// }
 
 	ShowFooter(show) {
 		App_ShowFooter(this, show)
@@ -85,7 +94,7 @@ function App_createHeader(self, head) {
 }
 
 function App_createFooter(self, footer) {
-	footer.innerHTML = 'footer'
+	footer.innerHTML = 'empty footer content'
 }
 
 
@@ -111,4 +120,29 @@ function App_ShowHome(self) {
 	window.parent.postMessage({
 		action: Component.ACTION_SHOWHOME
 	}, '*')	
+}
+
+function App_RenderSection(self) {
+	const main = self.Nodes.Main
+
+
+
+	const Sections = self.Sections
+	const secs = main.querySelectorAll('section[name]') 
+	let i = 0;
+	for (const sec of secs) {
+		const section = new Section(sec, {
+			index: i,
+			fn_getActiveSection: ()=>{
+				const cs = main.querySelector(`section[${Section.ATTR_ACTIVE}]`)
+				const name = cs.getAttribute('name') 
+				return Sections[name]
+			}
+		})
+		
+
+		// masukkan panel ini ke datamap
+		Sections[section.Name] = section
+		++i
+	}
 }

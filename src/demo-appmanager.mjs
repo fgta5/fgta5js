@@ -9,7 +9,8 @@ export default class Page {
 
 // sample program list
 const programs = {
-	account: new $fgta5.ModuleData({name:'account', title:'Account'}),
+	generator: new $fgta5.ModuleData({name:'generator', title:'Generator', url:'fgta5-generator'}),
+	account: new $fgta5.ModuleData({name:'account', title:'Account', icon:'images/iconprograms/mcfly.png'}),
 	departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'images/iconprograms/mcfly.png'}),
 	lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'images/iconprograms/medicine.png'}),
 	periode: new $fgta5.ModuleData({name:'periode', title:'Periode', icon: 'images/iconprograms/mountain.png'}),
@@ -31,8 +32,10 @@ async function main(self, args) {
 	const appmain = document.getElementById('appmain')
 	appmain.classList.add('hidden')
 
-	appmgr.SetTitle('apps manager')
+	appmgr.SetTitle('Fgta5 Application Manager')
 	appmgr.SetMenu([
+		programs.generator,
+
 		{
 			title: 'Accounting',
 			border: false,
@@ -71,16 +74,17 @@ async function main(self, args) {
 		},
 		
 		programs.crud01,
+		
 	
 	])
 
 	// set program favourite	
-	appmgr.SetFavourite(['crud01', 'account',  'periode', 'jurnal', 'user'])
+	appmgr.SetFavourite([ 'generator', 'crud01', 'account',  'periode'])
 
 	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 
 
-	await appmgr.OpenModule(programs.crud01)
+	await appmgr.OpenModule(programs.generator)
 	setTimeout(()=>{
 		appmain.classList.remove('hidden')
 	}, 1000)
@@ -88,41 +92,41 @@ async function main(self, args) {
 
 	appmgr.addEventListener('logout', (evt)=>{
 		// do something when logout
-		console.log('logout action')
-		console.log(evt.detail)
+		// console.log('logout action')
+		// console.log(evt.detail)
 	})
 
 	appmgr.addEventListener('openprofile', (evt)=>{
 		// do something when logout
-		console.log('open user profule')
-		console.log(evt.detail)
+		// console.log('open user profule')
+		// console.log(evt.detail)
 		appmgr.OpenModule(ProfileModule)
 	})
 
 	appmgr.addEventListener('opensetting', (evt)=>{
 		// do something when logout
-		console.log('open setting')
-		console.log(evt.detail)
+		// console.log('open setting')
+		// console.log(evt.detail)
 		appmgr.OpenModule(SettingModule)
 	})
 
 
 	appmgr.addEventListener('action', (evt)=>{
 		// click program, dll
-		console.log('action triggered')
-		console.log(evt.detail)
+		// console.log('action triggered')
+		// console.log(evt.detail)
 	})
 	
 
 	appmgr.addEventListener('removefavourite', (evt)=>{
-		console.log('remove from favourite')
-		console.log(evt.detail)
+		// console.log('remove from favourite')
+		// console.log(evt.detail)
 	})
 
 
 	appmgr.addEventListener('addtofavourite', (evt)=>{
-		console.log('add to favourite')
-		console.log(evt.detail)
+		// console.log('add to favourite')
+		// console.log(evt.detail)
 	})
 }
 

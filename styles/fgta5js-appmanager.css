@@ -16,9 +16,20 @@
 	padding: 0 0.5rem 0 0.5rem;
 }	
 
-.fgta5-app-main {
-	margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 2rem 1rem
+@media screen and (max-width: 500px) { 
+	.fgta5-app-main {
+		margin: calc(var(--fgta5-app-header-height) + 5px) 10px 2rem 10px
+	}
 }
+
+@media screen and (min-width: 501px) { 
+	.fgta5-app-main {
+		margin: calc(var(--fgta5-app-header-height) + 1rem) 1rem 2rem 1rem
+	}
+}
+
+
+
 
 .fgta5-app-footer {
 	background-color: #fff;
@@ -52,6 +63,12 @@
 	.fgta5-app-main[data-withfooter] {
 		margin-bottom: 3.5rem;
 	}
+}
+
+
+.fgta5-app-section {
+	border: 1px solid;
+	/* transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; */
 }
 
 
@@ -593,4 +610,27 @@
 	border-radius: 1rem;
 	width: 1rem;
 	height: 1rem;
+}
+
+
+
+.taruh-kiri {
+	transform: translateX(-300px); 
+	opacity: 0;
+}
+
+
+.taruh-kanan {
+	transform: translateX(300px); 
+	opacity: 0;
+}
+
+@keyframes geserKiri {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-300px); }
+}
+
+@keyframes geserKanan {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { transform: translateX(300px); }
 }
