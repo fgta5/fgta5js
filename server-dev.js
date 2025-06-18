@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import express from 'express';
 import favicon from 'serve-favicon';
 import * as data from './server-data.js'
+import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,6 +68,8 @@ app.use('/:env/images', express.static('images'))
 app.use('/:env/src', express.static('src'))
 app.use('/:env/styles', express.static('styles'))
 
+
+app.use(cors());
 
 app.get('/', function(req, res) {
 	res.render('index', {

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Coba Application Manager</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<script src="https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/dist/fgta5js-v1.0.0-min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/dist/fgta5js-v1.0.0-min.css" />
+		<style>
+			#loadingindicator {
+				position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #fff;
+				transition: opacity 0.5s ease, visibility 0.5s ease;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="appmain">
+			<h1>Selamat Datang,</h1>
+			<div data-currentuser></div>
+			<div data-favourite></div>
+			<div data-openedmodule></div>
+			<div class="fgta5-appmanager-home-subtitle">Tips</div>
+			<ul>
+				<li>untuk kembali ke home (halaman ini) dari program, anda bisa klik icon rumah di kiri atas</li>
+				<li>anda dapat menambahkan program yang telah dibuka ke favourite dengan cara drag and drop icon pada opened module ke bagian favourite (desktop). Icon tidak akan ditambahkan jika sudah ada</li>
+				<li>untuk menghapus favourite, drag and drop icon dari favourite ke simbol tempat sambah di bawah header (akan muncul saat anda mulai drag and drop) (desktop)</li>
+			</ul>
+		</main>
+		<div id="loadingindicator">
+			<div style="font-family: system-ui, sans-serif">
+				Loading ...
+			</div>
+		</div>
+	</body>
+	<script type="module">
+		window.addEventListener("load", async (event) => {
+			// buat programnya			
+			init_halaman()
+			removeLoadingIndicator()
+		});
+		
+		function init_halaman() {
+			const appmgr = new $fgta5.AppManager('appmain')
+			appmgr.SetMenu([
+				programs.account,
+				programs.lokasi,
+				{
+					title: 'Master Data',
+					items: [
+						programs.lokasi,
+						programs.periode
+					]
+				}
+
+			])
+
+		}
+
+
+		function removeLoadingIndicator() {
+			var pagemask = document.getElementById('loadingindicator')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		}
+
+		const programs = {
+			account: new $fgta5.ModuleData({name:'account', title:'Account', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/map.png', url: 'https://js.fgta.net'}),
+			departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/mcfly.png', url: 'https://js.fgta.net/debug/demo-application'}),
+			lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/medicine.png', url: 'https://js.fgta.net/debug/demo-application'}),
+			periode: new $fgta5.ModuleData({name:'periode', title:'Periode', icon: 'https://cdn.jsdelivr.net/gh/fgta5/fgta5js@main/images/iconprograms/mountain.png', url: 'https://js.fgta.net/debug/demo-application'}),
+		}
+	</script>
+
+</html>
