@@ -103,6 +103,16 @@ async function main(self, args) {
 	})
 	
 
+	appmgr.addEventListener('removefavourite', (evt)=>{
+		console.log('remove from favourite')
+		console.log(evt.detail)
+	})
+
+
+	appmgr.addEventListener('addtofavourite', (evt)=>{
+		console.log('add to favourite')
+		console.log(evt.detail)
+	})
 }
 
 

@@ -135,6 +135,14 @@
 }
 
 
+
+
+@media screen and (max-width: 501px) { 
+	.fgta5-favourite-trashcontainer {
+		display: none;
+	}
+}
+
 @media screen and (min-width: 501px) { 
 	.fgta5-favourite {
 		padding: 5px;
@@ -145,7 +153,43 @@
 		border: 3px dashed #5d7bff;
 		background-color: #5d7bff53;
 	}
+
+	.fgta5-favourite-trashcontainer {
+		position: absolute;
+		top: calc(var(--fgta5-app-header-height) + 10px);
+		color: default;
+		display: flex;
+		justify-content: center;
+		width: 100%;
+	}
+
+	.fgta5-favourite-trashcontainer > div {
+		height: 3rem;
+		width: 10rem;
+		border: 3px dashed red;
+		background-color: rgba(255, 0, 0, 0.294);
+		border-radius: 10px;
+		color: red;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 3px;
+		opacity: .4;
+	}
+
+	.fgta5-favourite-trashcontainer > div [data-icon] {
+		width: 1.2rem;
+		height: 1.2rem;
+	}
+
+	.fgta5-favourite-trashcontainer > div[data-dragover] {
+		opacity: 1;
+	}
+
 }
+
+
+
 
 
 .fgta5-iframe {
@@ -436,6 +480,12 @@
     100% { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes removing {
+	0% { opacity: 1; transform: scale(1); }
+	100% { opacity: 0; transform: scale(0) }
+
+}
+
 
 
 @media screen and (max-width: 500px) { 
@@ -531,4 +581,16 @@
 	.fgta5-button-shorcutclose {
 		color: red;
 	}
+}
+
+.fgta5-roundbox {
+	display: inline-block;
+	text-align: center;
+	padding: 2px;
+	border: 2px solid blue;
+	background-color: yellow;
+	color: blue;
+	border-radius: 1rem;
+	width: 1rem;
+	height: 1rem;
 }

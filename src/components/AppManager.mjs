@@ -14,6 +14,9 @@ const ATTR_SHORTCUT_TITLE = 'data-title'
 const ATTR_SHORTCUT_INFO = 'data-info'
 const ATTR_SHORTCUT_CLOSE = 'data-buttonclose'
 const ATTR_DRAGOVER = 'data-dragover'
+const ATTR_LABEL = 'data-label'
+const ATTR_ICON = 'data-icon'
+const ATTR_MAINBUTTON = 'data-mainbutton'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
 const CLS_BUTTONMENU = 'fgta5-button-menu'
@@ -32,10 +35,11 @@ const LogoutEvent = (data) => { return new CustomEvent('logout', data) }
 const OpenProfileEvent = (data) => { return new CustomEvent('openprofile', data) }
 const OpenSettingEvent = (data) => { return new CustomEvent('opensetting', data) }
 const AddToFavouriteEvent = (data) => { return new CustomEvent('addtofavourite', data) }
-
+const RemoveFromFavouriteEvent = (data) => { return new CustomEvent('removefavourite', data) }
 
 let current_dragged_modulename
 let current_drag_action
+let drop_valid = false
 
 export default class AppManager extends Component {
 	constructor(id) {
@@ -91,6 +95,7 @@ function AppManager_construct(self) {
 	const iframes = document.createElement('div')
 	const nav = document.createElement('nav')
 	const favourite = main.querySelector(`div[${ATTR_FAVOURITE}]`)
+	const trahsbox = document.createElement('div')
 	
 	const currentuser = main.querySelector(`div[${ATTR_CURRENTUSER}]`)
 	
@@ -124,7 +129,8 @@ function AppManager_construct(self) {
 		MenuFooter: MenuFooter, 
 		ProfileButton: ProfileButton,
 		LogoutButton: LogoutButton,
-		MenuResetButton: MenuResetButton
+		MenuResetButton: MenuResetButton,
+		TrashBox: trahsbox
 	}
 
 }
@@ -438,12 +444,33 @@ function AppManager_SetFavourite(self, data)	 {
 	if (self.Nodes.Favourite==null) {
 		return
 	}
-
+	
 	const favourite = self.Nodes.Favourite
 	const title = document.createElement('div')
+	const trahscontainer = self.Nodes.TrashBox
+	const trashbox = document.createElement('div')
+	const trashicon = document.createElement('div')
+	const trashlabel = document.createElement('div')
 	
-	title.innerHTML = `${TXT_FAVOURITE}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
+	// <div class='fgta5-roundbox'>?</div>
+	title.innerHTML = `${TXT_FAVOURITE}&nbsp;&nbsp;&nbsp;&nbsp;`
 	title.classList.add('fgta5-appmanager-home-subtitle')
+
+	trashicon.setAttribute(ATTR_ICON, '')
+	trashicon.innerHTML = Component.ICON_TRASH
+	
+	trashicon.setAttribute(ATTR_LABEL, '')
+	trashlabel.innerHTML = 'Delete'
+
+	trashbox.setAttribute(ATTR_MAINBUTTON,'')
+	trashbox.appendChild(trashicon)
+	trashbox.appendChild(trashlabel)
+
+	trahscontainer.classList.add('fgta5-favourite-trashcontainer')
+	trahscontainer.classList.add('hidden')
+	trahscontainer.appendChild(trashbox)
+	self.Nodes.Head.after(trahscontainer)
+
 
 	favourite.before(title)
 	favourite.classList.add('fgta5-menu')
@@ -864,31 +891,58 @@ function AppManager_FavouriteDrop(self, evt, favourite) {
 }
 
 function AppManager_setAsFavouriteIcon(self, mi, modulename, favourite) {
+	const trahsbox = self.Nodes.TrashBox
+	const trashbutton = trahsbox.querySelector(`[${ATTR_MAINBUTTON}]`)
+
 	mi.setAttribute('draggable', 'true')
 	mi.addEventListener('dragstart', (evt)=>{
+		drop_valid = false
 		current_drag_action = 'removefromfave'
 		evt.dataTransfer.setData('modulename', modulename);
+		trahsbox.classList.remove('hidden')
 	})
 
-	self.Nodes.Main.addEventListener('dragover', (evt)=>{
+	mi.addEventListener('dragend', (evt)=>{
+		setTimeout(()=>{
+			trahsbox.classList.add('hidden')
+			trashbutton.removeAttribute(ATTR_DRAGOVER)
+		}, 100)
+	})
+	
+
+	trashbutton.addEventListener('dragover', (evt)=>{
 		if (current_drag_action=='removefromfave') {
 			evt.preventDefault()
-			evt.dataTransfer.dropEffect = "copy"
-		}
-
-	})
-
-	self.Nodes.Main.addEventListener('dragleave', (evt)=>{
-		if (current_drag_action=='removefromfave') {
-
+			trashbutton.setAttribute(ATTR_DRAGOVER, '')
 		}
 	})
 
-	self.Nodes.Main.addEventListener('drop', (evt)=>{
+	trashbutton.addEventListener('dragleave', (evt)=>{
+		trashbutton.removeAttribute(ATTR_DRAGOVER)
+	})
+
+	trashbutton.addEventListener('drop', (evt)=>{
 		if (current_drag_action=='removefromfave') {
+			const modulename = evt.dataTransfer.getData('modulename');
+			if (modulename=='') {
+				return
+			}
+
+			var icon = favourite.querySelector(`[name="${modulename}"]`)
+			if (icon!=null) {
+				icon.style.animation = 'removing 0.3s forwards'
+				setTimeout(()=>{
+					icon.remove()
+				}, 300)
+				
+				self.Listener.dispatchEvent(RemoveFromFavouriteEvent({
+					detail: {
+						modulename: modulename,
+					}
+				}))
+			}
 			evt.preventDefault()
-			// evt.target.remove()
-			console.log('hapus')
+			current_drag_action = ''
 		}
 	})	
 }

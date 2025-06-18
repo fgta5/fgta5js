@@ -67,6 +67,14 @@ const ICON_HOME = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://
 <rect x="1.6787" y="3.9367" width="3.2135" height="1.4646"/>
 </g>`
 
+
+const ICON_TRASH = `<svg version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
+<g fill="currentColor">
+<path d="m6.5113 2.4805h-4.775l0.85705 5.5191h3.0609z" stroke-linecap="square" stroke-width="1.3229"/>
+<path d="m3.2115 0.40101v0.41341h-1.8266v0.86816h5.519v-0.86816h-1.8462v-0.41341z"/>
+</g>
+</svg>`
+
 export default class Component {
 	Id;
 	Element;
@@ -80,6 +88,7 @@ export default class Component {
 	static get ICON_SEARCH() { return ICON_SEARCH }
 	static get ICON_SETTING() { return ICON_SETTING }
 	static get ICON_HOME() { return ICON_HOME }
+	static get ICON_TRASH() { return ICON_TRASH }
 
 	static get ACTION_SHOWMENU()  { return 'showmenu' }
 	static get ACTION_SHOWHOME() { return 'showhome' }
