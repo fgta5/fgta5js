@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<%- include(style); %>
+		<%- include(script); %>
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/appgen.css" />
+		<style>
+			#loadingindicator {
+				position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #fff;
+				transition: opacity 0.5s ease, visibility 0.5s ease;
+			}
+		</style>
+		<script>
+			window.APPLICATION_NAME = 'appgen'
+		</script>
+	</head>
+	<body>
+
+		<!-- Loading Indicator -->
+		<div id="loadingindicator">
+			<div style="font-family: system-ui, sans-serif">
+				loading module...
+			</div>
+		</div>
+
+		<!-- Main Application Layout -->
+		<main id="appgen" class="hidden">
+
+		</main>	
+
+
+		<!-- Untuk tampungan template yang akan di load dinamis -->
+		<div id="TEMPLATE" class="hidden">
+
+		</div>
+	</body>
+
+
+	<script type="module">
+		// <% if (env=='release') { %>
+		import AppGen from './dist/appgen-v1.0.0-min.js'
+		// <% } else { %>
+		import AppGen from './src/appgen.mjs'	
+		// <% } %>	
+		window.addEventListener("load", async (event) => {
+			var $app = new AppGen();
+			await $app.main();
+			// remove loading indikator
+			var myapp = document.getElementById(window.APPLICATION_NAME)
+			var pagemask = document.getElementById('loadingindicator')
+			myapp.classList.remove('hidden')
+			setTimeout(()=>{
+				pagemask.style.opacity = 0
+				pagemask.style.visibility = 'hidden'
+				setTimeout(()=>{
+					pagemask.parentNode.removeChild(pagemask)
+				}, 500)
+			}, 500)
+		});
+	</script>	
+
+</html>			

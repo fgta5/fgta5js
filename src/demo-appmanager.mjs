@@ -9,7 +9,7 @@ export default class Page {
 
 // sample program list
 const programs = {
-	generator: new $fgta5.ModuleData({name:'generator', title:'Generator', url:'fgta5-generator'}),
+	generator: new $fgta5.ModuleData({name:'generator', title:'Generator', url:'appgen'}),
 	account: new $fgta5.ModuleData({name:'account', title:'Account', icon:'images/iconprograms/mcfly.png'}),
 	departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'images/iconprograms/mcfly.png'}),
 	lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'images/iconprograms/medicine.png'}),
@@ -79,7 +79,7 @@ async function main(self, args) {
 	])
 
 	// set program favourite	
-	appmgr.SetFavourite([ 'generator', 'crud01', 'account',  'periode'])
+	appmgr.SetFavourite([ 'appgen', 'crud01', 'account',  'periode'])
 
 	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 

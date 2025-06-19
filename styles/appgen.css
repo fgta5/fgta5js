@@ -1,0 +1,126 @@
+input[type="text"] {
+	outline: none;
+	border: 1px solid #ccc;
+	padding: 10px;
+} 
+
+input[type="text"]:focus {
+	border-color: black;
+} 
+
+th,
+label {
+	font-weight: bold;
+	font-size: 0.8rem;
+}
+
+th, td {
+	padding: 10px;
+}
+
+th {
+	background-color: rgb(34, 77, 156);
+	color: white;
+}
+
+
+button {
+	outline: none;
+	border: #ccc;
+	padding: 10px 40px 10px 40px;
+	min-width: 150px;
+	color: white;
+	background-color: rgb(17, 37, 75);
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: rgb(49, 78, 132);
+}
+
+.subtitle {
+	font-weight: bold;
+	font-size: 1.1rem;
+	padding: 20px 0 10px 0;
+}
+
+.generator-button-new {
+	display: inline-block;
+	position: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: url('./../images/icon-newdocument.svg');
+	width: 48px;
+	height: 48px;
+	right: 1rem;
+	top: calc(var(--fgta5-app-header-height) + 1rem);
+	transition: transform 0.3s ease;
+}
+
+.generator-button-new:hover {
+	transform: scale(1.5);
+}
+
+
+
+
+#appgen-datadesign-layout {
+	display: grid;
+	grid-template-areas:
+			"def def"
+			"entity entity"
+			"editor sidebar";
+	grid-template-columns: auto 300px;
+	grid-template-rows: auto;
+	gap: 10px;
+}
+
+#appgen-datadesign-layout > div {
+	/* background-color: #ccc; */
+	padding: 10px;
+}
+
+#layout-definition {
+	grid-area: def;
+
+	display: grid;
+	grid-template-columns: 150px auto;
+	column-gap: 10px;
+	row-gap: 10px;
+}
+
+#layout-definition > label {
+	text-align: right;
+	align-self: center;
+	justify-self: end;
+}
+
+#layout-entity {
+	grid-area: entity;
+}
+
+#layout-editor {
+	grid-area: editor;
+}
+
+#layout-sidebar {
+	grid-area: sidebar;
+}
+
+
+
+#tbl_entity {
+	width: 100%;
+}
+
+#tbl_entity th {
+	text-align: left;
+}
+
+#tbl_entity input {
+	padding: 3px;
+}
+
+#tbl_entity [name="col-name"] {
+	width: 100px;
+}

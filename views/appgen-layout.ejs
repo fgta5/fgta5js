@@ -1,0 +1,81 @@
+<!-- 
+* Daftar Module
+* menampilkan list-list module yang telah dibuat
+* perlu ada direktori untuk menyimpan hasil json generate
+* yang nanti bisa dipanggil lagi untuk di edit
+-->
+<section name="appgen-list" data-title="Daftar Module">
+	<a class="generator-button-new" href="javascript:void(0)"></a>
+	<table>
+
+	</table>
+</section>	
+
+
+<!-- 
+* Designer Editor
+* nama program, deskripsi, table utama
+* data2 detil related ke data utama
+* drag and drop componen-component ke masing2 header / detail, kemudian dikonfigurasi
+* -->
+<section name="appgen-datadesign" data-title="Design Data">
+	<a class="generator-button-new" href="javascript:void(0)"></a>
+	<div id="appgen-datadesign-layout">
+		<!-- Program Definition -->
+		
+		<div id="layout-definition">
+			<div class="subtitle" style="grid-column: span 2;">Program Definition</div>
+
+			<label for="obj_programname">Program Name</label>
+			<input type="text" id="obj_programname">
+			
+			<label for="obj_programdescription">Description</label>
+			<input type="text" id="obj_programdescription">
+		
+		</div>
+		
+		<!-- Definisi Header Detil -->
+		<div id="layout-entity">
+			<div class="subtitle">Entites</div>
+			<table id="tbl_entity" cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th name="col_name">Name</th>
+						<th name="col_title">Title</th>
+						<th name="col_table">Table</th>
+						<th name="col_pk">PK</th>
+						<th name="col_btndesign"></th>
+						<th name="col_btnremove"></th>
+						<th name="col_id">ID</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="7" style="padding-left: 0;"><button id="btn_addentity">Add Entity</button></td>
+					</tr>
+				</tfoot>
+
+			</table>
+			
+		</div>
+
+		<!-- Table Editor, menerima drag and drop dari component -->
+		<div id="layout-editor">
+		</div>
+
+		<!-- Side Bar, untuk daftar komponen yang bisa di drag and drop, dan lain2 -->
+		<div id="layout-sidebar">
+
+		</div>
+
+	</div>
+
+</section>	
+
+<section name="appgen-uidesign" data-title="User Interface">
+</section>	
+
+
