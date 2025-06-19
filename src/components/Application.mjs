@@ -122,27 +122,3 @@ function App_ShowHome(self) {
 	}, '*')	
 }
 
-function App_RenderSection(self) {
-	const main = self.Nodes.Main
-
-
-
-	const Sections = self.Sections
-	const secs = main.querySelectorAll('section[name]') 
-	let i = 0;
-	for (const sec of secs) {
-		const section = new Section(sec, {
-			index: i,
-			fn_getActiveSection: ()=>{
-				const cs = main.querySelector(`section[${Section.ATTR_ACTIVE}]`)
-				const name = cs.getAttribute('name') 
-				return Sections[name]
-			}
-		})
-		
-
-		// masukkan panel ini ke datamap
-		Sections[section.Name] = section
-		++i
-	}
-}

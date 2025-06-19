@@ -3,8 +3,9 @@ const app = new $fgta5.Application(appname)
 
 const EVT_CLICK = 'click'
 
-const obj = {}
-const btn = {}
+const mod = {} // menampung variabel2 module yang akan di share 
+const obj = {} // menampung object2 form
+const btn = {} // untuk menampung semua button
 
 export default class AppGenerator  {
 	async main(args) {
@@ -20,11 +21,12 @@ function render_template(self) {
 	// remder footer
 	const footer = app.Nodes.Footer
 	const footerButton = clone.querySelector('#footer-button');
-	footer.innerHTML = ''
+	footer.innerHTML = '' // reset content footer
 	footer.appendChild(footerButton)
 
-	const crs = new $fgta5.SectionCarousell(app.Nodes.Main)
-	// app.RenderSection(new $fgta5.SectionCarousell(appname))
+	// siapkan section carousel
+	mod.scar = new $fgta5.SectionCarousell(app.Nodes.Main)
+	
 
 }
 
@@ -37,27 +39,18 @@ async function main(self, args) {
 	btn.section3 = new $fgta5.Button('btn_section3')
 
 	btn.section1.addEventListener(EVT_CLICK, (evt)=>{
-		app.Sections['section1'].Show()
+		mod.scar.Items['section1'].Show({direction:$fgta5.Section.DIR_RIGHT})
 	})
 
 	btn.section2.addEventListener(EVT_CLICK, (evt)=>{
-		app.Sections['section2'].Show()
+		mod.scar.Items['section2'].Show()
 	})
 	
 	btn.section3.addEventListener(EVT_CLICK, (evt)=>{
-		app.Sections['section3'].Show()
+		mod.scar.Items['section3'].Show()
 	})
 
 
 	app.ShowFooter(true)
 }
 
-async function btn_new_click(self, evt) {
-}
-
-async function btn_save_click(self, evt) {
-	console.log('save')
-}
-
-async function btn_delete_click(self, evt) {
-}

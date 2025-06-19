@@ -260,16 +260,32 @@
 	}
 }
 
-
+/* geser ke kiri, menghilang */
 @keyframes fadeOutLeft {
     0% { opacity: 1; transform: translateX(0); }
     100% { opacity: 0; transform: translateX(-100px); }
 }
 
+/* geser ke kanan, menghilang */
+@keyframes fadeOutRight {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(100px); }
+}
+
+/* masuk dari kiri (sebelumnya harus di taruh dulu di kiri) */
+/* .taruh-kiri { transform: translateX(-100px); opacity: 0; } */
+@keyframes fadeInLeft {
+    0% { opacity: 0; transform: translateX(-100px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+/* masuk dari kanan, (sebelumnya harus di taruh dulu di kanan) */
+/* .taruh-kanan { transform: translateX(100px); opacity: 0; } */
 @keyframes fadeInRight {
     0% { opacity: 0; transform: translateX(100px); }
     100% { opacity: 1; transform: translateX(0); }
 }
+
 
 
 .fgta5-menu [data-iconcontainer] {
@@ -613,24 +629,11 @@
 }
 
 
-
-.taruh-kiri {
-	transform: translateX(-300px); 
-	opacity: 0;
+.fgta5-sectioncarousell {
+	position: relative;
 }
 
-
-.taruh-kanan {
-	transform: translateX(300px); 
-	opacity: 0;
-}
-
-@keyframes geserKiri {
-    0% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateX(-300px); }
-}
-
-@keyframes geserKanan {
-    0% { opacity: 1; transform: translateX(0); }
-    100% { transform: translateX(300px); }
+.fgta5-sectioncarousell section {
+	position: absolute;
+	width: 100%;
 }
