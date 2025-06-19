@@ -18,7 +18,7 @@
 
 @media screen and (max-width: 500px) { 
 	.fgta5-app-main {
-		margin: calc(var(--fgta5-app-header-height) + 5px) 10px 2rem 10px
+		margin: calc(var(--fgta5-app-header-height) + 20px) 10px 2rem 10px
 	}
 }
 
@@ -66,10 +66,7 @@
 }
 
 
-.fgta5-app-section {
-	border: 1px solid;
-	/* transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; */
-}
+
 
 
 .fgta5-button-head {
@@ -81,6 +78,13 @@
 	min-height: 1.2rem;
 	color: white;
 	padding: 5px;
+	opacity: 1;
+	transition: transform 0.3s ease, opacity 0.5s ease;
+}
+
+.fgta5-button-head:hover {
+	transform: scale(1.2);
+	/* opacity: 0.5; */
 }
 
 .fgta5-button-menu {
@@ -631,9 +635,41 @@
 
 .fgta5-sectioncarousell {
 	position: relative;
+	display: flex;
 }
 
-.fgta5-sectioncarousell section {
-	position: absolute;
+.fgta5-app-section {
+	position: relative;
 	width: 100%;
+	padding-bottom: 5.5rem;
+}
+
+.fgta5-app-section div[data-topbar] {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 1rem;
+}
+
+.fgta5-app-section div[data-backbutton] {
+	width: 15px;
+}
+
+.fgta5-app-section div[data-title] {
+	font-weight: bold;
+	font-size: 1.3rem;
+	height: 1.3rem;
+	line-height: 1.3rem;
+}
+
+.fgta5-app-section a[data-backbutton] {
+	width: 1.2rem;
+	height: 1.2rem;
+	overflow: hidden;
+	color: rgb(106, 106, 106);
+	transition: transform 0.3s ease; 
+}
+
+.fgta5-app-section a[data-backbutton]:hover {
+	transform: scale(2);
 }

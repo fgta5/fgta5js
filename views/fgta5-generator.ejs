@@ -26,23 +26,118 @@
 
 		<!-- Main Application Layout -->
 		<main id="appgenerator" class="hidden">
-			<section name="section1">
-				section 1	
+			<!-- 
+			* Daftar Module
+			* menampilkan list-list module yang telah dibuat
+			* perlu ada direktori untuk menyimpan hasil json generate
+			* yang nanti bisa dipanggil lagi untuk di edit
+			-->
+			<section name="modulelist" data-title="Daftar Module">
+				<a class="generator-button-new" href="javascript:void(0)"></a>
+				<table>
+
+				</table>
 			</section>	
-			<section name="section2">
-				section 2		
+
+
+			<!-- 
+			* Designer Editor
+			* nama program, deskripsi, table utama
+			* data2 detil related ke data utama
+			* drag and drop componen-component ke masing2 header / detail, kemudian dikonfigurasi
+			* -->
+			<section name="datadesign" data-title="Design Data">
+				<a class="generator-button-new" href="javascript:void(0)"></a>
+				<div id="datadesignboard">
+					<!-- Program Definition -->
+					<div name="def">
+						<label for="obj_programname">Program Name</label>
+						<input id="obj_programname">
+						<label for="obj_programdescription">Description</label>
+						<input id="obj_programdescription">
+					</div>
+					
+					<!-- Definisi Header Detil -->
+					<div name="detil">
+						<table id="tbl_detildef">
+							<tr>
+								<th name="data-col-name">Name</th>
+								<th name="data-col-title">Title</th>
+								<th name="data-col-table">Table</th>
+								<th name="data-col-pk">PK</th>
+								<th name="data-col-btndesign"></th>
+								<th name="data-col-btnremove"></th>
+							</tr>
+							<tr data-tplname="tpldesignrow" class="hidden">
+								<td name="data-col-name"><input data-tplname="tpldesignrow-name"></td>
+								<td name="data-col-title"><input data-tplname="tpldesignrow-title"></td>
+								<td name="data-col-table"><input data-tplname="tpldesignrow-table"></td>
+								<td name="data-col-pk"><input data-tplname="tpldesignrow-pk"></td>
+								<td name="data-col-btndesign"><button data-tplname="tpldesignrow-btndesign">design</button></td>
+								<td name="data-col-btnremove"><button data-tplname="tpldesignrow-btnremove">remove</button></td>
+							</tr>
+							<tr id="detil-header">
+								<td name="data-col-name" data-st="header" style="padding-right: 5px;">Header</td>
+								<td name="data-col-title"><input></td>
+								<td name="data-col-table"><input></td>
+								<td name="data-col-pk"><input></td>
+								<th name="data-col-btndesign"><button>design</button></th>
+								<td name="data-col-btnremove"></td>
+							</tr>
+							<tr>
+								<td><button id="btn_adddetil">Add</button></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+						
+					</div>
+
+					<!-- Table Editor, menerima drag and drop dari component -->
+					<div name="editor" id="dataeditorboard">
+						<div data-detil-id="detil-header">
+							detil-header
+							<div id="dataeditor-header-pk">
+
+							</div>
+						</div>
+					</div>
+
+					<!-- Side Bar, untuk daftar komponen yang bisa di drag and drop, dan lain2 -->
+					 <div name="sidebar">
+						<div id="datadesigner-toolbar">
+							<div class="datadesigner-component" draggable="true">Textbox</div>
+							<div class="datadesigner-component" draggable="true">Numberbox</div>
+							<div class="datadesigner-component" draggable="true">Checkbox</div>
+							<div class="datadesigner-component" draggable="true">Datepicker</div>
+							<div class="datadesigner-component" draggable="true">Timepicker</div>
+							<div class="datadesigner-component" draggable="true">Combobox</div>
+							<div class="datadesigner-component" draggable="true">Filebox</div>
+						</div>
+					 </div>
+
+				</div>
+				<a class="generator-button-new" href="javascript:void(0)"></a>
 			</section>	
-			<section name="section3">
-				section 3		
+
+			<section name="uidesign" data-title="User Interface">
 			</section>	
 		</main>	
 
 		<template>
+
 			<div id="footer-button">
 				<button id="btn_section1">1</button>	
 				<button id="btn_section2">2</button>	
 				<button id="btn_section3">3</button>		
 			</div>
+
+
+
+
+
 		</template>
 
 

@@ -1,3 +1,4 @@
+import ICONS from './Icons.mjs'
 import Component from "./Component.mjs"
 import Section from './Section.mjs'
 
@@ -75,11 +76,11 @@ function App_createHeader(self, head) {
 	const divleft = document.createElement('div')
 	const title = document.createElement('span')
 
-	const btnmenu = self.CreateSvgButton(Component.ICON_MENU, CLS_BUTTONHEAD, ()=>{
+	const btnmenu = Component.CreateSvgButton(ICONS.MENU, CLS_BUTTONHEAD, ()=>{
 		App_ShowMenu(self)
 	})
 
-	const btnhome = self.CreateSvgButton(Component.ICON_HOME, CLS_BUTTONHEAD, ()=>{
+	const btnhome = Component.CreateSvgButton(ICONS.HOME, CLS_BUTTONHEAD, ()=>{
 		App_ShowHome(self)
 	})
 

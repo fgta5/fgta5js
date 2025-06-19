@@ -1,15 +1,39 @@
 import Section from './Section.mjs'
 
+const EVT_SECTIONSHOWING = 'sectionshowing'
+
+const SectionShowingEvent = (data) => { return new CustomEvent(EVT_SECTIONSHOWING, data) }
 
 
 export default class SectionCarousell {
+	#items = {}
+	#listener = new EventTarget()
+	#currentsection 
+
+	static get EVT_SECTIONSHOWING() { return EVT_SECTIONSHOWING }
 
 	constructor(el) {
 		SectionCarousell_Construct(this, el)
 	}
 
-	#items = {}
 	get Items() { return this.#items}
+	get Listener() { return this.#listener }
+	get CurrentSection() { return this.#currentsection }
+
+	addEventListener(eventname, callback) {
+		this.Listener.addEventListener(eventname, callback)
+	}	
+
+	SetCurrentSection(section) {
+		this.#currentsection = section
+	}
+
+	DispatchSectionShowing(currSection, commingSection) {
+		this.Listener.dispatchEvent(SectionShowingEvent({
+			currSection: currSection,
+			commingSection: commingSection
+		}))
+	}
 }
 
 function SectionCarousell_Construct(self, el) {
@@ -22,11 +46,16 @@ function SectionCarousell_Construct(self, el) {
 	for (let node of nodes) {
 		const section = new Section(node, {
 			index: i,
+			carousell: self,
 			fn_getActiveSection: ()=>{
 				return SectionCarousell_getActiveSection(self, el)
 			}
 		})
 		const name = section.Name
+
+		if (self.CurrentSection==null) {
+			self.SetCurrentSection(section)
+		}
 
 		// masukkan panel ini ke items
 		self.Items[name] = section

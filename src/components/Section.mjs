@@ -1,42 +1,66 @@
+import ICONS from './Icons.mjs'
+import Component from "./Component.mjs"
+
 const CLS_HIDDEN = 'hidden'
 const CLS_SECTION = 'fgta5-app-section'
 
-const ATTR_ACTIVE = 'data-active'
 
+const ATTR_ACTIVE = 'data-active'
+const ATTR_TITLE = 'data-title'
+const ATTR_TOPBAR = 'data-topbar'
+const ATTR_BACKBUTTON = 'data-backbutton'
 
 const DIR_LEFT = 0
 const DIR_RIGHT = 1
+
+const EVT_BACKBUTTONCLICK = 'backbuttonclick'
+const EVT_SECTIONSHOWING = 'sectionshowing'
+
+const BackButtonClickEvent = (data) => { return new CustomEvent(EVT_BACKBUTTONCLICK, data) }
+const SectionShowingEvent = (data) => { return new CustomEvent(EVT_SECTIONSHOWING, data) }
 
 
 export default class Section {
 	#element
 	#index
 	#name
+	#title
 	#previoussection
+	#carousell
 	#fn_getActiveSection
+	#listener = new EventTarget()
 
 	static get ATTR_ACTIVE() { return ATTR_ACTIVE }
 	static get DIR_LEFT() { return DIR_LEFT }
 	static get DIR_RIGHT() { return DIR_RIGHT }
+	static get EVT_BACKBUTTONCLICK() { return EVT_BACKBUTTONCLICK }
+	static get EVT_SECTIONSHOWING() { return EVT_SECTIONSHOWING }
 
 
 	get Index() { return this.#index }
 	get Name() { return this.#name }
+	get Title()  { return this.#title }
 	get Element() { return this.#element }
 	get PreviousSection() { return this.#previoussection}
 	get getActiveSection() { return this.#fn_getActiveSection }
+	get Listener() { return this.#listener }
+	get Carousell() { return this.#carousell } 
 
 
 	constructor(el, args) {
 		const name = el.getAttribute('name')
+		const title = el.getAttribute(ATTR_TITLE)
 
 		this.#element = el
 		this.#name = name
-
+		this.#title = title ?? 'section'
+		
 		if (args!=null) {
 			if (args.index!=null) {
 				this.#index = args.index
 			}
+
+			this.#carousell = args.carousell
 
 			if (typeof args.fn_getActiveSection === 'function') {
 				this.#fn_getActiveSection = args.fn_getActiveSection
@@ -44,12 +68,10 @@ export default class Section {
 				this.#fn_getActiveSection = ()=>{return null}
 			}
 		}
-
-		SectionConstruct(this, args)
-
-
-
+		SectionConstruct(this, args) 
 	}
+
+
 
 
 	async Show(args, fn_callback) {
@@ -57,6 +79,10 @@ export default class Section {
 		this.#previoussection = currSection // set current session ke previous untuk keperluan back
 		await Section_Show(this, args, fn_callback)
 	}
+
+	addEventListener(eventname, callback) {
+		this.Listener.addEventListener(eventname, callback)
+	}	
 }
 
 function SectionConstruct(self, args) {
@@ -71,6 +97,37 @@ function SectionConstruct(self, args) {
 		el.classList.add(CLS_HIDDEN)
 	}
 
+
+	// set title
+	const topbar = document.createElement('div')
+	const title = document.createElement('div')
+	const backbutton = Component.CreateSvgButton(ICONS.BACK, '', ()=>{
+		// back ke previous section
+		Section_BackButtonClick(self)
+	})
+
+
+	topbar.setAttribute(ATTR_TOPBAR, '')
+	topbar.appendChild(backbutton)
+	topbar.appendChild(title)
+	
+
+	backbutton.setAttribute(ATTR_BACKBUTTON, '')
+	if (self.Index==0) {
+		backbutton.classList.add('hidden')
+	}
+
+	title.setAttribute(ATTR_TITLE, self.Title)
+	title.innerHTML = self.Title
+
+
+	
+	el.prepend(topbar)
+
+	self.Nodes = {
+		BackButton: backbutton,
+		Title: title
+	}
 
 }
 
@@ -106,6 +163,18 @@ async function Section_Show(self, args, fn_callback) {
 
 		const curr = currSection.Element
 
+
+		// trigger event showing
+		self.Carousell.SetCurrentSection(commingSection)
+		self.Carousell.DispatchSectionShowing(currSection, commingSection)
+		self.Listener.dispatchEvent(SectionShowingEvent({
+			data: {
+				currSection: currSection,
+				commingSection: commingSection
+			}
+		}))
+		
+
 		// taruh dulu yang akan data ke kanan, posisi hiden
 		comming.style.animation = 'unset'
 
@@ -124,10 +193,25 @@ async function Section_Show(self, args, fn_callback) {
 				comming.setAttribute(ATTR_ACTIVE, '')
 			}, 300)
 		}, 100)		
+
+
 	} else {
 		// langsung munculkan tanpa animasi
 		comming.classList.remove(CLS_HIDDEN)
 		comming.setAttribute(ATTR_ACTIVE, '')
 	}
 	
+}
+
+
+function Section_BackButtonClick(self) {
+	// back to self.PreviousSection
+	self.Listener.dispatchEvent(BackButtonClickEvent({
+		cancelable: true,
+		detail: {
+			fn_ShowNextSection: ()=>{
+				self.PreviousSection.Show({direction:DIR_RIGHT})
+			}
+		}
+	}))
 }

@@ -17,6 +17,7 @@ import Application from './components/Application.mjs';
 import ModuleData from './components/ModuleData.mjs'
 import Section from './components/Section.mjs'
 import SectionCarousell from './components/SectionCarousell.mjs'
+import Icons from './components/Icons.mjs';
 
 import * as Validators from './components/Validators.mjs';
 
@@ -46,7 +47,8 @@ const fgta5 = {
 	Application: Application,
 	ModuleData: ModuleData,
 	Section: Section,
-	SectionCarousell: SectionCarousell
+	SectionCarousell: SectionCarousell,
+	Icons: Icons
 }
 
 

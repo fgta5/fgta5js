@@ -1,0 +1,102 @@
+.generator-button-new {
+	display: inline-block;
+	position: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: url('./../images/icon-newdocument.svg');
+	width: 48px;
+	height: 48px;
+	right: 1rem;
+	top: calc(var(--fgta5-app-header-height) + 1rem);
+	transition: transform 0.3s ease;
+}
+
+.generator-button-new:hover {
+	transform: scale(1.5);
+}
+
+#datadesignboard {
+	display: grid;
+	grid-template-areas:
+			"def def"
+			"detil detil"
+			"editor sidebar";
+	grid-template-columns: auto 300px;
+	grid-template-rows: auto;
+	gap: 10px;
+}
+
+#datadesignboard th {
+	text-align: left;
+}
+
+#datadesignboard > div {
+	/* background-color: #ccc; */
+	padding: 3px;
+}
+
+#datadesignboard [name="def"] {
+	grid-area: def;
+
+	display: grid;
+	grid-template-columns: 150px auto;
+	column-gap: 10px;
+	row-gap: 3px;
+	padding: 5px;
+}
+
+#datadesignboard [name="def"] > label {
+	align-self: center;
+	justify-self: end;
+	font-weight: bold;
+	font-size: 0.8rem;
+}
+
+#datadesignboard [name="detil"] {
+	grid-area: detil;
+	
+}
+
+#datadesignboard [name="editor"] {
+	grid-area: editor;
+	min-height: 1600px;
+	
+}
+
+#datadesignboard [name="sidebar"] {
+	grid-area: sidebar;
+
+	
+}
+
+#datadesigner-toolbar {
+	position: sticky;
+	top: 50px;
+
+	display: flex;
+	flex-direction: column;
+	row-gap: 7px;
+}
+
+.datadesigner-component {
+	padding: 5px;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	cursor:grab;
+}
+
+#tbl_detildef th[name="data-col-name"], 
+#tbl_detildef td[name="data-col-name"] {
+	width: 150px;
+	text-align: right;
+}
+
+#tbl_detildef td[data-st="header"] {
+	background-color: #ccc;
+	color: #555555;
+	font-weight: bold;
+}
+
+#tbl_detildef td[name="data-col-name"] > input {
+	text-align: right;
+}

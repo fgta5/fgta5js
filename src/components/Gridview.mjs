@@ -1,3 +1,4 @@
+import ICONS from './Icons.mjs'
 import Component from "./Component.mjs"
 
 const ATTR_ROWSELECTOR = 'rowselector'
@@ -19,40 +20,11 @@ const TYPE_ROWSELECTOR = 'rowselector'
 const TYPE_AUTONUMBER = 'autonumber'
 const TYPE_STANDARD = 'standard'
 
-const ICON_UNSORT = `<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-<path d="m2.1656 5.2663 3.8057-4.6994 3.8057 4.6994z" fill="currentColor"/>
-<path d="m2.1656 6.6955 3.8057 4.6994 3.8057-4.6994z" fill="currentColor"/>
-</svg>`
-
-const ICON_SORTASC = `<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-<path d="m2.1943 9.1198 3.8057-6.5338 3.8057 6.5338z" fill="currentColor"/>
-</svg>`
-
-const ICON_SORTDESC = `<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-<path d="m2.1943 2.586 3.8057 6.5338 3.8057-6.5338z" fill="currentColor"/>
-</svg>
-`
-
-const ICON_YES = `<svg width="1rem" height="1rem" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-<circle cx="15" cy="15" r="12" stroke="currentColor" stroke-width="1" fill="none" />
-<circle cx="15" cy="15" r="8" fill="currentColor" />
-</svg>`
-
-const ICON_NO = `<svg width="1rem" height="1rem" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-<circle cx="15" cy="15" r="12" stroke="currentColor" stroke-width="1" fill="none" />
-</svg>`
-
 const CellClickEvent = (data) => { return new CustomEvent('cellclick', data) }
 const RowRenderEvent = (data) => { return new CustomEvent('rowrender', data) }
 const RowRemovingEvent = (data) => { return new CustomEvent('rowremoving', data) }
 const SortingEvent = (data) => { return new CustomEvent('sorting', data) }
 const NextDataEvent = (data) => { return new CustomEvent('nextdata', data) }
-
-
-
 
 export default class Gridview extends Component {
 	constructor(id) {
@@ -255,7 +227,7 @@ function Gridview_setupHeader(self, columns) {
 				container.setAttribute(ATTR_TEXTALIGN, column.textalign)
 
 				let sortbtn = document.createElement('button')
-				sortbtn.innerHTML = ICON_UNSORT
+				sortbtn.innerHTML = ICONS.UNSORT
 				sortbtn.setAttribute(ATTR_SORTING, '')
 				sortbtn.setAttribute(ATTR_BINDING, column.binding)
 				sortbtn.addEventListener('click', (evt)=>{ Gridview_sort(self, sortbtn) })
@@ -449,17 +421,17 @@ function Gridview_sort(self, btn) {
 		// ubah ke ascending
 		th.setAttribute(ATTR_SORTING, 'asc')
 		btn.setAttribute(ATTR_SORTING, 'asc')
-		btn.innerHTML = ICON_SORTASC
+		btn.innerHTML = ICONS.SORTASC
 	} else if (sorting=='asc') {
 		// ubah ke desc
 		th.setAttribute(ATTR_SORTING, 'desc')
 		btn.setAttribute(ATTR_SORTING, 'desc')
-		btn.innerHTML = ICON_SORTDESC
+		btn.innerHTML = ICONS.SORTDESC
 	} else {
 		// ubah ke unsort
 		th.removeAttribute(ATTR_SORTING)
 		btn.setAttribute(ATTR_SORTING, '')
-		btn.innerHTML = ICON_UNSORT
+		btn.innerHTML = ICONS.UNSORT
 	}
 
 	// ambil semua kolom yang di sort
@@ -617,8 +589,8 @@ function Gridview_formatDecimal (value, precision)  {
 }
 
 function Gridview_formatCheckmark(value) {
-	const yes = ICON_YES
-	const no = ICON_NO
+	const yes = ICONS.YES
+	const no = ICONS.NO
 
 	if (value===undefined || value===null) {
 		return no

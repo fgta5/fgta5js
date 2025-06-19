@@ -1,3 +1,4 @@
+import ICONS from "./Icons.mjs"
 import Component from "./Component.mjs"
 import ModuleData from "./ModuleData.mjs"
 
@@ -33,7 +34,6 @@ const TXT_OPENED = 'Opened Programs'
 
 const C_SHORTCUT_PREFIX = 'fgta5-sch-mod-'
 
-const ICON_DIRDEF = '<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg"><rect x=".4961" y="3.9307" width="7.5035" height="4.0689"/><path d="m0.4961 3.2521h7.5035l1e-7 -0.71184h-4.2386l-0.87664-1.3525h-2.3883z"/><rect x="5.8727" y="5.303" width="1.2058" height="1.1077" fill="#fff"/></svg>'
 
 
 const ActionEvent = (data) => { return new CustomEvent('action', data) }
@@ -112,7 +112,7 @@ function AppManager_construct(self) {
 	const favourite = main.querySelector(`div[${ATTR_FAVOURITE}]`)
 	const trahsbox = document.createElement('div')
 	const currentuser = main.querySelector(`div[${ATTR_CURRENTUSER}]`)
-	const btnmenu = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{
+	const btnmenu = AppManager_createHeadButton(self, ICONS.MENU, ()=>{
 		AppManager_ShowMenu(self)
 	})
 	
@@ -180,7 +180,7 @@ function AppManager_listenMessage(self) {
 
 
 function AppManager_createHeadButton(self, svg, fn_click) {
-	return self.CreateSvgButton(svg, CLS_BUTTONHEAD, fn_click )
+	return Component.CreateSvgButton(svg, CLS_BUTTONHEAD, fn_click )
 }
 
 function AppManager_SetTitle(self, title) {
@@ -190,9 +190,9 @@ function AppManager_SetTitle(self, title) {
 
 function AppManager_createMenuBoard(self, nav) {
 	const menuhead = document.createElement('div')
-	const btnmenureset = AppManager_createHeadButton(self, Component.ICON_MENU, ()=>{ AppManager_ResetMenu(self) })
+	const btnmenureset = AppManager_createHeadButton(self, ICONS.MENU, ()=>{ AppManager_ResetMenu(self) })
 	const divcenter = document.createElement('div')
-	const btnclose = AppManager_createHeadButton(self, Component.ICON_CLOSE, ()=>{ AppManager_closeMenu(self) })
+	const btnclose = AppManager_createHeadButton(self, ICONS.CLOSE, ()=>{ AppManager_closeMenu(self) })
 	const main = document.createElement('div')
 	const toppanel = document.createElement('div')
 	const toppanel_left = document.createElement('div')
@@ -248,12 +248,12 @@ function AppManager_createMenuBoard(self, nav) {
 
 
 	// home
-	const btnhome = self.CreateSvgButton(Component.ICON_HOME, CLS_BUTTONMENU, ()=>{
+	const btnhome = Component.CreateSvgButton(ICONS.HOME, CLS_BUTTONMENU, ()=>{
 		AppManager_showHome(self)
 	})
 
 	// setting
-	const btnsetting = self.CreateSvgButton(Component.ICON_SETTING, CLS_BUTTONMENU, ()=>{
+	const btnsetting = Component.CreateSvgButton(ICONS.SETTING, CLS_BUTTONMENU, ()=>{
 		AppManager_openSetting(self)
 	})
 	
@@ -274,7 +274,7 @@ function AppManager_createMenuBoard(self, nav) {
 	})
 
 	btnsearch.classList.add('fgta5-menu-search')
-	btnsearch.innerHTML = Component.ICON_SEARCH
+	btnsearch.innerHTML = ICONS.SEARCH
 	btnsearch.addEventListener(EVT_CLICK, (evt)=>{
 		txtsearch.focus()
 		AppManager_searchModule(self, txtsearch.value)
@@ -282,7 +282,7 @@ function AppManager_createMenuBoard(self, nav) {
 
 
 	// user
-	const btnprofile = self.CreateSvgButton(Component.ICON_USER, CLS_BUTTONMENU)
+	const btnprofile = Component.CreateSvgButton(ICONS.USER, CLS_BUTTONMENU)
 	btnprofile.classList.add(CLS_HIDDEN)
 	
 
@@ -304,7 +304,7 @@ function AppManager_createMenuBoard(self, nav) {
 
 
 	// button logout
-	btnlogout.innerHTML = `<div icon>${Component.ICON_LOGOUT}</div><div>Sign Out</div>`
+	btnlogout.innerHTML = `<div icon>${ICONS.LOGOUT}</div><div>Sign Out</div>`
 	btnlogout.setAttribute('href', 'javascript:void(0)')
 
 
@@ -469,7 +469,7 @@ function AppManager_SetFavourite(self, data)	 {
 	title.classList.add('fgta5-appmanager-home-subtitle')
 
 	trashicon.setAttribute(ATTR_ICON, '')
-	trashicon.innerHTML = Component.ICON_TRASH
+	trashicon.innerHTML = ICONS.TRASH
 	
 	trashicon.setAttribute(ATTR_LABEL, '')
 	trashlabel.innerHTML = 'Delete'
@@ -558,7 +558,7 @@ function AppManager_CreateGroupIcon(self, group) {
 		icon.style.backgroundImage = `url('${group.icon}')`
 	} else {
 		// tampilkan icon standard
-		icon.style.backgroundImage = `url('data:image/svg+xml,${encodeURIComponent(ICON_DIRDEF)}')`
+		icon.style.backgroundImage = `url('data:image/svg+xml,${encodeURIComponent(ICONS.DIRDEF)}')`
 	}
 
 	text.innerHTML = group.title
@@ -647,7 +647,7 @@ function AppManager_PopulateMenuIcons(self, icons, parent) {
 		if (icons[0].isbackIcon!==true) {
 			var backicon = {
 				title: '',
-				icon: `data:image/svg+xml,${encodeURIComponent(Component.ICON_BACK)}`,
+				icon: `data:image/svg+xml,${encodeURIComponent(ICONS.BACK)}`,
 				icons: parent,
 				parent: parent.parent
 			}
@@ -843,7 +843,7 @@ function AppManager_createOpenedShortcut(self, module, iframe, id) {
 	info.innerHTML = 'idle'
 
 
-	var btn = self.CreateSvgButton(Component.ICON_CLOSE, CLS_SHORTCUTBUTTONCLOSE, (evt)=>{
+	var btn = Component.CreateSvgButton(ICONS.CLOSE, CLS_SHORTCUTBUTTONCLOSE, (evt)=>{
 		evt.stopPropagation()
 		iframe.remove()
 		shortcut.remove()
