@@ -8,6 +8,17 @@ input[type="text"]:focus {
 	border-color: black;
 } 
 
+button,
+input[type="button"] {
+	user-select: none;
+	outline: none;
+	background-color: rgb(17, 37, 75);
+	color: white;
+	font-weight: bold;
+	border: 1px solid #ccc;
+	cursor: pointer;
+}
+
 th,
 label {
 	font-weight: bold;
@@ -15,7 +26,7 @@ label {
 }
 
 th, td {
-	padding: 10px;
+	padding: 0;
 }
 
 th {
@@ -25,13 +36,8 @@ th {
 
 
 button {
-	outline: none;
-	border: #ccc;
 	padding: 10px 40px 10px 40px;
 	min-width: 150px;
-	color: white;
-	background-color: rgb(17, 37, 75);
-	cursor: pointer;
 }
 
 button:hover {
@@ -70,7 +76,7 @@ button:hover {
 			"def def"
 			"entity entity"
 			"editor sidebar";
-	grid-template-columns: auto 300px;
+	grid-template-columns: auto 150px;
 	grid-template-rows: auto;
 	gap: 10px;
 }
@@ -107,20 +113,209 @@ button:hover {
 	grid-area: sidebar;
 }
 
+#layout-sidebar > div {
+	position: sticky;
+	top: calc(var(--fgta5-app-header-height) + 75px);
+}
+
 
 
 #tbl_entity {
 	width: 100%;
+	
+}
+
+#tbl_entity > tfoot > tr td {
+	padding-top: 15px;
+}
+
+#tbl_entity td > span {
+	margin: 5px;
 }
 
 #tbl_entity th {
 	text-align: left;
+	padding: 10px 5px 10px 5px;
 }
 
 #tbl_entity input {
 	padding: 3px;
+	width: calc(100% - 20px);
+	margin: 5px;
 }
 
-#tbl_entity [name="col-name"] {
+#tbl_entity [name="col_name"] {
 	width: 100px;
+	min-width: 100px;
+}
+
+#tbl_entity [name="col_name"] > input {
+	text-transform: lowercase;
+}
+
+#tbl_entity [name="col_title"] {
+	min-width: 100px;
+}
+
+#tbl_entity [name="col_table"] {
+	width: 100px;
+}
+
+#tbl_entity [name="col_pk"] {
+	width: 100px;
+}
+
+#tbl_entity [name="col_btndesign"] {
+	width: 100px;
+}
+
+#tbl_entity [name="col_btnremove"] {
+	width: 100px;
+}
+
+#tbl_entity [name="col_btnremove"] {
+	width: 100px;
+}
+
+#tbl_entity [name="col_id"] {
+	width: 100px; 
+	max-width: 100px;
+	white-space: nowrap; 
+	overflow: hidden; 
+	text-overflow: ellipsis;
+}
+
+
+#entities-design {
+	/* position: relative; */
+	/* padding-bottom: 300px; */
+}
+
+
+
+.entity-editor {
+	/* position: absolute; */
+	/* top: 0; left: 0; */
+	/* right: 0; */
+	/* min-height: 300px; */
+	/* padding-bottom: 100px; */
+	scroll-margin-top: calc(var(--fgta5-app-header-height) + 50px) 
+
+}
+
+
+.designer-info {
+	display: grid;
+	grid-template-columns: 50px auto;
+	width: 100%;
+	column-gap: 10px;
+}
+
+.designer-info div[name="col_name"] {
+	text-transform: lowercase;
+}
+
+.designer-info div[name="col_title"] {
+	grid-column: span 2;
+	border: 0;
+	margin-bottom: 5px;
+	font-weight: bold;
+	font-size: .9rem;
+}
+
+.designer-info [data-tag="label"] {
+	font-weight: bold;
+	font-size: .7rem;
+	text-align: right;
+	line-height: 1.2rem;
+}
+
+.designer-info [data-tag="content"] {
+	border-bottom: 1px dotted #ddd;
+}
+
+
+@keyframes tombolDiTekanMenghilang {
+	0% { opacity: 1; transform: scale(1); }
+	100% { opacity: 0; transform: scale(1.2) }
+}
+
+@keyframes tombolMunculLagi {
+	0% { opacity: 0; transform: scale(0.3); }
+	100% { opacity: 1; transform: scale(1) }
+}
+
+@keyframes pulseHighlight {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 200, 0, 0);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 200, 0, 0.6);
+	border-color: rgba(255, 200, 0);
+	color: rgba(255, 200, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 200, 0, 0);
+  }
+}
+
+.drop-target {
+	margin: 30px;
+	border: 6px dashed #eee;
+	padding: 30px;
+	text-align: center;
+	border-radius: 30px;
+	color: #eee;
+	font-size: 2rem;
+	font-weight: bold;
+} 
+
+.drop-target[data-dragover] {
+	border-color: #a7c8ff;
+	color: #a7c8ff;
+}
+
+.component-icon-tool {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin: 5px 0 5px 0;
+	padding: 0;
+	
+	display: flex;
+	align-items: center;
+	column-gap: 5px;
+
+	background-color: #fff;
+
+	transition: transform 0.3s ease, opacity 0.5s ease, background-color 0.3s ease ;
+
+	cursor: grab;
+
+}
+
+.component-icon-tool:hover {
+	/* transform: scale(1.2); */
+	background-color: #a7c8ff;
+} 
+
+.component-icon-tool > div[data-icon] {
+	width: 32px;
+	height: 32px;
+	padding: 0;
+}
+
+.component-icon-tool > div[data-label] {
+	font-weight: bold;
+	font-size: 0.7rem;
+}
+
+
+.design-data-field {
+	min-height: 100px;
+	margin: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px ;
 }

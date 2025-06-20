@@ -49,7 +49,7 @@
 						<th name="col_id">ID</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="data-entities">
 
 				</tbody>
 				<tfoot>
@@ -64,11 +64,20 @@
 
 		<!-- Table Editor, menerima drag and drop dari component -->
 		<div id="layout-editor">
+			<div class="subtitle">Data Editor</div>
+			<div id="entities-design"></div>
 		</div>
 
 		<!-- Side Bar, untuk daftar komponen yang bisa di drag and drop, dan lain2 -->
 		<div id="layout-sidebar">
+			<div >
+				<div class="subtitle">Components</div>
+				<div id="crud-component-list">
+					
+				</div>
 
+
+			</div>
 		</div>
 
 	</div>
@@ -77,5 +86,35 @@
 
 <section name="appgen-uidesign" data-title="User Interface">
 </section>	
+
+
+<div id="DESIGNTEMPLATE" class="hidden">
+
+	<!-- DESIGNER INFO -->
+	<div name="designer-info" class="designer-info">
+		<div name="col_title" data-tag="content">{title}</div>
+
+		<div data-tag="label">Name</div>
+		<div data-tag="content" name="col_name">{name}</div>
+
+		<div data-tag="label">Table</div>
+		<div data-tag="content" name="col_table">{table}</div>
+		
+		<div data-tag="label">PK</div>
+		<div data-tag="content" name="col_pk">{pk}</div>
+	</div>
+
+
+	<!-- DROP TARGET -->
+	<div name="drop-target" class="drop-target">
+		drag and drop component here
+	</div>
+
+	<!-- ICON TOOL -->
+	 <div name="component-icon-tool" class="component-icon-tool" draggable="true">
+		<div data-icon></div>
+		<div data-label>Textbox</div>
+	</div>
+</div>
 
 
