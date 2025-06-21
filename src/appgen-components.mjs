@@ -11,6 +11,7 @@ const ICON_Filebox = ``
 
 const Textbox = {
 	title: 'Textbox',
+	template: 'textbox',
 	descr: '',
 	icon: ICON_Textbox,
 	properties: {
@@ -24,6 +25,7 @@ const Textbox = {
 
 const Numberbox = {
 	title: 'Numberbox',
+	template: 'numberbox',
 	descr: '',
 	icon: ICON_Numberbox,
 	properties: {
@@ -34,6 +36,7 @@ const Numberbox = {
 
 const Checkbox = {
 	title: 'Checkbox',
+	template: 'checkbox',
 	descr: '',
 	icon: ICON_Checkbox,
 	properties: {
@@ -43,6 +46,7 @@ const Checkbox = {
 
 const Combobox = {
 	title: 'Combobox',
+	template: 'textbox',
 	descr: '',
 	icon: ICON_Combobox,
 	properties: {
@@ -53,6 +57,7 @@ const Combobox = {
 
 const Datepicker = {
 	title: 'Datepicker',
+	template: 'textbox',
 	descr: '',
 	icon: ICON_Datepicker,
 	properties: {
@@ -63,6 +68,7 @@ const Datepicker = {
 
 const Timepicker = {
 	title: 'Timepicker',
+	template: 'textbox',
 	descr: '',
 	icon: ICON_Timepicker,
 	properties: {
@@ -73,6 +79,7 @@ const Timepicker = {
 
 const Filebox = {
 	title: 'Filebox',
+	template: 'textbox',
 	descr: '',
 	icons: ICON_Filebox,
 	icon: ICON_Timepicker,

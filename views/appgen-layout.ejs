@@ -63,20 +63,17 @@
 		</div>
 
 		<!-- Table Editor, menerima drag and drop dari component -->
-		<div id="layout-editor">
+		<div id="layout-editor" class="hidden">
 			<div class="subtitle">Data Editor</div>
 			<div id="entities-design"></div>
 		</div>
 
 		<!-- Side Bar, untuk daftar komponen yang bisa di drag and drop, dan lain2 -->
-		<div id="layout-sidebar">
+		<div id="layout-sidebar" class="hidden">
 			<div >
 				<div class="subtitle">Components</div>
 				<div id="crud-component-list">
-					
 				</div>
-
-
 			</div>
 		</div>
 
@@ -115,6 +112,174 @@
 		<div data-icon></div>
 		<div data-label>Textbox</div>
 	</div>
+
+	<!-- FIELD EDITOR -->
+	<div name="design-data-field" class="design-data-field" data-template="textbox">
+		<div name="component-type"></div>
+		<div>
+		<!--     1                    2                        3              4                  5                6  -->
+			<label>Field name</label><div>
+			<input type="text" name="fieldname"></div>  
+			
+			<label>Type</label>
+			<div>
+				<select name="datatype">
+					<option selected>varchar</option>
+					<option>char</option>
+					<option>integer</option>
+				</select>
+			</div>  
+			
+			<label>Length</label>
+			<div><input type="number" name="length" value="30"></div>
+
+			<label>Description</label>
+			<div style="grid-column: span 3;"><input type="text" name="description"></div>
+			
+			<div></div>
+			<label name="allownull"><input type="checkbox" style="transform: translateY(2px);" checked>Allow Null</label>
+			
+
+			<div style="display: block; height: 1rem;"></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+
+			<label>Object Name</label><div>
+			<input type="text" name="objectname"></div>  
+
+			<label>Label Text</label><div>
+			<input type="text" name="labeltext"></div> 
+			
+			<div></div>
+			<div></div>
+
+
+			<label name="validation">Validation</label>
+			<div style="grid-column: span 5;" name="validation">
+
+				<label name="isrequired"><input type="checkbox" style="transform: translateY(2px);">Required</label>
+				<div></div>
+				<input type="text" name="" placeholder="invalid message">
+
+				<label name="min"><input type="checkbox" style="transform: translateY(2px);">Minimum</label>
+				<input type="number" name="min">
+				<input type="text" name="" placeholder="invalid message">
+
+				<label name="max"><input type="checkbox" style="transform: translateY(2px);">Maximum</label>
+				<input type="number" name="max">
+				<input type="text" name="" placeholder="invalid message">
+
+			</div>
+		</div>
+	</div>
+
+
+
+	<div name="design-data-field" class="design-data-field" data-template="numberbox">
+		<div name="component-type"></div>
+		<div>
+		<!--     1                    2                        3              4                  5                6  -->
+			<label>Field name</label><div>
+			<input type="text" name="fieldname"></div>  
+			
+			<label>Type</label>
+			<div>
+				<select name="datatype">
+					<option selected>integer</option>
+					<option>decimal</option>
+				</select>
+			</div>  
+			
+			<label>Length</label>
+			<div><input type="number" name="length" value="9"><input type="number" name="precission" value="0"></div>
+
+			<label>Description</label>
+			<div style="grid-column: span 3;"><input type="text" name="description"></div>
+			
+			<div></div>
+			<label name="allownull"><input type="checkbox" style="transform: translateY(2px);">Allow Null</label>
+			
+
+			<div style="display: block; height: 1rem;"></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+
+			<label>Object Name</label><div>
+			<input type="text" name="objectname"></div>  
+
+			<label>Label Text</label><div>
+			<input type="text" name="labeltext"></div> 
+			
+			<div></div>
+			<div></div>
+
+
+			<label name="validation">Validation</label>
+			<div style="grid-column: span 5;" name="validation">
+
+				<label name="isrequired"><input type="checkbox" style="transform: translateY(2px);">Required</label>
+				<div></div>
+				<input type="text" name="" placeholder="invalid message">
+
+				<label name="min"><input type="checkbox" style="transform: translateY(2px);">Minimum</label>
+				<input type="number" name="min">
+				<input type="text" name="" placeholder="invalid message">
+
+				<label name="max"><input type="checkbox" style="transform: translateY(2px);">Maximum</label>
+				<input type="number" name="max">
+				<input type="text" name="" placeholder="invalid message">
+
+			</div>
+		</div>
+	</div>
+
+
+	<div name="design-data-field" class="design-data-field" data-template="checkbox">
+		<div name="component-type"></div>
+		<div>
+		<!--     1                    2                        3              4                  5                6  -->
+			<label>Field name</label><div>
+			<input type="text" name="fieldname"></div>  
+			
+			<label>Type</label>
+			<div>
+				<select name="datatype">
+					<option selected>tinyint</option>
+				</select>
+			</div>  
+			
+			<div></div>
+			<div></div>
+
+			<label>Description</label>
+			<div style="grid-column: span 5;"><input type="text" name="description"></div>
+
+			<div style="display: block; height: 1rem;"></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+
+			<label>Object Name</label><div>
+			<input type="text" name="objectname"></div>  
+
+			<label>Label Text</label><div>
+			<input type="text" name="labeltext"></div> 
+			
+			<label>Caption</label><div>
+			<input type="text" name="caption"></div> 
+
+		</div>
+	</div>
+
+
 </div>
 
 

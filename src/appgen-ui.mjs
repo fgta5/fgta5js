@@ -15,10 +15,12 @@ const ATTR_NAME = 'name'
 const ATTR_ENTITYID = 'data-entity-id'
 const ATTR_DROPTARGET = 'drop-target'
 const ATTR_DRAGOVER = 'data-dragover'
+const ATTR_CURRENTENTITY = 'data-currententity'
 
 const ID_ENTITYEDITOR = 'entity-editor'
 const ID_DESIGNERINFO = 'designer-info'
 const ID_ICONTOOL = 'component-icon-tool'
+const ID_DESIGNFIELD = 'design-data-field'
 
 const CLS_HIDDEN = 'hidden'
 const CLS_ENTITYEDITOR = 'entity-editor'
@@ -27,8 +29,15 @@ const CLS_ENTITYEDITOR = 'entity-editor'
 const DRAG_ICONTOOL = 'drag-icon-tool'
 const DRAG_REORDERFIELD = 'drag-reorderfield'
 
-let current_drag_action
+// let drop_valid = false
 
+const CURRENT = {
+	drag_action: null,
+	drop_valid: false,
+	entity_id: null,
+	Design: null,
+	droptarget: null
+}
 
 
 const generateId = (prefix = "el") => {
@@ -282,10 +291,6 @@ async function btn_design_click(self, evt) {
 		} else {
 			el.classList.add(CLS_HIDDEN)
 		}
-		// } else {
-		// 	el.classList.remove(CLS_HIDDEN)
-			
-		// }
 	})
 }
 
@@ -304,6 +309,11 @@ function AppGenLayout_GetEntityData(self, tr) {
 function AppGenLayout_entityDesign(self, entity_id, tr) {
 	const data = AppGenLayout_GetEntityData(self, tr)
 	AppGenLayout_changeEntityInfo(self, entity_id, data)
+
+	// tandaii tool: ATTR_CURRENTENTITY
+	Array.from(ME.ComponentList.children).forEach(el=>{
+		el.setAttribute(ATTR_CURRENTENTITY, entity_id)
+	})
 }
 
 
@@ -395,6 +405,7 @@ function AppGenLayout_startDesign(self, entity_id) {
 		// blum ada, buat dulu
 		const tpl = ME.DesignTemplate.querySelector(`div[name="${ATTR_DROPTARGET}"]`)
 		droptarget = tpl.cloneNode(true)
+		droptarget.setAttribute(ATTR_ENTITYID, entity_id)
 		designer.appendChild(droptarget)
 	}
 
@@ -409,6 +420,9 @@ function AppGenLayout_startDesign(self, entity_id) {
 	// higlight drop target
 	AppGenLayout_highlightElement(self, droptarget)
 
+	CURRENT.entity_id = entity_id
+	CURRENT.Design = designer
+	CURRENT.droptarget = droptarget
 
 }
 
@@ -427,12 +441,23 @@ function AppGenLayout_setupDropTarget(self, droptarget) {
 
 	droptarget.addEventListener('dragleave', (evt)=>{
 		droptarget.removeAttribute(ATTR_DRAGOVER)
+		// droptarget.classList.add('hidden')
 	})
 
 	droptarget.addEventListener('drop', (evt)=>{
+		CURRENT.drop_valid = true
 		droptarget.removeAttribute(ATTR_DRAGOVER)
 		const compname = evt.dataTransfer.getData('compname');
 		AppGenLayout_addComponentToDesigner(self, droptarget, Components[compname])
+
+		setTimeout(()=>{
+			CURRENT.Design.appendChild(droptarget)
+			droptarget.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start'
+			});
+		}, 300)
+		// droptarget.classList.add('hidden')
 	})
 	
 }
@@ -460,10 +485,22 @@ function AppGenLayout_createIconTool(self, comp, tpl) {
 
 
 	tool.addEventListener('dragstart', (evt)=>{
-
-		console.log(comp)
-		current_drag_action = DRAG_ICONTOOL
+		CURRENT.drop_valid = false
+		CURRENT.drag_action = DRAG_ICONTOOL
 		evt.dataTransfer.setData('compname', comp.name);
+	})
+
+	tool.addEventListener('dragend', (evt)=>{
+		if (CURRENT.droptarget==null) {
+			return
+		}
+		const fields = CURRENT.Design.querySelectorAll('[name="design-data-field"]')
+		if (fields.length==0) {
+			return
+		}
+		if (!CURRENT.drop_valid) {
+			CURRENT.droptarget.classList.add('hidden')
+		}
 	})
 
 	return tool
@@ -471,14 +508,44 @@ function AppGenLayout_createIconTool(self, comp, tpl) {
 
 
 function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
-	const div = document.createElement('div')
-	div.classList.add('design-data-field')
-	div.innerHTML = comp.title
-	
-	droptarget.before(div)
+	const tpl = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNFIELD}"][data-template=${comp.template}]`)
+	const datafield = tpl.cloneNode(true)
 
-	droptarget.scrollIntoView({
-		behavior: 'smooth',
-		block: 'start'
+
+	const comptype = datafield.querySelector('[name="component-type"]')
+	comptype.innerHTML = comp.title
+
+	// masukkan element baru sebelum drop target
+	droptarget.before(datafield)
+
+	// kalau data field dilewati DRAG ICON, munculkan droptarget di bawahnya
+	datafield.addEventListener('dragover', (evt)=>{
+		if (CURRENT.drag_action==DRAG_ICONTOOL) {
+			evt.preventDefault()
+			droptarget.classList.remove('hidden')
+
+			const rect = datafield.getBoundingClientRect();
+  			const offsetY = evt.clientY - rect.top;
+			const offsetX = evt.clientX - rect.left;
+
+			if (offsetX > rect.width - 100) {
+				return;
+			}
+			
+
+			if (offsetY < rect.height / 2) {
+				setTimeout(()=>{
+					datafield.before(droptarget)
+				}, 300)
+				
+			} else {
+				// console.log("Di bawah");
+				setTimeout(()=>{
+					datafield.after(droptarget)
+				}, 300)
+			}
+
+		}
 	})
+
 }	
