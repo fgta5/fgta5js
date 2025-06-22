@@ -20,6 +20,10 @@ export default class App extends Component {
 	// RenderSection() {
 		// App_RenderSection(this)
 	// }
+	SetTitle(title) {
+		App_SetTitle(this, title)
+	}
+
 
 	ShowFooter(show) {
 		App_ShowFooter(this, show)
@@ -65,11 +69,20 @@ function App_construct(self) {
 		if (args.action!=undefined) {
 			var action = args.action
 			if (action==Component.ACTION_APPLICATIONLOADED) {
-				document.title = args.module.title
-				document.getElementById(ID_TITLE).innerHTML =  args.module.title
+				if (args.module!=null) {
+					if (args.module.title!=null) {
+						App_SetTitle(self, args.module.title)
+					}
+				}
+				
 			}
 		}
 	})
+}
+
+function App_SetTitle(self, title) {
+	document.title = title
+	document.getElementById(ID_TITLE).innerHTML =  title
 }
 
 function App_createHeader(self, head) {

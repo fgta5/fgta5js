@@ -24,11 +24,19 @@
 		<!-- Program Definition -->
 		
 		<div id="layout-definition">
-			<div class="subtitle" style="grid-column: span 2;">Program Definition</div>
-
+			<div class="subtitle" style="grid-column: span 3;">Program Definition</div>
+			
 			<label for="obj_programname">Program Name</label>
 			<input type="text" id="obj_programname">
 			
+			<div id="upload-icon" style="grid-row: span 2;">
+				<label>
+					change icon
+					<input id="btn_IconUpload" type="file" accept=".svg,.png" style="display: none;" />
+				</label>
+			</div>
+			
+				
 			<label for="obj_programdescription">Description</label>
 			<input type="text" id="obj_programdescription">
 		
@@ -74,6 +82,29 @@
 				<div class="subtitle">Components</div>
 				<div id="crud-component-list">
 				</div>
+				<div class="subtitle">Design</div>
+				<div id="design-tools-container">
+					<a id="btn_ShowSummary" class="design-button">
+						<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+						<g fill="#e6e6e6" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+						<path d="m3 3h42v16h-42z"/>
+						<path d="m3 23h42v10h-42z"/>
+						<path d="m3 37h42v8h-42z"/>
+						</g>
+						</svg>
+					</a>
+					<a id="btn_ShowDetail" class="design-button">
+						<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+						<g fill="#e6e6e6" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+						<path d="m3 40h42v5h-42z"/>
+						<path d="m3 31.5h42v5h-42z"/>
+						<path d="m3 22h42v5h-42z"/>
+						<path d="m3 12.5h42v5h-42z"/>
+						<path d="m3 3h42v5h-42z"/>
+						</g>
+						</svg>
+					</a>
+				</div>
 			</div>
 		</div>
 
@@ -113,10 +144,53 @@
 		<div data-label>Textbox</div>
 	</div>
 
+	<!--
+	fieldname
+	datatype
+	defaultvalue
+	datalength
+	dataprecission
+	description
+	objectname
+	labeltext
+	placeholder
+	isrequired
+	isbatasmin
+	isbatasmax
+	minimum
+	maximum
+	msg_invalid_default
+	msg_invalid_required
+	msg_invalid_minimum
+	msg_invalid_maximum
+
+	ishandlechanged
+	ishandleinput
+	ishandlekeydown
+	-->
+
+
 	<!-- FIELD EDITOR -->
 	<div name="design-data-field" class="design-data-field" data-template="textbox">
-		<div name="component-type"></div>
-		<div>
+		<div name="component-type" data-detil data-fieldtitle>
+			<div style="display: flex; justify-content: left; align-items: center; gap: 5px;">
+				<div name="icon" class="design-data-field-icon">
+					<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48">
+						<path d="M3 8h42v32H3z" style="fill:#fff;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
+						<g style="stroke-width:1.20933">
+							<path d="M25.87 12.666V39.14h3.043l.207-.886q1.194.647 2.423 1.023 1.228.39 2.87.39 1.764 0 3.233-.664 1.47-.681 2.698-2.025 1.159-1.292 1.833-3.198.692-1.904.693-4.286 0-4.713-1.99-7.3-1.971-2.586-5.396-2.586-1.92 0-3.458.715a13.4 13.4 0 0 0-2.906 1.803v-9.459zm8.82 9.986q2.542 0 3.683 1.77 1.14 1.752 1.14 5.155 0 3.726-1.538 5.478-1.521 1.735-4.219 1.735-1.263 0-2.266-.237-.986-.24-2.37-.852V24.814a11.8 11.8 0 0 1 2.698-1.548q1.453-.613 2.871-.614M14.414 19.701a22.6 22.6 0 0 0-3.672.306q-1.863.307-2.848.562v3.252h.178q1.738-.63 3.368-.954 1.63-.34 2.957-.34 1.093 0 2.097.136 1.002.137 1.717.528.753.408 1.148 1.123.413.715.413 1.804v.494a93 93 0 0 0-5.5.408q-2.563.273-4.39 1.04-1.81.765-2.795 2.11-.967 1.328-.967 3.489Q6.12 36.298 8 38q1.882 1.702 4.587 1.701 1.47 0 2.561-.271a10 10 0 0 0 1.935-.649 8.8 8.8 0 0 0 1.47-.815q.77-.528 1.219-.818v2.026h3.348V26.27q.001-1.838-.59-3.08a5.1 5.1 0 0 0-1.72-2.026q-1.145-.8-2.722-1.123-1.56-.34-3.674-.34m5.358 9.498v5.293a15 15 0 0 1-2.725 1.583q-1.47.647-3.242.648-2.132 0-3.172-.817-1.038-.835-1.039-2.469 0-1.446.897-2.263.896-.834 2.348-1.226 1.218-.324 3.295-.493a144 144 0 0 1 3.638-.256" style="font-size:33.7393px;font-family:Sans;-inkscape-font-specification:&quot;Sans, Normal&quot;;stroke-width:2.41864;stroke-linecap:round;stroke-linejoin:round" transform="matrix(.90413 0 0 .75628 1.466 4.42)"/>
+						</g>
+					</svg>
+				</div>
+				<div name="title">
+					Textbox
+				</div>
+				<div class="field-remove-button">
+				</div>
+			</div>
+		</div>
+		
+		<div data-detil data-fieldform>
 		<!--     1                    2                        3              4                  5                6  -->
 			<label>Field name</label><div>
 			<input type="text" name="fieldname"></div>  
@@ -131,47 +205,112 @@
 			</div>  
 			
 			<label>Length</label>
-			<div><input type="number" name="length" value="30"></div>
+			<div>
+				<input type="number" name="datalength" value="30">
+				<input type="hidden" name="dataprecission" value="0">
+			</div>
+
+
+
+			<label>Default Value</label>
+			<div>
+				<input name="defaultvalue" type="text" >
+			</div>
+			
+			<div></div>
+			<div></div>
+			<div></div>
+			
+			<label name="allownull">
+				<input type="checkbox" value="1" style="transform: translateY(2px);" checked>
+				Allow Null
+			</label>
+
 
 			<label>Description</label>
-			<div style="grid-column: span 3;"><input type="text" name="description"></div>
-			
-			<div></div>
-			<label name="allownull"><input type="checkbox" style="transform: translateY(2px);" checked>Allow Null</label>
+			<div style="grid-column: span 5;">
+				<input name="description" type="text" >
+			</div>
+
 			
 
-			<div style="display: block; height: 1rem;"></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+
 
 			<label>Object Name</label><div>
 			<input type="text" name="objectname"></div>  
+			<div></div>	
+			<div></div>
+			<div></div>	
+			<div></div>	
 
 			<label>Label Text</label><div>
 			<input type="text" name="labeltext"></div> 
 			
-			<div></div>
-			<div></div>
+			<label>Placeholder</label>
+			<div style="grid-column: span 3;">
+				<input type="text" name="placeholder">
+			</div> 
 
 
-			<label name="validation">Validation</label>
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+
+
+			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
+	
+				<div name="defaultinvalidmessage" style="grid-column: span 2;">Default Invalid Message</div>
+				<input type="text" name="msg_invalid_default" placeholder="invalid message">
 
-				<label name="isrequired"><input type="checkbox" style="transform: translateY(2px);">Required</label>
+				<label>
+					<input name="isrequired" type="checkbox" value="1" style="transform: translateY(2px);">
+					Required
+				</label>
 				<div></div>
-				<input type="text" name="" placeholder="invalid message">
+				<input name="msg_invalid_required" type="text" placeholder="invalid message">
 
-				<label name="min"><input type="checkbox" style="transform: translateY(2px);">Minimum</label>
-				<input type="number" name="min">
-				<input type="text" name="" placeholder="invalid message">
+				<label>
+					<input name="isbatasmin" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Min Length
+				</label>
+				<input type="number" name="minimum">
+				<input type="text" name="msg_invalid_minimum" placeholder="invalid message">
 
-				<label name="max"><input type="checkbox" style="transform: translateY(2px);">Maximum</label>
-				<input type="number" name="max">
-				<input type="text" name="" placeholder="invalid message">
+				<label>
+					<input name="isbatasmax" type="checkbox" checked disabled value="1" style="transform: translateY(2px);" value="1">
+					Max Length
+				</label>
+				<input type="number" name="maximum" disabled>
+				<input type="text" name="msg_invalid_maximum" placeholder="invalid message">
+			</div>
 
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+			<label name="validation" style="transform: translateY(10px);">Handle Event</label>
+			<div style="grid-column: span 5; padding-left: 10px; display: flex; gap: 30px; flex-wrap: wrap;" >
+
+				<label>
+					<input name="ishandlechanged" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Changed
+				</label>
+
+				<label>
+					<input name="ishandleinput" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Input
+				</label>
+
+				<label>
+					<input name="ishandlekeydown" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Keydown
+				</label>				
+			</div>	
+		</div>
+		<div name="component-summary" data-summary style="display: none;" draggable="true">
+			<div name="icon" class="design-data-field-icon">
+			</div>
+			<div name="title">
+				<input type="text" name="fieldname-summary" placeholder="text field name">
+			</div>
+			<div class="field-remove-button">
 			</div>
 		</div>
 	</div>
@@ -179,8 +318,24 @@
 
 
 	<div name="design-data-field" class="design-data-field" data-template="numberbox">
-		<div name="component-type"></div>
-		<div>
+		<div name="component-type" data-detil data-fieldtitle>
+			<div style="display: flex; justify-content: left; align-items: center; gap: 5px;">
+				<div name="icon" class="design-data-field-icon">
+					<svg xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 48 48">
+						<path d="M3 8h42v32H3z" style="fill:#fff;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
+						<path d="M14.708 30.002h-2.353V15.01q-.85.81-2.234 1.62-1.373.81-2.47 1.216v-2.274q1.973-.928 3.45-2.248t2.09-2.562h1.517Zm18.39-2.262v2.262H20.432q-.027-.85.274-1.634.484-1.294 1.542-2.549 1.072-1.254 3.085-2.901 3.123-2.562 4.221-4.052 1.098-1.503 1.098-2.836 0-1.398-1.006-2.353-.994-.967-2.601-.967-1.7 0-2.719 1.02-1.02 1.02-1.032 2.823l-2.418-.249q.248-2.705 1.869-4.116 1.62-1.425 4.352-1.425 2.758 0 4.365 1.53 1.608 1.528 1.608 3.79 0 1.15-.47 2.26-.471 1.111-1.569 2.34-1.085 1.228-3.62 3.372-2.118 1.777-2.719 2.418-.6.627-.993 1.267zm2.535-2.796 2.352-.314q.405 2 1.373 2.888.98.876 2.378.876 1.66 0 2.797-1.15 1.15-1.15 1.15-2.85 0-1.62-1.058-2.666-1.059-1.058-2.693-1.058-.666 0-1.66.261l.262-2.065q.235.026.379.026 1.503 0 2.705-.784t1.203-2.418q0-1.294-.876-2.143-.876-.85-2.261-.85-1.372 0-2.287.863-.915.862-1.177 2.588l-2.352-.419q.431-2.365 1.96-3.66 1.53-1.306 3.804-1.306 1.568 0 2.888.68 1.32.666 2.013 1.83.706 1.162.706 2.47 0 1.241-.667 2.26-.667 1.02-1.974 1.621 1.7.392 2.64 1.634.942 1.228.942 3.084 0 2.51-1.83 4.261-1.83 1.738-4.627 1.738-2.522 0-4.195-1.503-1.66-1.503-1.895-3.894" aria-label="123" style="font-size:26.7668px;font-family:Arial;-inkscape-font-specification:&quot;Arial, Normal&quot;;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" transform="scale(.84463 1.18395)"/>
+					</svg>
+				</div>
+				<div name="title">
+					Numberbox
+				</div>
+				<div class="field-remove-button">
+				</div>
+			</div>
+		</div>
+
+
+		<div data-detil data-fieldform>
 		<!--     1                    2                        3              4                  5                6  -->
 			<label>Field name</label><div>
 			<input type="text" name="fieldname"></div>  
@@ -194,55 +349,124 @@
 			</div>  
 			
 			<label>Length</label>
-			<div><input type="number" name="length" value="9"><input type="number" name="precission" value="0"></div>
+			<div>
+				<input type="number" name="datalength" value="9">
+				<input type="number" name="dataprecission" value="0">
+			</div>
+
+
+			<label>Default Value</label>
+			<div>
+				<input name="defaultvalue" type="text" >
+			</div>
+			
+			<div></div>
+			<div></div>
+			<div></div>
+
+			<label name="allownull">
+				<input type="checkbox" value="1" style="transform: translateY(2px);">
+				Allow Null
+			</label>
 
 			<label>Description</label>
-			<div style="grid-column: span 3;"><input type="text" name="description"></div>
-			
-			<div></div>
-			<label name="allownull"><input type="checkbox" style="transform: translateY(2px);">Allow Null</label>
-			
+			<div style="grid-column: span 5;">
+				<input type="text" name="description">
+			</div>
 
-			<div style="display: block; height: 1rem;"></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+
 
 			<label>Object Name</label><div>
 			<input type="text" name="objectname"></div>  
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
 
 			<label>Label Text</label><div>
 			<input type="text" name="labeltext"></div> 
 			
-			<div></div>
-			<div></div>
+			<label>Placeholder</label>
+			<div style="grid-column: span 3;">
+				<input type="text" name="placeholder">
+			</div> 
 
 
-			<label name="validation">Validation</label>
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+
+			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 
-				<label name="isrequired"><input type="checkbox" style="transform: translateY(2px);">Required</label>
-				<div></div>
-				<input type="text" name="" placeholder="invalid message">
+				<div name="defaultinvalidmessage" style="grid-column: span 2;">Default Invalid Message</div>
+				<input type="text" name="msg_invalid_default" placeholder="invalid message">
 
-				<label name="min"><input type="checkbox" style="transform: translateY(2px);">Minimum</label>
-				<input type="number" name="min">
-				<input type="text" name="" placeholder="invalid message">
+				<label>
+					<input name="isbatasmin" type="checkbox" value="1" style="transform: translateY(2px);">
+					Min Value
+				</label>
+				<input type="number" name="minimum">
+				<input type="text" name="msg_invalid_minimum" placeholder="invalid message">
 
-				<label name="max"><input type="checkbox" style="transform: translateY(2px);">Maximum</label>
-				<input type="number" name="max">
-				<input type="text" name="" placeholder="invalid message">
+				<label name="max">
+					<input name="isbatasmax" type="checkbox" value="1" style="transform: translateY(2px);">
+					Maximum
+				</label>
+				<input type="number" name="maximum">
+				<input type="text" name="msg_invalid_maximum" placeholder="invalid message">
 
+			</div>
+
+
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+			<label name="validation" style="transform: translateY(10px);">Handle Event</label>
+			<div style="grid-column: span 5; padding-left: 10px; display: flex; gap: 30px; flex-wrap: wrap;" >
+
+				<label>
+					<input name="ishandlechanged" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Changed
+				</label>
+
+				<label>
+					<input name="ishandleinput" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Input
+				</label>
+
+				<label>
+					<input name="ishandlekeydown" type="checkbox" value="1" style="transform: translateY(2px);" value="1">
+					Keydown
+				</label>				
+			</div>	
+			
+			
+		</div>
+		<div name="component-summary" data-summary style="display: none;" draggable="true">
+			<div name="icon" class="design-data-field-icon">
+			</div>
+			<div name="title">
+				<input type="text" name="fieldname-summary" placeholder="number field name">
+			</div>
+			<div class="field-remove-button">
 			</div>
 		</div>
 	</div>
 
 
 	<div name="design-data-field" class="design-data-field" data-template="checkbox">
-		<div name="component-type"></div>
-		<div>
+		<div name="component-type" data-detil data-fieldtitle>
+			<div style="display: flex; justify-content: left; align-items: center; gap: 5px;">
+				<div name="icon" class="design-data-field-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M3 8h42v32H3z" style="fill:#fff;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/><path d="m12 24.5 8 9.5 16-19" style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/></svg>
+				</div>
+				<div name="title">
+					Checkbox
+				</div>
+				<div class="field-remove-button">
+				</div>
+			</div>
+		</div>
+		<div data-detil data-fieldform>
 		<!--     1                    2                        3              4                  5                6  -->
 			<label>Field name</label><div>
 			<input type="text" name="fieldname"></div>  
@@ -277,6 +501,16 @@
 			<input type="text" name="caption"></div> 
 
 		</div>
+		<div name="component-summary" data-summary style="display: none;" draggable="true">
+			<div name="icon" class="design-data-field-icon">
+			</div>
+			<div name="title">
+				<input type="text" name="fieldname-summary" placeholder="checkbox field name">
+			</div>
+			<div class="field-remove-button">
+			</div>
+		</div>
+
 	</div>
 
 

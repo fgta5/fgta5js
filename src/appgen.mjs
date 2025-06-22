@@ -20,6 +20,8 @@ const mod = {} // menampung variabel2 module yang akan di share
 
 export default class AppGen  {
 	async main(args) {
+		app.SetTitle("Generator")
+
 
 		// ambil semua file-file yang diperlukan
 		await ui.FetchAll({

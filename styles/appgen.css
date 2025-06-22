@@ -106,7 +106,7 @@ button:hover {
 	grid-area: def;
 
 	display: grid;
-	grid-template-columns: 150px auto;
+	grid-template-columns: 150px auto 100px ;
 	column-gap: 10px;
 	row-gap: 10px;
 }
@@ -201,11 +201,10 @@ button:hover {
 	text-overflow: ellipsis;
 }
 
-
+/* 
 #entities-design {
-	/* position: relative; */
-	/* padding-bottom: 300px; */
-}
+} 
+*/
 
 
 
@@ -302,7 +301,8 @@ button:hover {
 
 	transition: transform 0.3s ease, opacity 0.5s ease, background-color 0.3s ease ;
 
-	cursor: grab;
+	/* cursor: grab; */
+	cursor: pointer;
 
 	background-color: #f9f9f9;
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
@@ -315,9 +315,10 @@ button:hover {
 } 
 
 .component-icon-tool > div[data-icon] {
-	width: 32px;
-	height: 32px;
-	padding: 0;
+	width: 16px;
+	height: 16px;
+	margin: 8px;
+	cursor: grab;
 }
 
 .component-icon-tool > div[data-label] {
@@ -343,11 +344,13 @@ button:hover {
 }
 
 .design-data-field > div {
+	margin: 10px 30px 30px 20px;
+}
+
+.design-data-field > div[data-fieldform] {
 	display: grid;
 	grid-template-columns: 90px 150px 90px 150px 90px auto;
 	gap: 5px;
-	margin: 10px 30px 30px 20px;
-
 }
 
 .design-data-field label {
@@ -383,19 +386,16 @@ button:hover {
 	width: calc(100% - 10px);
 }
 
-.design-data-field input[name="min"],
-.design-data-field input[name="max"],
-.design-data-field input[name="length"],
-.design-data-field input[name="precission"] {
+.design-data-field input[name="minimum"],
+.design-data-field input[name="maximum"],
+.design-data-field input[name="datalength"],
+.design-data-field input[name="dataprecission"] {
 	width: 30px;
 	text-align: right;
 	margin-right: 5px;
 
 } 
 
-.design-data-field [name="validation"] {
-	margin-top: 10px
-}
 
 .design-data-field div[name="validation"] {
 	display: grid;
@@ -408,3 +408,131 @@ button:hover {
 	transform: translateY(0);
 }
 
+
+.design-data-field div[name="defaultinvalidmessage"] {
+	line-height: 1.5rem;
+	text-align: right;
+	font-size: 0.7rem;
+	font-weight: bold;
+	padding-right: 10px;
+}
+
+
+#upload-icon {
+	display: flex;
+	width: 100px;
+	height: 100px;
+	align-items: center;
+	justify-content: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#upload-icon:hover > label {
+	opacity: 1;
+}
+
+#upload-icon > label {
+	display: inline-block;
+	background-color: white;
+	color: black;
+	opacity: 0;
+	cursor: pointer;
+	padding: 3px;
+	border: 1px solid #ccc;
+}
+
+#design-tools-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px
+}
+
+.design-button {
+	display: block;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+
+.design-view-as-summary div[name="design-data-field"] {
+	box-shadow: none;
+	padding: 5px 0 5px 10px;
+	margin: 10px;
+	border-radius: 3px;
+	min-height: unset;
+}
+
+.design-view-as-summary div[name="design-data-field"] div[data-summary] {
+	display: flex !important;
+	gap: 5px;
+	margin: 3px;
+	align-items: center;
+}
+
+.design-view-as-summary div[name="design-data-field"] div[data-detil] {
+	display: none;
+}
+
+.design-view-as-summary input[name="fieldname-summary"] {
+	border: none;
+	background: transparent;
+	font-weight: bold;
+	width: 200px;
+}
+
+.design-view-as-summary input[name="fieldname-summary"]:focus {
+	background-color: rgb(208, 208, 208);
+}
+
+
+.design-view-as-summary div[name="drop-target"] {
+	margin: 0;
+	border: 1 px solid #eee;
+	padding: 15px;
+	font-size: 1rem;
+	background-color: white;
+	color: #eee
+}
+
+.design-view-as-summary div[name="drop-target"][data-dragover] {
+	border: 1px solid #a7c8ff;
+	font-size: 1rem;
+	background-color: #a7c8ff;
+	color: white
+}
+
+.design-view-as-summary div[name="component-summary"] [name="icon"] {
+	cursor: grab;
+}
+
+
+
+.design-data-field-icon {
+	width: 16px; 
+	height: 16px;
+}
+
+
+.field-remove-button {
+	width: 12px;
+	height: 12px;
+	color: #ccc;
+	position: absolute;
+	right: 0;
+	padding: 5px;
+	margin: 5px;
+	transition: transform 0.3s ease;
+	cursor: pointer;
+}
+
+.field-remove-button:hover {
+	transform: scale(1.5);
+	color: red;
+}
+
+@keyframes fieldDihapus {
+	0% { opacity: 1; transform: scale(1);	}
+	100% { opacity: 0; transform: scale( 0.3);}
+}

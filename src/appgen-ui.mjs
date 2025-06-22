@@ -1,5 +1,6 @@
 import Components from './appgen-components.mjs'
 
+
 const URL_LAYOUT = 'appgen-layout'
 const ME = {}
 
@@ -28,6 +29,21 @@ const CLS_ENTITYEDITOR = 'entity-editor'
 
 const DRAG_ICONTOOL = 'drag-icon-tool'
 const DRAG_REORDERFIELD = 'drag-reorderfield'
+
+/* icon default untuk program yang akan di generate, muncul di tombol [upload icon program] */
+const ICON_DEFAULT = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g fill="currentColor">
+<path d="m20.019 2c-2.9332 0-5.2348 2.3057-5.2348 5.2389v3.1417h-8.3806c-2.3047 0-4.1903 1.8856-4.1903 4.1903v7.9628h3.1417c3.1427 0 5.6567 2.514 5.6567 5.6567 0 3.1427-2.514 5.6567-5.6567 5.6567h-3.3547v7.9628c0 2.3047 1.8856 4.1903 4.1903 4.1903h7.9628v-3.1458c0-3.1427 2.514-5.6567 5.6567-5.6567 3.1427 0 5.6567 2.514 5.6567 5.6567v3.1458h7.9628c2.3047 0 4.1903-1.8856 4.1903-4.1903v-8.3806h3.1417c2.9332 0 5.2389-2.3057 5.2389-5.2389 0-2.9332-2.3057-5.2389-5.2389-5.2389h-3.1417v-8.3806c0-2.3047-1.8856-4.1903-4.1903-4.1903h-8.3806v-3.1417c0.20951-2.9332-2.0968-5.2389-5.03-5.2389z"/>
+</g>
+</svg>`
+
+const ICON_CLOSE = `<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="currentColor" stroke-linecap="round" stroke-width="5">
+	<path d="M4 4 L28 28"/>
+	<path d="M4 28 L28 4"/>
+  </g>
+</svg>`
+
 
 // let drop_valid = false
 
@@ -92,13 +108,14 @@ async function AppGenLayout_FetchAll(self) {
 }
 
 async function AppGenLayout_Render(self) {
+	ME.IconButton = document.getElementById('upload-icon') 
 	ME.ComponentList = document.getElementById('crud-component-list')
 	ME.DesignTemplate = document.getElementById('DESIGNTEMPLATE')
 	ME.DataEntities = document.getElementById('data-entities')
 	ME.EntityDesigner = document.getElementById('entities-design')
 	ME.LayoutEditor = document.getElementById('layout-editor')
 	ME.LayoutSidebar = document.getElementById('layout-sidebar')
-	ME.EntityDesigner = document.getElementById('entities-design')
+	// ME.EntityDesigner = document.getElementById('entities-design')
 	ME.tbl_entity = document.getElementById('tbl_entity')
 	ME.btn_addEntity = document.getElementById('btn_addentity')
 	ME.btn_addEntity.addEventListener('click', (evt)=>{
@@ -106,7 +123,61 @@ async function AppGenLayout_Render(self) {
 	})
 
 	AppGenLayout_createComponentList(this)
+	AppGenLayout_createButtons(this)
 }
+
+function AppGenLayout_createButtons(self) {
+	// upload image icon
+	ME.IconButton.style.backgroundImage = `url('data:image/svg+xml,${encodeURIComponent(ICON_DEFAULT)}')`;
+	const btnUpload = document.getElementById('btn_IconUpload')
+	btnUpload.addEventListener('change', (evt)=>{
+		const file = btnUpload.files[0];
+  		if (!file) return;
+
+		const validTypes = ["image/png", "image/svg+xml"];
+		if (!validTypes.includes(file.type)) {
+			alert("Hanya file PNG atau SVG yang diperbolehkan.");
+			return;
+		}
+		
+		const reader = new FileReader();
+  		reader.onload = function (e) {
+			ME.IconButton.style.backgroundImage = `url('${e.target.result}')`
+		};
+ 		reader.readAsDataURL(file);
+	})
+
+
+	//button design summary
+	const btn_ShowSummary = document.getElementById('btn_ShowSummary')
+	btn_ShowSummary.addEventListener('click', (evt)=>{
+		btn_ShowSummary_click(self, evt)
+	})
+
+	// button design detil
+	const btn_ShowDetail = document.getElementById('btn_ShowDetail')
+	btn_ShowDetail.addEventListener('click', (evt)=>{
+		btn_ShowDetail_click(self, evt)
+	})
+}
+
+function btn_ShowSummary_click(self, evt) {
+	CURRENT.Design.classList.add('design-view-as-summary')
+	
+	// const entitties = CURRENT.Design.querySelectorAll('div[name="design-data-field"]')
+	// entitties.forEach(el=>{
+	// 	console.log(el)
+	// })
+}
+
+function btn_ShowDetail_click(self, evt) {
+	CURRENT.Design.classList.remove('design-view-as-summary')
+	// const entitties = CURRENT.Design.querySelectorAll('div[name="design-data-field"]')
+	// entitties.forEach(el=>{
+	// 	console.log(el)
+	// })
+}
+
 
 
 function btn_addEntity_click(self, evt) {
@@ -447,8 +518,16 @@ function AppGenLayout_setupDropTarget(self, droptarget) {
 	droptarget.addEventListener('drop', (evt)=>{
 		CURRENT.drop_valid = true
 		droptarget.removeAttribute(ATTR_DRAGOVER)
-		const compname = evt.dataTransfer.getData('compname');
-		AppGenLayout_addComponentToDesigner(self, droptarget, Components[compname])
+
+		
+		if (CURRENT.drag_action==DRAG_ICONTOOL) {
+			const compname = evt.dataTransfer.getData('compname');
+			AppGenLayout_addComponentToDesigner(self, droptarget, Components[compname])
+		} else if (CURRENT.drag_action==DRAG_REORDERFIELD) {
+			const datafield_id =  evt.dataTransfer.getData('datafield_id');
+			const el = document.getElementById(datafield_id)
+			droptarget.after(el)
+		}  
 
 		setTimeout(()=>{
 			CURRENT.Design.appendChild(droptarget)
@@ -465,9 +544,6 @@ function AppGenLayout_setupDropTarget(self, droptarget) {
 
 function AppGenLayout_createComponentList(self) {
 	const tpl = ME.DesignTemplate.querySelector(`div[name="${ID_ICONTOOL}"]`)
-	
-
-
 	for (var name in Components) {
 		let comp = Components[name]
 
@@ -480,7 +556,11 @@ function AppGenLayout_createComponentList(self) {
 
 function AppGenLayout_createIconTool(self, comp, tpl) {
 	const tool = tpl.cloneNode(true)
+	const icon = tool.querySelector('div[data-icon')
 	const label = tool.querySelector('div[data-label]')
+	
+	
+	icon.innerHTML =comp.icon
 	label.innerHTML = comp.title
 
 
@@ -503,6 +583,20 @@ function AppGenLayout_createIconTool(self, comp, tpl) {
 		}
 	})
 
+	tool.addEventListener('click', (evt)=>{
+		// pindah drop target ke bawah
+		CURRENT.Design.appendChild(CURRENT.droptarget)
+		AppGenLayout_addComponentToDesigner(self, CURRENT.droptarget, comp)
+		
+		// terus sroll ke bawah
+		setTimeout(()=>{
+			CURRENT.droptarget.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start'
+			});
+		}, 300)
+	})
+
 	return tool
 }
 
@@ -511,16 +605,56 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 	const tpl = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNFIELD}"][data-template=${comp.template}]`)
 	const datafield = tpl.cloneNode(true)
 
-
-	const comptype = datafield.querySelector('[name="component-type"]')
-	comptype.innerHTML = comp.title
+	const datafield_id = generateId('datafield')
+	datafield.setAttribute('id', datafield_id)
 
 	// masukkan element baru sebelum drop target
 	droptarget.before(datafield)
 
+
+	// setup datafiled
+	const comptype = datafield.querySelector('[name="component-type"]')
+	const compicon = comptype.querySelector('[name="icon"]')
+	const comptitle = comptype.querySelector('[name="title"]')
+	comptitle.innerHTML = comp.title
+
+	const compsummary = datafield.querySelector('[name="component-summary"]')
+	const compiconsummary = compsummary.querySelector('[name="icon"]')
+
+
+	compsummary.setAttribute('draggable', true)
+	compsummary.addEventListener('dragstart', (evt)=>{
+		CURRENT.drop_valid = false
+		CURRENT.drag_action = DRAG_REORDERFIELD
+		evt.dataTransfer.setData('datafield_id', datafield_id);
+	})
+	compsummary.addEventListener('dragend', (evt)=>{
+		if (CURRENT.droptarget==null) {
+			return
+		}
+		if (!CURRENT.drop_valid) {
+			CURRENT.droptarget.classList.add('hidden')
+		}
+	})
+
+
+
+	// copy icon dari detil design ke summary design
+	compiconsummary.innerHTML = compicon.innerHTML
+
+
+	const obj_name = datafield.querySelector('input[name="fieldname"]')
+	obj_name.addEventListener('change', (evt)=>{ obj_namesummary.value = obj_name.value })
+
+	const obj_namesummary = datafield.querySelector('input[name="fieldname-summary"]')
+	obj_namesummary.addEventListener('change', (evt)=>{ obj_name.value = obj_namesummary.value })
+
+
+
+
 	// kalau data field dilewati DRAG ICON, munculkan droptarget di bawahnya
 	datafield.addEventListener('dragover', (evt)=>{
-		if (CURRENT.drag_action==DRAG_ICONTOOL) {
+		if (CURRENT.drag_action==DRAG_ICONTOOL || CURRENT.drag_action==DRAG_REORDERFIELD) {
 			evt.preventDefault()
 			droptarget.classList.remove('hidden')
 
@@ -547,5 +681,21 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 
 		}
 	})
+
+	// handle button close
+	const btncs = datafield.querySelectorAll(`[class="field-remove-button"]`)
+	for (const btn of btncs) {
+		btn.innerHTML = ICON_CLOSE
+		btn.addEventListener('click', async (evt)=>{
+			var res = await $fgta5.MessageBox.Confirm('removing field is irreversible. Are you sure ?')
+			if (res=='ok') {
+				// hapus
+				datafield.style.animation = 'fieldDihapus 0.3s forwards'
+				setTimeout(()=>{
+					datafield.remove()
+				}, 300)
+			}
+		})
+	}
 
 }	
