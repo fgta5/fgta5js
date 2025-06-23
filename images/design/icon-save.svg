@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
-   sodipodi:docname="icon-component-combobox.svg"
+   sodipodi:docname="icon-save.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,9 +25,9 @@
      inkscape:document-units="px"
      inkscape:clip-to-page="true"
      labelstyle="default"
-     inkscape:zoom="9.0816169"
-     inkscape:cx="25.711281"
-     inkscape:cy="32.703428"
+     inkscape:zoom="2.8147109"
+     inkscape:cx="25.402253"
+     inkscape:cy="106.2276"
      inkscape:window-width="1440"
      inkscape:window-height="847"
      inkscape:window-x="0"
@@ -82,6 +82,16 @@
        orientation="0,-1"
        id="guide6"
        inkscape:locked="false" />
+    <sodipodi:guide
+       position="-2,41"
+       orientation="0,-1"
+       id="guide7"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="6,7"
+       orientation="0,-1"
+       id="guide8"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <defs
      id="defs1" />
@@ -89,17 +99,31 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="fill:#ffffff;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
-       id="rect1"
-       width="42"
-       height="32"
-       x="2.9999998"
-       y="8" />
     <path
-       style="fill:#000000;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       d="m 8.4000003,12.999998 15.5913047,22 17.008695,-22 z"
-       id="path1"
-       sodipodi:nodetypes="cccc" />
+       id="rect1"
+       style="stroke-width:3;stroke-linecap:square"
+       d="M 2,2 H 35.882343 L 46,13.324569 V 46 H 2 Z"
+       sodipodi:nodetypes="cccccc" />
+    <rect
+       style="fill:#ffffff;stroke-width:3.00001;stroke-linecap:square;stroke-dasharray:none"
+       id="rect2"
+       width="36"
+       height="21.000002"
+       x="6"
+       y="21" />
+    <rect
+       style="fill:#ffffff;stroke-width:3.00002;stroke-linecap:square;stroke-dasharray:none"
+       id="rect2-8"
+       width="21"
+       height="11.500002"
+       x="12"
+       y="3.499999" />
+    <rect
+       style="fill:#000000;stroke-width:3.00002;stroke-linecap:square;stroke-dasharray:none"
+       id="rect2-8-2"
+       width="6"
+       height="6"
+       x="24"
+       y="6" />
   </g>
 </svg>

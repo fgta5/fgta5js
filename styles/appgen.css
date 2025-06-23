@@ -1,3 +1,10 @@
+.fgta5-app-section {
+	position: relative;
+	width: 100%;
+	padding-bottom: 0;
+}
+
+
 input[type="text"],
 input[type="number"]
 {
@@ -90,6 +97,7 @@ button:hover {
 	display: grid;
 	grid-template-areas:
 			"def def"
+			"action action"
 			"entity entity"
 			"editor sidebar";
 	grid-template-columns: auto 150px;
@@ -115,6 +123,10 @@ button:hover {
 	text-align: right;
 	align-self: center;
 	justify-self: end;
+}
+
+#layout-action {
+	grid-area: action;
 }
 
 #layout-entity {
@@ -215,7 +227,7 @@ button:hover {
 
 .designer-info {
 	display: grid;
-	grid-template-columns: 50px auto;
+	grid-template-columns: 80px auto;
 	width: 100%;
 	column-gap: 10px;
 	margin-bottom: 40px;
@@ -420,8 +432,8 @@ button:hover {
 
 #upload-icon {
 	display: flex;
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	align-items: center;
 	justify-content: center;
 	background-repeat: no-repeat;
@@ -442,7 +454,7 @@ button:hover {
 	border: 1px solid #ccc;
 }
 
-#design-tools-container {
+.design-tools-container {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px
@@ -456,7 +468,8 @@ button:hover {
 }
 
 
-.design-view-as-summary div[name="design-data-field"] {
+.minimized,
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) {
 	box-shadow: none;
 	padding: 5px 0 5px 10px;
 	margin: 10px;
@@ -464,30 +477,38 @@ button:hover {
 	min-height: unset;
 }
 
-.design-view-as-summary div[name="design-data-field"] div[data-summary] {
+
+.minimized div[data-summary],
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) div[data-summary] {
 	display: flex !important;
 	gap: 5px;
 	margin: 3px;
 	align-items: center;
 }
 
-.design-view-as-summary div[name="design-data-field"] div[data-detil] {
+
+.minimized div[data-detil],
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) div[data-detil] {
 	display: none;
 }
 
-.design-view-as-summary input[name="fieldname-summary"] {
+.minimized input[name="fieldname-summary"],
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) input[name="fieldname-summary"] {
 	border: none;
 	background: transparent;
 	font-weight: bold;
 	width: 200px;
 }
 
-.design-view-as-summary input[name="fieldname-summary"]:focus {
+
+.minimized input[name="fieldname-summary"]:focus,
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) input[name="fieldname-summary"]:focus {
 	background-color: rgb(208, 208, 208);
 }
 
 
-.design-view-as-summary div[name="drop-target"] {
+.minimized-drop-target,
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) div[name="drop-target"] {
 	margin: 0;
 	border: 1 px solid #eee;
 	padding: 15px;
@@ -496,23 +517,22 @@ button:hover {
 	color: #eee
 }
 
-.design-view-as-summary div[name="drop-target"][data-dragover] {
+.minimized-drop-target[data-dragover],
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) div[name="drop-target"][data-dragover] {
 	border: 1px solid #a7c8ff;
 	font-size: 1rem;
 	background-color: #a7c8ff;
 	color: white
 }
 
-.design-view-as-summary div[name="component-summary"] [name="icon"] {
+
+.minimized div[name="component-summary"] [name="icon"],
+.design-view-as-summary div[name="design-data-field"]:not(.maximized) div[name="component-summary"] [name="icon"] {
 	cursor: grab;
 }
 
 
 
-.design-data-field-icon {
-	width: 16px; 
-	height: 16px;
-}
 
 
 .field-remove-button {
@@ -535,4 +555,71 @@ button:hover {
 @keyframes fieldDihapus {
 	0% { opacity: 1; transform: scale(1);	}
 	100% { opacity: 0; transform: scale( 0.3);}
+}
+
+
+
+.design-data-field-icon {
+	width: 16px; 
+	height: 16px;
+	margin-left: 8px;
+}
+
+
+.design-data-field-icon-pk {
+	width: 16px; 
+	height: 16px;
+	position: absolute;
+	transform: translateX(-8px);
+}
+
+.field-handle-bar {
+	cursor: pointer;
+}
+
+
+
+.action-input {
+	border: 1px solid #ccc;
+	outline: none;
+	margin: 3px;
+	padding: 5px;
+
+}
+
+.action-title {
+	font-weight: bold;
+}
+
+.action-button-add {
+	border: 1px solid #ccc;
+	margin: 3px;
+	padding: 5px;
+
+	outline: none;
+	width: 60px;
+	height: 28px;
+	padding: 3px;
+	min-width: unset;
+}
+
+.action-cell {
+	padding: 5px;
+}
+
+.action-cell[name="action-title"] {
+	font-weight: bold;
+}
+
+.action-button-remove {
+	width: 16px;
+	height: 16px;
+	color: #ccc;
+	transition: transform 0.3s ease;
+	margin-left: 10px;
+}
+
+.action-button-remove:hover {
+	color: red;
+	transform: scale(1.5);
 }

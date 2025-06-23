@@ -1,5 +1,6 @@
 import AppGenUI from './appgen-ui.mjs'
 
+
 const app = new $fgta5.Application(window.APPLICATION_NAME)
 const ui = new AppGenUI(app)
 const SectionCarousell = $fgta5.SectionCarousell
@@ -37,6 +38,8 @@ export default class AppGen  {
 async function AppGen_main(self, args) {
 	mod.btnnewall = AppGen_setupButtonNew(self)
 	mod.scar = AppGen_setupSectionCarousell(self)
+
+	
 	
 }
 

@@ -1,4 +1,5 @@
 import Components from './appgen-components.mjs'
+import AppGenIO from './appgen-io.mjs'
 
 
 const URL_LAYOUT = 'appgen-layout'
@@ -44,6 +45,16 @@ const ICON_CLOSE = `<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.
   </g>
 </svg>`
 
+const ICON_PK = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g stroke-linecap="round" stroke-linejoin="round">
+<rect x="11" y="8" width="26" height="32" fill="#fc0" stroke="#ffd42a" stroke-width="2"/>
+<ellipse cx="23.333" cy="15.79" rx="8.6667" ry="4.2097" fill="none" stroke="#540" stroke-width="4"/>
+<path d="m22 22.419v13.161" fill="none" stroke="#540" stroke-width="4"/>
+<path d="m22 29.387h7.3333" fill="none" stroke="#540" stroke-width="4"/>
+<path d="m22 35.581h10.667" fill="none" stroke="#540" stroke-width="4"/>
+</g>
+</svg>`
+
 
 // let drop_valid = false
 
@@ -61,6 +72,9 @@ const generateId = (prefix = "el") => {
 }
 const isValidName = str => /^[_a-z0-9]+$/.test(str) ;
 
+const capitalizeFirst = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 const createInputElement = (type, entity_id, data={}) => {
 	const input = document.createElement('input')
@@ -124,6 +138,11 @@ async function AppGenLayout_Render(self) {
 
 	AppGenLayout_createComponentList(this)
 	AppGenLayout_createButtons(this)
+	AppGenLayout_handleActionForm(this)
+
+
+	const io = new AppGenIO()
+	io.Setup()
 }
 
 function AppGenLayout_createButtons(self) {
@@ -164,18 +183,34 @@ function AppGenLayout_createButtons(self) {
 function btn_ShowSummary_click(self, evt) {
 	CURRENT.Design.classList.add('design-view-as-summary')
 	
-	// const entitties = CURRENT.Design.querySelectorAll('div[name="design-data-field"]')
-	// entitties.forEach(el=>{
-	// 	console.log(el)
-	// })
+	const entitties = CURRENT.Design.querySelectorAll('div[name="design-data-field"]')
+	entitties.forEach(el=>{
+		el.classList.remove('minimized')
+		el.classList.remove('maximized')
+	})
+
+	const droptarget =  CURRENT.Design.querySelector('div[name="drop-target"')
+	droptarget.classList.add('minimized-drop-target')
 }
 
 function btn_ShowDetail_click(self, evt) {
 	CURRENT.Design.classList.remove('design-view-as-summary')
-	// const entitties = CURRENT.Design.querySelectorAll('div[name="design-data-field"]')
-	// entitties.forEach(el=>{
-	// 	console.log(el)
-	// })
+	const entitties = CURRENT.Design.querySelectorAll('div[name="design-data-field"]')
+	entitties.forEach(el=>{
+		el.classList.remove('minimized')
+		el.classList.remove('maximized')
+	})
+
+	const droptarget =  CURRENT.Design.querySelector('div[name="drop-target"')
+	droptarget.classList.remove('minimized-drop-target')
+}
+
+
+function AppGenLayout_handleActionForm(self) {
+	const btn_action_add = document.getElementById('btn_action_add')
+	btn_action_add.addEventListener('click', (evt)=>{
+		AppGenLayout_addAction(self, evt)
+	})
 }
 
 
@@ -263,7 +298,7 @@ async function AppGenLayout_AddEntity(self, entity={}) {
 	fn_set_input('text', entity[ENT_COL_TITLE], ENT_COL_TITLE)
 	fn_set_input('text', entity[ENT_COL_TABLE], ENT_COL_TABLE)
 	fn_set_input('text', entity[ENT_COL_PK], ENT_COL_PK)
-
+	
 	let btn_design = fn_set_input('button', "design", ENT_COL_BTNDESIGN)
 	btn_design.addEventListener('click', (evt)=>{
 		console.log(`design ${ID}`)
@@ -278,8 +313,9 @@ async function AppGenLayout_AddEntity(self, entity={}) {
 	}
 
 
+
 	// tambahkan ke ME.EntityDesigner
-	AppGenLayout_addDesigner(self, ID)
+	AppGenLayout_addDesigner(self, ID, entity.isheader)
 	
 }
 
@@ -296,6 +332,10 @@ async function AppGenLayout_entityInputChanged(self, evt) {
 	const valid = await AppGenLayout_CekEntityData(self, data)
 	if (valid) {
 		AppGenLayout_changeEntityInfo(self, entity_id, data)
+	}
+
+	if (name==ENT_COL_PK) {
+		AppGenLayout_designerFieldNameChanged(self, entity_id, input, true)
 	}
 
 }
@@ -426,7 +466,7 @@ async function btn_remove_click(self, evt) {
 }
 
 
-function AppGenLayout_addDesigner(self, ID) {
+function AppGenLayout_addDesigner(self, ID, isheader) {
 	const editem = document.createElement('div')
 	editem.classList.add('hidden')
 	editem.classList.add(CLS_ENTITYEDITOR)
@@ -436,6 +476,22 @@ function AppGenLayout_addDesigner(self, ID) {
 	// ambil data template untuk entity info
 	const tpl = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNERINFO}"]`)
 	const elinfo = tpl.cloneNode(true)
+
+	const chka = elinfo.querySelector('input[type="checkbox"][name="allow-row-add"]')
+	const chkr = elinfo.querySelector('input[type="checkbox"][name="allow-row-remove"]')
+
+	chka.checked = true
+	chkr.checked = true
+
+	if (isheader===true) {
+		chka.disabled = true
+		chkr.disabled = true
+		const dcs = elinfo.querySelectorAll('[data-control]')
+		for (var dc of dcs) {
+			dc.classList.add('hidden')
+		}
+
+	}
 
 	editem.appendChild(elinfo)
 	ME.EntityDesigner.appendChild(editem)
@@ -523,20 +579,26 @@ function AppGenLayout_setupDropTarget(self, droptarget) {
 		if (CURRENT.drag_action==DRAG_ICONTOOL) {
 			const compname = evt.dataTransfer.getData('compname');
 			AppGenLayout_addComponentToDesigner(self, droptarget, Components[compname])
+
+			setTimeout(()=>{
+				CURRENT.Design.appendChild(droptarget)
+				droptarget.scrollIntoView({
+					behavior: 'smooth',
+					block: 'start'
+				});
+			}, 300)
+
 		} else if (CURRENT.drag_action==DRAG_REORDERFIELD) {
 			const datafield_id =  evt.dataTransfer.getData('datafield_id');
 			const el = document.getElementById(datafield_id)
 			droptarget.after(el)
+			setTimeout(()=>{
+				droptarget.classList.add('hidden')
+			}, 300)
 		}  
 
-		setTimeout(()=>{
-			CURRENT.Design.appendChild(droptarget)
-			droptarget.scrollIntoView({
-				behavior: 'smooth',
-				block: 'start'
-			});
-		}, 300)
-		// droptarget.classList.add('hidden')
+
+
 	})
 	
 }
@@ -583,8 +645,10 @@ function AppGenLayout_createIconTool(self, comp, tpl) {
 		}
 	})
 
-	tool.addEventListener('click', (evt)=>{
+	tool.addEventListener('dblclick', (evt)=>{
 		// pindah drop target ke bawah
+		// droptarget.classList.remove('hidden')
+		CURRENT.droptarget.classList.remove('hidden')
 		CURRENT.Design.appendChild(CURRENT.droptarget)
 		AppGenLayout_addComponentToDesigner(self, CURRENT.droptarget, comp)
 		
@@ -604,9 +668,11 @@ function AppGenLayout_createIconTool(self, comp, tpl) {
 function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 	const tpl = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNFIELD}"][data-template=${comp.template}]`)
 	const datafield = tpl.cloneNode(true)
+	const entity_id = droptarget.getAttribute(ATTR_ENTITYID)
 
 	const datafield_id = generateId('datafield')
 	datafield.setAttribute('id', datafield_id)
+	datafield.setAttribute(ATTR_ENTITYID, entity_id)
 
 	// masukkan element baru sebelum drop target
 	droptarget.before(datafield)
@@ -614,6 +680,7 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 
 	// setup datafiled
 	const comptype = datafield.querySelector('[name="component-type"]')
+	
 	const compicon = comptype.querySelector('[name="icon"]')
 	const comptitle = comptype.querySelector('[name="title"]')
 	comptitle.innerHTML = comp.title
@@ -621,6 +688,10 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 	const compsummary = datafield.querySelector('[name="component-summary"]')
 	const compiconsummary = compsummary.querySelector('[name="icon"]')
 
+	const compiconspk = datafield.querySelectorAll('[name="icon-pk"]')
+	for (var iconspk of compiconspk) {
+		iconspk.setAttribute(ATTR_ENTITYID, entity_id)
+	}
 
 	compsummary.setAttribute('draggable', true)
 	compsummary.addEventListener('dragstart', (evt)=>{
@@ -643,14 +714,11 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 	compiconsummary.innerHTML = compicon.innerHTML
 
 
-	const obj_name = datafield.querySelector('input[name="fieldname"]')
-	obj_name.addEventListener('change', (evt)=>{ obj_namesummary.value = obj_name.value })
 
 	const obj_namesummary = datafield.querySelector('input[name="fieldname-summary"]')
-	obj_namesummary.addEventListener('change', (evt)=>{ obj_name.value = obj_namesummary.value })
-
-
-
+	obj_namesummary.addEventListener('dblclick', (evt)=>{ 
+		evt.stopPropagation() // mencegar trigger maximize/minimized saat dblclick textbox
+	})
 
 	// kalau data field dilewati DRAG ICON, munculkan droptarget di bawahnya
 	datafield.addEventListener('dragover', (evt)=>{
@@ -698,4 +766,202 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 		})
 	}
 
+
+	const bars = datafield.querySelectorAll("div[field-handle-bar]")
+	for (let bar of bars) {
+		bar.addEventListener('dblclick', (evt)=>{
+			const varname = bar.getAttribute('name')
+			if (varname=='component-summary') {
+				datafield.classList.add('maximized')
+				datafield.classList.remove('minimized')
+			} else {
+				datafield.classList.add('minimized')
+				datafield.classList.remove('maximized')
+			}
+		})
+	}
+
+	AppGenGenLayout_HandleDataField(self, entity_id, comp, datafield) 
+
 }	
+
+
+function AppGenLayout_designerFieldNameChanged(self, entity_id, obj, fromentity) {
+	const query = `tr[${ATTR_ENTITYID}="${entity_id}"] [name="${ENT_COL_PK}"] input`
+	const elpk = ME.DataEntities.querySelector(query)
+
+
+	
+	const setPk = (df, primary_key) => {
+		// reset seluruh primary key
+		const alliconspk = df.querySelectorAll('[name="icon-pk"]')
+		for (var icoalpk of alliconspk) {
+			icoalpk.innerHTML = ''
+		}
+		
+		const field = df.querySelector(`input[name="fieldname"][${ATTR_ENTITYID}="${entity_id}"]`)
+		const current_fieldname_value = field.value
+		if (current_fieldname_value==primary_key) {
+			const iconspk = df.querySelectorAll(`[name="icon-pk"][${ATTR_ENTITYID}="${entity_id}"]`)
+			for (var ico of iconspk) {
+				ico.innerHTML = ICON_PK
+			}
+
+		}
+	}
+
+
+
+	let primary_key
+	if (fromentity===true) {
+		// diedit dari tabel entity
+		primary_key = obj.value
+
+		// cari semua field dengan valuenya primary_key
+		const design = ME.EntityDesigner.querySelector(`[name="entity-editor"][${ATTR_ENTITYID}="${entity_id}"]`)
+		const dfs = design.querySelectorAll('[name="design-data-field"]')
+		for (const df of dfs) {
+			setPk(df, primary_key)
+		}
+	} else {
+		// diedit dari designer
+ 		primary_key = elpk.value
+		const df = obj.closest('[name="design-data-field"]') //cari [name="design-data-field"] terdekat
+		setPk(df, primary_key)
+	}
+}
+
+async function AppGenLayout_addAction(self, evt) {
+	const txt_action_name = document.getElementById('txt_action_name')
+	const txt_action_title = document.getElementById('txt_action_title')
+	const tbody = document.getElementById('action-lists')	
+
+	const name = txt_action_name.value
+	const title = txt_action_title.value
+
+	if (!isValidName(name)) {
+		await $fgta5.MessageBox.Warning('nama action tidak valid')
+		return
+	}
+
+	if (title.trim()=='') {
+		await $fgta5.MessageBox.Warning('title tidak valid')
+		return
+	}
+
+
+	const tr = document.createElement('tr')
+	const tdName = document.createElement('td')
+	const tdTitle = document.createElement('td')
+	const tdButton = document.createElement('td')
+	const rmButton = document.createElement('div')
+	
+
+
+
+	tdName.innerHTML = `<div name="action-name" class="action-cell">${name}</div>`
+	tdTitle.innerHTML = `<div name="action-title" class="action-cell">${title}</div>`
+
+	rmButton.innerHTML = ICON_CLOSE
+	rmButton.classList.add("action-button-remove")
+	rmButton.addEventListener('click', async (evt)=>{
+		var res = await $fgta5.MessageBox.Confirm('Are you sure removing this action ?')
+		if (res=='ok') {
+			tr.remove()
+		}
+	})
+	
+	tdButton.appendChild(rmButton)
+
+
+	tr.appendChild(tdName)
+	tr.appendChild(tdTitle)
+	tr.appendChild(tdButton)
+	tbody.appendChild(tr)
+
+	txt_action_name.value = ''
+	txt_action_title.value = ''
+}
+
+function AppGenGenLayout_HandleDataField(self, entity_id, comp, datafield) {
+	const fieldname = datafield.querySelector('input[name="fieldname"]')
+	const namesummary = datafield.querySelector('input[name="fieldname-summary"]')
+	const objectname  = datafield.querySelector('input[name="objectname"]')
+	const labeltext = datafield.querySelector('input[name="labeltext"]')
+	const placeholder = datafield.querySelector('input[name="placeholder"]')
+	
+
+	
+	
+	const nameChanged = (value) => {
+		if (objectname.value.trim()=='') {
+			objectname.value = fieldname.value
+		}
+
+		if (labeltext.value.trim()=='') {
+			labeltext.value = capitalizeFirst(fieldname.value)
+		}
+
+		if (placeholder.value.trim()=='') {
+			placeholder.value = fieldname.value
+		}
+	}
+
+	const nameKeydown = (evt) => {
+		const allowed = /^[a-zA-Z0-9_]$/; // hanya huruf, angka, dan underscore
+
+		if (
+			evt.ctrlKey || evt.metaKey || evt.altKey || // biarkan shortcut seperti Ctrl+C
+			evt.key === "Backspace" ||
+			evt.key === "Tab" ||
+			evt.key === "ArrowLeft" ||
+			evt.key === "ArrowRight" ||
+			evt.key === "Delete"
+		) {
+			return; // izinkan navigasi dan kontrol
+		}
+
+		if (!allowed.test(evt.key)) {
+			evt.preventDefault(); // blokir karakter lain
+		}
+	}
+	
+
+	fieldname.setAttribute(ATTR_ENTITYID, entity_id)
+	fieldname.addEventListener('change', (evt)=>{ 
+		namesummary.value = fieldname.value 
+		const entity_id = fieldname.getAttribute(ATTR_ENTITYID)
+		AppGenLayout_designerFieldNameChanged(self, entity_id, fieldname)
+		nameChanged(fieldname.value)
+	})
+
+	
+	namesummary.setAttribute(ATTR_ENTITYID, entity_id)
+	namesummary.addEventListener('change', (evt)=>{ 
+		fieldname.value = namesummary.value 
+		const entity_id = namesummary.getAttribute(ATTR_ENTITYID)
+		AppGenLayout_designerFieldNameChanged(self, entity_id, namesummary)
+		nameChanged(namesummary.value)
+	})
+
+
+	fieldname.addEventListener('keydown', (evt)=>{
+		nameKeydown(evt)
+	}); 
+
+	namesummary.addEventListener('keydown', (evt)=>{
+		nameKeydown(evt)
+	});
+
+
+	if (comp.name=='Textbox') {
+		const datalength = datafield.querySelector('input[name="datalength"]')
+		const maximum = datafield.querySelector('input[name="maximum"]')
+		maximum.value = datalength.value
+		datalength.addEventListener('change', (evt)=>{
+			maximum.value = datalength.value
+		})
+
+	}
+
+}

@@ -8,11 +8,10 @@ const ICON_Textbox = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48
 
 
 const ICON_Numberbox = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<g stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-<rect x="3" y="8" width="42" height="32" fill="#fff" stroke="#000"/>
-<path transform="scale(.84463 1.1839)" d="m35.633 24.944 2.3526-0.31367q0.40516 1.9997 1.3723 2.8884 0.98023 0.87567 2.3787 0.87567 1.6599 0 2.7969-1.1501 1.1501-1.1501 1.1501-2.8492 0-1.6206-1.0586-2.6662-1.0586-1.0586-2.6924-1.0586-0.66656 0-1.6599 0.2614l0.2614-2.065q0.23526 0.02614 0.37902 0.02614 1.503 0 2.7054-0.78418 1.2024-0.78418 1.2024-2.4179 0-1.2939-0.87567-2.1434-0.87567-0.84953-2.2611-0.84953-1.3723 0-2.2872 0.8626t-1.1763 2.5878l-2.3526-0.41823q0.4313-2.3656 1.9605-3.6595 1.5292-1.307 3.8033-1.307 1.5684 0 2.8884 0.67963 1.32 0.66656 2.0127 1.8298 0.70577 1.1632 0.70577 2.4702 0 1.2416-0.66656 2.2611-0.66656 1.0194-1.9735 1.6206 1.6991 0.39209 2.6401 1.6337 0.94102 1.2286 0.94102 3.0845 0 2.5094-1.8298 4.2607-1.8298 1.7383-4.6267 1.7383-2.5225 0-4.1954-1.503-1.6599-1.503-1.8951-3.8948z"/>
-<path d="m27.111 32.795v2.677h-10.697q-0.02208-1.0058 0.23182-1.9342 0.40845-1.5319 1.3026-3.0174 0.9052-1.4855 2.6052-3.4352 2.6383-3.0329 3.5656-4.7969 0.92728-1.7795 0.92728-3.3578 0-1.6557-0.85001-2.7853-0.83897-1.1451-2.1968-1.1451-1.4351 0-2.2961 1.207-0.86105 1.207-0.87209 3.3424l-2.0422-0.294q0.20974-3.2031 1.5786-4.8743 1.3688-1.6867 3.676-1.6867 2.3292 0 3.6871 1.8104t1.3578 4.4874q0 1.3617-0.39741 2.677-0.39741 1.3153-1.3247 2.7698-0.91624 1.4545-3.0578 3.9923-1.7883 2.1044-2.2961 2.8627-0.5078 0.74275-0.83897 1.501z"/>
-<path transform="scale(.84463 1.1839)" d="m14.708 30.002h-2.3526v-14.991q-0.84953 0.81032-2.2349 1.6206-1.3723 0.81032-2.4702 1.2155v-2.2741q1.9735-0.92795 3.4504-2.248 1.4769-1.32 2.0912-2.5617h1.5161z"/>
+<g stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+<path transform="scale(.87733 1.1398)" d="m42.141 16.959-4.9275-0.88311q0.61434-2.355 2.355-3.6092 1.7534-1.2543 4.9531-1.2543 3.6732 0 5.3115 1.3695t1.6382 3.4428q0 1.2159-0.66553 2.2014-0.66553 0.9855-2.0094 1.7278 1.0879 0.26877 1.6638 0.62714 0.9343 0.57594 1.4463 1.523 0.52475 0.9343 0.52475 2.2398 0 1.6382-0.85751 3.1485-0.85751 1.4974-2.4701 2.3166-1.6126 0.80632-4.2364 0.80632-2.5597 0-4.0444-0.60154-1.4718-0.60154-2.4317-1.7534-0.9471-1.1647-1.459-2.9181l5.2091-0.69113q0.30717 1.5742 0.9471 2.1886 0.65273 0.60154 1.651 0.60154 1.0495 0 1.7406-0.76792 0.70393-0.76792 0.70393-2.0478 0-1.3055-0.67833-2.0222-0.66553-0.71673-1.8174-0.71673-0.61434 0-1.6894 0.30717l0.26877-3.7244q0.43516 0.06399 0.67833 0.06399 1.0239 0 1.7022-0.65273 0.69113-0.65273 0.69113-1.5486 0-0.85751-0.51195-1.3695-0.51195-0.51195-1.4079-0.51195-0.9215 0-1.4974 0.56314-0.57594 0.55034-0.78072 1.9454z"/>
+<path transform="scale(.87733 1.1398)" d="m34.859 30.296h-15.64q0.26877-2.3166 1.6254-4.3516 1.3695-2.0478 5.1195-4.8251 2.291-1.7022 2.9309-2.5853t0.63993-1.6766q0-0.85751-0.63993-1.459-0.62714-0.61434-1.587-0.61434-0.9983 0-1.6382 0.62714-0.62714 0.62714-0.84471 2.2142l-5.2219-0.42236q0.30717-2.2014 1.1263-3.43 0.81912-1.2415 2.3038-1.8942 1.4974-0.66553 4.134-0.66553 2.7517 0 4.2748 0.62714 1.5358 0.62714 2.4062 1.9326 0.88311 1.2927 0.88311 2.9053 0 1.715-1.0111 3.2765-0.9983 1.5614-3.6476 3.43-1.5742 1.0879-2.1118 1.523-0.52474 0.43516-1.2415 1.1391h8.14z"/>
+<path transform="scale(.87733 1.1398)" d="m13.933 11.213v19.083h-5.2731v-12.504q-1.2799 0.9727-2.4829 1.5742-1.1903 0.60154-2.9949 1.1519v-4.2748q2.6621-0.85751 4.134-2.0606t2.3038-2.9693z"/>
 </g>
 </svg>`
 
@@ -22,9 +21,9 @@ const ICON_Checkbox = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 4
 </svg>`
 
 
-const ICON_Combobox = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-<path d="M3 8h42v32H3z" style="fill:#fff;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
-<path d="m13 18 11 15 12-15Z" style="fill:#000;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/>
+const ICON_Combobox = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<rect x="3" y="8" width="42" height="32" fill="#fff" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+<path d="m8.4 13 15.591 22 17.009-22z"/>
 </svg>`
 
 
@@ -35,19 +34,17 @@ const ICON_Datepicker = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48
 </svg>
 `
 
-const ICON_Timepicker = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-<path d="M3 8h42v32H3z" style="fill:#fff;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
-<ellipse cx="24" cy="24" rx="13" ry="12" style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/>
-<path d="m19 21 5 3 8-7" style="fill:none;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/>
-</svg>
-`
+const ICON_Timepicker = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="24" cy="24" r="14" stroke-width="5"/>
+<path d="m16 22.666 7.3907 5.1631 12.185-10.329" stroke-width="3"/>
+</g>
+</svg>`
 
 
-const ICON_Filebox = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-<path d="M3 8h42v32H3z" style="fill:#fff;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
-<path d="M10.304 34h27.392" style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/>
-<path d="M9.477 34v-6M38.605 34l-.128-6" style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/>
-<path d="M21.5 27h6v-5h7l-10-10-11 10h8z" style="fill:#000;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"/>
+const ICON_Filebox = `<svg version="1.1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="m6 31v6h36v-6" fill="none" stroke="#000" stroke-linecap="square" stroke-width="6"/>
+<path d="m19 29h10v-7h11l-16-15-16 15h11z"/>
 </svg>`
 
 
@@ -89,7 +86,7 @@ const Checkbox = {
 
 const Combobox = {
 	title: 'Combobox',
-	template: 'textbox',
+	template: 'combobox',
 	descr: '',
 	icon: ICON_Combobox,
 	properties: {
@@ -100,7 +97,7 @@ const Combobox = {
 
 const Datepicker = {
 	title: 'Datepicker',
-	template: 'textbox',
+	template: 'datepicker',
 	descr: '',
 	icon: ICON_Datepicker,
 	properties: {
@@ -111,7 +108,7 @@ const Datepicker = {
 
 const Timepicker = {
 	title: 'Timepicker',
-	template: 'textbox',
+	template: 'timepicker',
 	descr: '',
 	icon: ICON_Timepicker,
 	properties: {
@@ -122,7 +119,7 @@ const Timepicker = {
 
 const Filebox = {
 	title: 'Filebox',
-	template: 'textbox',
+	template: 'filebox',
 	descr: '',
 	icon: ICON_Filebox,
 	properties: {
