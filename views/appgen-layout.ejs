@@ -269,16 +269,13 @@
 			<div>
 				<input name="defaultvalue" type="text" >
 			</div>
-			
 			<div></div>
-			<div></div>
-			<div></div>
-			
 			<label name="allownull">
 				<input type="checkbox" value="1" style="transform: translateY(2px);" checked>
 				Allow Null
 			</label>
-
+			<div></div>
+			<div></div>
 
 			<label>Description</label>
 			<div style="grid-column: span 5;">
@@ -305,10 +302,44 @@
 				<input type="text" name="placeholder">
 			</div> 
 
+			<label>Char Case</label>
+			<div>
+				<select name="charcasing">
+					<option value="normal" selected>Normal</option>
+					<option value="lowercase">lowercase</option>
+					<option value="uppercase">UPPERCASE</option>
+				</select>
+			</div> 
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+
+
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>
+
+
+		
+
+
 
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
-
-
 			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 	
@@ -339,10 +370,10 @@
 
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
 			<label>Reference</label>
-			<div style="grid-column: span 5; display: flex; gap: 10px" >
-				<div><input type="text" name="ref_table" placeholder="table"></div>
-				<div><input type="text" name="ref_id" placeholder="value"></div>
-				<div><input type="text" name="ref_text" placeholder="text"></div>
+			<input type="text" name="ref_table" placeholder="table">
+			<label>PK</label>
+			<div style="grid-column: span 3; display: flex; gap: 10px" >
+				<div><input type="text" name="ref_id" placeholder="fieldname"></div>
 			</div>
 
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
@@ -424,15 +455,15 @@
 			<div>
 				<input name="defaultvalue" type="text" value="0">
 			</div>
-			
 			<div></div>
-			<div></div>
-			<div></div>
-
 			<label name="allownull">
 				<input type="checkbox" value="1" style="transform: translateY(2px);">
 				Allow Null
 			</label>
+			<div></div>
+			<div></div>
+
+
 
 			<label>Description</label>
 			<div style="grid-column: span 5;">
@@ -459,8 +490,26 @@
 			</div> 
 
 
-			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>
 
+
+			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
 			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 
@@ -582,6 +631,26 @@
 			<label>Caption</label><div>
 			<input type="text" name="caption"></div> 
 
+
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>
+
+
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
 			<label name="validation" style="transform: translateY(10px);">Handle Event</label>
 			<div style="grid-column: span 5; padding-left: 10px; display: flex; gap: 30px; flex-wrap: wrap;" >
@@ -654,15 +723,13 @@
 			<div>
 				<input name="defaultvalue" type="text" >
 			</div>
-			
 			<div></div>
-			<div></div>
-			<div></div>
-			
 			<label name="allownull">
 				<input type="checkbox" value="1" style="transform: translateY(2px);" checked>
 				Allow Null
 			</label>
+			<div></div>
+			<div></div>
 
 
 			<label>Description</label>
@@ -691,9 +758,26 @@
 			</div> 
 
 
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>
+
+
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
-
-
 			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 	
@@ -712,11 +796,20 @@
 
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
 			<label>Reference</label>
-			<div style="grid-column: span 5; display: flex; gap: 10px" >
-				<div><input type="text" name="ref_table" placeholder="table"></div>
-				<div><input type="text" name="ref_id" placeholder="value"></div>
-				<div><input type="text" name="ref_text" placeholder="text"></div>
+			<input type="text" name="ref_table" placeholder="table">
+			<label>Binding</label>
+			<div style="grid-column: span 3; display: flex; gap: 10px" >
+				<div><input type="text" name="ref_id" placeholder="value fieldname"></div>
+				<div><input type="text" name="ref_text" placeholder="text fieldname"></div>
 			</div>
+
+			<label>Loader API</label>
+			<input type="text" name="loaderapimodule" placeholder="module">
+			<div style="grid-column: span 4;" >
+				<input type="text" name="loaderapipath" placeholder="path">
+			</div>
+
+
 
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
 			<label name="validation" style="transform: translateY(10px);">Handle Event</label>
@@ -742,7 +835,7 @@
 			<div name="icon-pk" class="design-data-field-icon-pk"></div>
 			<div name="icon" class="design-data-field-icon"></div>
 			<div name="title">
-				<input type="text" name="fieldname-summary" placeholder="text field name">
+				<input type="text" name="fieldname-summary" placeholder="texcomboboxt field name">
 			</div>
 			<div class="field-remove-button">
 			</div>
@@ -794,15 +887,14 @@
 			<div>
 				<input name="defaultvalue" type="text" >
 			</div>
-			
 			<div></div>
-			<div></div>
-			<div></div>
-			
 			<label name="allownull">
 				<input type="checkbox" value="1" style="transform: translateY(2px);" checked>
 				Allow Null
 			</label>
+			<div></div>
+			<div></div>
+			
 
 
 			<label>Description</label>
@@ -831,9 +923,26 @@
 			</div> 
 
 
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>			
+
+
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
-
-
 			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 	
@@ -862,7 +971,7 @@
 			<div name="icon-pk" class="design-data-field-icon-pk"></div>
 			<div name="icon" class="design-data-field-icon"></div>
 			<div name="title">
-				<input type="text" name="fieldname-summary" placeholder="text field name">
+				<input type="text" name="fieldname-summary" placeholder="date field name">
 			</div>
 			<div class="field-remove-button">
 			</div>
@@ -915,15 +1024,13 @@
 			<div>
 				<input name="defaultvalue" type="text" >
 			</div>
-			
 			<div></div>
-			<div></div>
-			<div></div>
-			
 			<label name="allownull">
 				<input type="checkbox" value="1" style="transform: translateY(2px);" checked>
 				Allow Null
 			</label>
+			<div></div>
+			<div></div>
 
 
 			<label>Description</label>
@@ -952,9 +1059,25 @@
 			</div> 
 
 
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>			
+
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
-
-
 			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 	
@@ -983,7 +1106,7 @@
 			<div name="icon-pk" class="design-data-field-icon-pk"></div>
 			<div name="icon" class="design-data-field-icon"></div>
 			<div name="title">
-				<input type="text" name="fieldname-summary" placeholder="text field name">
+				<input type="text" name="fieldname-summary" placeholder="time field name">
 			</div>
 			<div class="field-remove-button">
 			</div>
@@ -1034,15 +1157,13 @@
 			<div>
 				<input name="defaultvalue" type="text" >
 			</div>
-			
 			<div></div>
-			<div></div>
-			<div></div>
-			
 			<label name="allownull">
 				<input type="checkbox" value="1" style="transform: translateY(2px);" checked>
 				Allow Null
 			</label>
+			<div></div>
+			<div></div>
 
 
 			<label>Description</label>
@@ -1071,9 +1192,26 @@
 			</div> 
 
 
+			<div>
+				<input type="text" style="visibility: hidden;"> <!-- agar tinggi baris tidak terlihat sempet, karena di baris ini hanya checkbox-->
+			</div>
+			<div style="grid-column: span 5; display: flex; align-items: center;">
+				<label>
+					<input type="checkbox" name="showingrid" style="transform: translateY(2px);" checked >
+					Show in GridView
+				</label>
+				<label style="margin-left: 40px">
+					<input type="checkbox" name="showinform" style="transform: translateY(2px);" checked>
+					Show in Form
+				</label>
+				<label style="margin-left: 20px">
+					<input type="checkbox" name="disabledinform" style="transform: translateY(2px);">
+					Disabled
+				</label>
+			</div>
+
+
 			<div style="display: block; height: 1rem; grid-column: span 6;"></div>
-
-
 			<label>Validation</label>
 			<div style="grid-column: span 5;" name="validation">
 	
@@ -1102,7 +1240,7 @@
 			<div name="icon-pk" class="design-data-field-icon-pk"></div>
 			<div name="icon" class="design-data-field-icon"></div>
 			<div name="title">
-				<input type="text" name="fieldname-summary" placeholder="text field name">
+				<input type="text" name="fieldname-summary" placeholder="filebox field name">
 			</div>
 			<div class="field-remove-button">
 			</div>
