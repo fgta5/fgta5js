@@ -398,10 +398,7 @@ button:hover {
 	width: calc(100% - 10px);
 }
 
-.design-data-field input[name="minimum"],
-.design-data-field input[name="maximum"],
-.design-data-field input[name="datalength"],
-.design-data-field input[name="dataprecission"] {
+.design-data-field input[type="number"] {
 	width: 30px;
 	text-align: right;
 	margin-right: 5px;
@@ -457,7 +454,7 @@ button:hover {
 .design-tools-container {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px
+	gap: 12px
 }
 
 .design-button {
@@ -622,4 +619,8 @@ button:hover {
 .action-button-remove:hover {
 	color: red;
 	transform: scale(1.5);
+}
+
+.field-error {
+	background: #ff8383;
 }

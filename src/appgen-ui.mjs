@@ -18,14 +18,18 @@ const ATTR_ENTITYID = 'data-entity-id'
 const ATTR_DROPTARGET = 'drop-target'
 const ATTR_DRAGOVER = 'data-dragover'
 const ATTR_CURRENTENTITY = 'data-currententity'
+const ATTR_COMPNAME = 'data-component-name'
 
 const ID_ENTITYEDITOR = 'entity-editor'
 const ID_DESIGNERINFO = 'designer-info'
+const ID_DESIGNERSEARCH = 'designer-search'
+const ID_DESIGNERUNIQ = 'designer-unique'
 const ID_ICONTOOL = 'component-icon-tool'
 const ID_DESIGNFIELD = 'design-data-field'
 
 const CLS_HIDDEN = 'hidden'
 const CLS_ENTITYEDITOR = 'entity-editor'
+
 
 
 const DRAG_ICONTOOL = 'drag-icon-tool'
@@ -178,6 +182,21 @@ function AppGenLayout_createButtons(self) {
 	btn_ShowDetail.addEventListener('click', (evt)=>{
 		btn_ShowDetail_click(self, evt)
 	})
+
+	const btn_ShowFields = document.getElementById('btn_ShowFields')
+	btn_ShowFields.addEventListener('click', (evt)=>{
+		btn_ShowFields_click(self, evt)
+	})
+
+	const btn_ShowUniq = document.getElementById('btn_ShowUniq')
+	btn_ShowUniq.addEventListener('click', (evt)=>{
+		btn_ShowUniq_click(self, evt)
+	})
+
+	const btn_ShowSearch = document.getElementById('btn_ShowSearch')
+	btn_ShowSearch.addEventListener('click', (evt)=>{
+		btn_ShowSearch_click(self, evt)
+	})
 }
 
 function btn_ShowSummary_click(self, evt) {
@@ -204,6 +223,32 @@ function btn_ShowDetail_click(self, evt) {
 	const droptarget =  CURRENT.Design.querySelector('div[name="drop-target"')
 	droptarget.classList.remove('minimized-drop-target')
 }
+
+function showOnly(toShow) {
+	var nodes = CURRENT.Design.children
+	for (var node of nodes) {
+		var name = node.getAttribute('name')
+		if (toShow.includes(name)) {
+			node.classList.remove('hidden')
+		} else {
+			node.classList.add('hidden')
+		}
+		
+	}
+}
+
+function btn_ShowFields_click(self, evt) {
+	showOnly(['designer-info', 'design-data-field'])
+}
+
+function btn_ShowUniq_click(self, evt) {
+	showOnly(['designer-info', 'designer-unique'])
+}
+
+function btn_ShowSearch_click(self, evt) {
+	showOnly(['designer-info', 'designer-search'])
+}
+
 
 
 function AppGenLayout_handleActionForm(self) {
@@ -453,13 +498,23 @@ async function btn_remove_click(self, evt) {
 		}
 	}
 
+	const remove = (tr) => {
+		var entity_id = tr.getAttribute(ATTR_ENTITYID)
+		var editor = ME.EntityDesigner.querySelector(`[${ATTR_ENTITYID}="${entity_id}"]`) 
+		if (editor!=null) {
+			editor.remove()
+		}
+		tr.remove()
+	}
+
+
 	if (sudahadadata) {
 		var ret = await $fgta5.MessageBox.Confirm("Apakah anda yakin mau menghapus design entity ini?")
 		if (ret=='ok') {
-			tr.remove()
+			remove(tr)
 		}
 	} else {
-		tr.remove()
+		remove(tr)
 	}
 
 
@@ -474,8 +529,24 @@ function AppGenLayout_addDesigner(self, ID, isheader) {
 	editem.setAttribute(ATTR_ENTITYID, ID)
 	
 	// ambil data template untuk entity info
-	const tpl = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNERINFO}"]`)
-	const elinfo = tpl.cloneNode(true)
+	const tplInfo = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNERINFO}"]`)
+	const elinfo = tplInfo.cloneNode(true)
+
+	// ambil data template uniq design
+	const tplUniq = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNERUNIQ}"]`)
+	const eluniq = tplUniq.cloneNode(true)
+
+	// ambil data template uniq search
+	const tplSearch = ME.DesignTemplate.querySelector(`div[name="${ID_DESIGNERSEARCH}"]`)
+	const elsearch = tplSearch.cloneNode(true)
+
+
+	
+
+	
+	editem.appendChild(elinfo)
+	editem.appendChild(eluniq)
+	editem.appendChild(elsearch)
 
 	const chka = elinfo.querySelector('input[type="checkbox"][name="allow-row-add"]')
 	const chkr = elinfo.querySelector('input[type="checkbox"][name="allow-row-remove"]')
@@ -491,9 +562,14 @@ function AppGenLayout_addDesigner(self, ID, isheader) {
 			dc.classList.add('hidden')
 		}
 
+	} else {
+		const dai = elinfo.querySelectorAll('[data-autoid]')
+		for (var ai of dai) {
+			ai.classList.add('hidden')
+		}
 	}
 
-	editem.appendChild(elinfo)
+	
 	ME.EntityDesigner.appendChild(editem)
 }
 
@@ -673,6 +749,7 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 	const datafield_id = generateId('datafield')
 	datafield.setAttribute('id', datafield_id)
 	datafield.setAttribute(ATTR_ENTITYID, entity_id)
+	datafield.setAttribute(ATTR_COMPNAME, comp.name)
 
 	// masukkan element baru sebelum drop target
 	droptarget.before(datafield)
