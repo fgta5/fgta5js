@@ -146,7 +146,17 @@ async function AppGenLayout_Render(self) {
 
 
 	const io = new AppGenIO()
-	io.Setup()
+	io.Setup({
+		AddEntity: (data) => {
+			AppGenLayout_AddEntity(self, data)
+		},
+		startDesign: (entity_id, suppress) => {
+			AppGenLayout_startDesign(self, entity_id, suppress)
+		},
+		addComponentToDesigner: (droptarget, comp) => {
+			return AppGenLayout_addComponentToDesigner(self, droptarget, comp) 
+		 }
+	})
 }
 
 function AppGenLayout_createButtons(self) {
@@ -302,6 +312,11 @@ async function AppGenLayout_AddEntity(self, entity={}) {
 
 	const newtr = document.createElement('tr')
 	newtr.setAttribute(ATTR_ENTITYID, ID)
+
+	if (entity.isheader) {
+		newtr.setAttribute('data-isheader', '')
+	}
+
 	cols.forEach(th => {
 		const name = th.getAttribute(ATTR_NAME)
 		const td = document.createElement('td')
@@ -574,14 +589,25 @@ function AppGenLayout_addDesigner(self, ID, isheader) {
 }
 
 function AppGenLayout_NewData(self) {
-	// siapkan header
-	AppGenLayout_AddEntity(self, {
-		isheader: true,
-		col_name: 'header',
-		col_title: 'test_title',
-		col_table: 'test_table',
-		col_pk: 'test_pk'
-	})
+
+	// jika belum ada header
+	const tbl_entity = ME.tbl_entity
+	const tbody = tbl_entity.querySelector('tbody')
+	
+
+	const head = tbody.querySelector('tr[data-isheader]')
+	if (head==null) {
+		// siapkan header
+		AppGenLayout_AddEntity(self, {
+			isheader: true,
+			col_name: 'header',
+			col_title: 'test_title',
+			col_table: 'test_table',
+			col_pk: 'test_pk'
+		})
+	}
+
+
 }
 
 
@@ -595,9 +621,16 @@ function AppGenLayout_highlightElement(self, droptarget) {
 
 }
 
-function AppGenLayout_startDesign(self, entity_id) {
-	ME.LayoutEditor.classList.remove('hidden')
-	ME.LayoutSidebar.classList.remove('hidden')
+function AppGenLayout_startDesign(self, entity_id, suppress) {
+	if (suppress===undefined) {
+		suppress = false
+	}	
+
+
+	if (!suppress) {
+		ME.LayoutEditor.classList.remove('hidden')
+		ME.LayoutSidebar.classList.remove('hidden')
+	}
 
 
 	// buat drop target
@@ -860,6 +893,8 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 
 	AppGenGenLayout_HandleDataField(self, entity_id, comp, datafield) 
 
+
+	return datafield
 }	
 
 

@@ -1,3 +1,5 @@
+import Components from './appgen-components.mjs'
+
 const btn = {}
 const ATTR_ENTITYID = 'data-entity-id'
 const ATTR_COMPNAME = 'data-component-name'
@@ -7,59 +9,155 @@ const isValidName = str => /^[_a-z0-9]+$/.test(str) ;
 
 
 export default class AppGenIO {
-	Setup() {
-		AppGenIO_Setup(this)
+	Setup(config) {
+		AppGenIO_Setup(this, config)
 	}
 	
-	GetData() {
-		AppGenIO_GetData(this)
-	}
+
+	// cek AppGenIO_Setup untuk ovveride fungsi2 di bawah
+	AddEntity(data) {} // ini nanti di ovveride saat setup
+	startDesign(entity_id) {}
+
 }
 
 
 
 
-function getValueFrom(el, query, propertyname) {
-	var res = el.querySelector(query)
-	if (res==null) {
+function getValueFrom(datafield, query, propertyname) {
+	var el = datafield.querySelector(query)
+	if (el==null) {
 		return null
 	}
-	if (res[propertyname]===undefined) {
+	if (el[propertyname]===undefined) {
 		return null
 	} 
-	return res[propertyname]
+	return el[propertyname]
 }
 
-function getCheckedFrom(el, query) {
-	var res = el.querySelector(query)
-	if (res==null) {
+function getCheckedFrom(datafield, query) {
+	var el = datafield.querySelector(query)
+	if (el==null) {
 		return false
 	}
 
-	return res.checked===true ? true : false
+	return el.checked===true ? true : false
+}
+
+function setValueTo(value, datafield, query, propertyname) {
+	var el = datafield.querySelector(query)
+	if (el==null) {
+		return null
+	}
+	if (el[propertyname]===undefined) {
+		return null
+	} 
+	el[propertyname] = value
+}
+
+function setCheckedTo(checked, datafield, query) {
+	var el = datafield.querySelector(query)
+	if (el==null) {
+		return false
+	}
+	el.checked = checked
+}
+
+function setSelectedTo(value, datafield, query) {
+	var el = datafield.querySelector(query)
+	if (el==null) {
+		return false
+	}
+
+	for (let option of el.options) {
+		if (option.value === value) {
+			option.selected = true;
+			break;
+		}
+	}
+
 }
 
 
-function AppGenIO_Setup(self) {
-	console.log('setup')
 
-	btn.save = document.getElementById('btnAppGenLoad')
+function AppGenIO_Setup(self, config) {
+	self.AddEntity = config.AddEntity
+	self.startDesign = config.startDesign
+	self.addComponentToDesigner = config.addComponentToDesigner
+
+
+	btn.save = document.getElementById('btnAppGenSave')
 	btn.save.addEventListener('click', (evt)=>{
-		AppGenIO_Load(self, evt)
-	})
-
-	btn.load = document.getElementById('btnAppGenSave')
-	btn.load.addEventListener('click', (evt)=>{
 		AppGenIO_Save(self, evt)
 	})
+
+
+
+	btn.load = document.getElementById('btnAppGenLoad')
+	btn.load.addEventListener('click', (evt)=>{
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = ".json"; // opsional: filter ekstensi
+		input.style.display = "none"; // tidak perlu ditambahkan ke dokumen
+		
+		input.addEventListener("change", () => {
+			if (input.files.length > 0) {
+				const file = input.files[0]
+				if (!file) return;
+				
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					const content = e.target.result;
+					AppGenIO_ReadData(self, content)
+				};
+				reader.readAsText(file); 
+			}
+		});
+
+		input.click(); // harus dalam content clikc user
+	})
+
+	
+	// baca data dari local storage
+	const stored = localStorage.getItem("appgendata");
+	if (stored!=null) {
+		AppGenIO_ReadData(self, stored)
+	}
+
+	// autosave ke local storage per 10 detik
+	setInterval(async ()=>{
+		try {
+			var data = await AppGenIO_GetCurrentWorkData(self)
+			localStorage.setItem("appgendata", JSON.stringify(data));
+			console.log('saved')
+		} catch (err) {
+			console.log(err.message)
+		}
+	}, 10000)
+	
 }
 
-function AppGenIO_Save(self, evt) {
-	AppGenIO_GetCurrentWorkData(self)
+async function AppGenIO_Save(self, evt) {
+	try {
+		var data = await AppGenIO_GetCurrentWorkData(self)
+
+		// coba save ke file
+		const pretty = JSON.stringify(data, null, 2); // indentasi 2 spasi
+		const blob = new Blob([pretty], { type: "application/json" });
+		const url = URL.createObjectURL(blob);
+
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = `${PROG.name}.json`;
+		a.click();
+
+		URL.revokeObjectURL(url);
+
+	} catch (err) {
+		await $fgta5.MessageBox.Error(err.message)
+	}
+	
 }
 
-function AppGenIO_Load(self, evt) {
-}
 
 async function AppGenIO_GetCurrentWorkData(self) {
 	const PROG = {
@@ -80,9 +178,9 @@ async function AppGenIO_GetCurrentWorkData(self) {
 		AppGenIO_GetActions(self, PROG)
 		AppGenIO_GetEntities(self, PROG)
 
-		console.log(PROG)
+		return PROG
 	} catch (err) {
-		await $fgta5.MessageBox.Error(err.message)
+		throw err
 	}
 
 
@@ -306,3 +404,134 @@ function AppGenIO_GetFieldData(self, el) {
 	return field
 }
 
+
+async function AppGenIO_ReadData(self, content) {
+	const data = JSON.parse(content)
+	// console.log(data)
+
+	// clear data entity
+	const elEntities = document.getElementById('data-entities')
+	elEntities.innerHTML = ''
+
+	// clear data design
+	const elEntityDesign = document.getElementById('entities-design')
+	elEntityDesign.innerHTML = ''
+
+	console.log(data)
+
+	var de = document.getElementById('entities-design')
+	for (var entityname in data.entities) {
+		var entity = data.entities[entityname]
+
+
+		await self.AddEntity({
+			col_id: entity.id,
+			col_name: entity.name,
+			col_title: entity.title,
+			col_table: entity.table,
+			col_pk: entity.pk,
+			isheader: entity.isheader
+		})
+
+		self.startDesign(entity.id, true) // supperss start design
+
+
+		// isikan data entity
+		// TODO: isikan data entity
+		const editor = de.querySelector(`div[name="entity-editor"][${ATTR_ENTITYID}="${entity.id}"]`)
+		setValueTo(entity.descr, editor, 'div[name="designer-info"] input[name="table-descr"]', 'value')
+		setCheckedTo(entity.allowRowAdd, editor, 'div[name="designer-info"] input[name="allow-row-add"]')
+		setCheckedTo(entity.allowRowRemove, editor, 'div[name="designer-info"] input[name="allow-row-remove"]')
+		setValueTo(entity.identifierMethod, editor, 'div[name="designer-info"] select[name="identifier-method"]', 'value')
+		setValueTo(entity.identifierPrefix, editor, 'div[name="designer-info"] input[name="identifier-prefix"]', 'value')
+		setValueTo(entity.identifierBlock , editor, 'div[name="designer-info"] input[name="identifier-block"]', 'value')
+		setValueTo(entity.identifierLength, editor, 'div[name="designer-info"] input[name="identifier-length"]', 'value')
+
+		// ambil drop target dari entity
+		let droptarget = elEntityDesign.querySelector(`div[name="entity-editor"][${ATTR_ENTITYID}="${entity.id}"] div[name="drop-target"]`)
+	
+		// console.log(entity)
+		for (var item_id in entity.Items) {
+			let item = entity.Items[item_id]
+			var componentname = item.component
+			
+			let comp = Components[componentname]
+			let datafield = self.addComponentToDesigner(droptarget, comp)
+
+			// isi datafieldnya
+			AppGenIO_FillDataField(self, datafield, item)
+		}
+		
+	}
+
+}
+
+function AppGenIO_FillDataField(self, datafield, field) {
+
+
+
+
+
+
+	setValueTo(field.input_name, datafield, 'input[name="fieldname"]', 'value')
+	setValueTo(field.input_name, datafield, 'input[name="fieldname-summary"]', 'value')
+
+	setSelectedTo(field.data_type, datafield, 'select[name="datatype"]')
+
+	setValueTo(field.data_length, datafield, 'input[name="datalength"]', 'value')
+	setValueTo(field.data_precision, datafield, 'input[name="dataprecission"]', 'value')
+
+	setCheckedTo(field.data_allownull, datafield, 'input[name="allownull"]')
+
+	if (field.component=='Checkbox') {
+		setCheckedTo(field.data_defaultvalue, datafield, 'input[name="defaultvalue"]')
+	} else {
+		setValueTo(field.data_defaultvalue, datafield, 'input[name="defaultvalue"]', 'value')
+	}
+	setValueTo(field.description, datafield, 'input[name="description"]', 'value')
+
+
+	// object related
+	setValueTo(field.input_name, datafield, 'input[name="objectname"]', 'value')
+	setValueTo(field.input_label, datafield, 'input[name="labeltext"]', 'value')
+	setValueTo(field.input_placeholder, datafield, 'input[name="placeholder"]', 'value')
+	setValueTo(field.input_caption, datafield, 'input[name="caption"]', 'value')
+
+
+	setSelectedTo(field.input_charcase, datafield, 'select[name="charcasing"]')
+
+	setCheckedTo(field.input_disabled, datafield, 'input[name="disabledinform"]')
+	setCheckedTo(field.showInGrid, datafield, 'input[name="showingrid"]')
+	setCheckedTo(field.showInForm, datafield, 'input[name="showinform"]')
+
+	setCheckedTo(field.Validation.isRequired, datafield, 'input[name="isrequired"]')
+	setCheckedTo(field.Validation.isMinimum, datafield, 'input[name="isbatasmin"]')
+	setCheckedTo(field.Validation.isMaximum, datafield, 'input[name="isbatasmax"]')
+
+	setValueTo(field.Validation.Minimum, datafield, 'input[name="minimum"]', 'value')
+	setValueTo(field.Validation.Maximum, datafield, 'input[name="maximum"]', 'value')
+	setValueTo(field.Validation.messageDefault, datafield, 'input[name="msg_invalid_default"]', 'value')
+	setValueTo(field.Validation.messageRequired, datafield, 'input[name="msg_invalid_required"]', 'value')
+	setValueTo(field.Validation.messageMinimum, datafield, 'input[name="msg_invalid_minimum"]', 'value')
+	setValueTo(field.Validation.messageMaximum, datafield, 'input[name="msg_invalid_maximum"]', 'value')
+
+	setValueTo(field.Reference.table, datafield, 'input[name="ref_table"]', 'value')
+	setValueTo(field.Reference.pk, datafield, 'input[name="ref_id"]', 'value')
+	
+	// TODO: ini nanti kalau perlu diperbaiki disini
+	// setValueTo(field.Reference.bindingValue, datafield, 'input[name="ref_id"]', 'value')
+	
+	setValueTo(field.Reference.bindingText, datafield, 'input[name="ref_text"]', 'value')
+	setValueTo(field.Reference.loaderApiModule, datafield, 'input[name="loaderapimodule"]', 'value')
+	setValueTo(field.Reference.loaderApiPath, datafield, 'input[name="loaderapipath"]', 'value')
+
+	setCheckedTo(field.Handle.changed, datafield, 'input[name="ishandlechanged"]')
+	setCheckedTo(field.Handle.input, datafield, 'input[name="ishandleinput"]')
+	setCheckedTo(field.Handle.keydown, datafield, 'input[name="ishandlekeydown"]')
+	setCheckedTo(field.Handle.checked, datafield, 'input[name="ishandlechecked"]')
+	setCheckedTo(field.Handle.selected, datafield, 'input[name="ishandleselected"]')
+	setCheckedTo(field.Handle.selecting, datafield, 'input[name="ishandleselecting"]')
+	setCheckedTo(field.Handle.populating, datafield, 'input[name="ishandlepopulating"]')
+	setCheckedTo(field.Handle.loadingdata, datafield, 'input[name="ishandleloadingdata"]')
+
+}

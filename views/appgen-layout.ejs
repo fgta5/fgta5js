@@ -164,7 +164,10 @@
 
 	</div>
 	<div style="margin-top: 100px">
-		<button id="btnAppGenLoad">Load</button>
+		
+		<button id="btnAppGenLoad">
+			Load<input id="input-file" type="file" style="display: none;">
+		</button>
 		<button id="btnAppGenSave">Save</button>
 	</div>
 </section>	
@@ -315,9 +318,8 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>varchar</option>
-					<option>char</option>
-					<option>integer</option>
+					<option value="varchar" selected>varchar</option>
+					<option value="char">char</option>
 				</select>
 			</div>  
 			
@@ -503,8 +505,8 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>integer</option>
-					<option>decimal</option>
+					<option value="integer" selected>integer</option>
+					<option value="decimal">decimal</option>
 				</select>
 			</div>  
 			
@@ -654,7 +656,7 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>tinyint</option>
+					<option value="tinyint" selected>tinyint</option>
 				</select>
 			</div>  
 			
@@ -773,9 +775,9 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>varchar</option>
-					<option>char</option>
-					<option>integer</option>
+					<option value="varchar" selected>varchar</option>
+					<option value="char">char</option>
+					<option value="integer">integer</option>
 				</select>
 			</div>  
 			
@@ -944,7 +946,7 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>date</option>
+					<option value="date" selected>date</option>
 				</select>
 			</div>  
 			
@@ -1081,7 +1083,7 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>time</option>
+					<option value="time" selected>time</option>
 				</select>
 			</div>  
 			
@@ -1214,7 +1216,7 @@
 			<label>Type</label>
 			<div>
 				<select name="datatype">
-					<option selected>varchar</option>
+					<option value="varchar" selected>varchar</option>
 				</select>
 			</div>  
 			
