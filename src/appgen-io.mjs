@@ -14,6 +14,18 @@ export default class AppGenIO {
 	}
 	
 
+	AutoSave() {
+		AppGenIO_AutoSave(this)
+	}
+
+	GetDataFromCache() {
+		return AppGenIO_GetDataFromCache(this)
+	}
+
+	ReadData(content) {
+		AppGenIO_ReadData(this, content)
+	}
+
 	// cek AppGenIO_Setup untuk ovveride fungsi2 di bawah
 	AddEntity(data) {} // ini nanti di ovveride saat setup
 	startDesign(entity_id) {}
@@ -86,8 +98,26 @@ function AppGenIO_Setup(self, config) {
 
 
 	btn.save = document.getElementById('btnAppGenSave')
-	btn.save.addEventListener('click', (evt)=>{
-		AppGenIO_Save(self, evt)
+	btn.save.addEventListener('click', async (evt)=>{
+
+		const data = await AppGenIO_GetCurrentWorkData(self)
+		const suggestedName = data.name
+		const handle = await window.showSaveFilePicker({
+			suggestedName,
+			types: [
+			{
+				description: "JSON File",
+				accept: { "application/json": [".json"] },
+			},
+			],
+		});
+
+		
+		const writable = await handle.createWritable();
+  		await writable.write(JSON.stringify(data, null, 2)); // prettify JSON
+  		await writable.close();
+
+		// AppGenIO_Save(self, evt)
 	})
 
 
@@ -115,31 +145,34 @@ function AppGenIO_Setup(self, config) {
 
 		input.click(); // harus dalam content clikc user
 	})
+}
 
-	
-	// baca data dari local storage
-	const stored = localStorage.getItem("appgendata");
-	if (stored!=null) {
-		AppGenIO_ReadData(self, stored)
-	}
+function AppGenIO_GetDataFromCache(self) {
+	const stored = localStorage.getItem("appgendata"); // baca data dari local storage
+	return stored
+}
 
+
+function AppGenIO_AutoSave(self) {
 	// autosave ke local storage per 10 detik
-	setInterval(async ()=>{
+	const svr = setInterval(async ()=>{
 		try {
 			var data = await AppGenIO_GetCurrentWorkData(self)
 			localStorage.setItem("appgendata", JSON.stringify(data));
 			console.log('saved')
+			// clearInterval(svr)
 		} catch (err) {
 			console.log(err.message)
 		}
 	}, 10000)
-	
 }
 
+/*
 async function AppGenIO_Save(self, evt) {
 	try {
 		var data = await AppGenIO_GetCurrentWorkData(self)
 
+		
 		// coba save ke file
 		const pretty = JSON.stringify(data, null, 2); // indentasi 2 spasi
 		const blob = new Blob([pretty], { type: "application/json" });
@@ -147,8 +180,11 @@ async function AppGenIO_Save(self, evt) {
 
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = `${PROG.name}.json`;
-		a.click();
+		a.download = `${data.name}.json`;
+		
+		if (data.name!='' && data.name!=null) {
+			a.click();
+		}
 
 		URL.revokeObjectURL(url);
 
@@ -157,6 +193,7 @@ async function AppGenIO_Save(self, evt) {
 	}
 	
 }
+*/
 
 
 async function AppGenIO_GetCurrentWorkData(self) {
@@ -409,6 +446,20 @@ async function AppGenIO_ReadData(self, content) {
 	const data = JSON.parse(content)
 	// console.log(data)
 
+
+
+	// data def
+	const obj_programname = document.getElementById('obj_programname')
+	const obj_programtitle = document.getElementById('obj_programtitle')
+	const obj_programdescription = document.getElementById('obj_programdescription')
+	const obj_icon = document.getElementById('upload-icon')
+	obj_programname.value = data.name
+	obj_programtitle.value = data.title
+	obj_programdescription.value = data.description
+	obj_icon.style.backgroundImage = data.icon
+
+
+
 	// clear data entity
 	const elEntities = document.getElementById('data-entities')
 	elEntities.innerHTML = ''
@@ -417,7 +468,6 @@ async function AppGenIO_ReadData(self, content) {
 	const elEntityDesign = document.getElementById('entities-design')
 	elEntityDesign.innerHTML = ''
 
-	console.log(data)
 
 	var de = document.getElementById('entities-design')
 	for (var entityname in data.entities) {

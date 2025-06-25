@@ -1,6 +1,7 @@
 import Components from './appgen-components.mjs'
 import AppGenIO from './appgen-io.mjs'
 
+const IO = new AppGenIO()
 
 const URL_LAYOUT = 'appgen-layout'
 const ME = {}
@@ -99,8 +100,8 @@ export default class AppGenUI {
 
 	get App() { return this.#app}
 
-	NewData() {
-		AppGenLayout_NewData(this)
+	async NewData() {
+		await AppGenLayout_NewData(this)
 	}
 
 	async FetchAll(args) {
@@ -144,9 +145,8 @@ async function AppGenLayout_Render(self) {
 	AppGenLayout_createButtons(this)
 	AppGenLayout_handleActionForm(this)
 
-
-	const io = new AppGenIO()
-	io.Setup({
+	
+	IO.Setup({
 		AddEntity: (data) => {
 			AppGenLayout_AddEntity(self, data)
 		},
@@ -317,13 +317,15 @@ async function AppGenLayout_AddEntity(self, entity={}) {
 		newtr.setAttribute('data-isheader', '')
 	}
 
-	cols.forEach(th => {
+	for (var th of cols) {
 		const name = th.getAttribute(ATTR_NAME)
 		const td = document.createElement('td')
 		td.setAttribute(ATTR_NAME, name)
 		newtr.appendChild(td)
-	});
+	}
 	tbody.appendChild(newtr)
+
+	
 
 
 	const fn_set_input = (type, value, entity_column_identity, isheader) => {
@@ -361,7 +363,6 @@ async function AppGenLayout_AddEntity(self, entity={}) {
 	
 	let btn_design = fn_set_input('button', "design", ENT_COL_BTNDESIGN)
 	btn_design.addEventListener('click', (evt)=>{
-		console.log(`design ${ID}`)
 		btn_design_click(self, evt)
 	})
 
@@ -377,6 +378,8 @@ async function AppGenLayout_AddEntity(self, entity={}) {
 	// tambahkan ke ME.EntityDesigner
 	AppGenLayout_addDesigner(self, ID, entity.isheader)
 	
+
+	return ID
 }
 
 
@@ -451,10 +454,8 @@ async function btn_design_click(self, evt) {
 		return
 	}
 
-	editores.forEach(el => {
+	for (let el of editores) {
 		let ceid = el.getAttribute(ATTR_ENTITYID)
-		// let info = el.getAttribute(ATTR_DATAINFO)
-		// if (info==null) {
 		if (ceid==entity_id) {
 			el.classList.remove(CLS_HIDDEN)
 			AppGenLayout_entityDesign(self, entity_id, tr)
@@ -462,17 +463,19 @@ async function btn_design_click(self, evt) {
 		} else {
 			el.classList.add(CLS_HIDDEN)
 		}
-	})
+	}
 }
 
 
 function AppGenLayout_GetEntityData(self, tr) {
 	const ens = [ENT_COL_NAME, ENT_COL_TITLE, ENT_COL_TABLE, ENT_COL_PK]
 	const data = {}
-	ens.forEach(name => {
+
+	for (var name of ens) {
 		const obj = tr.querySelector(`td[name="${name}"] input`)
 		data[name] = obj.value
-	})
+	}
+
 	return data
 }
 
@@ -482,22 +485,22 @@ function AppGenLayout_entityDesign(self, entity_id, tr) {
 	AppGenLayout_changeEntityInfo(self, entity_id, data)
 
 	// tandaii tool: ATTR_CURRENTENTITY
-	Array.from(ME.ComponentList.children).forEach(el=>{
+	let arr = Array.from(ME.ComponentList.children)
+	for (let el of arr) {
 		el.setAttribute(ATTR_CURRENTENTITY, entity_id)
-	})
+	}
 }
 
 
 function AppGenLayout_changeEntityInfo(self, entity_id, data) {
 	const info = ME.EntityDesigner.querySelector(`div[${ATTR_ENTITYID}="${entity_id}"] div[name="${ID_DESIGNERINFO}"]`)
 	const ens = [ENT_COL_NAME, ENT_COL_TITLE, ENT_COL_TABLE, ENT_COL_PK]
-	ens.forEach(name => {
+	for (var name of ens) {
 		if (data[name]!==undefined) {
 			const ed = info.querySelector(`div[name="${name}"]`)
 			ed.innerHTML = data[name]
 		}
-	})
-
+	}
 }
 
 
@@ -537,6 +540,7 @@ async function btn_remove_click(self, evt) {
 
 
 function AppGenLayout_addDesigner(self, ID, isheader) {
+
 	const editem = document.createElement('div')
 	editem.classList.add('hidden')
 	editem.classList.add(CLS_ENTITYEDITOR)
@@ -588,17 +592,29 @@ function AppGenLayout_addDesigner(self, ID, isheader) {
 	ME.EntityDesigner.appendChild(editem)
 }
 
-function AppGenLayout_NewData(self) {
+async function AppGenLayout_NewData(self) {
 
 	// jika belum ada header
 	const tbl_entity = ME.tbl_entity
 	const tbody = tbl_entity.querySelector('tbody')
+	const jsoncachedata =  IO.GetDataFromCache()
+	const data = JSON.parse(jsoncachedata)
 	
-
-	const head = tbody.querySelector('tr[data-isheader]')
-	if (head==null) {
-		// siapkan header
-		AppGenLayout_AddEntity(self, {
+	const header = data?.entities?.header;
+	var entity_id
+	if (header) {
+		entity_id = header.id
+		await AppGenLayout_AddEntity(self, {
+			isheader: true,
+			col_id: header.id,
+			col_name: header.name,
+			col_title: header.title,
+			col_table: header.table,
+			col_pk: header.pk
+		})
+		IO.ReadData(jsoncachedata)
+	} else {
+ 		entity_id = await AppGenLayout_AddEntity(self, {
 			isheader: true,
 			col_name: 'header',
 			col_title: 'test_title',
@@ -606,7 +622,16 @@ function AppGenLayout_NewData(self) {
 			col_pk: 'test_pk'
 		})
 	}
+	
+	// ambil button
+	const btn = tbody.querySelector(`[name="col_btndesign"][${ATTR_ENTITYID}="${entity_id}"]`)
+	btn.click()
 
+
+
+	setTimeout(()=>{
+		IO.AutoSave()
+	}, 2000)
 
 }
 
@@ -706,7 +731,8 @@ function AppGenLayout_setupDropTarget(self, droptarget) {
 			}, 300)
 		}  
 
-
+		CURRENT.drag_action = ''
+		
 
 	})
 	
@@ -851,7 +877,6 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 				}, 300)
 				
 			} else {
-				// console.log("Di bawah");
 				setTimeout(()=>{
 					datafield.after(droptarget)
 				}, 300)
