@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "fgta5js",
+			"path": "."
+		}
+	],
+	
+	"settings": {
+		"editor.insertSpaces": false,
+		"codium.codeCompletion.enable": false
+	}
+}

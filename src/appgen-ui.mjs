@@ -155,7 +155,11 @@ async function AppGenLayout_Render(self) {
 		},
 		addComponentToDesigner: (droptarget, comp) => {
 			return AppGenLayout_addComponentToDesigner(self, droptarget, comp) 
-		 }
+		},
+		addAction: (data) => {
+			AppGenLayout_addAction(self, data)
+		}
+		
 	})
 }
 
@@ -261,12 +265,7 @@ function btn_ShowSearch_click(self, evt) {
 
 
 
-function AppGenLayout_handleActionForm(self) {
-	const btn_action_add = document.getElementById('btn_action_add')
-	btn_action_add.addEventListener('click', (evt)=>{
-		AppGenLayout_addAction(self, evt)
-	})
-}
+
 
 
 
@@ -592,6 +591,11 @@ function AppGenLayout_addDesigner(self, ID, isheader) {
 	ME.EntityDesigner.appendChild(editem)
 }
 
+
+
+
+
+
 async function AppGenLayout_NewData(self) {
 
 	// jika belum ada header
@@ -603,15 +607,15 @@ async function AppGenLayout_NewData(self) {
 	const header = data?.entities?.header;
 	var entity_id
 	if (header) {
-		entity_id = header.id
-		await AppGenLayout_AddEntity(self, {
-			isheader: true,
-			col_id: header.id,
-			col_name: header.name,
-			col_title: header.title,
-			col_table: header.table,
-			col_pk: header.pk
-		})
+		// entity_id = header.id
+		// await AppGenLayout_AddEntity(self, {
+		// 	isheader: true,
+		// 	col_id: header.id,
+		// 	col_name: header.name,
+		// 	col_title: header.title,
+		// 	col_table: header.table,
+		// 	col_pk: header.pk
+		// })
 		IO.ReadData(jsoncachedata)
 	} else {
  		entity_id = await AppGenLayout_AddEntity(self, {
@@ -621,11 +625,13 @@ async function AppGenLayout_NewData(self) {
 			col_table: 'test_table',
 			col_pk: 'test_pk'
 		})
+
+		const btn = tbody.querySelector(`[name="col_btndesign"][${ATTR_ENTITYID}="${entity_id}"]`)
+		btn.click()
 	}
 	
-	// ambil button
-	const btn = tbody.querySelector(`[name="col_btndesign"][${ATTR_ENTITYID}="${entity_id}"]`)
-	btn.click()
+	
+	
 
 
 
@@ -968,13 +974,23 @@ function AppGenLayout_designerFieldNameChanged(self, entity_id, obj, fromentity)
 	}
 }
 
-async function AppGenLayout_addAction(self, evt) {
-	const txt_action_name = document.getElementById('txt_action_name')
-	const txt_action_title = document.getElementById('txt_action_title')
-	const tbody = document.getElementById('action-lists')	
+function AppGenLayout_handleActionForm(self) {
+	const btn_action_add = document.getElementById('btn_action_add')
+	btn_action_add.addEventListener('click', (evt)=>{
+		const txt_action_name = document.getElementById('txt_action_name')
+		const txt_action_title = document.getElementById('txt_action_title')
 
-	const name = txt_action_name.value
-	const title = txt_action_title.value
+		AppGenLayout_addAction(self, {
+			name: txt_action_name.value,
+			title: txt_action_title.value
+		})
+	})
+}
+
+async function AppGenLayout_addAction(self, data) {
+	const tbody = document.getElementById('action-lists')	
+	const name = data.name
+	const title = data.title
 
 	if (!isValidName(name)) {
 		await $fgta5.MessageBox.Warning('nama action tidak valid')

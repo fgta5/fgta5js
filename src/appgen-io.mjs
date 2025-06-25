@@ -7,6 +7,16 @@ const ATTR_COMPNAME = 'data-component-name'
 
 const isValidName = str => /^[_a-z0-9]+$/.test(str) ;
 
+const timestamp = () => {
+  const now = new Date();
+  const YYYY = now.getFullYear();
+  const MM = String(now.getMonth() + 1).padStart(2, "0");
+  const DD = String(now.getDate()).padStart(2, "0");
+  const HH = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  const SS = String(now.getSeconds()).padStart(2, "0");
+  return `${YYYY}${MM}${DD}${HH}${mm}${SS}`;
+}
 
 export default class AppGenIO {
 	Setup(config) {
@@ -95,6 +105,7 @@ function AppGenIO_Setup(self, config) {
 	self.AddEntity = config.AddEntity
 	self.startDesign = config.startDesign
 	self.addComponentToDesigner = config.addComponentToDesigner
+	self.addAction = config.addAction
 
 
 	btn.save = document.getElementById('btnAppGenSave')
@@ -159,7 +170,7 @@ function AppGenIO_AutoSave(self) {
 		try {
 			var data = await AppGenIO_GetCurrentWorkData(self)
 			localStorage.setItem("appgendata", JSON.stringify(data));
-			console.log('saved')
+			console.log(`saved ${timestamp()}`)
 			// clearInterval(svr)
 		} catch (err) {
 			console.log(err.message)
@@ -459,6 +470,12 @@ async function AppGenIO_ReadData(self, content) {
 	obj_icon.style.backgroundImage = data.icon
 
 
+	// actions
+	const elActions = document.getElementById('action-lists')
+	elActions.innerHTML = ''
+	for (var action of data.actions) {
+		self.addAction(action)
+	}
 
 	// clear data entity
 	const elEntities = document.getElementById('data-entities')
@@ -468,7 +485,8 @@ async function AppGenIO_ReadData(self, content) {
 	const elEntityDesign = document.getElementById('entities-design')
 	elEntityDesign.innerHTML = ''
 
-
+	const tbl_entity =document.getElementById('tbl_entity')
+	const tbody = tbl_entity.querySelector('tbody')
 	var de = document.getElementById('entities-design')
 	for (var entityname in data.entities) {
 		var entity = data.entities[entityname]
@@ -485,6 +503,9 @@ async function AppGenIO_ReadData(self, content) {
 
 		self.startDesign(entity.id, true) // supperss start design
 
+		const btn = tbody.querySelector(`[name="col_btndesign"][${ATTR_ENTITYID}="${entity.id}"]`)
+		btn.click()
+		
 
 		// isikan data entity
 		// TODO: isikan data entity
