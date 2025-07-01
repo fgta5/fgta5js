@@ -36,6 +36,7 @@
 	display: inline-block;
 	height: 32px;
 	width: 100%;
+	text-align: center;
 	transform: translateY(12px); 
 }
 

@@ -6,6 +6,8 @@ const btn_msgboxConfirm = new $fgta5.Button('btn_msgbox_confirm')
 const btn_msgbox_choose = new $fgta5.Button('btn_msgbox_choose')
 
 
+
+
 export default class Page {
 	async main(args) {
 		await main(this, args)

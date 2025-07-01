@@ -14,6 +14,8 @@ const formUnLockedEvent = new CustomEvent('unlocked')
 
 export default class Form extends Component {
 	#_locked = false
+	#_autoid = false
+	#_primarykey
 
 	Inputs = {}
 
@@ -25,6 +27,9 @@ export default class Form extends Component {
 	}
 
 
+	get AutoID() { return this.#_autoid }
+	get PrimaryKey() { return this.#_primarykey } 
+
 	Lock(lock) { 
 		this.#_locked = Form_Lock(this, lock) 
 	}
@@ -33,16 +38,29 @@ export default class Form extends Component {
 		return this.#_locked
 	}
 
+	#isnew
+	IsNew() {
+		return this.#isnew
+	}
 
-	Reset() { Form_Reset(this) }
+	Reset() { 
+		this.#isnew = false
+		Form_Reset(this) 
+	}
 
-	AcceptChanges() { Form_AcceptChanges(this) }
+	AcceptChanges() { 
+		this.#isnew = false
+		Form_AcceptChanges(this) 
+	}
 
 	IsChanged() { return Form_IsChanged(this) }
 
 	
 
-	NewData(data) { Form_NewData(this, data) }
+	NewData(data) { 
+		this.#isnew = true
+		Form_NewData(this, data) 
+	}
 
 	Render() { Form_Render(this) }
 
@@ -67,6 +85,18 @@ export default class Form extends Component {
 		} else {
 			this.#_locked = false
 		}
+
+		var autoid = this.Element.getAttribute('autoid')
+		if (autoid.toLowerCase() === 'true') {
+			this.#_autoid = true
+		} else {
+			this.#_autoid = false
+		}
+
+
+		var primarykey = this.Element.getAttribute('primarykey')
+		this.#_primarykey = primarykey
+
 	}
 
 }

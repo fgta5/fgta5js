@@ -46,6 +46,11 @@ export default class Section {
 	get Listener() { return this.#listener }
 	get Carousell() { return this.#carousell } 
 
+	set Title(v) {
+		this.#title = v
+		Section_SetTitle(this, v)
+	}
+
 
 	constructor(el, args) {
 		const name = el.getAttribute('name')
@@ -84,6 +89,8 @@ export default class Section {
 		this.Listener.addEventListener(eventname, callback)
 	}	
 }
+
+
 
 function SectionConstruct(self, args) {
 	const el = self.Element
@@ -214,4 +221,9 @@ function Section_BackButtonClick(self) {
 			}
 		}
 	}))
+}
+
+
+function Section_SetTitle(self, v) {
+	self.Nodes.Title.innerHTML = v
 }
