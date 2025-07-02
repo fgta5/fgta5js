@@ -38,10 +38,10 @@ export default class SectionCarousell {
 
 function SectionCarousell_Construct(self, el) {
 
-	el.classList.add('fgta5-sectioncarousell')
+	el.classList.add('fgta5-carousellcontainer')
 
 	// ambil semua section yang terdapat di element
-	const nodes = el.querySelectorAll('section[name]') 
+	const nodes = el.querySelectorAll('section[class="fgta5-carousell"]') 
 	let i = 0;
 	for (let node of nodes) {
 		const section = new Section(node, {

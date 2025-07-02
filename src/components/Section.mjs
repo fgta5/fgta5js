@@ -21,6 +21,7 @@ const SectionShowingEvent = (data) => { return new CustomEvent(EVT_SECTIONSHOWIN
 
 
 export default class Section {
+	#id
 	#element
 	#index
 	#name
@@ -37,6 +38,7 @@ export default class Section {
 	static get EVT_SECTIONSHOWING() { return EVT_SECTIONSHOWING }
 
 
+	get Id() { return this.#id } 
 	get Index() { return this.#index }
 	get Name() { return this.#name }
 	get Title()  { return this.#title }
@@ -53,10 +55,12 @@ export default class Section {
 
 
 	constructor(el, args) {
-		const name = el.getAttribute('name')
+		const id = el.id
+		const name = id
 		const title = el.getAttribute(ATTR_TITLE)
 
 		this.#element = el
+		this.#id = id
 		this.#name = name
 		this.#title = title ?? 'section'
 		
@@ -95,6 +99,7 @@ export default class Section {
 function SectionConstruct(self, args) {
 	const el = self.Element
 	
+	el.setAttribute('name', self.Name)
 	el.classList.add(CLS_SECTION)
 	if (self.Index==0) {
 		// jadikan index section pertama yang active

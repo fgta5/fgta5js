@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<%- include(style); %>
+		<%- include(script); %>
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/demo-carousell.css" />
+		<style>
+			html {
+				scroll-behavior: smooth;
+			}
+			#loadingindicator {
+				position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #fff;
+				transition: opacity 0.5s ease, visibility 0.5s ease;
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- Loading Indicator -->
+		<div id="loadingindicator">
+			<div style="font-family: system-ui, sans-serif">
+				loading module...
+			</div>
+		</div>
+
+		<!-- Main Application Layout -->
+		<main id="main">
+			<section id="sec_page1" class="fgta5-carousell" data-title="Page 1">page 1
+
+				<button id="btn_openPage2">Open Page 2</button>
+			</section>
+			<section id="sec_page2" class="fgta5-carousell" data-title="Page 2">page 2
+
+				<button id="btn_openPage3">Open Page 3</button>
+			</section>
+			<section id="sec_page3" class="fgta5-carousell" data-title="Page 2">page 3
+
+				
+			</section>
+		</main>	
+
+
+	</body>
+
+
+	<script type="module">
+		import DemoApp from './src/demo-carousell.mjs'	
+		window.addEventListener("load", async (event) => {
+			var $app = new DemoApp();
+			await $app.main();
+			// remove loading indikator
+			var myapp = document.getElementById('main')
+			var pagemask = document.getElementById('loadingindicator')
+			myapp.classList.remove('hidden')
+			setTimeout(()=>{
+				pagemask.style.opacity = 0
+				pagemask.style.visibility = 'hidden'
+				setTimeout(()=>{
+					pagemask.parentNode.removeChild(pagemask)
+				}, 500)
+			}, 500)
+		});
+	</script>	
+
+</html>			
