@@ -84,7 +84,7 @@ async function main(self, args) {
 	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 
 
-	await appmgr.OpenModule(programs.generator)
+	// await appmgr.OpenModule(programs.generator)
 	setTimeout(()=>{
 		appmain.classList.remove('hidden')
 	}, 1000)
