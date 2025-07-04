@@ -87,11 +87,14 @@ export default class Form extends Component {
 		}
 
 		var autoid = this.Element.getAttribute('autoid')
-		if (autoid.toLowerCase() === 'true') {
-			this.#_autoid = true
-		} else {
-			this.#_autoid = false
-		}
+		if (autoid!=null) {
+			if (autoid.toLowerCase() === 'true') {
+				this.#_autoid = true
+			} else {
+				this.#_autoid = false
+			}
+		} 
+		
 
 
 		var primarykey = this.Element.getAttribute('primarykey')
