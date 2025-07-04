@@ -9,7 +9,7 @@ export default class Page {
 
 // sample program list
 const programs = {
-	generator: new $fgta5.ModuleData({name:'generator', title:'Generator', url:'appgen'}),
+	appgen: new $fgta5.ModuleData({name:'generator', title:'Generator', url:'appgen'}),
 	account: new $fgta5.ModuleData({name:'account', title:'Account', icon:'images/iconprograms/mcfly.png'}),
 	departement: new $fgta5.ModuleData({name:'departement', title:'Departemen', icon: 'images/iconprograms/mcfly.png'}),
 	lokasi: new $fgta5.ModuleData({name:'lokasi', title:'Lokasi', icon: 'images/iconprograms/medicine.png'}),
