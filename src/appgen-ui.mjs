@@ -108,6 +108,18 @@ export default class AppGenUI {
 		await AppGenLayout_FetchAll(this)
 		await AppGenLayout_Render(this)
 		AppGenLayout_NewData(this)
+
+
+		// home button
+		setTimeout(()=>{
+			var el = document.querySelector('header > div > a')
+			if (el!=null) {
+				console.log(el)
+				el.href = '/'
+			}
+		}, 1000)
+		
+
 	}
 }
 
