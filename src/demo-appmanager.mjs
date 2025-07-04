@@ -34,7 +34,7 @@ async function main(self, args) {
 
 	appmgr.SetTitle('Fgta5 Application Manager')
 	appmgr.SetMenu([
-		programs.generator,
+		programs.appgen,
 
 		{
 			title: 'Accounting',
