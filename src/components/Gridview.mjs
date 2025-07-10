@@ -435,11 +435,16 @@ function Gridview_sort(self, btn) {
 	}
 
 	// ambil semua kolom yang di sort
-	var tr = btn.closest('tr')
-	var sort = GridView_GetSort(self, tr)
+	const tr = btn.closest('tr')
+	const sort = GridView_GetSort(self, tr)
+	const criteria = self.Criteria
 
 	self.Listener.dispatchEvent(SortingEvent({
-		detail: {sort: sort}
+		detail: {
+			sort: sort,
+			criteria: criteria
+		
+		}
 	}))
 
 }
@@ -514,7 +519,8 @@ function GridView_SetNext(self, nextoffset, limit) {
 				detail: {
 					criteria: self.Criteria,
 					nextoffset: nextoffset,
-					limit: limit
+					limit: limit,
+					sort: self.GetSort()
 				}
 			}))
 		})

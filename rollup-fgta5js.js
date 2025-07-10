@@ -1,10 +1,11 @@
 import { terser } from "rollup-plugin-terser";
 import postcss from "rollup-plugin-postcss";
+import pkg from './package.json';
 
 
 const currentdate = (new Date()).toISOString().split('T')[0]
 const name = 'fgta5js'
-const version = '1.0.0'
+const version = pkg.version
 const banner = `fgta5js ${version}
 * https://github.com/fgta5/fgta5js
 * A simple component for FGTA5 framework
