@@ -163,6 +163,26 @@ function Combobox_construct(self, id) {
 
 	// setup container
 	container.setAttribute('fgta5-component', 'Combobox')
+	if (input.style.width!='') {
+		container.style.width = input.style.width
+	}
+	if (input.style.marginTop!='') {
+		container.style.marginTop = input.style.marginTop
+		input.style.marginTop = ''
+	}
+	if (input.style.marginBottom!='') {
+		container.style.marginBottom = input.style.marginBottom
+		input.style.marginBottom=''
+	}
+	if (input.style.marginLeft!='') {
+		container.style.marginLeft = input.style.marginLeft
+		input.style.marginLeft=''
+	}
+	if (input.style.marginRight!='') {
+		container.style.marginRight = input.style.marginRight
+		input.style.marginRight=''
+	}
+
 
 	// setup wrapper
 	wrapinput.classList.add('fgta5-entry-input-wrapper')
@@ -171,8 +191,20 @@ function Combobox_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.setAttribute('type', 'hidden')
 	input.getInputCaption = () => {
-		return label.innerHTML
+		if (label!=null) {
+			return label.innerHTML
+		} else {
+			return input.getAttribute('placeholder')
+		}
 	}
+	const nonFgtaClasses = Array.from(input.classList).filter(className =>
+		!className.startsWith('fgta5-')
+	);
+	for (var classname of nonFgtaClasses) {
+		input.classList.remove(classname)
+		container.classList.add(classname)
+	}
+
 
 	// setup display
 	display.id = self.Id + '-display'
@@ -196,8 +228,10 @@ function Combobox_construct(self, id) {
 	lasttext.setAttribute('type', 'hidden')
 
 	// setup label
-	label.setAttribute('for', display.id)
-	label.classList.add('fgta5-entry-label')
+	if (label!=null) {
+		label.setAttribute('for', display.id)
+		label.classList.add('fgta5-entry-label')
+	}
 
 
 	// required field
@@ -207,6 +241,9 @@ function Combobox_construct(self, id) {
 	}
 
 	// dialog
+	if (datalist!=null) {
+		self.HasStaticOption = true
+	}
 	Combobox_createDialog(self, dialog)
 	dialog.addEventListener("cancel", (e)=>{
 		dialog.setAttribute(ATTR_REMOVING, 'true')
@@ -487,37 +524,47 @@ function Combobox_createDialog(self, dialog) {
 	btnClose.innerHTML = icon_cbo_close
 	head.appendChild(btnClose)
 
+
+
 	
 	// filtering
-	var srccontainer = document.createElement('div')
-	var srcinput = document.createElement('input')
-	var srcbuton = document.createElement('button')
-	var btnnext = document.createElement('a')
+	if (!self.HasStaticOption) {
+		var srccontainer = document.createElement('div')
+		var srcinput = document.createElement('input')
+		var srcbuton = document.createElement('button')
+		var btnnext = document.createElement('a')
 
-	srcinput.setAttribute('placeholder', 'Search')
-	srcinput.setAttribute('maxlength', 30)
-	srcinput.addEventListener('keypress', (evt)=>{
-		if (evt.key==="Enter") {
-			srcbuton.click()
-		}
-	})
-	
+		srcinput.setAttribute('placeholder', 'Search')
+		srcinput.setAttribute('maxlength', 30)
+		srcinput.addEventListener('keypress', (evt)=>{
+			if (evt.key==="Enter") {
+				srcbuton.click()
+			}
+		})
+		
 
-	srcbuton.innerHTML = 'Submit'
-	srcbuton.addEventListener('click', (evt)=>{
-		var searchtext = srcinput.value
-		var limit = DEF_LIMIT
-		var offset = 0
+		srcbuton.innerHTML = 'Submit'
+		srcbuton.addEventListener('click', (evt)=>{
+			var searchtext = srcinput.value
+			var limit = DEF_LIMIT
+			var offset = 0
 
-		btnnext.searchtext = searchtext
-		Combobox_resetSelected(self)
-		Combobox_Search(self, searchtext, limit, offset)
-	})
+			btnnext.searchtext = searchtext
+			Combobox_resetSelected(self)
+			Combobox_Search(self, searchtext, limit, offset)
+		})
 
-	srccontainer.classList.add('fgta5-combobox-dialog-filter')
-	srccontainer.appendChild(srcinput)
-	srccontainer.appendChild(srcbuton)
-	dialog.appendChild(srccontainer)
+		srccontainer.classList.add('fgta5-combobox-dialog-filter')
+		srccontainer.appendChild(srcinput)
+		srccontainer.appendChild(srcbuton)
+		dialog.appendChild(srccontainer)
+
+	}
+
+
+
+
+
 
 	// template tabel dialog
 	var table = document.createElement('table')
@@ -531,31 +578,39 @@ function Combobox_createDialog(self, dialog) {
 	table.appendChild(tfoot)
 	table.appendChild(thead)
 
-	// siapkan tombol next,
-	// jikalau nanti ada data yang panjang dan perlu paging
-	btnnext.classList.add('fgta5-combobox-dialog-nextbutton')
-	btnnext.innerHTML = 'next data'
-	btnnext.style.display = 'none'
-	btnnext.setAttribute('href', 'javascript:void(0)')
-	btnnext.addEventListener('click', (evt)=>{
-		// ketiak, eh ketika tombol next di klik
-		var searchtext = btnnext.searchtext
-		var limit = btnnext.limit
-		var nextoffset = btnnext.nextoffset
-		Combobox_Search(self, searchtext, limit, nextoffset)
-	})
-	dialog.appendChild(btnnext)
-	
-	
-	dialog.SetNext = (nextoffset, limit) => {
-		btnnext.nextoffset = nextoffset
-		btnnext.limit = limit
-		if (nextoffset!=null && nextoffset!=0) {
-			btnnext.style.display = 'inline-block'
-		} else {
-			btnnext.style.display = 'none'
+
+	if (!self.HasStaticOption) {
+		// siapkan tombol next,
+		// jikalau nanti ada data yang panjang dan perlu paging
+		btnnext.classList.add('fgta5-combobox-dialog-nextbutton')
+		btnnext.innerHTML = 'next data'
+		btnnext.style.display = 'none'
+		btnnext.setAttribute('href', 'javascript:void(0)')
+		btnnext.addEventListener('click', (evt)=>{
+			// ketiak, eh ketika tombol next di klik
+			var searchtext = btnnext.searchtext
+			var limit = btnnext.limit
+			var nextoffset = btnnext.nextoffset
+			Combobox_Search(self, searchtext, limit, nextoffset)
+		})
+		dialog.appendChild(btnnext)
+
+		dialog.SetNext = (nextoffset, limit) => {
+			btnnext.nextoffset = nextoffset
+			btnnext.limit = limit
+			if (nextoffset!=null && nextoffset!=0) {
+				btnnext.style.display = 'inline-block'
+			} else {
+				btnnext.style.display = 'none'
+			}
 		}
-	}
+	} else {
+		dialog.SetNext = (nextoffset, limit) => {
+			console.log('not implemented')
+		}
+	}	
+	
+	
 }
 
 function Combobox_userSelectValue(self, value, text, data) {
@@ -576,6 +631,10 @@ function Combobox_userSelectValue(self, value, text, data) {
 }
 
 function Combobox_markChanged(self) {
+	if (self.Form==null) {
+		return
+	}
+
 	var display = self.Nodes.Display
 	if (self.Value!=self.GetLastValue()) {
 		display.setAttribute('changed', 'true')
@@ -718,11 +777,12 @@ function Combobox_Search(self, searchtext, limit, offset) {
 function Combobox_buttonClick(self, e) {
 	const dialog = self.Nodes.Dialog
 
-	var editmode = self.Nodes.Button.getAttribute(ATTR_EDITMODE)
-	if (editmode!=="true") {
-		return
+	if (self.Form!=null) {
+		var editmode = self.Nodes.Button.getAttribute(ATTR_EDITMODE)
+		if (editmode!=="true") {
+			return
+		}
 	}
-
 
 	if (self.HasStaticOption) {
 		// populasi data option statis melalui definisi datalist pada element

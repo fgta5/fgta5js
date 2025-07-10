@@ -70,7 +70,27 @@ function Textbox_construct(self, id) {
 	// setup container
 	container.setAttribute('fgta5-component', 'Textbox')
 	container.setAttribute('input-id', id)
-	
+	if (input.style.width!='') {
+		container.style.width = input.style.width
+	}
+	if (input.style.marginTop!='') {
+		container.style.marginTop = input.style.marginTop
+		input.style.marginTop = ''
+	}
+	if (input.style.marginBottom!='') {
+		container.style.marginBottom = input.style.marginBottom
+		input.style.marginBottom=''
+	}
+	if (input.style.marginLeft!='') {
+		container.style.marginLeft = input.style.marginLeft
+		input.style.marginLeft=''
+	}
+	if (input.style.marginRight!='') {
+		container.style.marginRight = input.style.marginRight
+		input.style.marginRight=''
+	}
+
+
 
 	// setup wrapper
 	wrapinput.classList.add('fgta5-entry-input-wrapper')
@@ -81,12 +101,21 @@ function Textbox_construct(self, id) {
 	input.getInputCaption = () => {
 		return label.innerHTML
 	}
+	const nonFgtaClasses = Array.from(input.classList).filter(className =>
+		!className.startsWith('fgta5-')
+	);
+	for (var classname of nonFgtaClasses) {
+		input.classList.remove(classname)
+		container.classList.add(classname)
+	}
+
 
 	// label
 	if (label!=null) {
 		label.classList.add('fgta5-entry-label')
 	}
 	
+
 
 	// set input value
 	self._setLastValue(self.Value)
@@ -117,13 +146,18 @@ function Textbox_construct(self, id) {
 
 	// internal event listener
 	input.addEventListener("input", (evt)=>{
+		self.Listener.dispatchEvent(InputEvent({}))
+		
+		// jika tidak ada form, tidak ada perubahan change notifications
+		if (self.Form==null) {
+			return
+		}
+
 		if (self.GetLastValue() != self.Value) {
 			input.setAttribute('changed', 'true')
 		} else {
 			input.removeAttribute('changed')
 		}
-
-		self.Listener.dispatchEvent(InputEvent({}))
 	})
 
 	input.addEventListener('blur', (evt)=> {

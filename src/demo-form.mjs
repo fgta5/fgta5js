@@ -19,6 +19,10 @@ const obj_jam = form.Inputs.obj_jam
 const obj_kota = form.Inputs.obj_kota
 
 
+const obj_searchtext = new $fgta5.Textbox('obj_searchtext')
+const obj_searchcity = new $fgta5.Combobox('obj_searchcity')
+
+
 // untuk keperluan test & debug agar bisa diakses langsung dari console
 // PERHATIAN! jangan lakukan ini untuk production
 window.form = form
@@ -113,6 +117,11 @@ async function main(self, args) {
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
 	form.Render()
 
+
+
+
+
+
 }
 
 
@@ -140,6 +149,9 @@ function obj_kota_selecting(evt) {
 	cbo.Wait()
 	cbo.AbortHandler = () => { loader.Abort() }	
 	loader.Load('/getdata', args, (err, result)=>{
+		console.log('loading..')
+		console.log(result)
+
 		for (var row of result.data) {
 			evt.detail.addRow(row.value, row.text, row)
 		}

@@ -39,17 +39,28 @@ export default class Dataloader {
 			const response = await fetch(url, opt);
 			const data = await response.json();
 			if (typeof loadedCallback == 'function') {
-				loadedCallback(null, data)
+				try {
+					loadedCallback(null, data)
+				} catch (err) {
+					console.error(err)
+				}
 			}
 		} catch (err) {
 			if (err.name === "AbortError") {
 				console.log("Request dibatalkan!");
 			} else {
 				if (typeof loadedCallback == 'function') {
-					loadedCallback(err, null)
+					try {
+						loadedCallback(err, null)
+					} catch (err) {
+						console.error(err)
+					}
 				}
 			}
 		}
+
+
+
 	}
 
 }
