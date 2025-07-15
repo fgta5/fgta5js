@@ -21,6 +21,7 @@ const obj_kota = form.Inputs.obj_kota
 
 const obj_searchtext = new $fgta5.Textbox('obj_searchtext')
 const obj_searchcity = new $fgta5.Combobox('obj_searchcity')
+const obj_searchdate = new $fgta5.Datepicker('obj_searchdate')
 
 
 // untuk keperluan test & debug agar bisa diakses langsung dari console

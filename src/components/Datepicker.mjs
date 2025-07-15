@@ -15,6 +15,10 @@ const button_icon = `<svg transform="translate(0 3)" width="12" height="12" stro
 /*
  * https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
  */
+
+const ChangeEvent = (data) => { return new CustomEvent('change', data) }
+
+
 export default class Datepicker extends Input {
 
 	constructor(id) {
@@ -142,6 +146,27 @@ function Datepicker_construct(self, id) {
 
 	// setup container
 	container.setAttribute('fgta5-component', 'Datepicker')
+	if (input.style.width!='') {
+		container.style.width = input.style.width
+	}
+	if (input.style.marginTop!='') {
+		container.style.marginTop = input.style.marginTop
+		input.style.marginTop = ''
+	}
+	if (input.style.marginBottom!='') {
+		container.style.marginBottom = input.style.marginBottom
+		input.style.marginBottom=''
+	}
+	if (input.style.marginLeft!='') {
+		container.style.marginLeft = input.style.marginLeft
+		input.style.marginLeft=''
+	}
+	if (input.style.marginRight!='') {
+		container.style.marginRight = input.style.marginRight
+		input.style.marginRight=''
+	}
+		
+
 
 
 	// setup wrapper
@@ -160,26 +185,42 @@ function Datepicker_construct(self, id) {
 	if (placeholder!=null && placeholder !='') {
 		display.setAttribute('placeholder', placeholder)
 	}
-	var cssclass = input.getAttribute('class')
-	if (cssclass!=null && cssclass !='') {
-		display.setAttribute('class', cssclass)
-	}
-	var cssstyle = input.getAttribute('style')
-	if (cssstyle!=null && cssstyle !='') {
-		display.setAttribute('style', cssstyle)
-	}
+	// var cssclass = input.getAttribute('class')
+	// if (cssclass!=null && cssclass !='') {
+	// 	display.setAttribute('class', cssclass)
+	// }
+	// var cssstyle = input.getAttribute('style')
+	// if (cssstyle!=null && cssstyle !='') {
+	// 	display.setAttribute('style', cssstyle)
+	// }
 
 
 	// main input
+	const nonFgtaClasses = Array.from(input.classList).filter(className =>
+		!className.startsWith('fgta5-')
+	);
+
 	input.setAttribute('type', 'date')
 	input.removeAttribute('class')
 	input.removeAttribute('style')
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-datepicker')
-		input.getInputCaption = () => {
-		return label.innerHTML
+	input.getInputCaption = () => {
+		if (label!=null) {
+			return label.innerHTML
+		} else {
+			return input.getAttribute('placeholder')
+		}
 	}
 	
+	for (var classname of nonFgtaClasses) {
+		// console.log(classname)
+		input.classList.remove(classname)
+		display.classList.remove(classname)
+		container.classList.add(classname)
+	}
+
+
 
 	// picker button
 	button.id = self.Id + '-button'
@@ -188,9 +229,10 @@ function Datepicker_construct(self, id) {
 
 
 	// label
-	label.setAttribute('for', button.id)
-	label.classList.add('fgta5-entry-label')
-
+	if (label!=null) {
+		label.setAttribute('for', button.id)
+		label.classList.add('fgta5-entry-label')
+	}
 
 
 
@@ -297,14 +339,23 @@ function Datepicker_Reset(self) {
 function Datepicker_changed(self) {
 	var input = self.Nodes.Input
 	Datepicker_setDisplay(self, input.value)
+
+	// trigger object change
+	try {
+		self.Listener.dispatchEvent(ChangeEvent({
+			sender: self,
+			detail: {value:  input.value, sender: self}
+		}))
+	} catch (err) {
+		console.error(err.message)
+	}
+	
 	
 	Datepicker_markChanged(self)
 	if (self.InEditMode) {
 		self.SetError(null)
 		self.Validate()
 	}
-
-	// trigger object change
 }
 
 
@@ -327,6 +378,10 @@ function Datepicker_getIsoDateValue(v) {
 
 
 function Datepicker_markChanged(self) {
+	if (self.Form==null) {
+		return
+	}
+
 	var display = self.Nodes.Display
 	if (self.Value!=self.GetLastValue()) {
 		display.setAttribute('changed', 'true')
