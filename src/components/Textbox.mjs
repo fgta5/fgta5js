@@ -99,7 +99,11 @@ function Textbox_construct(self, id) {
 	// setup input
 	input.classList.add('fgta5-entry-input')
 	input.getInputCaption = () => {
-		return label.innerHTML
+		if (label!=null) {
+			return label.innerHTML
+		} else {
+			return input.getAttribute('placeholder')
+		}
 	}
 	const nonFgtaClasses = Array.from(input.classList).filter(className =>
 		!className.startsWith('fgta5-')
