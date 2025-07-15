@@ -1,12 +1,12 @@
 {
   "name": "fgta5js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "fgta5js libary",
   "type": "module",
   "main": "rollup.config.js",
   "scripts": {
     "test": "node ./server-dev.js",
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist && node version.js",
     "build": "rollup -c rollup-fgta5js.js"
   },
   "author": "agung nugroho",
