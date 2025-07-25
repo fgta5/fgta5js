@@ -23,14 +23,14 @@ export default class Datepicker extends Input {
 
 	constructor(id) {
 		super(id)
-		Datepicker_construct(this, id)
+		dtp_construct(this, id)
 	}
 
-	get Value() { return Datepicker_getValue(this) }
-	set Value(v) { Datepicker_setValue(this, v) }
+	get value() { return dtp_getValue(this) }
+	set value(v) { dtp_setValue(this, v) }
 
 
-	get Min() { 
+	get min() { 
 		if (this.Element.min!="") {
 			var dt = new Date(this.Element.min );
 			return dt
@@ -38,7 +38,7 @@ export default class Datepicker extends Input {
 			return null
 		}
 	}
-	set Min(v) {
+	set min(v) {
 		if (v instanceof Date) {
 			this.Element.min = v.toISOString().split("T")[0]
 		} else if (typeof v === "string") {
@@ -46,7 +46,7 @@ export default class Datepicker extends Input {
 		}
 	}
 
-	get Max() { 
+	get max() { 
 		if (this.Element.max!="") {
 			var dt = new Date(this.Element.max);
 			return dt
@@ -54,7 +54,7 @@ export default class Datepicker extends Input {
 			return null
 		}
 	}
-	set Max(v) {
+	set max(v) {
 		if (v instanceof Date) {
 			this.Element.max = v.toISOString().split("T")[0]
 		} else if (typeof v === "string") {
@@ -63,54 +63,54 @@ export default class Datepicker extends Input {
 	}
 
 
-	get Disabled() { return this.Element.disabled }
-	set Disabled(v) { 
+	get disabled() { return this.Element.disabled }
+	set disabled(v) { 
 		this.Element.disabled = v 
-		Datepicker_setDisabled(this, v)
+		dtp_setDisabled(this, v)
 	}
 
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Datepicker_SetEditingMode(this, ineditmode)
+		dtp_setEditingMode(this, ineditmode)
 	}
 
 
 
 
-	NewData(initialvalue) {
+	newData(initialvalue) {
 		if (initialvalue===undefined || initialvalue===null) {
 			initialvalue = ''
 		}
-		super.NewData(initialvalue)
-		// Datepicker_Newdata(this, initialvalue)
+		super.newData(initialvalue)
+		// dtp_Newdata(this, initialvalue)
 	}
 
-	AcceptChanges() {
-		super.AcceptChanges()
-		Datepicker_AcceptChanges(this)
+	acceptChanges() {
+		super.acceptChanges()
+		dtp_acceptChanges(this)
 		
 	}
 
-	Reset() {
-		super.Reset()
-		Datepicker_Reset(this)
+	reset() {
+		super.reset()
+		dtp_reset(this)
 	}
 
-	SetError(msg) {
-		super.SetError(msg)
-		Datepicker_SetError(this, msg)
+	setError(msg) {
+		super.setError(msg)
+		dtp_setError(this, msg)
 	}
 
-	GetLastValue() {
-		return Datepicker_GetLastValue(this)
+	getLastValue() {
+		return dtp_getLastValue(this)
 	} 
 
 }
 
-function Datepicker_construct(self, id) {
+function dtp_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -241,13 +241,13 @@ function Datepicker_construct(self, id) {
 	// required
 	var required = input.getAttribute('required')
 	if (required != null) {
-		self.MarkAsRequired(true)
+		self.markAsRequired(true)
 	}
 
 	if (input.value != null && input.value != '') {
-		self.Value = input.value
+		self.value = input.value
 		self._setLastValue(input.value)
-		self.AcceptChanges()
+		self.acceptChanges()
 	}
 
 	
@@ -258,7 +258,7 @@ function Datepicker_construct(self, id) {
 
 	// internal event
 	input.addEventListener('change', (e)=>{
-		Datepicker_changed(self)
+		dtp_changed(self)
 	})
 
 
@@ -266,7 +266,7 @@ function Datepicker_construct(self, id) {
 
 
 
-function Datepicker_setDisabled(self, v) {
+function dtp_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var inputwrap = self.Nodes.InputWrapper
 	var button = self.Nodes.Button
@@ -283,7 +283,7 @@ function Datepicker_setDisabled(self, v) {
 }
 
 
-function Datepicker_SetEditingMode(self, ineditmode) {
+function dtp_setEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
@@ -297,48 +297,48 @@ function Datepicker_SetEditingMode(self, ineditmode) {
 		input.removeAttribute('readonly')
 	} else {
 		input.setAttribute('readonly', 'true')
-		self.SetError(null)
+		self.setError(null)
 	}
 }
 
 
-function Datepicker_getValue(self) {
+function dtp_getValue(self) {
 	if (self.Nodes.Input.value=='') {
 		return null
 	} else {
-		return Datepicker_getIsoDateValue(self.Nodes.Input.value) 
+		return dtp_getIsoDateValue(self.Nodes.Input.value) 
 	}
 }
 
 
-function Datepicker_setValue(self, dt) {
+function dtp_setValue(self, dt) {
 	self.Nodes.Input.value = dt
-	Datepicker_setDisplay(self, dt)
-	Datepicker_markChanged(self)
+	dtp_setDisplay(self, dt)
+	dtp_markChanged(self)
 }
 
 
-// function Datepicker_Newdata(self, initialvalue) {
-// 	self.AcceptChanges()
+// function dtp_Newdata(self, initialvalue) {
+// 	self.acceptChanges()
 // }
 
 
-function Datepicker_AcceptChanges(self) {
+function dtp_acceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')
 }
 
-function Datepicker_Reset(self) {
-	var lastvalue = self.GetLastValue()
+function dtp_reset(self) {
+	var lastvalue = self.getLastValue()
 	if (lastvalue==null) {
-		self.Value = ''
+		self.value = ''
 	} else {
-		self.Value = lastvalue
+		self.value = lastvalue
 	}
 }
 
-function Datepicker_changed(self) {
+function dtp_changed(self) {
 	var input = self.Nodes.Input
-	Datepicker_setDisplay(self, input.value)
+	dtp_setDisplay(self, input.value)
 
 	// trigger object change
 	try {
@@ -351,15 +351,15 @@ function Datepicker_changed(self) {
 	}
 	
 	
-	Datepicker_markChanged(self)
+	dtp_markChanged(self)
 	if (self.InEditMode) {
-		self.SetError(null)
-		self.Validate()
+		self.setError(null)
+		self.validate()
 	}
 }
 
 
-function Datepicker_getIsoDateValue(v) {
+function dtp_getIsoDateValue(v) {
 	var dt
 	if (typeof v==='string') {
 		dt = new Date(v)
@@ -369,7 +369,7 @@ function Datepicker_getIsoDateValue(v) {
 	return dt.toISOString().split("T")[0]
 }
 
-// function Datepicker_getFormattedValue(isodate) {
+// function dtp_getFormattedValue(isodate) {
 // 	var date = new Date(isodate);
 //     var options = { day: '2-digit', month: 'short', year: 'numeric' };
 // 	var formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
@@ -377,20 +377,20 @@ function Datepicker_getIsoDateValue(v) {
 // }
 
 
-function Datepicker_markChanged(self) {
+function dtp_markChanged(self) {
 	if (self.Form==null) {
 		return
 	}
 
 	var display = self.Nodes.Display
-	if (self.Value!=self.GetLastValue()) {
+	if (self.value!=self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 	} else {
 		display.removeAttribute('changed')
 	}
 }
 
-function Datepicker_setDisplay(self, dtiso) {
+function dtp_setDisplay(self, dtiso) {
 	var display = self.Nodes.Display
 	if (dtiso=='') {
 		display.value = ''
@@ -403,7 +403,7 @@ function Datepicker_setDisplay(self, dtiso) {
 }
 
 
-function Datepicker_SetError(self, msg) {
+function dtp_setError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg!== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
@@ -412,7 +412,7 @@ function Datepicker_SetError(self, msg) {
 	}
 }
 
-function Datepicker_GetLastValue(self) {
+function dtp_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	if (lastvalue=='') {
 		return null

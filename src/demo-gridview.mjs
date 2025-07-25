@@ -31,7 +31,7 @@ async function main(self, args) {
 
 	txt_search.addEventListener('keydown', (evt)=>{
 		if (evt.key == 'Enter') {
-			var searchtext = txt_search.Value
+			var searchtext = txt_search.value
 			if (searchtext.trim()!='') {
 				btn_search.click()
 			}
@@ -40,9 +40,9 @@ async function main(self, args) {
 	})
 
 	btn_search.addEventListener('click', (evt)=>{
-		var searchtext = txt_search.Value
-		// tbl_data.Clear()
-		tbl_data.SetCriteria({
+		var searchtext = txt_search.value
+		// tbl_data.clear()
+		tbl_data.setCriteria({
 			searchtext: searchtext
 		})		
 		search(tbl_data.Criteria)
@@ -50,8 +50,8 @@ async function main(self, args) {
 
 
 	btn_remove.addEventListener('click', (evt)=>{
-		var mask = $fgta5.Modal.Mask()
-		tbl_data.RemoveSelected(()=>{
+		var mask = $fgta5.Modal.createMask()
+		tbl_data.removeSelected(()=>{
 			mask.close();
 		})
 	})
@@ -112,11 +112,11 @@ async function tbl_data_removing(self, evt) {
 		tr.remove()
 	} else {
 		console.log('tidak berhasil remove dari database')
-		$fgta5.MessageBox.Error("simulasi ada baris yang tidak bisa dihapus")
+		$fgta5.MessageBox.error("simulasi ada baris yang tidak bisa dihapus")
 	}
 	tr.MarkProcessing(false)
 
-	var pending = tbl_data.HasRowPendingProcess()
+	var pending = tbl_data.hasRowPendingProcess()
 	console.log(pending)
 	if (!pending) {
 		var onFinished = evt.detail.onFinished
@@ -134,7 +134,7 @@ async function search(criteria, limit, offset, sort) {
 
 	// cek sorting
 	if (sort===undefined) {
-		sort = tbl_data.GetSort()
+		sort = tbl_data.getSort()
 	}
 
 	console.log(sort)
@@ -155,14 +155,14 @@ async function search(criteria, limit, offset, sort) {
 
 
 
-	var mask = $fgta5.Modal.Mask()
+	var mask = $fgta5.Modal.createMask()
 	const loader = new $fgta5.Dataloader() 
-	loader.Load('/getdata-persons', args, (err, result)=>{
+	loader.load('/getdata-persons', args, (err, result)=>{
 		if (offset===undefined) {
-			tbl_data.Clear()
+			tbl_data.clear()
 		}
-		tbl_data.AddRows(result.data)
-		tbl_data.SetNext(result.nextoffset, result.limit)
+		tbl_data.addRows(result.data)
+		tbl_data.setNext(result.nextoffset, result.limit)
 		mask.close();
 	})
 }
@@ -179,7 +179,7 @@ function tbl_data_nextdata(self, evt) {
 function tbl_data_sorting(self, evt) {
 	var criteria = tbl_data.Criteria
 
-	// tbl_data.Clear()
+	// tbl_data.clear()
 	search(criteria, undefined, undefined, evt.detail.sort)
 	
 }

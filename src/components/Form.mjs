@@ -23,52 +23,56 @@ export default class Form extends Component {
 		super(id)
 
 		this.#readAttributes()
-		Construct(this, id)
+		frm_construct(this, id)
 	}
 
 
 	get AutoID() { return this.#_autoid }
 	get PrimaryKey() { return this.#_primarykey } 
 
-	Lock(lock) { 
-		this.#_locked = Form_Lock(this, lock) 
+	lock(lock) { 
+		this.#_locked = frm_lock(this, lock) 
 	}
 
-	IsLocked() { 
+	isLocked() { 
 		return this.#_locked
 	}
 
 	#isnew
-	IsNew() {
+	isNew() {
 		return this.#isnew
 	}
 
-	Reset() { 
+	reset() { 
 		this.#isnew = false
-		Form_Reset(this) 
+		frm_Reset(this) 
 	}
 
-	AcceptChanges() { 
+	acceptChanges() { 
 		this.#isnew = false
-		Form_AcceptChanges(this) 
+		frm_acceptChanges(this) 
 	}
 
-	IsChanged() { return Form_IsChanged(this) }
+	isChanged() { return frm_isChanged(this) }
 
 	
 
-	NewData(data) { 
+	newData(data) { 
 		this.#isnew = true
-		Form_NewData(this, data) 
+		frm_newData(this, data) 
 	}
 
-	Render() { Form_Render(this) }
+	render() { frm_render(this) }
 
-	Validate() { return Form_Validate(this) }
+	validate() { return frm_validate(this) }
 
 
-	GetData() {
-		return Form_GetData(this)
+	getData() {
+		return frm_getData(this)
+	}
+
+	setData(data) {
+		frm_setData(this, data)
 	}
 
 	addEventListener(event, callback) {
@@ -105,7 +109,7 @@ export default class Form extends Component {
 }
 
 
-function Construct(self, id) {
+function frm_construct(self, id) {
 	var formEl =  document.getElementById(id)
 
 	self.Id = id
@@ -149,28 +153,28 @@ function Construct(self, id) {
 }
 
 
-function Form_Render(self) {
+function frm_render(self) {
 	// render semua input
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
 		obj.bindForm(self)
 	}
 
-	var locked = self.IsLocked() ? true : false
+	var locked = self.isLocked() ? true : false
 	if (locked) {
-		Form_Lock(self, true)
+		frm_lock(self, true)
 	} else {
-		Form_Lock(self, false)
+		frm_lock(self, false)
 	}
 
 }
 
-function Form_Lock(self, lock) {
+function frm_lock(self, lock) {
 	var formEl = self.Element
 	var editmode = lock ? false : true
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		obj.SetEditingMode(editmode)
+		obj.setEditingMode(editmode)
 	}
 
 	if (lock) {
@@ -186,71 +190,85 @@ function Form_Lock(self, lock) {
 
 
 
-function Form_AcceptChanges(self) {
+function frm_acceptChanges(self) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		obj.AcceptChanges()
+		obj.acceptChanges()
 	}
 }
 
-function Form_Reset(self) {
+function frm_Reset(self) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		obj.Reset()
+		obj.reset()
 	}
 }
 
+function frm_setData(self, data) {
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name];
+		var bindingdata = obj.getBindingData();
+		var value = data[bindingdata]
+		if (obj instanceof Combobox) {
+		
+		} else {
+			obj.value = value
+		}
+	}
+	frm_acceptChanges(self)
+}
 
-function Form_NewData(self, data) {
+
+function frm_newData(self, data) {
 	data = data!=null ? data : {} 
 
 	for (var name in self.Inputs) {
 		
 		var obj = self.Inputs[name]
-		var bindingdata = obj.GetBindingData()
+		var bindingdata = obj.getBindingData()
 		var initialvalue = data[bindingdata]
 
 		if (obj instanceof Combobox) {
 			var initialdata = (initialvalue!=null) ? initialvalue : {value:'',text:''}
-			obj.NewData({
+			obj.newData({
 				value: initialdata.value,
 				text: initialdata.text
 			})
 		} else if (obj instanceof Checkbox) { 
-			obj.NewData(initialvalue)
+			obj.newData(initialvalue)
 		} else {
-			obj.NewData(initialvalue)
+			obj.newData(initialvalue)
 		}
 	}
 }
 
-function Form_IsChanged(self) {
+function frm_isChanged(self) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		if (obj.IsChanged()) {
+		if (obj.isChanged()) {
 			return true
 		}
 	}
 	return false
 } 
 
-function Form_Validate(self) {
+function frm_validate(self) {
 	var isValid = true
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		isValid &&= obj.Validate()
+		isValid &&= obj.validate()
 	}
 	return isValid
 }
 
 
-function Form_GetData(self) {
+function frm_getData(self) {
 	var data = {}
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		var bindingdata = obj.GetBindingData()
+		var bindingdata = obj.getBindingData()
 		if (bindingdata) {
-			data[bindingdata] = obj.Value
+			data[bindingdata] = obj.value
 		}
 	}
 	return data

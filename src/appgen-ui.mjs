@@ -418,7 +418,7 @@ async function AppGenLayout_entityInputChanged(self, evt) {
 async function AppGenLayout_CekEntityData(self, data) {
 	for (var name in data) {
 		if (data[name]==null || data[name].trim()=='') {
-			await $fgta5.MessageBox.Warning("lengkapi dahulu semua data entity")
+			await $fgta5.MessageBox.warning("lengkapi dahulu semua data entity")
 			return false
 		}
 	}
@@ -428,21 +428,21 @@ async function AppGenLayout_CekEntityData(self, data) {
 	
 	if (data[ENT_COL_NAME]!==undefined) {
 		if (!isValidName(data[ENT_COL_NAME].trim())) {
-			await $fgta5.MessageBox.Warning(`nama entity: <span style="font-weight:bold; color:red">${data[ENT_COL_NAME]}</span> tidak valid!<br>${rule}`)
+			await $fgta5.MessageBox.warning(`nama entity: <span style="font-weight:bold; color:red">${data[ENT_COL_NAME]}</span> tidak valid!<br>${rule}`)
 			return false
 		}
 	}
 
 	if (data[ENT_COL_TABLE]!==undefined) {
 		if (!isValidName(data[ENT_COL_TABLE].trim())) {
-			await $fgta5.MessageBox.Warning(`nama table: <span style="font-weight:bold; color:red">${data[ENT_COL_TABLE]}</span> tidak valid!<br>${rule}`)
+			await $fgta5.MessageBox.warning(`nama table: <span style="font-weight:bold; color:red">${data[ENT_COL_TABLE]}</span> tidak valid!<br>${rule}`)
 			return false
 		}
 	}
 	
 	if (data[ENT_COL_PK]!==undefined) {
 		if (!isValidName(data[ENT_COL_PK].trim())) {
-			await $fgta5.MessageBox.Warning(`nama PK: <span style="font-weight:bold; color:red">${data[ENT_COL_PK]}</span> tidak valid!<br>${rule}`)
+			await $fgta5.MessageBox.warning(`nama PK: <span style="font-weight:bold; color:red">${data[ENT_COL_PK]}</span> tidak valid!<br>${rule}`)
 			return false
 		}
 	}
@@ -538,7 +538,7 @@ async function btn_remove_click(self, evt) {
 
 
 	if (sudahadadata) {
-		var ret = await $fgta5.MessageBox.Confirm("Apakah anda yakin mau menghapus design entity ini?")
+		var ret = await $fgta5.MessageBox.confirm("Apakah anda yakin mau menghapus design entity ini?")
 		if (ret=='ok') {
 			remove(tr)
 		}
@@ -908,7 +908,7 @@ function AppGenLayout_addComponentToDesigner(self, droptarget, comp) {
 	for (const btn of btncs) {
 		btn.innerHTML = ICON_CLOSE
 		btn.addEventListener('click', async (evt)=>{
-			var res = await $fgta5.MessageBox.Confirm('removing field is irreversible. Are you sure ?')
+			var res = await $fgta5.MessageBox.confirm('removing field is irreversible. Are you sure ?')
 			if (res=='ok') {
 				// hapus
 				datafield.style.animation = 'fieldDihapus 0.3s forwards'
@@ -1005,12 +1005,12 @@ async function AppGenLayout_addAction(self, data) {
 	const title = data.title
 
 	if (!isValidName(name)) {
-		await $fgta5.MessageBox.Warning('nama action tidak valid')
+		await $fgta5.MessageBox.warning('nama action tidak valid')
 		return
 	}
 
 	if (title.trim()=='') {
-		await $fgta5.MessageBox.Warning('title tidak valid')
+		await $fgta5.MessageBox.warning('title tidak valid')
 		return
 	}
 
@@ -1030,7 +1030,7 @@ async function AppGenLayout_addAction(self, data) {
 	rmButton.innerHTML = ICON_CLOSE
 	rmButton.classList.add("action-button-remove")
 	rmButton.addEventListener('click', async (evt)=>{
-		var res = await $fgta5.MessageBox.Confirm('Are you sure removing this action ?')
+		var res = await $fgta5.MessageBox.confirm('Are you sure removing this action ?')
 		if (res=='ok') {
 			tr.remove()
 		}

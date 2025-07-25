@@ -24,13 +24,13 @@ async function main(self, args) {
 
 
 async function btn_staticmask_click(self, evt) {
-	var mask = $fgta5.Modal.Mask()
+	var mask = $fgta5.Modal.createMask()
 	await new Promise(resolve => setTimeout(resolve, 3000));
 	mask.close();
 }
 
 async function btn_infomask_click(params) {
-	var mask = $fgta5.Modal.Mask()
+	var mask = $fgta5.Modal.createMask()
 	await new Promise(resolve => setTimeout(resolve, 1000))
 
 	mask.setText('doing first progress')
@@ -49,7 +49,7 @@ async function btn_infomask_click(params) {
 }
 
 async function btn_progressmask_click(self, evt) {
-	var prog = $fgta5.Modal.Progress()
+	var prog = $fgta5.Modal.createProgress()
 	prog.setProgress(0, "initializing") 
 	await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -63,7 +63,7 @@ async function btn_progressmask_click(self, evt) {
 }
 
 async function btn_stayprogressmask_click(self, evt) {
-	var prog = $fgta5.Modal.Progress({buttonClose: true})
+	var prog = $fgta5.Modal.createProgress({buttonClose: true})
 	prog.setProgress(0, "initializing") 
 	await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -76,7 +76,7 @@ async function btn_stayprogressmask_click(self, evt) {
 }
 
 async function btn_interuptedprogressmask_click(self, evt) {
-	var prog = $fgta5.Modal.Progress()
+	var prog = $fgta5.Modal.createProgress()
 	prog.setProgress(0, "initializing") 
 	await new Promise(resolve => setTimeout(resolve, 1000));
 

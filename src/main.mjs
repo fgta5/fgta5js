@@ -10,7 +10,7 @@ import Datepicker from './components/Datepicker.mjs';
 import Timepicker from './components/Timepicker.mjs';	
 import Combobox from './components/Combobox.mjs';	
 import Filebox from './components/Filebox.mjs';
-import Dataloader from './components/DataLoader.mjs';	
+import Dataloader from './components/Dataloader.mjs';	
 import Gridview from './components/Gridview.mjs';	
 import AppManager from './components/AppManager.mjs'
 import Application from './components/Application.mjs';
@@ -20,9 +20,6 @@ import SectionCarousell from './components/SectionCarousell.mjs'
 import Icons from './components/Icons.mjs';
 
 import * as Validators from './components/Validators.mjs';
-
-
-
 
 
 

@@ -63,13 +63,13 @@ async function main(self, args) {
 
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
-	form.Render()
+	form.render()
 
 }
 
 
 async function btn_maskOpen_click(self, evt) {
-	var mask = $fgta5.Dialog.Mask()
+	var mask = $fgta5.Dialog.createMask()
 	await new Promise(resolve => setTimeout(resolve, 3000));
 	mask.close();
 }
@@ -105,29 +105,29 @@ async function btn_progressOpen_click(self, evt) {
 
 
 async function btn_msgboxShow_click(self, evt) {
-	var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan")
+	var ret = await $fgta5.MessageBox.show("ini messagebox ditampilkan")
 	console.log(ret)
 }
 
 async function btn_msgboxInfo_click(self, evt) {
-	$fgta5.MessageBox.Info("ini info ditampilkan")
+	$fgta5.MessageBox.info("ini info ditampilkan")
 }
 
 async function btn_rmsgboxWarn_click(self, evt) {
-	$fgta5.MessageBox.Warning("ini warning ditampilkan")
+	$fgta5.MessageBox.warning("ini warning ditampilkan")
 }
 
 async function btn_msgboxError_click(self, evt) {
-	$fgta5.MessageBox.Error("ini error ditampilkan")
+	$fgta5.MessageBox.error("ini error ditampilkan")
 }
 
 async function btn_msgboxConfirm_click(self, evt) {
-	var ret = await $fgta5.MessageBox.Confirm("konfirmasi, oke tidak ?")
+	var ret = await $fgta5.MessageBox.confirm("konfirmasi, oke tidak ?")
 	console.log(ret)
 }
 
 async function btn_msgbox_choose_click(self, evt) {
-	// var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan", {
+	// var ret = await $fgta5.MessageBox.show("ini messagebox ditampilkan", {
 	// 	iconcss: 'warning',
 	// 	// buttons: {
 	// 	// 	ok: new $fgta5.MessageBoxButton('Ok'),
@@ -139,17 +139,17 @@ async function btn_msgbox_choose_click(self, evt) {
 
 
 function btn_edittogle_click(self, evt) {
-	$fgta5.MessageBox.Show('test messagebox')
+	$fgta5.MessageBox.show('test messagebox')
 	
-	// if (form.IsChanged()) {
+	// if (form.isChanged()) {
 		// alert('Ada perubahan data, silakan batalkan perubahan atau simpa data terlebih dahulu')
 		// return
 	// }
 
 
-	// 	form.AcceptChanges()
+	// 	form.acceptChanges()
 	// } else {
-	// 	form.Lock(!form.Locked) 
+	// 	form.lock(!form.locked) 
 	// }
 
 
@@ -160,21 +160,21 @@ function btn_edittogle_click(self, evt) {
 
 function btn_reset_click(self, evt) {
 	console.log('btn_reset_click()')
-	form.Reset()
+	form.reset()
 }
 
 function btn_save_click(self, evt) {
 	console.log('btn_save_click()')
-	if (form.IsChanged()) {
-		form.AcceptChanges()
+	if (form.isChanged()) {
+		form.acceptChanges()
 	}
 }
 
 function btn_new_click(self, evt) {
 	console.log('btn_new_click()')
-	form.NewData()
+	form.newData()
 
-	form.Lock(false)
+	form.lock(false)
 }
 
 
@@ -199,7 +199,7 @@ function form_unlocked(self, evt) {
 function btn_testvalidation_click(self, evt) {
 	console.log('btn_testvalidation_click()')
 
-	var isValid = form.Validate()
+	var isValid = form.validate()
 	if (!isValid) {	
 		console.error('ada error, di default validation');
 	} else {
@@ -211,7 +211,7 @@ function btn_testvalidation_click(self, evt) {
 	}
 
 	console.log('Test Set Error')
-	obj_txt_nama.SetError('error message')
+	obj_txt_nama.setError('error message')
 
 }
 
@@ -228,6 +228,6 @@ function btn_clearerror_click(self, evt) {
 	console.log('btn_testdised_click()')
 	for (var name in form.Inputs) {	
 		var obj = form.Inputs[name]
-		obj.SetError(null)
+		obj.setError(null)
 	}
 }

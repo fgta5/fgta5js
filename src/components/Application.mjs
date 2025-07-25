@@ -12,7 +12,7 @@ const ATTR_WITHFOOTER = 'data-withfooter'
 export default class App extends Component {
 	constructor(id) {
 		super(id)
-		App_construct(this)
+		app_construct(this)
 	}
 
 	// #sections = {}
@@ -20,17 +20,17 @@ export default class App extends Component {
 	// RenderSection() {
 		// App_RenderSection(this)
 	// }
-	SetTitle(title) {
-		App_SetTitle(this, title)
+	setTitle(title) {
+		app_setTitle(this, title)
 	}
 
 
-	ShowFooter(show) {
-		App_ShowFooter(this, show)
+	showFooter(show) {
+		app_showFooter(this, show)
 	}
 }
 
-function App_construct(self) {
+function app_construct(self) {
 	console.log('constructiong application')
 
 	const main = self.Element  
@@ -47,8 +47,8 @@ function App_construct(self) {
 	footer.classList.add('fgta5-app-footer')
 	footer.classList.add('hidden')
 
-	App_createHeader(self, head)
-	App_createFooter(self, footer)
+	app_createHeader(self, head)
+	app_createFooter(self, footer)
 
 	self.Nodes = {
 		Head: head,
@@ -71,7 +71,7 @@ function App_construct(self) {
 			if (action==Component.ACTION_APPLICATIONLOADED) {
 				if (args.module!=null) {
 					if (args.module.title!=null) {
-						App_SetTitle(self, args.module.title)
+						app_setTitle(self, args.module.title)
 					}
 				}
 				
@@ -80,21 +80,21 @@ function App_construct(self) {
 	})
 }
 
-function App_SetTitle(self, title) {
+function app_setTitle(self, title) {
 	document.title = title
 	document.getElementById(ID_TITLE).innerHTML =  title
 }
 
-function App_createHeader(self, head) {
+function app_createHeader(self, head) {
 	const divleft = document.createElement('div')
 	const title = document.createElement('span')
 
-	const btnmenu = Component.CreateSvgButton(ICONS.MENU, CLS_BUTTONHEAD, ()=>{
-		App_ShowMenu(self)
+	const btnmenu = Component.createSvgButton(ICONS.MENU, CLS_BUTTONHEAD, ()=>{
+		app_showMenu(self)
 	})
 
-	const btnhome = Component.CreateSvgButton(ICONS.HOME, CLS_BUTTONHEAD, ()=>{
-		App_ShowHome(self)
+	const btnhome = Component.createSvgButton(ICONS.HOME, CLS_BUTTONHEAD, ()=>{
+		app_showHome(self)
 	})
 
 	divleft.appendChild(btnhome)
@@ -107,12 +107,12 @@ function App_createHeader(self, head) {
 	head.appendChild(btnmenu)
 }
 
-function App_createFooter(self, footer) {
+function app_createFooter(self, footer) {
 	footer.innerHTML = 'empty footer content'
 }
 
 
-function App_ShowFooter(self, show) {
+function app_showFooter(self, show) {
 	const main = self.Nodes.Main
 	const footer = self.Nodes.Footer
 	if (show) {
@@ -124,13 +124,13 @@ function App_ShowFooter(self, show) {
 	}
 }
 
-function App_ShowMenu(self) {
+function app_showMenu(self) {
 	window.parent.postMessage({
 		action: Component.ACTION_SHOWMENU
 	}, '*')
 }
 
-function App_ShowHome(self) {
+function app_showHome(self) {
 	window.parent.postMessage({
 		action: Component.ACTION_SHOWHOME
 	}, '*')	

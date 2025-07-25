@@ -200,7 +200,7 @@ async function AppGenIO_Save(self, evt) {
 		URL.revokeObjectURL(url);
 
 	} catch (err) {
-		await $fgta5.MessageBox.Error(err.message)
+		await $fgta5.MessageBox.error(err.message)
 	}
 	
 }

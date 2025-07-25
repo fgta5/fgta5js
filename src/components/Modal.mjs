@@ -1,7 +1,7 @@
 export default class Modal  {
-	static Show (content) { return Modal_Show(content) }
-	static Mask (message) { return Modal_Mask(message) }
-	static Progress (config) { return Modal_Progress(config) }
+	static show (content) { return modal_show(content) }
+	static createMask (message) { return modal_createMask(message) }
+	static createProgress (config) { return modal_createProgress(config) }
 }
 
 
@@ -17,12 +17,12 @@ function CreateModal() {
 }
 
 
-function Modal_Show(content) {
+function modal_show(content) {
 	const modal = CreateModal()
 	return modal
 }
 
-function Modal_Mask(message) {
+function modal_createMask(message) {
 	message =  message===undefined ? 'Please wait ...' : message
 	
 	const modal = CreateModal()
@@ -49,7 +49,7 @@ function Modal_Mask(message) {
 }
 
 
-function Modal_Progress(config) {
+function modal_createProgress(config) {
 	if (config === undefined) config = {}
 	
 

@@ -19,18 +19,18 @@ const banner = `fgta5js ${version}
 export default {
   input: "build.mjs", // File utama yang menjadi entry point
   output: {
-    file: `dist/${name}-v${version}-min.js`, // Lokasi output file hasil bundle
+    file: `dist/${name}-v${version}.js`, // Lokasi output file hasil bundle
     format: "esm", // Format modul ECMAScript
 	banner: `/*! ${banner}*/`
   },
   
   plugins: [
 	
-    terser({
-		compress: {
-			drop_console: true, // Hapus console.log
-		}	
-	}),
+    // terser({
+	// 	compress: {
+	// 		drop_console: true, // Hapus console.log
+	// 	}	
+	// }),
 
 	postcss({
 		extract: `${name}-v${version}-min.css`, // Nama file CSS yang diekstrak

@@ -14,63 +14,63 @@ export default class Numberbox extends Input {
 			maximumFractionDigits: 2
 		});
 
-		Numberbox_construct(this, id)
+		nmb_construct(this, id)
 	}
 
-	get Value() { return Numberbox_getValue(this) }
-	set Value(v) { Numberbox_setValue(this, v) }
+	get value() { return nmb_getValue(this) }
+	set value(v) { nmb_setValue(this, v) }
 		
 		
 
 
-	get Disabled() { return this.Element.disabled }
-	set Disabled(v) { 
+	get disabled() { return this.Element.disabled }
+	set disabled(v) { 
 		this.Element.disabled = v 
-		Numberbox_setDisabled(this, v)
+		nmb_setDisabled(this, v)
 	}
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Numberbox_SetEditingMode(this, ineditmode)
+		nmb_setEditingMode(this, ineditmode)
 	}
 
 
-	NewData(initialvalue) {
+	newData(initialvalue) {
 		if (initialvalue===undefined || initialvalue===null) {
 			initialvalue = 0
 		}
-		super.NewData(initialvalue)
+		super.newData(initialvalue)
 	}
 
 
-	AcceptChanges() {
-		super.AcceptChanges()
-		Numberbox_AcceptChanges(this)
+	acceptChanges() {
+		super.acceptChanges()
+		nmb_acceptChanges(this)
 		
 	}
 
-	Reset() {
-		super.Reset()
-		Numberbox_Reset(this)
+	reset() {
+		super.reset()
+		nmb_Reset(this)
 	}
 
-	SetError(msg) {
-		super.SetError(msg)
-		Numberbox_SetError(this, msg)
+	setError(msg) {
+		super.setError(msg)
+		nmb_setError(this, msg)
 	}
 
 
-	GetLastValue() {
-		return Numberbox_GetLastValue(this)
+	getLastValue() {
+		return nmb_getLastValue(this)
 	} 
 
 }
 
 
 
-function Numberbox_construct(self, id) {
+function nmb_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -143,7 +143,7 @@ function Numberbox_construct(self, id) {
 	// additional property setup
 	var required = input.getAttribute('required')
 	if (required != null) {
-		self.MarkAsRequired(true)
+		self.markAsRequired(true)
 	}
 
 
@@ -157,11 +157,11 @@ function Numberbox_construct(self, id) {
 
 	// internal event listener
 	display.addEventListener('focus', (e)=>{
-		Numberbox_displayFocus(self, e)
+		nmb_displayFocus(self, e)
 	})
 
 	display.addEventListener('blur', (e)=>{
-		Numberbox_displayBlur(self, e)
+		nmb_displayBlur(self, e)
 	})
 
 	display.addEventListener("input", (e)=>{
@@ -214,13 +214,13 @@ function getPrecission(precision) {
 }
 
 
-function Numberbox_getValue(self) {
+function nmb_getValue(self) {
 	var num = Number(self.Nodes.Input.value)
 	return num
 }
 
 
-function Numberbox_setValue(self, v) {
+function nmb_setValue(self, v) {
 	self.Nodes.Input.value = v
 
 	if (isNaN(v)) {
@@ -233,11 +233,11 @@ function Numberbox_setValue(self, v) {
 		self.Nodes.Display.value = num
 	}
 
-	Numberbox_markChanged(self)
+	nmb_markChanged(self)
 }
 
 
-function Numberbox_setDisabled(self, v) {
+function nmb_setDisabled(self, v) {
 	if (v) {
 		self.Nodes.Display.disabled = true
 	} else {
@@ -245,7 +245,7 @@ function Numberbox_setDisabled(self, v) {
 	}
 }
 
-function Numberbox_SetEditingMode(self, ineditmode) {
+function nmb_setEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 
 	self.Nodes.Display.setAttribute('editmode', attrval)
@@ -258,11 +258,11 @@ function Numberbox_SetEditingMode(self, ineditmode) {
 	} else {
 		self.Nodes.Input.setAttribute('readonly', 'true')
 		self.Nodes.Display.setAttribute('readonly', 'true')
-		self.SetError(null)
+		self.setError(null)
 	}
 }
 
-function Numberbox_displayFocus(self, e) {
+function nmb_displayFocus(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	
@@ -274,7 +274,7 @@ function Numberbox_displayFocus(self, e) {
 	}
 }
 
-function Numberbox_displayBlur(self, e) {
+function nmb_displayBlur(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	
@@ -282,12 +282,12 @@ function Numberbox_displayBlur(self, e) {
 		var num = Number(display.value)
 		if (isNaN(num)) {
 			self.Listener.dispatchEvent(ChangeEvent({detail: {invalid:true}}))
-			self.SetError('Invalid number')
+			self.setError('Invalid number')
 		} else {
-			self.SetError(null)
+			self.setError(null)
 			
 			input.value = num
-			var invalid = !self.Validate()
+			var invalid = !self.validate()
 			var formattedValue = self.formatterFixed.format(num)
 			display.setAttribute('type', 'text')
 			display.value = formattedValue
@@ -299,15 +299,15 @@ function Numberbox_displayBlur(self, e) {
 }
 
 
-function Numberbox_AcceptChanges(self) {
+function nmb_acceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')
 }
 
-function Numberbox_Reset(self) {
-	self.Value = self.GetLastValue()
+function nmb_Reset(self) {
+	self.value = self.getLastValue()
 }
 
-function Numberbox_SetError(self, msg) {
+function nmb_setError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg!== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
@@ -317,11 +317,11 @@ function Numberbox_SetError(self, msg) {
 }
 
 
-function Numberbox_markChanged(self) {
+function nmb_markChanged(self) {
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
 	
-	if (self.Value!=self.GetLastValue()) {
+	if (self.value!=self.getLastValue()) {
 		input.setAttribute('changed', 'true')
 		display.setAttribute('changed', 'true')
 	} else {
@@ -330,7 +330,7 @@ function Numberbox_markChanged(self) {
 	}
 }
 
-function Numberbox_GetLastValue(self) {
+function nmb_getLastValue(self) {
 	var lastvalue = Number(self.Nodes.LastValue.value)
 	return lastvalue
 }

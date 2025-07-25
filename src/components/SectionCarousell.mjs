@@ -13,7 +13,7 @@ export default class SectionCarousell {
 	static get EVT_SECTIONSHOWING() { return EVT_SECTIONSHOWING }
 
 	constructor(el) {
-		SectionCarousell_Construct(this, el)
+		scar_Construct(this, el)
 	}
 
 	get Items() { return this.#items}
@@ -24,11 +24,11 @@ export default class SectionCarousell {
 		this.Listener.addEventListener(eventname, callback)
 	}	
 
-	SetCurrentSection(section) {
+	setCurrentSection(section) {
 		this.#currentsection = section
 	}
 
-	DispatchSectionShowing(currSection, commingSection) {
+	dispatchSectionShowing(currSection, commingSection) {
 		this.Listener.dispatchEvent(SectionShowingEvent({
 			currSection: currSection,
 			commingSection: commingSection
@@ -36,7 +36,7 @@ export default class SectionCarousell {
 	}
 }
 
-function SectionCarousell_Construct(self, el) {
+function scar_Construct(self, el) {
 
 	el.classList.add('fgta5-carousellcontainer')
 
@@ -48,13 +48,13 @@ function SectionCarousell_Construct(self, el) {
 			index: i,
 			carousell: self,
 			fn_getActiveSection: ()=>{
-				return SectionCarousell_getActiveSection(self, el)
+				return scar_getActiveSection(self, el)
 			}
 		})
 		const name = section.Name
 
 		if (self.CurrentSection==null) {
-			self.SetCurrentSection(section)
+			self.setCurrentSection(section)
 		}
 
 		// masukkan panel ini ke items
@@ -64,7 +64,7 @@ function SectionCarousell_Construct(self, el) {
 }
 
 
-function SectionCarousell_getActiveSection(self, el) {
+function scar_getActiveSection(self, el) {
 	// ambil section yang sedang aktif yang ada di el
 	const cs = el.querySelector(`section[${Section.ATTR_ACTIVE}]`)
 

@@ -1,7 +1,6 @@
 'use strict';
 
 import Input from "./Input.mjs"
-import Dataloader from "./DataLoader.mjs";
 
 const ChangeEvent = (data) => { return new CustomEvent('change', data) }
 const OptionFormattingEvent = (data) => { return new CustomEvent('optionformatting', data) }
@@ -34,77 +33,77 @@ export default class Combobox extends Input {
 
 	constructor(id) {
 		super(id)
-		Combobox_construct(this, id)
+		cbo_construct(this, id)
 	}
 
-	get Value() { return Combobox_getValue(this) }
-	set Value(v) {  throw Error('Value is readonly') }
+	get value() { return cbo_getValue(this) }
+	set value(v) {  throw Error('Value is readonly') }
 
-	get Text() { return  Combobox_getText(this) }
-	set Text(v) { throw Error('Text is readonly') }
+	get text() { return  cbo_getText(this) }
+	set text(v) { throw Error('Text is readonly') }
 
-	get Disabled() { return this.Element.disabled }
-	set Disabled(v) { 
+	get disabled() { return this.Element.disabled }
+	set disabled(v) { 
 		this.Element.disabled = v 
-		Combobox_setDisabled(this, v)
+		cbo_setDisabled(this, v)
 	}
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Combobox_SetEditingMode(this, ineditmode)
+		cbo_SetEditingMode(this, ineditmode)
 	}
 
-	NewData(initialdata) {
-		Combobox_NewData(this, initialdata)
+	newData(initialdata) {
+		cbo_newData(this, initialdata)
 	}
 
-	AcceptChanges() {
-		super.AcceptChanges()
-		Combobox_AcceptChanges(this)
+	acceptChanges() {
+		super.acceptChanges()
+		cbo_acceptChanges(this)
 	}
 	
-	Reset() {
-		super.Reset()
-		Combobox_Reset(this)
+	reset() {
+		super.reset()
+		cbo_reset(this)
 	}
 
 	_setLastValue(v, t) {
 		super._setLastValue(v)
-		Combobox_setLastValue(this, v, t)
+		cbo_setLastValue(this, v, t)
 	}
 
-	GetLastValue() {
-		return Combobox_GetLastValue(this)
+	getLastValue() {
+		return cbo_getLastValue(this)
 	} 
 
-	GetLastText() {
-		return Combobox_GetLastText(this)
+	getLastText() {
+		return cbo_getLastText(this)
 	} 
 
-	SetSelected(value, text) {
+	setSelected(value, text) {
 		if (text===undefined || text===null) {
 			text = value
 		}
-		Combobox_SetSelected(this, value, text)
+		cbo_setSelected(this, value, text)
 	}
 
 
-	AddOptions(data) {
-		Combobox_AddOptions(this, data)
+	addOptions(data) {
+		cbo_addOptions(this, data)
 	}
 
-	SetOptions(data) {
-		Combobox_SetOptions(this, data)
+	setOptions(data) {
+		cbo_setOptions(this, data)
 	}
 
 
 	#iswaiting = false
-	IsWaiting() { return this.#iswaiting }
-	Wait(iswaiting) {
+	isWaiting() { return this.#iswaiting }
+	wait(iswaiting) {
 		this.#iswaiting = iswaiting===undefined ? true : iswaiting
-		Combobox_Wait(this, iswaiting)
+		cbo_wait(this, iswaiting)
 	}
 	
 	// untuk keperluan abort fetch data yang dibatalkan
@@ -117,13 +116,13 @@ export default class Combobox extends Input {
 }
 
 
-function Combobox_SetSelected(self, value, text) {
+function cbo_setSelected(self, value, text) {
 	self.Nodes.Input.value = value
 	self.Nodes.Display.value = text
-	Combobox_markChanged(self)
+	cbo_markChanged(self)
 }
 
-function Combobox_construct(self, id) {
+function cbo_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -220,7 +219,7 @@ function Combobox_construct(self, id) {
 	button.classList.add('fgta5-entry-button-combobox')	
 	button.innerHTML = icon_cbo_button
 	button.addEventListener('click', (e)=>{
-		Combobox_buttonClick(self, e)
+		cbo_buttonClick(self, e)
 	})
 
 
@@ -237,14 +236,14 @@ function Combobox_construct(self, id) {
 	// required field
 	var required = input.getAttribute('required')
 	if (required != null) {
-		self.MarkAsRequired(true)
+		self.markAsRequired(true)
 	}
 
 	// dialog
 	if (datalist!=null) {
 		self.HasStaticOption = true
 	}
-	Combobox_createDialog(self, dialog)
+	cbo_createDialog(self, dialog)
 	dialog.addEventListener("cancel", (e)=>{
 		dialog.setAttribute(ATTR_REMOVING, 'true')
 		e.preventDefault()
@@ -252,12 +251,12 @@ function Combobox_construct(self, id) {
 			dialog.close()
 			dialog.removeAttribute(ATTR_REMOVING)
 			dialog.removeAttribute(ATTR_SHOWED)
-			Combobox_closed(self)
+			cbo_closed(self)
 		}, 200);
     });
 
 	dialog.addEventListener('close', (evt)=>{
-		Combobox_dialogClose(self)
+		cbo_dialogClose(self)
 	})
 
 	
@@ -265,10 +264,10 @@ function Combobox_construct(self, id) {
 	// datalist
 	if (datalist!=null) {
 		datalist.remove()
-		var opt = Combobox_createStaticOptions(self, dialog, datalist)
+		var opt = cbo_createStaticOptions(self, dialog, datalist)
 		if (opt.default!=null) {
-			input.value = def.value
-			display.value = def.text
+			input.value = opt.default.value
+			display.value = opt.default.text
 		}
 
 		if (opt.count>0) {
@@ -290,7 +289,7 @@ function Combobox_construct(self, id) {
 }
 
 
-function Combobox_getValue(self) {
+function cbo_getValue(self) {
 	var input = self.Nodes.Input
 	if (input.value=='') {
 		return null
@@ -299,12 +298,12 @@ function Combobox_getValue(self) {
 	}
 }
 
-function Combobox_getText(self) {
+function cbo_getText(self) {
 	return self.Nodes.Display.value
 }
 
 
-function Combobox_NewData(self, initialdata) {
+function cbo_newData(self, initialdata) {
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
 
@@ -324,27 +323,29 @@ function Combobox_NewData(self, initialdata) {
 	}
 	self.Nodes.Display.removeAttribute('changed')
 
-	self.SetError(null)
-	self.AcceptChanges()
+	self.setError(null)
+	self.acceptChanges()
 }
 
-function Combobox_AcceptChanges(self) {
+function cbo_acceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')
-	self._setLastValue(self.Value, self.Text)
+	self._setLastValue(self.value, self.text)
 }
 
-function Combobox_Reset(self) {
-	self.Value = self.GetLastValue()
-	self.Text = self.GetLastText()
+function cbo_reset(self) {
+	// self.value = self.getLastValue()
+	// self.text = self.getLastText()
+	self.Nodes.Input.value = self.getLastValue();
+	self.Nodes.Display.value = self.getLastText();
 	self.Nodes.Display.removeAttribute('changed')
 }
 
-function Combobox_setLastValue(self, v, t) {
+function cbo_setLastValue(self, v, t) {
 	self.Nodes.LastValue.value = v
 	self.Nodes.LastText.value = t
 }
 
-function Combobox_setDisabled(self, v) {
+function cbo_setDisabled(self, v) {
 	if (v) {
 		self.Nodes.Display.disabled = true
 		self.Nodes.Button.disabled = true
@@ -354,7 +355,7 @@ function Combobox_setDisabled(self, v) {
 	}
 }
 
-function Combobox_markSelected(self, tr) {
+function cbo_markSelected(self, tr) {
 	tr.setAttribute(ATTR_SELECTED, '')
 	
 	setTimeout(()=>{
@@ -376,7 +377,7 @@ function Combobox_markSelected(self, tr) {
 }
 
 
-function Combobox_SetEditingMode(self, ineditmode) {
+function cbo_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 
 	self.Nodes.Display.setAttribute(ATTR_EDITMODE, attrval)
@@ -388,12 +389,12 @@ function Combobox_SetEditingMode(self, ineditmode) {
 		self.Nodes.Input.removeAttribute('readonly')
 	} else {
 		self.Nodes.Input.setAttribute('readonly', 'true')
-		self.SetError(null)
+		self.setError(null)
 	}
 }
 
 
-function Combobox_createOptionRow(self, value, text, data) {
+function cbo_createOptionRow(self, value, text, data) {
 	let tr = document.createElement('tr')
 	var td = document.createElement('td')
 
@@ -416,19 +417,19 @@ function Combobox_createOptionRow(self, value, text, data) {
 		}, 500)
 
 		// reset dulu jika ada option yang terpilih sebelumnya
-		Combobox_resetSelected(self)
+		cbo_resetSelected(self)
 
 		// tandai baris yang sekarang dilih
 		if (text=='none') {
 			console.log('add none row option')
 		}
 
-		Combobox_markSelected(self, tr)
+		cbo_markSelected(self, tr)
 
 
 		self.Nodes.Input.value = value
 		self.Nodes.Display.value = text
-		Combobox_userSelectValue(self, value, text, data)
+		cbo_userSelectValue(self, value, text, data)
 
 
 	})
@@ -451,16 +452,16 @@ function Combobox_createOptionRow(self, value, text, data) {
 
 
 	// tandai baris pilihan ini jika merupakan opsi yang dipilih user saat ini
-	var valueselected=self.Value??''
+	var valueselected=self.value??''
 	if (value==valueselected) {
-		Combobox_markSelected(self, tr)
+		cbo_markSelected(self, tr)
 	}
 
 
 	return tr
 } 
 
-function Combobox_createStaticOptions(self, dialog, datalist) {
+function cbo_createStaticOptions(self, dialog, datalist) {
 	const options = datalist.getElementsByTagName("option");
 	
 	const thead = dialog.getElementsByTagName('thead')[0]
@@ -474,8 +475,8 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 
 	// jika tidak harus diisi,
 	// tambahkan opsi none
-	if (!self.IsRequired()) {
-		var tr = Combobox_createOptionRow(self, '', 'none', {})
+	if (!self.isRequired()) {
+		var tr = cbo_createOptionRow(self, '', 'none', {})
 		tr.setAttribute('data-none', '')
 		tr.setAttribute(ATTR_INDEX, 0)
 		tbody.appendChild(tr)
@@ -497,7 +498,7 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 		}
 
 		var idx = tbody.rows.length - 1
-		var tr = Combobox_createOptionRow(self, value, text, { option: option })
+		var tr = cbo_createOptionRow(self, value, text, { option: option })
 		
 		tr.setAttribute(ATTR_INDEX, idx)
 		tbody.appendChild(tr)
@@ -510,7 +511,7 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 
 }
 
-function Combobox_createDialog(self, dialog) {
+function cbo_createDialog(self, dialog) {
 	dialog.classList.add('fgta5-combobox-dialog')
 
 	// buat header dialog
@@ -550,8 +551,8 @@ function Combobox_createDialog(self, dialog) {
 			var offset = 0
 
 			btnnext.searchtext = searchtext
-			Combobox_resetSelected(self)
-			Combobox_Search(self, searchtext, limit, offset)
+			cbo_resetSelected(self)
+			cbo_search(self, searchtext, limit, offset)
 		})
 
 		srccontainer.classList.add('fgta5-combobox-dialog-filter')
@@ -591,11 +592,11 @@ function Combobox_createDialog(self, dialog) {
 			var searchtext = btnnext.searchtext
 			var limit = btnnext.limit
 			var nextoffset = btnnext.nextoffset
-			Combobox_Search(self, searchtext, limit, nextoffset)
+			cbo_search(self, searchtext, limit, nextoffset)
 		})
 		dialog.appendChild(btnnext)
 
-		dialog.SetNext = (nextoffset, limit) => {
+		dialog.setNext = (nextoffset, limit) => {
 			btnnext.nextoffset = nextoffset
 			btnnext.limit = limit
 			if (nextoffset!=null && nextoffset!=0) {
@@ -605,7 +606,7 @@ function Combobox_createDialog(self, dialog) {
 			}
 		}
 	} else {
-		dialog.SetNext = (nextoffset, limit) => {
+		dialog.setNext = (nextoffset, limit) => {
 			console.log('not implemented')
 		}
 	}	
@@ -613,30 +614,30 @@ function Combobox_createDialog(self, dialog) {
 	
 }
 
-function Combobox_userSelectValue(self, value, text, data) {
+function cbo_userSelectValue(self, value, text, data) {
 	// trigger event
 	self.Listener.dispatchEvent(ChangeEvent({
 		sender: self,
 		detail: {value: value, text: text, data:data, sender: self}
 	}))
 
-	Combobox_markChanged(self)
+	cbo_markChanged(self)
 
 	// tutup
 	self.Nodes.Dialog.removeAttribute(ATTR_SHOWED)
 	setTimeout(() => {
 		self.Nodes.Dialog.close()
-		Combobox_closed(self)
+		cbo_closed(self)
 	}, 200);
 }
 
-function Combobox_markChanged(self) {
+function cbo_markChanged(self) {
 	if (self.Form==null) {
 		return
 	}
 
 	var display = self.Nodes.Display
-	if (self.Value!=self.GetLastValue()) {
+	if (self.value!=self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 	} else {
 		display.removeAttribute('changed')
@@ -644,7 +645,7 @@ function Combobox_markChanged(self) {
 }
 
 
-function Combobox_GetLastValue(self) {
+function cbo_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	if (lastvalue=='') {
 		return null
@@ -653,12 +654,12 @@ function Combobox_GetLastValue(self) {
 	}
 }
 
-function Combobox_GetLastText(self) {
-	return this.Nodes.LastText.value
+function cbo_getLastText(self) {
+	return self.Nodes.LastText.value
 }
 
 
-function Combobox_ClearOptions(self, tbody) {
+function cbo_clearOptions(self, tbody) {
 	const dialog = self.Nodes.Dialog
 	if (tbody==undefined || tbody==null) {
 		tbody = dialog.getElementsByTagName('tbody')[0]
@@ -667,7 +668,7 @@ function Combobox_ClearOptions(self, tbody) {
 	tbody.replaceChildren()
 }
 
-function Combobox_AddOptions(self, data, tbody) {
+function cbo_addOptions(self, data, tbody) {
 	if (data==undefined || data==null) {
 		return
 	}
@@ -678,29 +679,29 @@ function Combobox_AddOptions(self, data, tbody) {
 	}
 
 	for (let row of data) {
-		tbody.appendChild(Combobox_createOptionRow(self, row.value, row.text, data))
+		tbody.appendChild(cbo_createOptionRow(self, row.value, row.text, data))
 	}
 }
 
-function Combobox_SetOptions(self, data) {
+function cbo_setOptions(self, data) {
 	const dialog = self.Nodes.Dialog
 	const tbody = dialog.getElementsByTagName('tbody')[0]
 
 	// hapus dulu datanya
-	Combobox_ClearOptions(self, tbody)
+	cbo_clearOptions(self, tbody)
 	
 	// cek apakah tidak required
 	// jika tidak required, tambahkan none di paling atas
-	if (!self.IsRequired()) {
-		// Combobox_addOptionRow(self, tbody, '', '')
+	if (!self.isRequired()) {
+		// cbo_addOptionRow(self, tbody, '', '')
 	}
 
 
 	// tampilkan data pada pilihan
-	Combobox_AddOptions(self, data, tbody)
+	cbo_addOptions(self, data, tbody)
 }
 
-function Combobox_closed(self) {
+function cbo_closed(self) {
 	console.log('combobox closed')
 	if (typeof self.AbortHandler==='function') {
 		self.AbortHandler()
@@ -708,7 +709,7 @@ function Combobox_closed(self) {
 }
 
 
-function Combobox_Search(self, searchtext, limit, offset) {
+function cbo_search(self, searchtext, limit, offset) {
 	const dialog = self.Nodes.Dialog
 	const tbody = dialog.getElementsByTagName('tbody')[0]
 
@@ -716,13 +717,16 @@ function Combobox_Search(self, searchtext, limit, offset) {
 	// required atau nggak
 	var addNoneIfNotRequired = () => {
 		var none = tbody.querySelector('tr[data-none]')
-		if (self.IsRequired()) {
+		if (self.isRequired()) {
 			// hilangkan none
-			none.remove()
+			if (none!=null) {
+				none.remove()
+			}
+			
 		} else {
 			// tambahkan none jika belum ada
 			if (none==null) {
-				var tr = Combobox_createOptionRow(self, '', 'none', {})
+				var tr = cbo_createOptionRow(self, '', 'none', {})
 				tr.setAttribute('data-none', '')
 				tr.setAttribute(ATTR_INDEX, 0)
 				tbody.prepend(tr)
@@ -740,8 +744,8 @@ function Combobox_Search(self, searchtext, limit, offset) {
 			execute_selecting = false
 		} else {
 			execute_selecting = true
-			Combobox_ClearOptions(self, tbody)
-			dialog.SetNext(null)
+			cbo_clearOptions(self, tbody)
+			dialog.setNext(null)
 		}
 	}
 	
@@ -762,7 +766,7 @@ function Combobox_Search(self, searchtext, limit, offset) {
 				offset: offset,
 				addRow: (value, text, data) => {
 					var idx = tbody.rows.length - 1
-					var tr = Combobox_createOptionRow(self, value, text, data)
+					var tr = cbo_createOptionRow(self, value, text, data)
 					tr.setAttribute(ATTR_INDEX, idx)
 					tbody.appendChild(tr)
 				}
@@ -774,7 +778,7 @@ function Combobox_Search(self, searchtext, limit, offset) {
 }
 
 
-function Combobox_buttonClick(self, e) {
+function cbo_buttonClick(self, e) {
 	const dialog = self.Nodes.Dialog
 
 	if (self.Form!=null) {
@@ -792,7 +796,7 @@ function Combobox_buttonClick(self, e) {
 				dialog: dialog,
 				searchtext: '', limit: 0, offset: 0,
 				addRow: (value, text, data) => {
-					var tr = Combobox_createOptionRow(self, value, text, data)
+					var tr = cbo_createOptionRow(self, value, text, data)
 					tbody.appendChild(tr)
 				}
 			}
@@ -805,7 +809,7 @@ function Combobox_buttonClick(self, e) {
 		var offset = 0
 
 		// tambahkan data yang dipilih
-		Combobox_Search(self, searchtext, limit, offset)
+		cbo_search(self, searchtext, limit, offset)
 
 		// set focus pada input search
 		setTimeout(()=>{
@@ -820,8 +824,8 @@ function Combobox_buttonClick(self, e) {
 
 	// set jika dalam waktu 1 detik masih dalam posisi waiting, munculkan mask
 	setTimeout(()=>{
-		if (self.IsWaiting()) {
-			dialog.mask = $fgta5.Modal.Mask()
+		if (self.isWaiting()) {
+			dialog.mask = $fgta5.Modal.createMask()
 		}
 	}, 1000)
 
@@ -839,7 +843,7 @@ function Combobox_buttonClick(self, e) {
 				dialog.close()
 				dialog.removeAttribute(ATTR_REMOVING)
 				dialog.removeAttribute(ATTR_SHOWED)
-				Combobox_closed(self)
+				cbo_closed(self)
 			}, 200);
 		}
 	}
@@ -847,7 +851,7 @@ function Combobox_buttonClick(self, e) {
 }
 
 
-function Combobox_Wait(self, iswaiting) {
+function cbo_wait(self, iswaiting) {
 	const dialog = self.Nodes.Dialog
 	var tbody = dialog.getElementsByTagName('tbody')[0]
 
@@ -877,7 +881,7 @@ function Combobox_Wait(self, iswaiting) {
 }
 
 
-function Combobox_resetSelected(self) {
+function cbo_resetSelected(self) {
 	// ambil baris yang dipilih sebelumnya
 	const prevselected = self.Nodes.Dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
 	if (prevselected != null) {
@@ -907,7 +911,7 @@ function Combobox_resetSelected(self) {
 }
 
 
-function Combobox_dialogClose(self) {
+function cbo_dialogClose(self) {
 	// kembalikan yang saat ini di select ke baris semula
 	// const dialog = self.Nodes.Dialog
 	// const selected = dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
@@ -925,5 +929,4 @@ function Combobox_dialogClose(self) {
 	// 		}
 	// 	}
 	// }
-
 }

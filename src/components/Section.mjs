@@ -50,7 +50,7 @@ export default class Section {
 
 	set Title(v) {
 		this.#title = v
-		Section_SetTitle(this, v)
+		sec_setTitle(this, v)
 	}
 
 
@@ -77,16 +77,16 @@ export default class Section {
 				this.#fn_getActiveSection = ()=>{return null}
 			}
 		}
-		SectionConstruct(this, args) 
+		sec_construct(this, args) 
 	}
 
 
 
 
-	async Show(args, fn_callback) {
+	async show(args, fn_callback) {
 		const currSection = this.getActiveSection()
 		this.#previoussection = currSection // set current session ke previous untuk keperluan back
-		await Section_Show(this, args, fn_callback)
+		await sec_show(this, args, fn_callback)
 	}
 
 	addEventListener(eventname, callback) {
@@ -96,7 +96,7 @@ export default class Section {
 
 
 
-function SectionConstruct(self, args) {
+function sec_construct(self, args) {
 	const el = self.Element
 	
 	el.setAttribute('name', self.Name)
@@ -113,9 +113,9 @@ function SectionConstruct(self, args) {
 	// set title
 	const topbar = document.createElement('div')
 	const title = document.createElement('div')
-	const backbutton = Component.CreateSvgButton(ICONS.BACK, '', ()=>{
+	const backbutton = Component.createSvgButton(ICONS.BACK, '', ()=>{
 		// back ke previous section
-		Section_BackButtonClick(self)
+		sec_backButtonClick(self)
 	})
 
 
@@ -144,7 +144,7 @@ function SectionConstruct(self, args) {
 }
 
 
-async function Section_Show(self, args, fn_callback) {
+async function sec_show(self, args, fn_callback) {
 	if (typeof fn_callback==='function') {
 		await fn_callback()
 	}
@@ -177,8 +177,8 @@ async function Section_Show(self, args, fn_callback) {
 
 
 		// trigger event showing
-		self.Carousell.SetCurrentSection(commingSection)
-		self.Carousell.DispatchSectionShowing(currSection, commingSection)
+		self.Carousell.setCurrentSection(commingSection)
+		self.Carousell.dispatchSectionShowing(currSection, commingSection)
 		self.Listener.dispatchEvent(SectionShowingEvent({
 			data: {
 				currSection: currSection,
@@ -216,19 +216,19 @@ async function Section_Show(self, args, fn_callback) {
 }
 
 
-function Section_BackButtonClick(self) {
+function sec_backButtonClick(self) {
 	// back to self.PreviousSection
 	self.Listener.dispatchEvent(BackButtonClickEvent({
 		cancelable: true,
 		detail: {
 			fn_ShowNextSection: ()=>{
-				self.PreviousSection.Show({direction:DIR_RIGHT})
+				self.PreviousSection.show({direction:DIR_RIGHT})
 			}
 		}
 	}))
 }
 
 
-function Section_SetTitle(self, v) {
+function sec_setTitle(self, v) {
 	self.Nodes.Title.innerHTML = v
 }

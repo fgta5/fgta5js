@@ -116,7 +116,7 @@ async function main(self, args) {
 
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
-	form.Render()
+	form.render()
 
 
 
@@ -149,14 +149,14 @@ function obj_kota_selecting(evt) {
 
 	cbo.Wait()
 	cbo.AbortHandler = () => { loader.Abort() }	
-	loader.Load('/getdata', args, (err, result)=>{
+	loader.load('/getdata', args, (err, result)=>{
 		console.log('loading..')
 		console.log(result)
 
 		for (var row of result.data) {
 			evt.detail.addRow(row.value, row.text, row)
 		}
-		dialog.SetNext(result.nextoffset, result.limit)
+		dialog.setNext(result.nextoffset, result.limit)
 		cbo.Wait(false)
 	})
 	
@@ -164,41 +164,41 @@ function obj_kota_selecting(evt) {
 }
 
 async function btn_edittogle_click(self, evt) {
-	if (!form.IsLocked()) {
+	if (!form.isLocked()) {
 		// dalam posisi edit
-		if (form.IsChanged()) {
-			await $fgta5.MessageBox.Warning('Ada perubahan data, simpam data terlebih dahulu atau batalkan perubahan')
+		if (form.isChanged()) {
+			await $fgta5.MessageBox.warning('Ada perubahan data, simpam data terlebih dahulu atau batalkan perubahan')
 			return
 		}
 	}
 	
-	form.Lock(!form.IsLocked()) 
+	form.lock(!form.isLocked()) 
 }
 
 
 async function btn_reset_click(self, evt) {
-	if (form.IsChanged()) {
-		var ret = await $fgta5.MessageBox.Confirm("data pada form berubah, apakah akan reset data?")
+	if (form.isChanged()) {
+		var ret = await $fgta5.MessageBox.confirm("data pada form berubah, apakah akan reset data?")
 		if (ret=='ok') {
-			form.Reset()
+			form.reset()
 		}
 	}
 }
 
 async function btn_save_click(self, evt) {
-	if (!form.IsChanged()) {
+	if (!form.isChanged()) {
 		console.log('tidak ada perubahan data, tidak perlu disimpan')
 		return
 	}
 
-	var isValid = form.Validate()
+	var isValid = form.validate()
 	if (!isValid) {
 		var err = new Error('Ada kesalahan pada form, silahkan perbaiki');
 		console.warn(err.message);
-		await $fgta5.MessageBox.Error(err.message)
+		await $fgta5.MessageBox.error(err.message)
 		return
 	} else {
-		form.AcceptChanges()
+		form.acceptChanges()
 
 		var data = form.GetData()
 		console.log('data yang akan disimpan:', data)
@@ -207,16 +207,16 @@ async function btn_save_click(self, evt) {
 
 async function btn_new_click(self, evt) {
 	var newdata = true;
-	if (form.IsChanged()) {
+	if (form.isChanged()) {
 		newdata = false
-		var ret = await $fgta5.MessageBox.Confirm("data pada form berubah, apakah akan membuat data baru?")
+		var ret = await $fgta5.MessageBox.confirm("data pada form berubah, apakah akan membuat data baru?")
 		if (ret=='ok') {
 			newdata = true
 		}
 	}
 
 	if (newdata) {
-		form.NewData({
+		form.newData({
 			// nama: "Nama Baru",   // textbox
 			nilai: 60,  // numberbox
 			// isdisabled : true,
@@ -225,7 +225,7 @@ async function btn_new_click(self, evt) {
 			// jam: '11:00',
 			// alamat: "Alamat Baru", // textarea
 		})
-		form.Lock(false)
+		form.lock(false)
 	}
 }
 
@@ -249,7 +249,7 @@ function form_unlocked(self, evt) {
 
 
 function btn_testvalidation_click(self, evt) {
-	var isValid = form.Validate()
+	var isValid = form.validate()
 	if (!isValid) {	
 		console.warn('ada error, di default validation');
 		return
@@ -259,13 +259,13 @@ function btn_testvalidation_click(self, evt) {
 function btn_testdised_click(self, evt) {
 	for (var name in form.Inputs) {	
 		var obj = form.Inputs[name]
-		obj.Disabled = !obj.Disabled
+		obj.disabled = !obj.disabled
 	}
 }
 
 function btn_clearerror_click(self, evt) {
 	for (var name in form.Inputs) {	
 		var obj = form.Inputs[name]
-		obj.SetError(null)
+		obj.setError(null)
 	}
 }

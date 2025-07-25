@@ -44,18 +44,18 @@ export class MessageBox {
 	static ButtonYesNo = Object.freeze({yes:new MessageBoxButton('Yes'), no:new MessageBoxButton('No')})
 	static ButtonYesNoCancel = Object.freeze({yes:new MessageBoxButton('Yes'), no:new MessageBoxButton('No'), cancel:new MessageBoxButton('Cancel')})
 
-	static async Show (message, config) { return await MessageBox_Show(message, config) }
-	static async Error(message) { return await MessageBox_Error(message) }
-	static async Info(message) { return await MessageBox_Info(message) }
-	static async Warning(message) { return await MessageBox_Warning(message) }
-	static async Confirm(message, buttons) { return await MessageBox_Confirm(message, buttons) }
+	static async show (message, config) { return await msgbox_show(message, config) }
+	static async error(message) { return await msgbox_error(message) }
+	static async info(message) { return await msgbox_info(message) }
+	static async warning(message) { return await msgbox_warning(message) }
+	static async confirm(message, buttons) { return await msgbox_confirm(message, buttons) }
 }
 
 
 
 
 
-function Create(message, config) {
+function createMessageDialog(message, config) {
 	const dialog = document.createElement('dialog')
     dialog.classList.add('fgta5-messagebox-dialog')
 
@@ -100,10 +100,10 @@ function Create(message, config) {
 }
 
 
-async function MessageBox_Show(message, config) {
+async function msgbox_show(message, config) {
 	if (config === undefined) config = {}
 
-	var dialog = Create(message, config)
+	var dialog = createMessageDialog(message, config)
 	return new Promise((resolve)=>{
 		if (config.buttons) {
 			for (const [key, btn] of Object.entries(config.buttons)) {
@@ -132,20 +132,20 @@ async function MessageBox_Show(message, config) {
 }
 
 
-async function MessageBox_Error(message) {
-	return await MessageBox_Show(message, {iconSvg: ICON_ERROR})
+async function msgbox_error(message) {
+	return await msgbox_show(message, {iconSvg: ICON_ERROR})
 }
 
-async function MessageBox_Info(message) {
-	return await MessageBox_Show(message, {iconSvg: ICON_INFO})
+async function msgbox_info(message) {
+	return await msgbox_show(message, {iconSvg: ICON_INFO})
 }
-async function MessageBox_Warning(message) {
-	return await MessageBox_Show(message, {iconSvg: ICON_WARNING})
+async function msgbox_warning(message) {
+	return await msgbox_show(message, {iconSvg: ICON_WARNING})
 }
-async function MessageBox_Confirm(message, buttons) {
+async function msgbox_confirm(message, buttons) {
 	buttons = buttons===undefined ? MessageBox.ButtonOkCancel : buttons 
 
-	return await MessageBox_Show(message, {
+	return await msgbox_show(message, {
 		iconSvg: ICON_QUESTION,
 		buttons: buttons
 	})

@@ -32,29 +32,29 @@ async function main(self, args) {
 
 
 async function btn_msgboxShow_click(self, evt) {
-	var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan")
+	var ret = await $fgta5.MessageBox.show("ini messagebox ditampilkan")
 	console.log(ret)
 }
 
 async function btn_msgboxInfo_click(self, evt) {
-	$fgta5.MessageBox.Info("ini info ditampilkan")
+	$fgta5.MessageBox.info("ini info ditampilkan")
 }
 
 async function btn_rmsgboxWarn_click(self, evt) {
-	$fgta5.MessageBox.Warning("ini warning ditampilkan")
+	$fgta5.MessageBox.warning("ini warning ditampilkan")
 }
 
 async function btn_msgboxError_click(self, evt) {
-	$fgta5.MessageBox.Error("ini error ditampilkan")
+	$fgta5.MessageBox.error("ini error ditampilkan")
 }
 
 async function btn_msgboxConfirm_click(self, evt) {
-	var ret = await $fgta5.MessageBox.Confirm("konfirmasi, oke tidak ?")
+	var ret = await $fgta5.MessageBox.confirm("konfirmasi, oke tidak ?")
 	console.log(ret)
 }
 
 async function btn_msgbox_choose_click(self, evt) {
-	var ret = await $fgta5.MessageBox.Show("Kamu mau soto atau gulai ?", {
+	var ret = await $fgta5.MessageBox.show("Kamu mau soto atau gulai ?", {
 		iconcss: 'demo-icon-food',
 		buttons: {
 			soto: new $fgta5.MessageBoxButton('Soto'),

@@ -20,11 +20,12 @@ const TYPE_ROWSELECTOR = 'rowselector'
 const TYPE_AUTONUMBER = 'autonumber'
 const TYPE_STANDARD = 'standard'
 
-const CellClickEvent = (data) => { return new CustomEvent('cellclick', data) }
-const RowRenderEvent = (data) => { return new CustomEvent('rowrender', data) }
-const RowRemovingEvent = (data) => { return new CustomEvent('rowremoving', data) }
-const SortingEvent = (data) => { return new CustomEvent('sorting', data) }
-const NextDataEvent = (data) => { return new CustomEvent('nextdata', data) }
+const cellClickEvent = (data) => { return new CustomEvent('cellclick', data) }
+const cellDblClickEvent = (data) => { return new CustomEvent('celldblclick', data) }
+const rowRenderEvent = (data) => { return new CustomEvent('rowrender', data) }
+const rowRemovingEvent = (data) => { return new CustomEvent('rowremoving', data) }
+const sortingEvent = (data) => { return new CustomEvent('sorting', data) }
+const nextDataEvent = (data) => { return new CustomEvent('nextdata', data) }
 
 export default class Gridview extends Component {
 	constructor(id) {
@@ -35,22 +36,24 @@ export default class Gridview extends Component {
 			if (el.tagName.toLowerCase()!='table' ) {
 				throw new Error(`element '${id}' is not table`)
 			}
-			Gridview_construct(this)
+			grv_construct(this)
 		} else {
 			throw new Error(`element id '${id}' for gridview is not defined`)
 		}
 	}
 
-	AddRow(row) {
-		Gridview_AddRows(this, row)
+	/* menambahkan satu baris */
+	addRow(row) {
+		grv_addRow(this, row)
 	}
 
-	AddRows(rows) {
-		Gridview_AddRows(this, rows)
+	/* menambahkan multi baris */
+	addRows(rows) {
+		grv_addRows(this, rows)
 	}
 
-	SetNext(nextoffset, limit) {
-		// GridView_SetNext(this, nextoffset, limit)
+	setNext(nextoffset, limit) {
+		// grv_setNext(this, nextoffset, limit)
 	}
 
 	#columndata
@@ -66,39 +69,39 @@ export default class Gridview extends Component {
 	}
 
 
-	RemoveSelected(onFinished) {
-		GridView_RemoveSelected(this, onFinished)
+	removeSelected(onFinished) {
+		grv_removeSelected(this, onFinished)
 	}
 
-	HasRowPendingProcess() {
-		return GridView_HasRowPendingProcess(this)
+	hasRowPendingProcess() {
+		return grv_hasRowPendingProcess(this)
 	}
 
 	addEventListener(evt, callback) {
 		this.Listener.addEventListener(evt, callback)
 	}
 
-	Clear() {
+	clear() {
 		this.Nodes.Tbody.innerHTML = ''
 	}
 
-	SetNext(nextoffset, limit)  {
-		GridView_SetNext(this, nextoffset, limit)
+	setNext(nextoffset, limit)  {
+		grv_setNext(this, nextoffset, limit)
 	}
 
-	GetSort() {
-		return GridView_GetSort(this)
+	getSort() {
+		return grv_getSort(this)
 	}
 
 	#criteria = {}
 	get Criteria() { return this.#criteria } 
-	SetCriteria(criteria) {
+	setCriteria(criteria) {
 		this.#criteria = criteria
 	}
 }
 
 
-function Gridview_construct(self) {
+function grv_construct(self) {
 	var tbl = self.Element
 	var thead = tbl.querySelector('thead')
 	var tbody = document.createElement('tbody')
@@ -125,25 +128,25 @@ function Gridview_construct(self) {
 	
 
 	// baca kolom
-	const {headrow, columns, key} =Gridview_getColumns(self)
+	const {headrow, columns, key} =grv_getColumns(self)
 	self.setColumnData(columns)
 	self.setKey(key)
 
 	// create header
 	headrow.remove()
-	Gridview_setupHeader(self, columns)
+	grv_setupHeader(self, columns)
 
 	
 
 
-	// const columns = Gridview_getColumns()
-	// Gridview_createTableHaeder(self, tbl)
+	// const columns = grv_getColumns()
+	// grv_createTableHaeder(self, tbl)
 
 
 }
 
 
-function Gridview_getColumns(self) {
+function grv_getColumns(self) {
 	var columns = []
 	var thead = self.Nodes.Thead
 	var headrow = thead.querySelector("tr[data-header]")
@@ -195,7 +198,7 @@ function Gridview_getColumns(self) {
 }
 
 
-function Gridview_setupHeader(self, columns) {
+function grv_setupHeader(self, columns) {
 	var tr = document.createElement('tr')
 	tr.setAttribute(ATTR_MAINHEADROW, '')
 
@@ -211,7 +214,7 @@ function Gridview_setupHeader(self, columns) {
 
 		if (column.type==TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
-			chk.addEventListener('change', (evt)=>{ Gridview_headerCheckboxChange(self, evt)})
+			chk.addEventListener('change', (evt)=>{ grv_headerCheckboxChange(self, evt)})
 			
 			th.appendChild(chk)
 			th.setAttribute(ATTR_ROWSELECTOR, '')
@@ -230,7 +233,7 @@ function Gridview_setupHeader(self, columns) {
 				sortbtn.innerHTML = ICONS.UNSORT
 				sortbtn.setAttribute(ATTR_SORTING, '')
 				sortbtn.setAttribute(ATTR_BINDING, column.binding)
-				sortbtn.addEventListener('click', (evt)=>{ Gridview_sort(self, sortbtn) })
+				sortbtn.addEventListener('click', (evt)=>{ grv_sort(self, sortbtn) })
 
 				var text = document.createElement('div')
 				text.innerHTML = column.html
@@ -284,7 +287,7 @@ function createCheckbox() {
 }
 
 
-function Gridview_headerCheckboxChange(self, evt) {
+function grv_headerCheckboxChange(self, evt) {
 	var headchk = evt.target
 	var trs = self.Nodes.Tbody.querySelectorAll('tr');
 	for (var tr of trs) {
@@ -298,7 +301,7 @@ function Gridview_headerCheckboxChange(self, evt) {
 	}
 }
 
-function Gridview_rowCheckboxChange(self, evt) {
+function grv_rowCheckboxChange(self, evt) {
 	var chk = evt.target
 	var tr = chk.closest('tr')
 	if (chk.checked) {
@@ -312,20 +315,18 @@ function Gridview_rowCheckboxChange(self, evt) {
 	}
 }
 
-function Gridview_AddRows(self, rows) {
+function grv_addRows(self, rows) {
 	var tbody = self.Nodes.Tbody
 	for (var row of rows) {
-		GridView_AddRow(self, row, tbody)
+		grv_addRow(self, row, tbody)
 	}
 }
 
 
-function GridView_AddRow(self, row, tbody) {
+function grv_addRow(self, row, tbody) {
 	if (tbody===undefined) {
 		tbody = self.Nodes.Tbody
 	}
-
-	
 
 	var tr = document.createElement('tr')
 	tr.classList.add('fgta5-gridview-row')
@@ -352,17 +353,18 @@ function GridView_AddRow(self, row, tbody) {
 	
 		if (column.type==TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
-			chk.addEventListener('change', (evt)=>{ Gridview_rowCheckboxChange(self, evt) })
+			chk.addEventListener('change', (evt)=>{ grv_rowCheckboxChange(self, evt) })
 			td.appendChild(chk)
 			td.setAttribute(ATTR_ROWSELECTOR, '')
 		} else if (column.type==TYPE_AUTONUMBER) {
-			var linenumber = GridView_getLastLineNumber(self)
+			var linenumber = grv_getLastLineNumber(self)
 
 			linenumber++
 			td.setAttribute(ATTR_AUTONUMBER, '')
 			td.setAttribute(ATTR_LINENUMBER, linenumber)
 			td.innerHTML = linenumber
-			td.addEventListener('click', (evt)=>{ GridView_cellClick(self, td, tr) })
+			td.addEventListener('click', (evt)=>{ grv_cellClick(self, td, tr) })
+			td.addEventListener('dblclick', (evt)=>{ grv_cellDblClick(self, td, tr) })
 		} else {
 			var value = row[column.binding]
 			td.setAttribute(ATTR_VALUE, value)
@@ -370,7 +372,7 @@ function GridView_AddRow(self, row, tbody) {
 				if (column.formatter!=null) {
 					try {
 					// 	eval(`value=${column.formatter}`)
-						const func = Gridview_createFunction(column.formatter, value);
+						const func = grv_createFunction(column.formatter, value);
 						value = func(value)
 					} catch (err) {
 						console.error(err)
@@ -383,7 +385,8 @@ function GridView_AddRow(self, row, tbody) {
 			} else {
 				td.innerHTML = ''
 			}
-			td.addEventListener('click', (evt)=>{ GridView_cellClick(self, td, tr) })
+			td.addEventListener('click', (evt)=>{ grv_cellClick(self, td, tr) })
+			td.addEventListener('dblclick', (evt)=>{ grv_cellDblClick(self, td, tr) })
 		}
 
 		
@@ -391,26 +394,32 @@ function GridView_AddRow(self, row, tbody) {
 		tr.appendChild(td)
 	}
 
-	GridView_rowRender(self, tr)
+	grv_rowRender(self, tr)
 	tbody.appendChild(tr)
 	
 
 }
 
 
-function GridView_cellClick(self, td, tr) {
-	self.Listener.dispatchEvent(CellClickEvent({
+function grv_cellClick(self, td, tr) {
+	self.Listener.dispatchEvent(cellClickEvent({
 		detail: {tr: tr, td: td}
 	}))
 }
 
-function GridView_rowRender(self, tr) {
-	self.Listener.dispatchEvent(RowRenderEvent({
+function grv_cellDblClick(self, td, tr) {
+	self.Listener.dispatchEvent(cellDblClickEvent({
+		detail: {tr: tr, td: td}
+	}))
+}
+
+function grv_rowRender(self, tr) {
+	self.Listener.dispatchEvent(rowRenderEvent({
 		detail: {tr: tr}
 	}))
 }
 
-function Gridview_sort(self, btn) {
+function grv_sort(self, btn) {
 	var sorting = btn.getAttribute(ATTR_SORTING)
 	var binding = btn.getAttribute(ATTR_BINDING)
 	var th = btn.closest('th')
@@ -436,10 +445,10 @@ function Gridview_sort(self, btn) {
 
 	// ambil semua kolom yang di sort
 	const tr = btn.closest('tr')
-	const sort = GridView_GetSort(self, tr)
+	const sort = grv_getSort(self, tr)
 	const criteria = self.Criteria
 
-	self.Listener.dispatchEvent(SortingEvent({
+	self.Listener.dispatchEvent(sortingEvent({
 		detail: {
 			sort: sort,
 			criteria: criteria
@@ -450,7 +459,7 @@ function Gridview_sort(self, btn) {
 }
 
 
-function GridView_RemoveSelected(self, onFinished) {
+function grv_removeSelected(self, onFinished) {
 	var chks = self.Nodes.Tbody.querySelectorAll(`tr td[${ATTR_ROWSELECTOR}] input[type="checkbox"]:checked`);
 	if (chks.length==0) {
 		if (typeof onFinished==='function') {
@@ -470,7 +479,7 @@ function GridView_RemoveSelected(self, onFinished) {
 			}
 		}
 
-		let evt = RowRemovingEvent({
+		let evt = rowRemovingEvent({
 			detail: {
 				tr: tr,
 				onFinished: onFinished
@@ -487,7 +496,7 @@ function GridView_RemoveSelected(self, onFinished) {
 }
 
 
-function GridView_HasRowPendingProcess(self) {
+function grv_hasRowPendingProcess(self) {
 	var rows = self.Nodes.Tbody.querySelectorAll(`tr[${ATTR_ROWPROCESSING}]`)
 
 	console.log(rows.length)
@@ -499,7 +508,7 @@ function GridView_HasRowPendingProcess(self) {
 }
 
 
-function GridView_SetNext(self, nextoffset, limit) {
+function grv_setNext(self, nextoffset, limit) {
 	var nextoffsetcontainer = self.Nodes.Tfoot.querySelector('tr[data-nextoffset]')
 	if (nextoffsetcontainer!=null) {
 		nextoffsetcontainer.remove()
@@ -515,12 +524,12 @@ function GridView_SetNext(self, nextoffset, limit) {
 		next.innerHTML = 'load next data'
 		next.setAttribute('href', 'javascript:void(0)')
 		next.addEventListener('click', (evt)=>{
-			self.Listener.dispatchEvent(NextDataEvent({
+			self.Listener.dispatchEvent(nextDataEvent({
 				detail: {
 					criteria: self.Criteria,
 					nextoffset: nextoffset,
 					limit: limit,
-					sort: self.GetSort()
+					sort: self.getSort()
 				}
 			}))
 		})
@@ -538,7 +547,7 @@ function GridView_SetNext(self, nextoffset, limit) {
 	} 
 }
 
-function  GridView_GetSort(self, tr) {
+function  grv_getSort(self, tr) {
 	if (tr==null) {
 		tr = self.Nodes.Thead.querySelector(`tr[${ATTR_MAINHEADROW}]`)
 	}
@@ -555,7 +564,7 @@ function  GridView_GetSort(self, tr) {
 }
 
 
-function GridView_getLastLineNumber(self) {
+function grv_getLastLineNumber(self) {
 	var lastrow = self.Nodes.Tbody.querySelector('tr:last-child td[autonumber]')
 	if (lastrow==null) {
 		return 0
@@ -570,7 +579,7 @@ function GridView_getLastLineNumber(self) {
 }
 
 
-function Gridview_createFunction(expression) {
+function grv_createFunction(expression) {
     const match = expression.match(/(\w+)\(([^)]+)\)/);
     if (!match) return null;
 
@@ -578,15 +587,15 @@ function Gridview_createFunction(expression) {
     const parsedArgs = args.split(",").map(arg => parseFloat(arg.trim()));
 
     if (funcName === "decimal") {
-        return (v) => Gridview_formatDecimal(v, parsedArgs[1]);
+        return (v) => grv_formatDecimal(v, parsedArgs[1]);
     } else if (funcName === 'checkmark') {
-		return (v) => Gridview_formatCheckmark(v)
+		return (v) => grv_formatCheckmark(v)
 	}
     return null;
 }
 
 
-function Gridview_formatDecimal (value, precision)  { 
+function grv_formatDecimal (value, precision)  { 
 	const formatterFixed = new Intl.NumberFormat('en-US', {
 		minimumFractionDigits: precision,
 		maximumFractionDigits: precision
@@ -594,7 +603,7 @@ function Gridview_formatDecimal (value, precision)  {
 	return formatterFixed.format(value)
 }
 
-function Gridview_formatCheckmark(value) {
+function grv_formatCheckmark(value) {
 	const yes = ICONS.YES
 	const no = ICONS.NO
 

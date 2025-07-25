@@ -14,54 +14,54 @@ export default class Checkbox extends Input {
 
 	constructor(id) {
 		super(id)
-		Checkbox_construct(this, id)
+		chk_construct(this, id)
 	}
 
-	get Value() { return Checkbox_getValue(this) }
-	set Value(v) {
-		Checkbox_setValue(this, v)
+	get value() { return chk_getValue(this) }
+	set value(v) {
+		chk_setValue(this, v)
 	}
 
 
-	get Disabled() { return Checkbox_getDisabled(this) }
-	set Disabled(v) { 
+	get disabled() { return chk_getDisabled(this) }
+	set disabled(v) { 
 		this.Element.disabled = v 
-		Checkbox_setDisabled(this, v)
+		chk_setDisabled(this, v)
 	}
 
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Checkbox_SetEditingMode(this, ineditmode)
+		chk_setEditingMode(this, ineditmode)
 	}
 
-	NewData(initialvalue) {
-		super.NewData(initialvalue)
-		Checkbox_NewData(this, initialvalue)
+	newData(initialvalue) {
+		super.newData(initialvalue)
+		chk_NewData(this, initialvalue)
 	}
 
-	GetLastValue() {
-		return Checkbox_GetLastValue(this)
+	getLastValue() {
+		return chk_getLastValue(this)
 	} 
 
-	IsChanged() { 
-		return Checkbox_IsChanged(this)
+	isChanged() { 
+		return chk_isChanged(this)
 	}
 
-	Reset() {
-		Checkbox_Reset(this)
+	reset() {
+		chk_Reset(this)
 	}
 
 	_setLastValue(v) {
-		Checkbox_setLastValue(this, v)
+		chk_setLastValue(this, v)
 	}
 }
 
 
 
-function Checkbox_construct(self, id) {
+function chk_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -112,12 +112,12 @@ function Checkbox_construct(self, id) {
 
 	// tambahkan event listener internal
 	input.addEventListener('change', (event) => {
-		Checkbox_checkedChanged(self)		
+		chk_checkedChanged(self)		
 	});
 
 }
 
-function Checkbox_getDisabled(self) {
+function chk_getDisabled(self) {
 	var disabled = self.Nodes.Input.getAttribute('permanent-disabled')
 	if (disabled === null) {
 		return false
@@ -129,7 +129,7 @@ function Checkbox_getDisabled(self) {
 	return false
 }
 
-function Checkbox_setDisabled(self, v) {
+function chk_setDisabled(self, v) {
 	var input = self.Nodes.Input
 
 	var editmode = input.getAttribute('editmode')
@@ -148,7 +148,7 @@ function Checkbox_setDisabled(self, v) {
 }
 
 
-function Checkbox_SetEditingMode(self, ineditmode) {
+function chk_setEditingMode(self, ineditmode) {
 	var input = self.Nodes.Input
 	var attrval = ineditmode ? 'true' : 'false'
 	var permdisattr = input.getAttribute('permanent-disabled')
@@ -166,7 +166,7 @@ function Checkbox_SetEditingMode(self, ineditmode) {
 	}
 }
 
-function Checkbox_setLastValue(self, v) {
+function chk_setLastValue(self, v) {
 	var lastvalue = 1
 	if (v==='off' || v==='0' || v===0 || v===false) {
 		lastvalue = 0
@@ -175,10 +175,10 @@ function Checkbox_setLastValue(self, v) {
 }
 
 
-function Checkbox_checkedChanged(self) {
+function chk_checkedChanged(self) {
 	var input = self.Nodes.Input
 	input.value = input.checked ? 1 : 0
-	if (self.GetLastValue() != self.Value) {
+	if (self.getLastValue() != self.value) {
 		input.setAttribute('changed', 'true')
 	} else {
 		input.removeAttribute('changed')
@@ -192,9 +192,9 @@ function Checkbox_checkedChanged(self) {
 }
 
 
-function Checkbox_IsChanged(self) {
-	var lastvalue = self.GetLastValue()
-	var currentvalue = self.Value
+function chk_isChanged(self) {
+	var lastvalue = self.getLastValue()
+	var currentvalue = self.value
 	if (currentvalue!=lastvalue) {
 		// console.log(`Checkbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true
@@ -205,7 +205,7 @@ function Checkbox_IsChanged(self) {
 
 
 
-function Checkbox_getBoolValue(v) {
+function chk_getBoolValue(v) {
 	if (v===0||v==='0'||v===false||v===undefined) {
 		return false
 	} else {
@@ -215,13 +215,13 @@ function Checkbox_getBoolValue(v) {
 
 
 
-function Checkbox_getValue(self) {
+function chk_getValue(self) {
 	return self.Element.checked
 }
 
-function Checkbox_setValue(self, v) {
+function chk_setValue(self, v) {
 	var input = self.Nodes.Input
-	var checked = Checkbox_getBoolValue(v)
+	var checked = chk_getBoolValue(v)
 	input.checked = checked
 	if (checked) {
 		input.value = 1
@@ -229,30 +229,30 @@ function Checkbox_setValue(self, v) {
 		input.value = 0
 	}
 
-	Checkbox_markChanged(self)
+	chk_markChanged(self)
 }
 
-function Checkbox_GetLastValue(self) {
+function chk_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
-	return Checkbox_getBoolValue(lastvalue)
+	return chk_getBoolValue(lastvalue)
 }
 
-function Checkbox_Reset(self) {
-	var checked = self.GetLastValue()
-	self.Value = checked
+function chk_Reset(self) {
+	var checked = self.getLastValue()
+	self.value = checked
 	self._setLastValue(checked)
 }
 
 
-function Checkbox_NewData(self, initialvalue) {
-	var checked = Checkbox_getBoolValue(initialvalue)
-	self.Value = checked
+function chk_NewData(self, initialvalue) {
+	var checked = chk_getBoolValue(initialvalue)
+	self.value = checked
 	self._setLastValue(checked)
 }
 
-function Checkbox_markChanged(self) {
+function chk_markChanged(self) {
 	var input = self.Nodes.Input
-	if (self.Value!=self.GetLastValue()) {
+	if (self.value!=self.getLastValue()) {
 		input.setAttribute('changed', 'true')
 	} else {
 		input.removeAttribute('changed')

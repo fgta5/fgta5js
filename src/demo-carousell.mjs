@@ -25,10 +25,10 @@ async function main(self) {
 
 function btn_openPage2_click(self, evt) {
 	const toshow = Crsl.Items['sec_page2']
-	toshow.Show()
+	toshow.show()
 }
 
 function btn_openPage3_click(self, evt) {
 	const toshow = Crsl.Items['sec_page3']
-	toshow.Show()
+	toshow.show()
 }

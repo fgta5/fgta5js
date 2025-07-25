@@ -12,11 +12,11 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 export default class Filebox extends Input {
 	constructor(id) {
 		super(id)
-		Filebox_construct(this, id)
+		flb_construct(this, id)
 	}
 
 
-	get Value() { 
+	get value() { 
 		if (this.Element.files.length===0) {
 			return ''
 		} else {
@@ -26,45 +26,45 @@ export default class Filebox extends Input {
 	
 
 
-	get Disabled() { return this.Element.disabled }
-	set Disabled(v) { 
+	get disabled() { return this.Element.disabled }
+	set disabled(v) { 
 		this.Element.disabled = v 
-		Filebox_setDisabled(this, v)
+		flb_setDisabled(this, v)
 	}
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Filebox_SetEditingMode(this, ineditmode)
+		flb_setEditingMode(this, ineditmode)
 	}
 
-	NewData() {
-		Filebox_NewData(this)
+	newData() {
+		flb_newData(this)
 	}
 
-	AcceptChanges() {
-		Filebox_AcceptChanges(this)
+	acceptChanges() {
+		flb_acceptChanges(this)
 	}
 
-	Reset() {
-		Filebox_Reset(this)
+	reset() {
+		flb_Reset(this)
 	}
 
-	IsChanged() { 
-		return Filebox_IsChanged(this)
+	isChanged() { 
+		return flb_isChanged(this)
 	}
 
-	SetError(msg) {
-		super.SetError(msg)
-		Filebox_SetError(this, msg)
+	setError(msg) {
+		super.setError(msg)
+		flb_setError(this, msg)
 	}
 
 
 
 }
 
-function Filebox_construct(self, id) {
+function flb_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -133,7 +133,11 @@ function Filebox_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-filebox')
 	input.getInputCaption = () => {
-		return label.innerHTML
+		if (label!=null) {
+			return label.innerHTML
+		} else {
+			return input.getAttribute('placeholder')
+		}
 	}
 
 	
@@ -154,11 +158,11 @@ function Filebox_construct(self, id) {
 	// required field
 	var required = input.getAttribute('required')
 	if (required != null) {
-		self.MarkAsRequired(true)
+		self.markAsRequired(true)
 	}
 
 	self._setLastValue(input.value)
-	self.AcceptChanges()
+	self.acceptChanges()
 
 
 	// set input description
@@ -166,14 +170,14 @@ function Filebox_construct(self, id) {
 
 
 	input.addEventListener('change', (e)=>{
-		Filebox_changed(self)
+		flb_changed(self)
 	})
 
 
 }
 
 
-function Filebox_setDisabled(self, v) {
+function flb_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var button = self.Nodes.Button
 	if (v) {
@@ -186,7 +190,7 @@ function Filebox_setDisabled(self, v) {
 }
 
 
-function Filebox_SetEditingMode(self, ineditmode) {
+function flb_setEditingMode(self, ineditmode) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	var attrval = ineditmode ? 'true' : 'false'
@@ -199,12 +203,12 @@ function Filebox_SetEditingMode(self, ineditmode) {
 		input.disabled = false
 	} else {
 		input.disabled = true
-		self.SetError(null)
+		self.setError(null)
 	}
 }
 
 
-function Filebox_changed(self) {
+function flb_changed(self) {
 	var input = self.Nodes.Input
 
 	if (input.files.length === 0) {
@@ -212,16 +216,16 @@ function Filebox_changed(self) {
 	}
 
 	self.Nodes.Display.value = input.files[0].name
-	Filebox_markChanged(self)
+	flb_markChanged(self)
 	if (self.InEditMode) {
-		self.SetError(null)
-		self.Validate()
+		self.setError(null)
+		self.validate()
 	}
 }
 
-function Filebox_markChanged(self) {
+function flb_markChanged(self) {
 	var display = self.Nodes.Display
-	if (self.Value!=self.GetLastValue()) {
+	if (self.value!=self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 	} else {
 		display.removeAttribute('changed')
@@ -230,7 +234,7 @@ function Filebox_markChanged(self) {
 
 
 
-function Filebox_SetError(self, msg) {
+function flb_setError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg!== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
@@ -239,29 +243,29 @@ function Filebox_SetError(self, msg) {
 	}
 }
 
-function Filebox_NewData(self) {
+function flb_newData(self) {
 	self.Nodes.Input.value = ''
 	self.Nodes.Display.value = ''
-	self.AcceptChanges()
+	self.acceptChanges()
 }
 
 
-function Filebox_Reset(self) {
+function flb_Reset(self) {
 	// let newFileInput = self.Nodes.Input.cloneNode();
 	// newFileInput.addEventListener('change', (e)=>{
-	// 	Filebox_changed(self)
+	// 	flb_changed(self)
 	// })
 	
 	// self.Nodes.Input.replaceWith(newFileInput)
 	// self.Nodes.Input = newFileInput
 	self.Nodes.Input.value = ''
 	
-	var lastvalue = self.GetLastValue()
+	var lastvalue = self.getLastValue()
 	self.Nodes.Display.value = lastvalue
-	self.AcceptChanges()
+	self.acceptChanges()
 }
 
-function Filebox_AcceptChanges(self) {
+function flb_acceptChanges(self) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	var currentvalue = ''
@@ -272,13 +276,13 @@ function Filebox_AcceptChanges(self) {
 	self._setLastValue(currentvalue)
 	input.removeAttribute('changed')
 	display.removeAttribute('changed')
-	self.SetError(null)
+	self.setError(null)
 }
 
 
-function Filebox_IsChanged(self) {
+function flb_isChanged(self) {
 	var lastvalue = self.Nodes.LastValue.value
-	var currentvalue = self.Value
+	var currentvalue = self.value
 	if (currentvalue!=lastvalue) {
 		console.log(`Input '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true

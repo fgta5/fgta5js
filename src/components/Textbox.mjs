@@ -11,30 +11,30 @@ export default class Textbox extends Input {
 
 	constructor(id) {
 		super(id)
-		Textbox_construct(this, id)
+		txt_construct(this, id)
 	}
 
-	get Value() { return Textbox_GetValue(this) }
-	set Value(v) { Textbox_SetValue(this, v) }
+	get value() { return txt_GetValue(this) }
+	set value(v) { txt_SetValue(this, v) }
 
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Textbox_SetEditingMode(this, ineditmode)
+		txt_setEditingMode(this, ineditmode)
 	}
 
-	NewData(initialvalue) {
-		super.NewData(initialvalue)
+	newData(initialvalue) {
+		super.newData(initialvalue)
 	}
 
-	GetLastValue() {
-		return Textbox_GetLastValue(this)
+	getLastValue() {
+		return txt_getLastValue(this)
 	} 
 
-	IsChanged() { 
-		return Textbox_IsChanged(this)
+	isChanged() { 
+		return txt_isChanged(this)
 	}
 
 
@@ -42,7 +42,7 @@ export default class Textbox extends Input {
 
 
 
-function Textbox_construct(self, id) {
+function txt_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -122,7 +122,7 @@ function Textbox_construct(self, id) {
 
 
 	// set input value
-	self._setLastValue(self.Value)
+	self._setLastValue(self.value)
 
 	// set input description
 	self._setupDescription()
@@ -144,7 +144,7 @@ function Textbox_construct(self, id) {
 	// required field
 	var required = input.getAttribute('required')
 	if (required != null) {
-		self.MarkAsRequired(true)
+		self.markAsRequired(true)
 	}
 
 
@@ -157,7 +157,7 @@ function Textbox_construct(self, id) {
 			return
 		}
 
-		if (self.GetLastValue() != self.Value) {
+		if (self.getLastValue() != self.value) {
 			input.setAttribute('changed', 'true')
 		} else {
 			input.removeAttribute('changed')
@@ -165,7 +165,7 @@ function Textbox_construct(self, id) {
 	})
 
 	input.addEventListener('blur', (evt)=> {
-		Textbox_blur(self, evt)
+		txt_blur(self, evt)
 		self.Listener.dispatchEvent(BlurEvent({}))
 	})	
 
@@ -189,7 +189,7 @@ function Textbox_construct(self, id) {
 	
 }
 
-function Textbox_getValueCased(self, v) {
+function txt_getValueCased(self, v) {
 	var value = v
 	var input = self.Nodes.Input
 	if (input.charCase === 'uppercase') {
@@ -201,24 +201,24 @@ function Textbox_getValueCased(self, v) {
 }
 
 
-function Textbox_GetValue(self) {
+function txt_GetValue(self) {
 	var input = self.Nodes.Input
-	var value = Textbox_getValueCased(self, input.value)
+	var value = txt_getValueCased(self, input.value)
 	return value
 }
 
-function Textbox_SetValue(self, v) {
+function txt_SetValue(self, v) {
 	if (v===null || v===undefined) {
 		v=''
 	}
-	self.Element.value = Textbox_getValueCased(self, v)
+	self.Element.value = txt_getValueCased(self, v)
 }
 
 
 
-function Textbox_IsChanged(self) {
-	var lastvalue = self.GetLastValue()
-	var currentvalue = self.Value
+function txt_isChanged(self) {
+	var lastvalue = self.getLastValue()
+	var currentvalue = self.value
 	if (currentvalue!=lastvalue) {
 		console.log(`Textbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true
@@ -227,12 +227,12 @@ function Textbox_IsChanged(self) {
 	}
 }
 
-function Textbox_GetLastValue(self) {
+function txt_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
-	return Textbox_getValueCased(self, lastvalue)
+	return txt_getValueCased(self, lastvalue)
 }
 
-function Textbox_SetEditingMode(self, ineditmode) {
+function txt_setEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 	self.Nodes.Input.setAttribute('editmode', attrval)
 	self.Nodes.InputWrapper.setAttribute('editmode', attrval)
@@ -241,15 +241,15 @@ function Textbox_SetEditingMode(self, ineditmode) {
 		self.Nodes.Input.removeAttribute('readonly')
 	} else {
 		self.Nodes.Input.setAttribute('readonly', 'true')
-		self.SetError(null)
+		self.setError(null)
 	}
 }
 
 
-function Textbox_blur(self, e) {
+function txt_blur(self, e) {
 	if (self.InEditMode) {
-		self.SetError(null)
-		self.Validate()
+		self.setError(null)
+		self.validate()
 	}
 }
 

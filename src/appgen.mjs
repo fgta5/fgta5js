@@ -21,7 +21,7 @@ const mod = {} // menampung variabel2 module yang akan di share
 
 export default class AppGen  {
 	async main(args) {
-		app.SetTitle("Generator")
+		app.setTitle("Generator")
 
 
 		// ambil semua file-file yang diperlukan
@@ -82,7 +82,7 @@ function AppGen_setupButtonNew(self) {
 			const sectionname = section.getAttribute('name')
 			if (sectionname!=SECTION_DATADESIGN) {
 				// tampilkan section 2
-				mod.scar.Items[SECTION_DATADESIGN].Show()
+				mod.scar.Items[SECTION_DATADESIGN].show()
 			}
 		})
 	})

@@ -16,21 +16,21 @@ export default class Component {
 		}
 	}
 
-	static CreateSvgButton(svg, classname, fn_click) {
-		return Component_CreateSvgButton(svg, classname, fn_click)
+	static createSvgButton(svg, classname, fn_click) {
+		return comp_createSvgButton(svg, classname, fn_click)
 	}
 
-	static GenerateId() {
+	static generateId() {
 		return `comp-${++counter}`;
 	}
 
-	static Sleep(ms) {
+	static sleep(ms) {
  		return new Promise(resolve => setTimeout(resolve, ms))
 	}
 }
 
 
-function Component_CreateSvgButton(svg, classname, fn_click) {
+function comp_createSvgButton(svg, classname, fn_click) {
 	const btn = document.createElement('a')
 	btn.innerHTML = svg
 

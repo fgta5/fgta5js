@@ -83,19 +83,19 @@ async function main(self, args) {
 	btn.section3 = new $fgta5.Button('btn_section3')
 
 	btn.section1.addEventListener(EVT_CLICK, (evt)=>{
-		mod.scar.Items[SECTION_MODULELIST].Show({direction:$fgta5.Section.DIR_RIGHT})
+		mod.scar.Items[SECTION_MODULELIST].show({direction:$fgta5.Section.DIR_RIGHT})
 	})
 
 	btn.section2.addEventListener(EVT_CLICK, (evt)=>{
-		mod.scar.Items[SECTION_DATADESIGN].Show()
+		mod.scar.Items[SECTION_DATADESIGN].show()
 	})
 	
 	btn.section3.addEventListener(EVT_CLICK, (evt)=>{
-		mod.scar.Items[SECTION_UIDESIGN].Show()
+		mod.scar.Items[SECTION_UIDESIGN].show()
 	})
 
 
-	app.ShowFooter(true)
+	app.showFooter(true)
 
 	const ui = new UIGenerator()
 	ui.init()
@@ -108,6 +108,6 @@ function AppGenerator_NewData(self, evt) {
 	const sectionname = section.getAttribute('name')
 	if (sectionname!=SECTION_DATADESIGN) {
 		// tampilkan section 2
-		mod.scar.Items[SECTION_DATADESIGN].Show()
+		mod.scar.Items[SECTION_DATADESIGN].show()
 	}
 }

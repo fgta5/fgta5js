@@ -32,8 +32,8 @@ async function main(self, args) {
 	const appmain = document.getElementById('appmain')
 	appmain.classList.add('hidden')
 
-	appmgr.SetTitle('Fgta5 Application Manager')
-	appmgr.SetMenu([
+	appmgr.setTitle('Fgta5 Application Manager')
+	appmgr.setMenu([
 		programs.appgen,
 
 		{
@@ -79,12 +79,12 @@ async function main(self, args) {
 	])
 
 	// set program favourite	
-	appmgr.SetFavourite([ 'appgen', 'crud01', 'account',  'periode'])
+	appmgr.setFavourite([ 'appgen', 'crud01', 'account',  'periode'])
 
-	appmgr.SetUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
+	appmgr.setUser({userid:'1234', displayname:'Agung Nugroho', profilepic:''})
 
 
-	// await appmgr.OpenModule(programs.generator)
+	// await appmgr.openModule(programs.generator)
 	setTimeout(()=>{
 		appmain.classList.remove('hidden')
 	}, 1000)
@@ -100,14 +100,14 @@ async function main(self, args) {
 		// do something when logout
 		// console.log('open user profule')
 		// console.log(evt.detail)
-		appmgr.OpenModule(ProfileModule)
+		appmgr.openModule(ProfileModule)
 	})
 
 	appmgr.addEventListener('opensetting', (evt)=>{
 		// do something when logout
 		// console.log('open setting')
 		// console.log(evt.detail)
-		appmgr.OpenModule(SettingModule)
+		appmgr.openModule(SettingModule)
 	})
 
 

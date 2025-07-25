@@ -18,60 +18,60 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 export default class Timepicker extends Input {
 	constructor(id) {
 		super(id)
-		Timepicker_construct(this, id)
+		tpck_construct(this, id)
 	}
 
-	get Min() { return this.Element.min }
-	set Min(v) { this.Element.min = v }
+	get min() { return this.Element.min }
+	set min(v) { this.Element.min = v }
 
-	get Max() { return this.Element.max }
-	set Max(v) { this.Element.max = v }
+	get max() { return this.Element.max }
+	set max(v) { this.Element.max = v }
 
 
-	get Value() { return Timepicker_getValue(this) }
-	set Value(v) { Timepicker_setValue(this, v) }
+	get value() { return tpck_getValue(this) }
+	set value(v) { tpck_setValue(this, v) }
 
-	get Disabled() { return this.Element.disabled }
-	set Disabled(v) { 
+	get disabled() { return this.Element.disabled }
+	set disabled(v) { 
 		this.Element.disabled = v 
-		Timepicker_setDisabled(this, v)
+		tpck_setDisabled(this, v)
 	}
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) {
+	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Timepicker_SetEditingMode(this, ineditmode)
+		tpck_setEditingMode(this, ineditmode)
 	}
 
 	
-	NewData(initialvalue) {
+	newData(initialvalue) {
 		if (initialvalue=='' || initialvalue==null) {
 			initialvalue = '00:00'
 		}
-		super.NewData(initialvalue)
-		// Timepicker_Newdata(this, initialvalue)
+		super.newData(initialvalue)
+		// tpck_Newdata(this, initialvalue)
 	}
 
-	AcceptChanges() {
-		super.AcceptChanges()
-		Timepicker_AcceptChanges(this)
+	acceptChanges() {
+		super.acceptChanges()
+		tpck_acceptChanges(this)
 		
 	}
 
-	Reset() {
-		super.Reset()
-		Timepicker_Reset(this)
+	reset() {
+		super.reset()
+		tpck_reset(this)
 	}
 	
 
-	SetError(msg) {
-		super.SetError(msg)
-		Timepicker_SetError(this, msg)
+	setError(msg) {
+		super.setError(msg)
+		tpck_setError(this, msg)
 	}
 
-	GetLastValue() {
-		return Timepicker_GetLastValue(this)
+	getLastValue() {
+		return tpck_getLastValue(this)
 	} 
 
 }
@@ -79,7 +79,7 @@ export default class Timepicker extends Input {
 
 
 
-function Timepicker_construct(self, id) {
+function tpck_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -170,15 +170,15 @@ function Timepicker_construct(self, id) {
 	// required field
 	var required = input.getAttribute('required')
 	if (required != null) {
-		self.MarkAsRequired(true)
+		self.markAsRequired(true)
 	}
 
 	if (input.value == null || input.value == '') {
 		input.value = '00:00'
 	}
-	self.Value = input.value
+	self.value = input.value
 	self._setLastValue(input.value)
-	self.AcceptChanges()
+	self.acceptChanges()
 
 
 	// set input description
@@ -186,12 +186,12 @@ function Timepicker_construct(self, id) {
 
 
 	input.addEventListener('change', (e)=>{
-		Timepicker_changed(self)
+		tpck_changed(self)
 	})
 }
 
 
-function Timepicker_setDisabled(self, v) {
+function tpck_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var inputwrap = self.Nodes.InputWrapper
 	var button = self.Nodes.Button
@@ -208,7 +208,7 @@ function Timepicker_setDisabled(self, v) {
 }
 
 
-function Timepicker_SetEditingMode(self, ineditmode) {
+function tpck_setEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
@@ -222,40 +222,40 @@ function Timepicker_SetEditingMode(self, ineditmode) {
 		input.removeAttribute('readonly')
 	} else {
 		input.setAttribute('readonly', 'true')
-		self.SetError(null)
+		self.setError(null)
 	}
 }
 
 
-function Timepicker_AcceptChanges(self) {
+function tpck_acceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')
 }
 
-function Timepicker_Reset(self) {
-	var lastvalue = self.GetLastValue()
+function tpck_reset(self) {
+	var lastvalue = self.getLastValue()
 	if (lastvalue==null) {
-		self.Value = ''
+		self.value = ''
 	} else {
-		self.Value = lastvalue
+		self.value = lastvalue
 	}
 }
 
 
-function Timepicker_changed(self) {
+function tpck_changed(self) {
 	var input = self.Nodes.Input
-	Timepicker_setDisplay(self, input.value)
+	tpck_setDisplay(self, input.value)
 	
-	Timepicker_markChanged(self)
+	tpck_markChanged(self)
 	if (self.InEditMode) {
-		self.SetError(null)
-		self.Validate()
+		self.setError(null)
+		self.validate()
 	}
 }
 
 
-function Timepicker_markChanged(self) {
+function tpck_markChanged(self) {
 	var display = self.Nodes.Display
-	if (self.Value!=self.GetLastValue()) {
+	if (self.value!=self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 	} else {
 		display.removeAttribute('changed')
@@ -264,7 +264,7 @@ function Timepicker_markChanged(self) {
 
 
 
-function Timepicker_getValue(self) {
+function tpck_getValue(self) {
 	var input = self.Nodes.Input
 	if (input.value=='') {
 		return null
@@ -275,22 +275,22 @@ function Timepicker_getValue(self) {
 
 
 
-function Timepicker_setValue(self, dt) {
+function tpck_setValue(self, dt) {
     if (!timeRegex.test(dt)) {
 		throw new Error(`invalid HH:ss format for '${dt}'`)
 	}
 
 	self.Nodes.Input.value = dt
-	Timepicker_setDisplay(self, dt)
-	Timepicker_markChanged(self)
+	tpck_setDisplay(self, dt)
+	tpck_markChanged(self)
 }
 
 
-function Timepicker_setDisplay(self, tm) {
+function tpck_setDisplay(self, tm) {
 	self.Nodes.Display.value = tm
 }
 
-function Timepicker_SetError(self, msg) {
+function tpck_setError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg!== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
@@ -300,7 +300,7 @@ function Timepicker_SetError(self, msg) {
 }
 
 
-function Timepicker_GetLastValue(self) {
+function tpck_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	if (lastvalue=='') {
 		return null
