@@ -89,6 +89,9 @@ export default class Combobox extends Input {
 		cbo_setSelected(this, value, text)
 	}
 
+	getDisplayBinding() {
+		return this.Nodes.Input.getAttribute('data-display')
+	}
 
 	addOptions(data) {
 		cbo_addOptions(this, data)
@@ -213,6 +216,7 @@ function cbo_construct(self, id) {
 	display.setAttribute('readonly', 'true')
 	display.setAttribute('fgta5-component', 'Combobox')
 	display.setAttribute('placeholder', input.getAttribute('placeholder'))
+	
 	display.required = input.required
 
 	// setup button

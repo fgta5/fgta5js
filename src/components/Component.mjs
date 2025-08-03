@@ -10,10 +10,17 @@ export default class Component {
 	static get ACTION_APPLICATIONLOADED() { return 'applicationloaded' }
 
 	constructor(id) {
-		if (id!=undefined) {
-			this.Id = id
-			this.Element = document.getElementById(id)
+		if (id==undefined) {
+			console.error('id component belum didefinisikan')
 		}
+
+		const el =  document.getElementById(id)
+		if (el==null) {
+			console.error(`element dengan id: '$id' tidak ditemukan di halaman`)
+		}
+
+		this.Id = id
+		this.Element = el
 	}
 
 	static createSvgButton(svg, classname, fn_click) {

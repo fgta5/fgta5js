@@ -181,8 +181,12 @@ async function sec_show(self, args, fn_callback) {
 		self.Carousell.dispatchSectionShowing(currSection, commingSection)
 		self.Listener.dispatchEvent(SectionShowingEvent({
 			data: {
-				currSection: currSection,
-				commingSection: commingSection
+				// currSection: currSection,
+				// commingSection: commingSection,
+				detail: {
+					currSection: currSection,
+					commingSection: commingSection,
+				}
 			}
 		}))
 		

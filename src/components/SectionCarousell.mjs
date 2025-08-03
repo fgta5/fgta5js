@@ -30,8 +30,12 @@ export default class SectionCarousell {
 
 	dispatchSectionShowing(currSection, commingSection) {
 		this.Listener.dispatchEvent(SectionShowingEvent({
-			currSection: currSection,
-			commingSection: commingSection
+			// currSection: currSection,
+			// commingSection: commingSection,
+			detail: {
+				currSection: currSection,
+				commingSection: commingSection,
+			}
 		}))
 	}
 }

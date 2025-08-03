@@ -431,6 +431,7 @@ async function appmgr_openModule(self, module) {
 				iframes.appendChild(newframe)
 				self.Nodes.IFrames.classList.remove(CLS_HIDDEN)
 			}).catch(error => {
+				console.error(error)
 				$fgta5.MessageBox.error(error)
 				mask.close()
 			});

@@ -56,6 +56,10 @@ export default class Gridview extends Component {
 		// grv_setNext(this, nextoffset, limit)
 	}
 
+	scrollToFooter() {
+		scrollToFooter(this)
+	}
+
 	#columndata
 	get Columns() { return this.#columndata }
 	setColumnData(columndata) {
@@ -143,6 +147,11 @@ function grv_construct(self) {
 	// grv_createTableHaeder(self, tbl)
 
 
+}
+
+function scrollToFooter(self) {
+	var tfoot = self.Nodes.Tfoot
+	tfoot.scrollIntoView({ behavior: 'smooth' });
 }
 
 

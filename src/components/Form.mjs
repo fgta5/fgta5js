@@ -210,7 +210,12 @@ function frm_setData(self, data) {
 		var bindingdata = obj.getBindingData();
 		var value = data[bindingdata]
 		if (obj instanceof Combobox) {
-		
+			var displayname = obj.getDisplayBinding()
+			if (displayname!=null) {
+				obj.setSelected(value, data[displayname])
+			} else {
+				obj.setSelected(value, value)
+			}
 		} else {
 			obj.value = value
 		}
