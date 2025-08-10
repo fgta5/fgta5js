@@ -43,6 +43,10 @@ export default class Form extends Component {
 		return this.#isnew
 	}
 
+	setAsNewData() {
+		this.#isnew = true
+	}
+
 	reset() { 
 		this.#isnew = false
 		frm_Reset(this) 
@@ -56,6 +60,15 @@ export default class Form extends Component {
 	isChanged() { return frm_isChanged(this) }
 
 	
+	#lastError
+	_setLastError(msg) {
+		this.#lastError = msg
+	}
+
+	getLastError() {
+		return this.#lastError
+	}
+
 
 	newData(data) { 
 		this.#isnew = true
@@ -69,6 +82,11 @@ export default class Form extends Component {
 
 	getData() {
 		return frm_getData(this)
+	}
+
+	getDataChanged() {
+		var changedOnly = true
+		return frm_getData(this, changedOnly)
 	}
 
 	setData(data) {
@@ -169,7 +187,7 @@ function frm_render(self) {
 
 }
 
-function frm_lock(self, lock) {
+function frm_lock(self, lock=true) {
 	var formEl = self.Element
 	var editmode = lock ? false : true
 	for (var name in self.Inputs) {
@@ -262,15 +280,42 @@ function frm_validate(self) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
 		isValid &&= obj.validate()
+
+		if (!isValid) {
+			var lastError = obj.getLastError()
+			self._setLastError(lastError)
+			return false
+		}
 	}
-	return isValid
+
+	self._setLastError(null)
+	return true
 }
 
 
-function frm_getData(self) {
+function frm_getData(self, changedOnly=false) {
+	var primarykey = self.PrimaryKey
+	var obj_pk = self.Inputs[primarykey]
+	var pkBinding = obj_pk.getBindingData()
+
+
 	var data = {}
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
+		var currBinding = obj.getBindingData()
+
+		if (changedOnly) {
+			// jika ambil data hanya yang berubah
+			// data primary key harus selalu diambil
+			if (currBinding!=pkBinding) {
+				// jika bukan primary key, cek apakah berubah
+				if (!obj.isChanged()) {
+					// jika tidak ada perubahan, skip
+					continue
+				}
+			}
+		}
+
 		var bindingdata = obj.getBindingData()
 		if (bindingdata) {
 			data[bindingdata] = obj.value

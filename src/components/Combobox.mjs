@@ -65,7 +65,6 @@ export default class Combobox extends Input {
 	}
 	
 	reset() {
-		super.reset()
 		cbo_reset(this)
 	}
 
@@ -329,6 +328,8 @@ function cbo_newData(self, initialdata) {
 
 	self.setError(null)
 	self.acceptChanges()
+
+	cbo_resetSelected(self)
 }
 
 function cbo_acceptChanges(self) {
@@ -337,11 +338,15 @@ function cbo_acceptChanges(self) {
 }
 
 function cbo_reset(self) {
-	// self.value = self.getLastValue()
-	// self.text = self.getLastText()
-	self.Nodes.Input.value = self.getLastValue();
-	self.Nodes.Display.value = self.getLastText();
+	var lastValue = self.getLastValue()
+	var lastText =  self.getLastText()
+
+	console.log('reset:', lastValue, lastText)
+	self.Nodes.Input.value = lastValue
+	self.Nodes.Display.value = lastText
 	self.Nodes.Display.removeAttribute('changed')
+
+	self.acceptChanges()
 }
 
 function cbo_setLastValue(self, v, t) {
@@ -397,6 +402,30 @@ function cbo_SetEditingMode(self, ineditmode) {
 	}
 }
 
+function isMobileDevice() {
+	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+}
+
+
+function cbo_selectRow(self, tr, td, value, text, data) {
+		// reset dulu jika ada option yang terpilih sebelumnya
+		cbo_resetSelected(self)
+
+		// tandai baris yang sekarang dilih
+		cbo_markSelected(self, tr)
+
+		self.Nodes.Input.value = value
+		if (value=='' && text=='none') {
+			console.log('none dipilih')
+			self.Nodes.Display.value = ''
+		} else {
+			self.Nodes.Display.value = text
+		}
+
+
+		
+		cbo_userSelectValue(self, value, text, data)
+}
 
 function cbo_createOptionRow(self, value, text, data) {
 	let tr = document.createElement('tr')
@@ -408,8 +437,26 @@ function cbo_createOptionRow(self, value, text, data) {
 	td.setAttribute('option', '')
 	td.setAttribute('value', value)
 	td.innerHTML = text
-	td.addEventListener('click', (e)=>{
 
+
+
+
+	td.addEventListener('dblclick', (e)=>{
+		if (isMobileDevice()) {
+			return
+		}
+
+		cbo_selectRow(self, tr, td, value, text, data)
+	})
+
+	td.addEventListener('click', (e)=>{
+		// click hanya untuk mobile
+		if (!isMobileDevice()) {
+			return
+		}
+
+		cbo_selectRow(self, tr, td, value, text, data)
+		/*
 		// untuk menghindari kesalah jika melakukan double click
 		// karena efek animate
 		if (self.pauseClickEvent===true) {
@@ -419,23 +466,7 @@ function cbo_createOptionRow(self, value, text, data) {
 		setTimeout(()=>{
 			self.pauseClickEvent = false
 		}, 500)
-
-		// reset dulu jika ada option yang terpilih sebelumnya
-		cbo_resetSelected(self)
-
-		// tandai baris yang sekarang dilih
-		if (text=='none') {
-			console.log('add none row option')
-		}
-
-		cbo_markSelected(self, tr)
-
-
-		self.Nodes.Input.value = value
-		self.Nodes.Display.value = text
-		cbo_userSelectValue(self, value, text, data)
-
-
+		*/
 	})
 
 	tr.appendChild(td)
@@ -707,8 +738,8 @@ function cbo_setOptions(self, data) {
 
 function cbo_closed(self) {
 	console.log('combobox closed')
-	if (typeof self.AbortHandler==='function') {
-		self.AbortHandler()
+	if (typeof self.abortHandler==='function') {
+		self.abortHandler()
 	}
 }
 

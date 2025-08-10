@@ -59,6 +59,15 @@ export default class Input extends Component {
 		return input_isChanged(this)
 	}
 
+	#lasterror
+	_setLastError(msg) {
+		this.#lasterror = msg
+	}	
+
+	getLastError() {
+		return this.#lasterror
+	}
+
 	setError(msg) {
 		input_setError(this, msg)
 	}
@@ -67,6 +76,7 @@ export default class Input extends Component {
 		input_setLastValue(this, v)
 	}
 
+	#lastvalue
 	getLastValue() {
 		return input_getLastValue(this)
 	} 
@@ -174,11 +184,13 @@ function input_setError(self, msg) {
 			 self.Nodes.Container.insertBefore(errdiv, self.Nodes.InputWrapper.nextSibling)
 		}
 		errdiv.innerHTML = msg
+		self._setLastError(msg)
 	} else {
 		self.Nodes.Input.removeAttribute('invalid')
 		if (errdiv) {
 			errdiv.remove()
 		}
+		self._setLastError(null)
 	}
 }
 

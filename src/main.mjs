@@ -19,6 +19,7 @@ import Section from './components/Section.mjs'
 import SectionCarousell from './components/SectionCarousell.mjs'
 import Icons from './components/Icons.mjs'
 import ActionButton from './components/ActionButton.mjs'
+import Dialog from './components/Dialog.mjs'
 
 import * as Validators from './components/Validators.mjs';
 
@@ -47,7 +48,8 @@ const fgta5 = {
 	Section: Section,
 	SectionCarousell: SectionCarousell,
 	Icons: Icons,
-	ActionButton: ActionButton
+	ActionButton: ActionButton,
+	Dialog: Dialog
 }
 
 

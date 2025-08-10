@@ -265,6 +265,7 @@
 } 
 
 
+.fgta5-dialogbox,
 .fgta5-combobox-dialog {
 	border: 0;
 	outline: none; 
@@ -281,17 +282,20 @@
 	max-width: 100vw;
 }
 
+.fgta5-dialogbox[showed="true"],
 .fgta5-combobox-dialog[showed="true"] {
 	opacity: 1;
 	transform: scale(1);
 }
 
+.fgta5-dialogbox[removing],
 .fgta5-combobox-dialog[removing] {
 	opacity: 0;
 	transform:translateX(-100vw)
 }
 
 
+.fgta5-dialogbox::backdrop,
 .fgta5-combobox-dialog::backdrop {
 	opacity: 0;
 	transition: opacity 0.5s ease-out;
@@ -299,14 +303,16 @@
 	padding: 5px;
 }
 
-
+.fgta5-dialogbox[showed="true"]::backdrop,
 .fgta5-combobox-dialog[showed="true"]::backdrop {
 	opacity: 0.6;
 } 
 
+.fgta5-dialogbox[removing]::backdrop
 .fgta5-combobox-dialog[removing]::backdrop {
 	opacity: 0;
 } 
+
 
 .fgta5-combobox-dialog-head {
 	position: sticky;
