@@ -44,13 +44,19 @@ export default class Gridview extends Component {
 
 	/* menambahkan satu baris */
 	addRow(row) {
-		grv_addRow(this, row)
+		return grv_addRow(this, row)
 	}
 
 	/* menambahkan multi baris */
 	addRows(rows) {
 		grv_addRows(this, rows)
 	}
+
+
+	updateRow(tr, data) {
+		grv_updateRow(this, tr, data)
+	}
+
 
 	setNext(nextoffset, limit) {
 		// grv_setNext(this, nextoffset, limit)
@@ -72,6 +78,11 @@ export default class Gridview extends Component {
 		this.#key = key
 	}
 
+
+
+	rowRender(tr) {
+		grv_rowRender(this, tr)
+	}
 
 	removeSelected(onFinished) {
 		grv_removeSelected(this, onFinished)
@@ -117,6 +128,7 @@ function grv_construct(self) {
 	tbl.prepend(tbody)
 
 	// tambahkan referensi elemen 
+	self.Formatters =  {}
 	self.Listener = new EventTarget()
 	self.Nodes = {
 		Table: tbl,
@@ -332,6 +344,25 @@ function grv_addRows(self, rows) {
 }
 
 
+function grv_updateRow(self, tr, data) {
+	const tds = tr.querySelectorAll('td')
+	tds.forEach(td => {
+		const name = td.getAttribute('data-name')
+		if (name!=null && data[name]!==undefined) {
+			// ambil formater column	
+			let value =  data[name]
+			const func = self.Formatters[name]
+			if (typeof func==='function') {
+				value = func(data[name])
+			} 
+			td.innerHTML = value
+		}	
+	})
+	grv_rowRender(self, tr)
+}
+
+
+
 function grv_addRow(self, row, tbody) {
 	if (tbody===undefined) {
 		tbody = self.Nodes.Tbody
@@ -375,25 +406,36 @@ function grv_addRow(self, row, tbody) {
 			td.addEventListener('click', (evt)=>{ grv_cellClick(self, td, tr) })
 			td.addEventListener('dblclick', (evt)=>{ grv_cellDblClick(self, td, tr) })
 		} else {
-			var value = row[column.binding]
-			td.setAttribute(ATTR_VALUE, value)
-			if (value!=null) {
-				if (column.formatter!=null) {
-					try {
-					// 	eval(`value=${column.formatter}`)
-						const func = grv_createFunction(column.formatter, value);
-						value = func(value)
-					} catch (err) {
-						console.error(err)
-					}
-					
 
+			let value = row[column.binding]
+			td.setAttribute(ATTR_VALUE, value)
+
+			if (column.formatter!=null) {
+				try {
+					// 	eval(`value=${column.formatter}`)
+					let func = self.Formatters[column.name]
+					if (func===undefined) {
+						func = grv_createFunction(column.formatter)
+						if (typeof func === 'function') {
+							self.Formatters[column.name] = func
+						}
+					} 
+					
+					if (typeof func === 'function') {
+						value = func(value)
+					}
+				} catch (err) {
+					console.error(err)
 				}
+			}
+
+
+			if (value!=null) {
 				td.innerHTML = value
-				
 			} else {
 				td.innerHTML = ''
 			}
+
 			td.addEventListener('click', (evt)=>{ grv_cellClick(self, td, tr) })
 			td.addEventListener('dblclick', (evt)=>{ grv_cellDblClick(self, td, tr) })
 		}
@@ -406,7 +448,7 @@ function grv_addRow(self, row, tbody) {
 	grv_rowRender(self, tr)
 	tbody.appendChild(tr)
 	
-
+	return tr
 }
 
 
@@ -630,3 +672,5 @@ function grv_formatCheckmark(value) {
 
 	return yes
 }
+
+

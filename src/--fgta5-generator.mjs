@@ -1,4 +1,4 @@
-import UIGenerator from "./fgta5-generator-ui.mjs"
+import UIGenerator from "./--fgta5-generator-ui.mjs"
 
 const appname = 'appgenerator'
 const app = new $fgta5.Application(appname)

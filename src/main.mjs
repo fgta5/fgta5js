@@ -20,6 +20,7 @@ import SectionCarousell from './components/SectionCarousell.mjs'
 import Icons from './components/Icons.mjs'
 import ActionButton from './components/ActionButton.mjs'
 import Dialog from './components/Dialog.mjs'
+import ApiEndpoint from './components/ApiEndPoint.mjs'
 
 import * as Validators from './components/Validators.mjs';
 
@@ -49,7 +50,8 @@ const fgta5 = {
 	SectionCarousell: SectionCarousell,
 	Icons: Icons,
 	ActionButton: ActionButton,
-	Dialog: Dialog
+	Dialog: Dialog,
+	ApiEndpoint: ApiEndpoint
 }
 
 

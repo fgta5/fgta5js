@@ -18,6 +18,9 @@ export default class Input extends Component {
 	get disabled() { return this.Element.disabled }
 	set disabled(v) { this.Element.disabled = v }
 
+	get placeholder() { return this.Element.getAttribute('placeholder') }
+	set placeholder(v) { this.Element.setAttribute('placeholder', v) }
+
 	#_form
 	get Form() { return this.#_form }
 	bindForm(form) { this.#_form = form }
@@ -146,6 +149,9 @@ export default class Input extends Component {
 	handle(name, fn) {
 		this.#handlers[name] = fn
 	}
+
+
+
 }
 
 function input_construct(self, id) {

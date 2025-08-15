@@ -69,6 +69,11 @@ export default class Form extends Component {
 		return this.#lastError
 	}
 
+	getPrimaryInput() {
+		const pk = this.PrimaryKey
+		const obj = this.Inputs[pk]
+		return obj
+	}
 
 	newData(data) { 
 		this.#isnew = true
