@@ -54,12 +54,17 @@ export default class ApiEndpoint {
 			if (!response.ok) {
 				const status = response.status
 				const statustext = response.statusText
-				throw new Error(`${status} ${statustext}: ${options.method} ${url}`)
+				const text = await response.text();
+				const err = new Error(`${status} ${statustext}: ${text}`)
+				err.code = status
+				throw err
 			}
 
 			const res = await response.json();
 			if (res.code!=0) {
-				throw new Error(res.message)
+				const err = new Error(res.message)
+				err.code = res.code
+				throw err
 			}
 
 			return res.result 

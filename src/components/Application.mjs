@@ -74,7 +74,8 @@ function app_construct(self) {
 						app_setTitle(self, args.module.title)
 					}
 				}
-				
+			} else if (action=='REDIRECT_TO_LOGIN') {
+				console.log('BUAT PROGRAM UNTUK REDIRECT KE LOGIN')
 			}
 		}
 	})
