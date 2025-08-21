@@ -384,10 +384,12 @@ function grv_addRow(self, row, tbody) {
 		let td = document.createElement('td')
 
 		setAttributeIfNotNull(td, 'class', column.cssclass)
+		setAttributeIfNotNull(td, 'style', column.cssstyle)
 		setAttributeIfNotNull(td, ATTR_COLNAME, column.name)
 		setAttributeIfNotNull(td, ATTR_BINDING, column.binding)
 		setAttributeIfNotNull(td, ATTR_FORMATTER, column.formatter)
 		setAttributeIfNotNull(td, ATTR_TEXTALIGN, column.textalign)
+	
 
 		td.classList.add('fgta5-gridview-cell')
 	
