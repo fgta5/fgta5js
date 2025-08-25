@@ -164,6 +164,12 @@ function appmgr_listenMessage(self) {
 				appmgr_showHome(self)
 			} else if (action==Component.ACTION_APPLICATIONLOADED) {
 				// applikasi client di iframe terbuka
+			} else if (action=='REDIRECT_TO_LOGIN') {
+				// ke halaman login
+				const nexturl = window.location.href // login dari container akan diredirect kembali ke container
+				const nextmodule = evt.data.nexturl // next url yang dikirim dari client adalah url untuk module
+				const url = `evt.data.href?nexturl=${nexturl}&nextmodule=${nextmodule}`
+				location.href = url
 			}
 		}
 	})
@@ -601,9 +607,9 @@ function appmgr_resetMenu(self) {
 function appmgr_readMenu(self, data) {
 	let icons = []
 	for (var node of data) {
-		if (node instanceof $fgta5.ModuleData) {
+		if (node instanceof $fgta5.ModuleData || node.type=='program') {
 			// module
-			let module = node
+			let module = (node instanceof $fgta5.ModuleData) ? node : new $fgta5.ModuleData(node)
 			let mi = appmgr_createModuleIcon(self, module)
 			icons.push(mi)
 
