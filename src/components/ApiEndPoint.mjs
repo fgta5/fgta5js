@@ -55,8 +55,16 @@ export default class ApiEndpoint {
 				const status = response.status
 				const statustext = response.statusText
 				const text = await response.text();
-				const err = new Error(`${status} ${statustext}: ${text}`)
-				err.code = status
+				let errorMessage = `${status} ${statustext}: ${text}`
+				if (status==401) {
+					// belum login, hapus session login
+					sessionStorage.removeItem('login');
+					sessionStorage.removeItem('login_nexturl');
+					errorMessage = 'authentication is needed to access resource'
+				} 
+				const err = new Error(errorMessage)
+				err.status = status
+				err.code = response.code || 1
 				throw err
 			}
 
