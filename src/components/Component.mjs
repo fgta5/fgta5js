@@ -34,6 +34,11 @@ export default class Component {
 	static sleep(ms) {
  		return new Promise(resolve => setTimeout(resolve, ms))
 	}
+
+
+	static isMobileDevice() {
+		return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+	}
 }
 
 

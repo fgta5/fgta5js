@@ -27,6 +27,7 @@ const CLS_SHORTCUTBUTTONCLOSE = 'fgta5-button-shorcutclose'
 const CLS_HIDDEN = 'hidden'
 
 const EVT_CLICK = 'click'
+const EVT_DBLCLICK = 'dblclick'
 const EVT_DRAGSTART = 'dragstart'
 
 const TXT_FAVOURITE = 'Favourite Programs'
@@ -536,7 +537,9 @@ function appmgr_createModuleIcon(self, module) {
 	container.appendChild(icon)
 	container.appendChild(text)
 
-	icon.addEventListener(EVT_CLICK, ()=>{
+
+	const clickEventName = Component.isMobileDevice() ? EVT_CLICK : EVT_DBLCLICK;
+	icon.addEventListener(clickEventName, ()=>{
 		self.openModule(module)
 		icon.style.animation = 'iconClicked 0.2s forwards'
 		setTimeout(()=>{
@@ -824,6 +827,7 @@ function appmgr_createOpenedShortcut(self, module, iframe, id) {
 	const title = document.createElement('div')
 	const info = document.createElement('div')
 	const closebutton = document.createElement('a')
+	const clickEventName = Component.isMobileDevice() ? EVT_CLICK : EVT_DBLCLICK;
 
 	shortcut.id = id
 	shortcut.classList.add('fgta5-openedmodule-shortcut')
@@ -832,7 +836,8 @@ function appmgr_createOpenedShortcut(self, module, iframe, id) {
 	shortcut.appendChild(title)
 	shortcut.appendChild(info)
 	shortcut.appendChild(closebutton)
-	shortcut.addEventListener(EVT_CLICK, async (evt)=>{ await appmgr_openModule(self, module) })
+
+	shortcut.addEventListener(clickEventName, async (evt)=>{ await appmgr_openModule(self, module) })
 	shortcut.addEventListener(EVT_DRAGSTART, (evt)=>{ appmgr_DragModule(self, evt, module) })
 
 
