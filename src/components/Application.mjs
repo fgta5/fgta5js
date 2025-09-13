@@ -89,23 +89,38 @@ function app_setTitle(self, title) {
 function app_createHeader(self, head) {
 	const divleft = document.createElement('div')
 	const title = document.createElement('span')
+	const divright = document.createElement('div')
 
-	const btnmenu = Component.createSvgButton(ICONS.MENU, CLS_BUTTONHEAD, ()=>{
-		app_showMenu(self)
-	})
 
 	const btnhome = Component.createSvgButton(ICONS.HOME, CLS_BUTTONHEAD, ()=>{
 		app_showHome(self)
 	})
 
+
+	const btnmenu = Component.createSvgButton(ICONS.MENU, CLS_BUTTONHEAD, ()=>{
+		app_showMenu(self)
+	})
+
+
+
 	divleft.appendChild(btnhome)
+	divright.appendChild(btnmenu)
+
+
+	if (!Component.isInContainer()) {
+		// jika tidak di dalam container,  
+		// sembunyikan tombol home dan menu
+		btnhome.classList.add('hidden')
+		btnmenu.classList.add('hidden')
+	} 
+
 
 	title.id = ID_TITLE
 	title.innerHTML = 'loading ...'
 
 	head.appendChild(divleft)
 	head.appendChild(title)
-	head.appendChild(btnmenu)
+	head.appendChild(divright)
 }
 
 function app_createFooter(self, footer) {

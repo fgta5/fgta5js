@@ -39,6 +39,11 @@ export default class Component {
 	static isMobileDevice() {
 		return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
 	}
+
+	static 	isInContainer() {
+		return window.self !== window.top;
+	}
+
 }
 
 
