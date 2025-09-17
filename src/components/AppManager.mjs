@@ -169,7 +169,7 @@ function appmgr_listenMessage(self) {
 				// ke halaman login
 				const nexturl = window.location.href // login dari container akan diredirect kembali ke container
 				const nextmodule = evt.data.nexturl // next url yang dikirim dari client adalah url untuk module
-				const url = `evt.data.href?nexturl=${nexturl}&nextmodule=${nextmodule}`
+				const url = `${evt.data.href}?nexturl=${nexturl}&nextmodule=${nextmodule}`
 				location.href = url
 			}
 		}
@@ -718,7 +718,7 @@ async function appmgr_searchModule(self, searchtext) {
 				mi.style.animation = 'dropped 0.3s forwards'
 				menuboard.appendChild(mi)
 				if (i<10) {
-					await Component.Sleep(100)
+					await Component.sleep(100)
 				}
 				
 			}
