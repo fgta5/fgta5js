@@ -643,6 +643,12 @@ function grv_createFunction(expression) {
         return (v) => grv_formatDecimal(v, parsedArgs[1]);
     } else if (funcName === 'checkmark') {
 		return (v) => grv_formatCheckmark(v)
+	} else if (funcName === 'dateiso') {
+		return (v) => grv_formatDateIso(v)
+	} else if (funcName === 'datelong') {
+		return (v) => grv_formatDateLong(v)
+	} else if (funcName === 'dateshort' || funcName=== 'date') {
+		return (v) => grv_formatDateShort(v)
 	}
     return null;
 }
@@ -673,6 +679,26 @@ function grv_formatCheckmark(value) {
 	}
 
 	return yes
+}
+
+function grv_formatDateIso(value) {
+	const dt = new Date(value)
+	const str = dt.toISOString().split("T")[0]
+	return str
+}
+
+function grv_formatDateLong(value) {
+	const dt = new Date(value)
+	const options = { day: '2-digit', month: 'short', year: 'numeric' };
+	const formattedDate = dt.toLocaleDateString('en-ID', options).replace('.', ''); 
+	return formattedDate
+}
+
+function grv_formatDateShort(value) {
+	const dt = new Date(value)
+	const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+	const formattedDate = dt.toLocaleDateString('en-ID', options).replace('.', ''); 
+	return formattedDate
 }
 
 
