@@ -89,6 +89,12 @@ export default class Section {
 		await sec_show(this, args, fn_callback)
 	}
 
+
+	sectionReturn
+	setSectionReturn(section) {
+		this.sectionReturn = section
+	}
+
 	addEventListener(eventname, callback) {
 		this.Listener.addEventListener(eventname, callback)
 	}	
@@ -226,7 +232,11 @@ function sec_backButtonClick(self) {
 		cancelable: true,
 		detail: {
 			fn_ShowNextSection: ()=>{
-				self.PreviousSection.show({direction:DIR_RIGHT})
+				if (self.sectionReturn!=null) {
+					self.sectionReturn.show({direction:DIR_RIGHT})
+				} else {
+					self.PreviousSection.show({direction:DIR_RIGHT})
+				}
 			}
 		}
 	}))

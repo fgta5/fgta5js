@@ -9,9 +9,13 @@ export default class Numberbox extends Input {
 	constructor(id) {
 		super(id)
 
+
+		// default formatter angka
+		// apabila akan diubah, lakukan di fungsi: nmb_formatValue(self, value)
 		this.formatterFixed = new Intl.NumberFormat('en-US', {
 			minimumFractionDigits: 2,
-			maximumFractionDigits: 2
+			maximumFractionDigits: 2,
+			useGrouping: true // apakah akan di group per ribuan
 		});
 
 		nmb_construct(this, id)
@@ -107,9 +111,10 @@ function nmb_construct(self, id) {
 	
 	
 	// precission and step
+	console.log('SET PRECISSION')
 	var {precision, step} = getPrecission(self.Element.getAttribute('precision'))
 	self.formatterFixed.minimumFractionDigits = precision
-	self.formatterFixed.maximumFractionDigits = precision
+	self.formatterFixed.maximumFractionDigits = precision  // minimum dan maksimum jumlah angka di belakang koma di set sama
 
 	// setup input
 	input.classList.add('fgta5-entry-input')
@@ -226,7 +231,7 @@ function nmb_setValue(self, v) {
 	if (isNaN(v)) {
 		v = Number(v) // v buka Angka, ubah dulu ke angka
 	}
-	var formattedValue = self.formatterFixed.format(v)
+	var formattedValue = nmb_formatValue(self, v)
 	if (self.Nodes.Display.type === 'text') {
 		self.Nodes.Display.value = formattedValue
 	} else {
@@ -288,7 +293,7 @@ function nmb_displayBlur(self, e) {
 			
 			input.value = num
 			var invalid = !self.validate()
-			var formattedValue = self.formatterFixed.format(num)
+			var formattedValue = nmb_formatValue(self, num)
 			display.setAttribute('type', 'text')
 			display.value = formattedValue
 
@@ -298,6 +303,17 @@ function nmb_displayBlur(self, e) {
 	}
 }
 
+
+function nmb_formatValue(self, value) {
+	const formatter = new Intl.NumberFormat('en-US', {
+			minimumFractionDigits: self.formatterFixed.minimumFractionDigits,
+			maximumFractionDigits: self.formatterFixed.minimumFractionDigits,
+			useGrouping: true
+	});
+
+	const formattedValue = formatter.format(value)
+	return formattedValue
+}
 
 function nmb_acceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')

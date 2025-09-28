@@ -49,7 +49,11 @@ export default class Form extends Component {
 
 	reset() { 
 		this.#isnew = false
-		frm_Reset(this) 
+		frm_reset(this) 
+	}
+
+	clear(text) {
+		frm_clear(this, text)
 	}
 
 	acceptChanges() { 
@@ -220,12 +224,20 @@ function frm_acceptChanges(self) {
 	}
 }
 
-function frm_Reset(self) {
+function frm_reset(self) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
 		obj.reset()
 	}
 }
+
+function frm_clear(self, text='') {
+	const inputs = self.Element.querySelectorAll('input')
+	inputs.forEach(element => {
+		element.value = text
+	});
+}
+
 
 function frm_setData(self, data) {
 	for (var name in self.Inputs) {
@@ -262,8 +274,6 @@ function frm_newData(self, data) {
 				value: initialdata.value,
 				text: initialdata.text
 			})
-		} else if (obj instanceof Checkbox) { 
-			obj.newData(initialvalue)
 		} else {
 			obj.newData(initialvalue)
 		}

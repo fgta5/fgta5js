@@ -84,8 +84,8 @@ export default class Datepicker extends Input {
 		if (initialvalue===undefined || initialvalue===null) {
 			initialvalue = ''
 		}
-		super.newData(initialvalue)
-		// dtp_Newdata(this, initialvalue)
+		// super.newData(initialvalue)
+		dtp_Newdata(this, initialvalue)
 	}
 
 	acceptChanges() {
@@ -312,15 +312,35 @@ function dtp_getValue(self) {
 
 
 function dtp_setValue(self, dt) {
-	self.Nodes.Input.value = dt
-	dtp_setDisplay(self, dt)
-	dtp_markChanged(self)
+	try {
+
+		if (dt!=null) {
+			if (dt instanceof Date) {
+				const isoformat = dt.toISOString()
+				const isodate = isoformat.slice(0, 10)
+				self.Nodes.Input.value = isodate
+			} else {
+				const isodate = dt.slice(0, 10)
+				self.Nodes.Input.value = isodate
+			}
+		} else {
+			self.Nodes.Input.value = null
+		}
+		
+
+		dtp_setDisplay(self, dt)
+		dtp_markChanged(self)
+	} catch (err) {
+		throw err
+	}
+
 }
 
 
-// function dtp_Newdata(self, initialvalue) {
-// 	self.acceptChanges()
-// }
+function dtp_Newdata(self, initialvalue) {
+	self.value = initialvalue
+	self.acceptChanges()
+}
 
 
 function dtp_acceptChanges(self) {

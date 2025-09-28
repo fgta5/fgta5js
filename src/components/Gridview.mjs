@@ -88,6 +88,11 @@ export default class Gridview extends Component {
 		grv_removeSelected(this, onFinished)
 	}
 
+	getSelected() {
+		return grv_getSelected(this)
+	}
+
+
 	hasRowPendingProcess() {
 		return grv_hasRowPendingProcess(this)
 	}
@@ -511,6 +516,22 @@ function grv_sort(self, btn) {
 
 }
 
+
+function grv_getSelected(self) {
+	var chks = self.Nodes.Tbody.querySelectorAll(`tr td[${ATTR_ROWSELECTOR}] input[type="checkbox"]:checked`);
+	if (chks.length==0) {
+		return []
+	}
+
+	const selected = []
+	for (let chk of chks) {
+		const tr = chk.closest('tr')
+		const keyvalue = tr.getAttribute(ATTR_ROWKEYVALUE)
+		selected.push(keyvalue)
+	}
+
+	return selected
+}
 
 function grv_removeSelected(self, onFinished) {
 	var chks = self.Nodes.Tbody.querySelectorAll(`tr td[${ATTR_ROWSELECTOR}] input[type="checkbox"]:checked`);
