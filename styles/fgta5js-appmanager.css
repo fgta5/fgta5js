@@ -173,6 +173,7 @@
 	.fgta5-favourite[data-dragover] {
 		border: 3px dashed #5d7bff;
 		background-color: #5d7bff53;
+		min-height: 50px;
 	}
 
 	.fgta5-favourite-trashcontainer {

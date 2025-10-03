@@ -38,6 +38,7 @@ export default class ActionButton {
 	#disabled = false
 	get disabled() { return this.#disabled }
 	set disabled(disable) {
+		this.#disabled = disable
 		this.#elements.forEach(element => {
 			if (disable) {
 				element.setAttribute('disabled', true)

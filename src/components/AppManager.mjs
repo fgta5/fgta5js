@@ -40,7 +40,7 @@ const C_SHORTCUT_PREFIX = 'fgta5-sch-mod-'
 const actionEvent = (data) => { return new CustomEvent('action', data) }
 const logoutEvent = (data) => { return new CustomEvent('logout', data) }
 const openProfileEvent = (data) => { return new CustomEvent('openprofile', data) }
-const openSettingEvent = (data) => { return new CustomEvent('opensetting', data) }
+const openPreferenceEvent = (data) => { return new CustomEvent('openpreference', data) }
 const addToFavouriteEvent = (data) => { return new CustomEvent('addtofavourite', data) }
 const removeFromFavouriteEvent = (data) => { return new CustomEvent('removefavourite', data) }
 
@@ -259,9 +259,9 @@ function appmgr_createMenuBoard(self, nav) {
 		appmgr_showHome(self)
 	})
 
-	// setting
-	const btnsetting = Component.createSvgButton(ICONS.SETTING, CLS_BUTTONMENU, ()=>{
-		appmgr_openSetting(self)
+	// preference
+	const btnpreference = Component.createSvgButton(ICONS.SETTING, CLS_BUTTONMENU, ()=>{
+		appmgr_openPreference(self)
 	})
 	
 	
@@ -296,7 +296,7 @@ function appmgr_createMenuBoard(self, nav) {
 	// toppanel content
 	toppanel_left.setAttribute(ATTR_GRIDAREA, 'left')
 	toppanel_left.appendChild(btnhome)
-	toppanel_left.appendChild(btnsetting)
+	toppanel_left.appendChild(btnpreference)
 	
 	toppanel_center.setAttribute(ATTR_GRIDAREA, 'center')
 	toppanel_center.appendChild(menusearch)
@@ -710,7 +710,9 @@ async function appmgr_searchModule(self, searchtext) {
 	menuboard.innerHTML = ''
 	var i = 0
 	for (var modulename in modules) {
-		if (modulename.toLowerCase().includes(searchtext)) {
+		const m = modules[modulename]
+		const moduleTitle = m.data.title
+		if (moduleTitle.toLowerCase().includes(searchtext)) {
 			i++
 			var module = modules[modulename]
 			if (module!=null) {
@@ -767,8 +769,8 @@ async function appmgr_logout(self) {
 	}
 }
 
-async function appmgr_openSetting(self) {
-	self.Listener.dispatchEvent(openSettingEvent({
+async function appmgr_openPreference(self) {
+	self.Listener.dispatchEvent(openPreferenceEvent({
 		detail: {
 			user: self.User,
 		}
@@ -903,10 +905,15 @@ function appmgr_FavouriteDrop(self, evt, favourite) {
 		return
 	}
 
+
 	var exist = favourite.querySelector(`[name="${modulename}"]`)
 	if (exist==null) {
 		evt.preventDefault()
 		const module = self.Modules[modulename]
+		if (module==null) {
+			return
+		}
+
 		let mi = appmgr_createModuleIcon(self, module.data)
 		appmgr_setAsFavouriteIcon(self, mi, modulename, favourite)
 		favourite.prepend(mi)

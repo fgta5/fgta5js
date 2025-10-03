@@ -74,6 +74,8 @@ function chk_construct(self, id) {
 	input.parentNode.insertBefore(container, input)
 
 
+
+
 	// tambahkan elemen-element ke container
 	// penambahakn container ke body document pada saat Input_construct di parent class Input
 	checkboxlabel.appendChild(input)
@@ -109,6 +111,13 @@ function chk_construct(self, id) {
 	// inisialisasi last value
 	self._setLastValue(self.Element.checked)
 
+
+
+
+	const dis = input.getAttribute('disabled')
+	if (dis!=null) {
+		chk_setDisabled(self, true)
+	}
 
 	// tambahkan event listener internal
 	input.addEventListener('change', (event) => {

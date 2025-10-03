@@ -111,7 +111,6 @@ function nmb_construct(self, id) {
 	
 	
 	// precission and step
-	console.log('SET PRECISSION')
 	var {precision, step} = getPrecission(self.Element.getAttribute('precision'))
 	self.formatterFixed.minimumFractionDigits = precision
 	self.formatterFixed.maximumFractionDigits = precision  // minimum dan maksimum jumlah angka di belakang koma di set sama
@@ -138,6 +137,13 @@ function nmb_construct(self, id) {
 	display.setAttribute('style', input.getAttribute('style') || '')
 	display.setAttribute('type', 'text')
 	display.setAttribute('fgta5-component', 'Numberbox')
+	display.setAttribute('autocomplete', 'off')
+	
+
+	const dis = input.getAttribute('disabled')
+	if (dis!=null) {
+		nmb_setDisabled(self, true)
+	}
 
 	
 	// label
@@ -243,6 +249,7 @@ function nmb_setValue(self, v) {
 
 
 function nmb_setDisabled(self, v) {
+	console.log('SET DISABLED')
 	if (v) {
 		self.Nodes.Display.disabled = true
 	} else {

@@ -218,6 +218,13 @@ function cbo_construct(self, id) {
 	
 	display.required = input.required
 
+	const dis = input.getAttribute('disabled')
+	if (dis!=null) {
+		cbo_setDisabled(self, true)
+	}
+
+
+
 	// setup button
 	button.classList.add('fgta5-entry-button-combobox')	
 	button.innerHTML = icon_cbo_button
@@ -850,6 +857,7 @@ function cbo_buttonClick(self, e) {
 		setTimeout(()=>{
 			var inputsearch = dialog.querySelector(".fgta5-combobox-dialog-filter input")
 			if (inputsearch!=null) {
+				inputsearch.value = ''
 				inputsearch.focus()
 			}
 		}, 100)
