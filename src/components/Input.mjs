@@ -151,6 +151,10 @@ export default class Input extends Component {
 	}
 
 
+	getErrorValidation(fnName) {
+		return input_getErrorValidation(this, fnName)
+	}
+
 
 }
 

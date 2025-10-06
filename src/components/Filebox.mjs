@@ -76,16 +76,32 @@ export default class Filebox extends Input {
 
 	setDownloadLink(linktext, url) {
 		flb_setDownloadLink(this, linktext, url)
+	}
 
-
-		
-
-		
-		
-		
+	validate() { 
+		return flb_validate(this) 
 	}
 }
 
+
+function flb_validate(self) {
+	if (self.isRequired()) {
+		if (self.Nodes.Display.value=='') {
+			// return false
+			var err = self.getErrorValidation('required') // prioritas utama untuk validasi
+			if (err!=null) {
+				self.setError(err.message)
+			} else {
+				self.setError('file harus diisi')
+			}
+			return false
+		} else {
+			return true
+		}
+	} else {
+		return true
+	}
+}
 
 function flb_setDownloadLink(self, linktext=null, url=null) {
 	const downloadLink = self.Nodes.DownloadLink
