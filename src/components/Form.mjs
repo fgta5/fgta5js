@@ -93,6 +93,10 @@ export default class Form extends Component {
 		return frm_getData(this)
 	}
 
+	getFiles() {
+		return frm_getFiles(this)
+	}
+	
 	getDataChanged() {
 		var changedOnly = true
 		return frm_getData(this, changedOnly)
@@ -232,7 +236,7 @@ function frm_reset(self) {
 }
 
 function frm_clear(self, text='') {
-	const inputs = self.Element.querySelectorAll('input')
+	const inputs = self.Element.querySelectorAll('input:not([type="file"]')
 	inputs.forEach(element => {
 		element.value = text
 	});
@@ -251,6 +255,8 @@ function frm_setData(self, data) {
 			} else {
 				obj.setSelected(value, value)
 			}
+		} else if (obj instanceof Filebox) {
+			obj.setDisplay(value)
 		} else {
 			obj.value = value
 		}
@@ -337,4 +343,33 @@ function frm_getData(self, changedOnly=false) {
 		}
 	}
 	return data
+}
+
+
+function frm_getFiles(self) {
+	const files = {}
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		if (!(obj instanceof Filebox)) {
+			continue
+		}
+
+		if (!obj.isChanged()) {
+			continue
+		}
+
+		const bindingdata = obj.getBindingData()
+
+		const file = obj.file
+		if (file!=null) {
+			files[bindingdata] = obj.file
+		}
+	}
+
+	const isEmpty = Object.keys(files).length === 0;
+	if (isEmpty) {
+		return null
+	} else {
+		return files
+	}
 }

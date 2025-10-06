@@ -31,7 +31,7 @@ export default class ApiEndpoint {
 		this.#headers[name] = value
 	}
 
-	async execute(args) {
+	async execute(args, formData) {
 		const signal = this.#controller.signal;
 		const url = this.#path
 		const method = this.#method
@@ -41,10 +41,22 @@ export default class ApiEndpoint {
 			args={}
 		}
 
+		let body
+		if (formData==null) {
+			body = JSON.stringify(args)
+		} else {
+			delete headers['Content-Type'] // fetch akan otomatis set, jika diisi akan error boundary
+			formData.append('form-body-jsondata', new Blob(
+				[JSON.stringify(args)],
+				{ type: 'application/json' }
+			));
+			body = formData
+		}
+
 		const options = {
-			method: method,
-			headers: headers,
-			body: JSON.stringify(args)
+			method,
+			headers,
+			body
 		}
 
 		const opt = Object.assign({ signal }, options)

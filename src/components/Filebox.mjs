@@ -15,16 +15,24 @@ export default class Filebox extends Input {
 		flb_construct(this, id)
 	}
 
-
+	#value = ''
+	set value(v) { this.#value = v }
 	get value() { 
 		if (this.Element.files.length===0) {
-			return ''
+			return this.#value
 		} else {
 			return this.Element.files[0].name
 		}
 	}
 	
 
+	get file() {
+		if (this.Element.files.length===0) {
+			return 0
+		} else {
+			return this.Element.files[0]
+		}
+	}
 
 	get disabled() { return this.Element.disabled }
 	set disabled(v) { 
@@ -61,8 +69,52 @@ export default class Filebox extends Input {
 	}
 
 
+	setDisplay(value) {
+		flb_setDisplay(this, value)
+	}
+
+
+	setDownloadLink(linktext, url) {
+		flb_setDownloadLink(this, linktext, url)
+
+
+		
+
+		
+		
+		
+	}
+}
+
+
+function flb_setDownloadLink(self, linktext=null, url=null) {
+	const downloadLink = self.Nodes.DownloadLink
+	
+	if (linktext==null) {
+		// sembunyikan link
+		downloadLink.classList.add('hidden')
+		downloadLink.innerHTML = 'download'
+		downloadLink.onclick = null
+		downloadLink.removeAttribute('href')	
+	} else {{
+		// munculkan link
+		downloadLink.classList.remove('hidden')
+		downloadLink.innerHTML = linktext
+		if (typeof url==='function') {
+			downloadLink.removeAttribute('target', '_blank')
+			downloadLink.setAttribute('href', 'javascript:void(0)')
+			downloadLink.onclick = () => {
+				url()
+			}	
+		} else {
+			downloadLink.setAttribute('target', '_blank')
+			downloadLink.setAttribute('href', url)
+			downloadLink.onclick = null
+		}
+	}}	
 
 }
+
 
 function flb_construct(self, id) {
 	const container = self.Nodes.Container
@@ -72,11 +124,18 @@ function flb_construct(self, id) {
 	const display = document.createElement('input')
 	const button = document.createElement('button')
 	const label = document.querySelector(`label[for="${id}"]`)
+	const downloadLink = document.createElement('a')
 
 	// setup container, (harus di awal seblum yang lain-lain)
 	// diperlukan untuk menampung semua element yang akan ditampilkan
 	input.parentNode.insertBefore(container, input)
 	
+
+	downloadLink.innerHTML = 'download'
+	downloadLink.classList.add('fgta5-entry-download-link')
+	downloadLink.classList.add('hidden')
+	
+
 
 
 	// tambahkan elemen-element ke container
@@ -85,7 +144,9 @@ function flb_construct(self, id) {
 	wrapinput.appendChild(button)
 	button.appendChild(input)
 	container.appendChild(wrapinput)
+	container.appendChild(downloadLink)
 	container.appendChild(lastvalue)
+	
 
 
 	// tambahkan referensi elemen ke Nodes
@@ -93,6 +154,7 @@ function flb_construct(self, id) {
 	self.Nodes.Label = label 
 	self.Nodes.Display = display
 	self.Nodes.Button = button
+	self.Nodes.DownloadLink = downloadLink
 
 
 	// setup container
@@ -176,6 +238,10 @@ function flb_construct(self, id) {
 
 }
 
+function flb_setDisplay(self, value) {
+	var display = self.Nodes.Display
+	display.value = value
+}
 
 function flb_setDisabled(self, v) {
 	var display = self.Nodes.Display
