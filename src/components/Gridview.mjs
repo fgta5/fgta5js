@@ -88,6 +88,10 @@ export default class Gridview extends Component {
 		grv_removeSelected(this, onFinished)
 	}
 
+	removeRow(tr) {
+		grv_removeRow(this, tr)
+	}
+
 	getSelected() {
 		return grv_getSelected(this)
 	}
@@ -118,8 +122,95 @@ export default class Gridview extends Component {
 	setCriteria(criteria) {
 		this.#criteria = criteria
 	}
+
+
+	#currentRow
+	get CurrentRow() { return this.#currentRow }
+	set CurrentRow(tr) {
+		this.#currentRow = tr
+		grv_setCurentRow(this, tr)
+	}
+	
+	
+
+	previousRecord() {
+		grv_previousRecord(this)
+	}
+
+	nextRecord() {
+		grv_nextRecord(this)
+	}
 }
 
+
+function grv_previousRecord(self) {
+	const currentRow = self.CurrentRow
+	if (currentRow==null) {
+		// set row pertama sebagai current row
+		console.log('set current row to first row')
+		const tbody = self.Nodes.Tbody
+		const tr = tbody.querySelector('tr')
+		self.CurrentRow = tr
+	} else {
+		const tr = currentRow
+		if (tr.previousElementSibling) {
+			self.CurrentRow = tr.previousElementSibling
+		}
+	}
+}
+
+
+function grv_nextRecord(self) {
+	const currentRow = self.CurrentRow
+	if (currentRow==null) {
+		// set row pertama sebagai current row
+		console.log('set current row to first row')
+		const tbody = self.Nodes.Tbody
+		const tr = tbody.querySelector('tr')
+		self.CurrentRow = tr
+	} else {
+		const tr = currentRow
+		if (tr.nextElementSibling) {
+			self.CurrentRow = tr.nextElementSibling
+		}
+	}
+}
+
+
+function grv_setCurentRow(self, tr) {
+	// kosongkan atribute terpilih	
+	const tbody = self.Nodes.Tbody
+	const rows = tbody.querySelectorAll('tr[data-currentrow]')
+	rows.forEach(tr=>{
+		tr.removeAttribute('data-currentrow')
+	})
+
+	if (tr!=null) {
+		// set atribut terpilih untuk tr
+		tr.setAttribute('data-currentrow', '')
+		if (!isElementInViewport(tr)) {
+			tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
+}
+
+function grv_removeRow(self, tr) {
+	const tbody = self.Nodes.Tbody
+	tr.remove()
+	if (tbody.children.length==0) {
+		self.CurrentRow = null
+	}
+}
+
+function isElementInViewport(el) {
+	const rect = el.getBoundingClientRect();
+	return (
+		rect.top >= 0 &&
+		rect.left >= 0 &&
+		rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+	);
+}
 
 function grv_construct(self) {
 	var tbl = self.Element
@@ -453,6 +544,12 @@ function grv_addRow(self, row, tbody) {
 	}
 
 	grv_rowRender(self, tr)
+
+	if (tbody.children.length==0) {
+		self.CurrentRow = tr
+	}
+
+
 	tbody.appendChild(tr)
 	
 	return tr
@@ -460,12 +557,14 @@ function grv_addRow(self, row, tbody) {
 
 
 function grv_cellClick(self, td, tr) {
+	self.CurrentRow = tr
 	self.Listener.dispatchEvent(cellClickEvent({
 		detail: {tr: tr, td: td}
 	}))
 }
 
 function grv_cellDblClick(self, td, tr) {
+	self.CurrentRow = tr
 	self.Listener.dispatchEvent(cellDblClickEvent({
 		detail: {tr: tr, td: td}
 	}))
@@ -564,7 +663,7 @@ function grv_removeSelected(self, onFinished) {
 		self.Listener.dispatchEvent(evt)
 		if (!evt.handled) {
 			tr.MarkProcessing(false)
-			tr.remove()
+			self.removeRow(tr)
 		}
 	}
 }

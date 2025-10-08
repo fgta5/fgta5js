@@ -95,12 +95,35 @@ export default class Section {
 		this.sectionReturn = section
 	}
 
+	setIconUrl(iconUrl) {
+		sec_setIconUrl(this, iconUrl)
+	}
+
 	addEventListener(eventname, callback) {
 		this.Listener.addEventListener(eventname, callback)
 	}	
+
+	back() {
+		if (this.sectionReturn!=null) {
+			this.sectionReturn.show({direction:1})
+		}
+	}
 }
 
 
+function sec_setIconUrl(self, iconUrl) {
+	const iconDiv = self.Nodes.iconDiv
+	iconDiv.style.display = 'unset'
+	if (iconUrl==null || iconUrl=='') {
+		iconDiv.innerHTML = ICONS.PROGRAM
+	} else {
+		iconDiv.style.backgroundImage = `url('${iconUrl}')`;
+		iconDiv.style.backgroundSize = "cover";
+		iconDiv.style.backgroundRepeat = "no-repeat";
+		iconDiv.style.backgroundPosition = "center";
+
+	}
+}
 
 function sec_construct(self, args) {
 	const el = self.Element
@@ -123,10 +146,13 @@ function sec_construct(self, args) {
 		// back ke previous section
 		sec_backButtonClick(self)
 	})
+	const iconDiv = document.createElement('div')
+	
 
 
 	topbar.setAttribute(ATTR_TOPBAR, '')
 	topbar.appendChild(backbutton)
+	topbar.appendChild(iconDiv)
 	topbar.appendChild(title)
 	
 
@@ -134,6 +160,12 @@ function sec_construct(self, args) {
 	if (self.Index==0) {
 		backbutton.classList.add('hidden')
 	}
+
+
+	iconDiv.classList.add('fgta5-app-section-icondiv')
+	iconDiv.style.display = 'none'
+
+
 
 	title.setAttribute(ATTR_TITLE, self.Title)
 	title.innerHTML = self.Title
@@ -144,7 +176,8 @@ function sec_construct(self, args) {
 
 	self.Nodes = {
 		BackButton: backbutton,
-		Title: title
+		Title: title,
+		iconDiv: iconDiv
 	}
 
 }

@@ -9,6 +9,8 @@ export default class SectionCarousell {
 	#items = {}
 	#listener = new EventTarget()
 	#currentsection 
+	#iconUrl
+	#firstSection
 
 	static get EVT_SECTIONSHOWING() { return EVT_SECTIONSHOWING }
 
@@ -19,6 +21,7 @@ export default class SectionCarousell {
 	get Items() { return this.#items}
 	get Listener() { return this.#listener }
 	get CurrentSection() { return this.#currentsection }
+	get IconUrl() { return this.#iconUrl }
 
 	addEventListener(eventname, callback) {
 		this.Listener.addEventListener(eventname, callback)
@@ -26,6 +29,16 @@ export default class SectionCarousell {
 
 	setCurrentSection(section) {
 		this.#currentsection = section
+	}
+
+
+	setFirstSection(section) {
+		this.#firstSection = section
+	}
+
+	setIconUrl(iconUrl) {
+		this.#iconUrl = iconUrl
+		this.#firstSection.setIconUrl(iconUrl)
 	}
 
 	dispatchSectionShowing(currSection, commingSection) {
@@ -48,6 +61,7 @@ function scar_Construct(self, el) {
 	const nodes = el.querySelectorAll('section[class="fgta5-carousell"]') 
 	let i = 0;
 	for (let node of nodes) {
+		console.log(node)
 		const section = new Section(node, {
 			index: i,
 			carousell: self,
@@ -56,6 +70,11 @@ function scar_Construct(self, el) {
 			}
 		})
 		const name = section.Name
+		
+		if (i==0) {
+			// set first section
+			self.setFirstSection(section)
+		}
 
 		if (self.CurrentSection==null) {
 			self.setCurrentSection(section)

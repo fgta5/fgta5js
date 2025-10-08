@@ -71,4 +71,12 @@ export default class ActionButton {
 			element.addEventListener(event, callback)
 		})		
 	}
+
+
+	click() {
+		if (this.#disabled) {
+			return
+		}
+		this.#elements[0].click()
+	}
 }

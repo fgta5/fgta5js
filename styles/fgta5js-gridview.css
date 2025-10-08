@@ -13,8 +13,14 @@
 }
 
 .fgta5-gridview tbody tr:hover {
-	background-color: rgb(22, 28, 104);
-  color: #fff
+	background-color: rgb(22, 28, 104) !important;
+  	color: #fff
+}
+
+
+.fgta5-gridview tbody tr[data-currentrow] {
+	background-color: rgb(221, 119, 52);
+  	color: #fff
 }
 
 .fgta5-gridview tbody td {

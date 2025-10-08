@@ -674,3 +674,11 @@
 .fgta5-app-section a[data-backbutton]:hover {
 	transform: scale(2);
 }
+
+
+.fgta5-app-section-icondiv {
+	border: 0p;
+	width: 40px;
+	height: 40px;
+}
+
