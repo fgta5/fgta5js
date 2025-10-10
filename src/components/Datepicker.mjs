@@ -108,6 +108,10 @@ export default class Datepicker extends Input {
 		return dtp_getLastValue(this)
 	} 
 
+
+	focus() {
+		this.Nodes.Display.focus()
+	}	
 }
 
 function dtp_construct(self, id) {
@@ -194,6 +198,10 @@ function dtp_construct(self, id) {
 	// 	display.setAttribute('style', cssstyle)
 	// }
 
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		display.setAttribute('tabindex', tabIndex)
+	}
 
 	// main input
 	const nonFgtaClasses = Array.from(input.classList).filter(className =>
@@ -235,11 +243,16 @@ function dtp_construct(self, id) {
 	}
 
 
+	const dis = input.getAttribute('disabled')
+	if (dis!=null) {
+		dtp_setDisabled(self, true)
+	}
+
 
 	// additional property setup
 
 	// required
-	var required = input.getAttribute('required')
+	const required = input.getAttribute('required')
 	if (required != null) {
 		self.markAsRequired(true)
 	}
@@ -270,7 +283,7 @@ function dtp_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var inputwrap = self.Nodes.InputWrapper
 	var button = self.Nodes.Button
-
+	
 	if (v) {
 		display.disabled = true
 		inputwrap.setAttribute('disabled', 'true')

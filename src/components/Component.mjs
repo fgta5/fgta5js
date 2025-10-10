@@ -55,6 +55,7 @@ function comp_createSvgButton(svg, classname, fn_click) {
 		btn.classList.add(classname)
 	}
 	
+	btn.setAttribute('tabindex', '-1')
 	btn.setAttribute('href', 'javascript:void(0)')
 
 	if (typeof fn_click === 'function') {

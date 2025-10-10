@@ -74,6 +74,9 @@ export default class Timepicker extends Input {
 		return tpck_getLastValue(this)
 	} 
 
+	focus() {
+		this.Nodes.Display.focus()
+	}	
 }
 
 
@@ -139,6 +142,10 @@ function tpck_construct(self, id) {
 		display.setAttribute('style', cssstyle)
 	}
 
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		display.setAttribute('tabindex', tabIndex)
+	}
 
 	// main input
 	input.setAttribute('type', 'time')

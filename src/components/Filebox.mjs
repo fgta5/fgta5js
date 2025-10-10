@@ -81,6 +81,10 @@ export default class Filebox extends Input {
 	validate() { 
 		return flb_validate(this) 
 	}
+
+	focus() {
+		this.Nodes.Display.focus()
+	}	
 }
 
 
@@ -202,8 +206,13 @@ function flb_construct(self, id) {
 		display.setAttribute('style', cssstyle)
 	}
 
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		display.setAttribute('tabindex', tabIndex)
+	}
 
-		// main input
+
+	// main input
 	input.setAttribute('type', 'file')
 	input.setAttribute('picker', 'file')
 	input.removeAttribute('class')

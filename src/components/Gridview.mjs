@@ -761,7 +761,9 @@ function grv_createFunction(expression) {
 
     if (funcName === "decimal") {
         return (v) => grv_formatDecimal(v, parsedArgs[1]);
-    } else if (funcName === 'checkmark') {
+    } else if (funcName === 'int') {
+		return (v) => grv_formatInteger(v)
+	} else if (funcName === 'checkmark') {
 		return (v) => grv_formatCheckmark(v)
 	} else if (funcName === 'dateiso') {
 		return (v) => grv_formatDateIso(v)
@@ -778,6 +780,15 @@ function grv_formatDecimal (value, precision)  {
 	const formatterFixed = new Intl.NumberFormat('en-US', {
 		minimumFractionDigits: precision,
 		maximumFractionDigits: precision
+	});
+	return formatterFixed.format(value)
+}
+
+function grv_formatInteger (value)  { 
+	const formatterFixed = new Intl.NumberFormat('en-US', {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0,
+		useGrouping: false
 	});
 	return formatterFixed.format(value)
 }

@@ -81,6 +81,7 @@ export default class Form extends Component {
 
 	newData(data) { 
 		this.#isnew = true
+		this.lock(false)
 		frm_newData(this, data) 
 	}
 
@@ -108,6 +109,15 @@ export default class Form extends Component {
 
 	addEventListener(event, callback) {
 		this.Element.addEventListener(event, callback)
+	}
+
+
+	acceptInput() {
+		const prevFocusedElement = document.activeElement;
+		prevFocusedElement.blur()
+		setTimeout(()=>{
+				prevFocusedElement.focus()
+		}, 100)
 	}
 
 	#readAttributes() {

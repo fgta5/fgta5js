@@ -403,7 +403,7 @@ function input_markAsRequired(self, required) {
 		} else {
 			self.Nodes.Label.removeAttribute(attrname)
 			self.Nodes.Input.removeAttribute(attrname)
-			self.RemoveValidator(attrname)
+			self.removeValidator(attrname)
 		}
 	}
 }

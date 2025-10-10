@@ -93,6 +93,12 @@ function chk_construct(self, id) {
 
 	// setup input
 	input.classList.add('fgta5-checkbox-input')
+
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		input.setAttribute('tabindex', tabIndex)
+	}
+
 	
 	// setup checkbox label untuk menampung checkbox
 	checkboxlabel.classList.add('fgta5-checkbox')

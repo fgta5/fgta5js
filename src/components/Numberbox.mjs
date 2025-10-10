@@ -70,6 +70,10 @@ export default class Numberbox extends Input {
 		return nmb_getLastValue(this)
 	} 
 
+
+	focus() {
+		this.Nodes.Display.focus()
+	}
 }
 
 
@@ -111,9 +115,12 @@ function nmb_construct(self, id) {
 	
 	
 	// precission and step
-	var {precision, step} = getPrecission(self.Element.getAttribute('precision'))
+	const {precision, step} = getPrecission(self.Element.getAttribute('precision'))
 	self.formatterFixed.minimumFractionDigits = precision
 	self.formatterFixed.maximumFractionDigits = precision  // minimum dan maksimum jumlah angka di belakang koma di set sama
+
+
+
 
 	// setup input
 	input.classList.add('fgta5-entry-input')
@@ -140,12 +147,26 @@ function nmb_construct(self, id) {
 	display.setAttribute('autocomplete', 'off')
 	
 
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		display.setAttribute('tabindex', tabIndex)
+	}
+
 	const dis = input.getAttribute('disabled')
 	if (dis!=null) {
 		nmb_setDisabled(self, true)
 	}
 
-	
+	const digitgrouping = input.getAttribute('digitgrouping') 
+	if (digitgrouping!=null) {
+		if (digitgrouping.toLowerCase()==='false') {
+			self.formatterFixed.useGrouping=false
+		} else {
+			self.formatterFixed.useGrouping=true
+		}
+	}
+
+
 	// label
 	label.setAttribute('for', display.id)
 	label.classList.add('fgta5-entry-label')
@@ -241,7 +262,7 @@ function nmb_setValue(self, v) {
 	if (self.Nodes.Display.type === 'text') {
 		self.Nodes.Display.value = formattedValue
 	} else {
-		self.Nodes.Display.value = num
+		self.Nodes.Display.value = v
 	}
 
 	nmb_markChanged(self)
@@ -249,7 +270,6 @@ function nmb_setValue(self, v) {
 
 
 function nmb_setDisabled(self, v) {
-	console.log('SET DISABLED')
 	if (v) {
 		self.Nodes.Display.disabled = true
 	} else {
@@ -315,7 +335,7 @@ function nmb_formatValue(self, value) {
 	const formatter = new Intl.NumberFormat('en-US', {
 			minimumFractionDigits: self.formatterFixed.minimumFractionDigits,
 			maximumFractionDigits: self.formatterFixed.minimumFractionDigits,
-			useGrouping: true
+			useGrouping: self.formatterFixed.useGrouping
 	});
 
 	const formattedValue = formatter.format(value)

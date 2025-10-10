@@ -23,9 +23,13 @@ export default class ActionButton {
 		}
 
 
-		
-		// handle default event click, yang berfungsi untuk mengamabkan tombol saat disable / hidden
+		// setup button yang diasosiasikan untuk action ini		
 		this.#elements.forEach(element => {
+
+			// disable tab
+			element.setAttribute('tabindex', '-1')
+
+			// handle default event click, yang berfungsi untuk mengamabkan tombol saat disable / hidden
 			element.addEventListener('click', (evt)=>{
 				if (this.#disabled || this.#hidden) {
 					console.warn('action is not allowed!')

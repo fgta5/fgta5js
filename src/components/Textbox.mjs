@@ -37,6 +37,9 @@ export default class Textbox extends Input {
 		return txt_isChanged(this)
 	}
 
+	focus() {
+		this.Nodes.Input.focus()
+	}
 
 }
 
@@ -111,6 +114,11 @@ function txt_construct(self, id) {
 	for (var classname of nonFgtaClasses) {
 		input.classList.remove(classname)
 		container.classList.add(classname)
+	}
+
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		input.setAttribute('tabindex', tabIndex)
 	}
 
 

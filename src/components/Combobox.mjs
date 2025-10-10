@@ -2,7 +2,7 @@
 
 import Input from "./Input.mjs"
 
-const ChangeEvent = (data) => { return new CustomEvent('change', data) }
+const SelectedEvent = (data) => { return new CustomEvent('selected', data) }
 const OptionFormattingEvent = (data) => { return new CustomEvent('optionformatting', data) }
 const SelectingEvent = (data) => { return new CustomEvent('selecting', data) }
 
@@ -100,6 +100,7 @@ export default class Combobox extends Input {
 		cbo_setOptions(this, data)
 	}
 
+	
 
 	#iswaiting = false
 	isWaiting() { return this.#iswaiting }
@@ -115,6 +116,11 @@ export default class Combobox extends Input {
 
 	HasStaticOption = null
 
+
+
+	focus() {
+		this.Nodes.Display.focus()
+	}
 }
 
 
@@ -215,6 +221,7 @@ function cbo_construct(self, id) {
 	display.setAttribute('readonly', 'true')
 	display.setAttribute('fgta5-component', 'Combobox')
 	display.setAttribute('placeholder', input.getAttribute('placeholder'))
+	display.setAttribute('tabindex', '-1')
 	
 	display.required = input.required
 
@@ -223,9 +230,13 @@ function cbo_construct(self, id) {
 		cbo_setDisabled(self, true)
 	}
 
-
+	const tabIndex = input.getAttribute('data-tabindex')
+	if (tabIndex!=null) {
+		button.setAttribute('tabindex', tabIndex)
+	}
 
 	// setup button
+	button.setAttribute('type', 'button')
 	button.classList.add('fgta5-entry-button-combobox')	
 	button.innerHTML = icon_cbo_button
 	button.addEventListener('click', (e)=>{
@@ -555,6 +566,8 @@ function cbo_createStaticOptions(self, dialog, datalist) {
 
 function cbo_createDialog(self, dialog) {
 	dialog.classList.add('fgta5-combobox-dialog')
+	
+
 
 	// buat header dialog
 	var head = document.createElement('div')
@@ -564,6 +577,7 @@ function cbo_createDialog(self, dialog) {
 
 	// tombol tutup dialog (tanpa memilih)
 	var btnClose = document.createElement('button')
+	btnClose.setAttribute('type', 'button')
 	btnClose.innerHTML = icon_cbo_close
 	head.appendChild(btnClose)
 
@@ -577,6 +591,7 @@ function cbo_createDialog(self, dialog) {
 		var srcbuton = document.createElement('button')
 		var btnnext = document.createElement('a')
 
+		
 		srcinput.setAttribute('placeholder', 'Search')
 		srcinput.setAttribute('maxlength', 30)
 		srcinput.addEventListener('keypress', (evt)=>{
@@ -585,7 +600,7 @@ function cbo_createDialog(self, dialog) {
 			}
 		})
 		
-
+		srcbuton.setAttribute('type', 'type')
 		srcbuton.innerHTML = 'Submit'
 		srcbuton.addEventListener('click', (evt)=>{
 			var searchtext = srcinput.value
@@ -658,12 +673,12 @@ function cbo_createDialog(self, dialog) {
 
 function cbo_userSelectValue(self, value, text, data) {
 	// trigger event
-	self.Listener.dispatchEvent(ChangeEvent({
-		sender: self,
-		detail: {value: value, text: text, data:data, sender: self}
-	}))
+	const changed = cbo_markChanged(self)
 
-	cbo_markChanged(self)
+	self.Listener.dispatchEvent(SelectedEvent({
+		sender: self,
+		detail: {value, text, data, changed, sender: self}
+	}))
 
 	// tutup
 	self.Nodes.Dialog.removeAttribute(ATTR_SHOWED)
@@ -681,8 +696,10 @@ function cbo_markChanged(self) {
 	var display = self.Nodes.Display
 	if (self.value!=self.getLastValue()) {
 		display.setAttribute('changed', 'true')
+		return true
 	} else {
 		display.removeAttribute('changed')
+		return false
 	}
 }
 
@@ -707,7 +724,7 @@ function cbo_clearOptions(self, tbody) {
 		tbody = dialog.getElementsByTagName('tbody')[0]
 	}
 
-	tbody.replaceChildren()
+	tbody.innerHTML = ''
 }
 
 function cbo_addOptions(self, data, tbody) {
@@ -744,7 +761,6 @@ function cbo_setOptions(self, data) {
 }
 
 function cbo_closed(self) {
-	console.log('combobox closed')
 	if (typeof self.abortHandler==='function') {
 		self.abortHandler()
 	}

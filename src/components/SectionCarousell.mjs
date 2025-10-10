@@ -61,7 +61,6 @@ function scar_Construct(self, el) {
 	const nodes = el.querySelectorAll('section[class="fgta5-carousell"]') 
 	let i = 0;
 	for (let node of nodes) {
-		console.log(node)
 		const section = new Section(node, {
 			index: i,
 			carousell: self,

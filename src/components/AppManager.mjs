@@ -36,7 +36,7 @@ const TXT_OPENED = 'Opened Programs'
 const C_SHORTCUT_PREFIX = 'fgta5-sch-mod-'
 
 
-
+const openingModuleEvent = (data) => { return new CustomEvent('openingmodule', data) }
 const actionEvent = (data) => { return new CustomEvent('action', data) }
 const logoutEvent = (data) => { return new CustomEvent('logout', data) }
 const openProfileEvent = (data) => { return new CustomEvent('openprofile', data) }
@@ -410,6 +410,7 @@ async function appmgr_openModule(self, module) {
 	const modulename = module.name
 
 	
+	console.log(module)
 
 	const qry = `iframe[${ATTR_MODULENAME}="${modulename}"]`
 	const ifr = iframes.querySelector(qry)
@@ -417,7 +418,9 @@ async function appmgr_openModule(self, module) {
 		// buka iframe baru
 		const mask = $fgta5.Modal.createMask('Please wait...')
 
-		var url = module.url ?? 'demo-application'
+		const url = new URL(module.url);
+		url.searchParams.append('prog', module.name);
+
 		let newframe = document.createElement('iframe')
 		newframe.classList.add('fgta5-iframe')
 		newframe.classList.add(CLS_HIDDEN)

@@ -101,6 +101,7 @@ function createMessageDialog(message, config) {
 
 
 async function msgbox_show(message, config) {
+	
 	if (config === undefined) config = {}
 
 	var dialog = createMessageDialog(message, config)
@@ -113,6 +114,7 @@ async function msgbox_show(message, config) {
 				btnEl.addEventListener('click', () => {
 					dialog.close()
 					resolve(key)
+					
 				})
 				dialog.divButtons.appendChild(btnEl)
 			}
