@@ -3,7 +3,7 @@
 import Input from "./Input.mjs"
 
 const SelectedEvent = (data) => { return new CustomEvent('selected', data) }
-const OptionFormattingEvent = (data) => { return new CustomEvent('optionformatting', data) }
+const PopulatingEvent = (data) => { return new CustomEvent('populating', data) }
 const SelectingEvent = (data) => { return new CustomEvent('selecting', data) }
 
 
@@ -66,6 +66,10 @@ export default class Combobox extends Input {
 	
 	reset() {
 		cbo_reset(this)
+	}
+
+	clear() {
+		cbo_clear(this)
 	}
 
 	_setLastValue(v, t) {
@@ -494,7 +498,7 @@ function cbo_createOptionRow(self, value, text, data) {
 	// CATATAN:
 	// dispatch event di sini tidak berlaku untuk static options
 	// karena event handler pada main program baru akan diexekusi setelah pembuatan content option statis
-	self.Listener.dispatchEvent(OptionFormattingEvent({
+	self.Listener.dispatchEvent(PopulatingEvent({
 		detail: {
 			value: value,
 			text: text,
@@ -766,6 +770,14 @@ function cbo_closed(self) {
 	}
 }
 
+
+function cbo_clear(self) {
+	const dialog = self.Nodes.Dialog
+	var selectedTr = dialog.querySelectorAll(`table tr[${ATTR_SELECTED}]`)
+	selectedTr.forEach(tr=>{
+		tr.removeAttribute(ATTR_SELECTED)
+	})
+}
 
 function cbo_search(self, searchtext, limit, offset) {
 	const dialog = self.Nodes.Dialog
