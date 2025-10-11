@@ -90,9 +90,7 @@ export default class Form extends Component {
 	validate() { return frm_validate(this) }
 
 
-	getData() {
-		return frm_getData(this)
-	}
+
 
 	getFiles() {
 		return frm_getFiles(this)
@@ -103,9 +101,23 @@ export default class Form extends Component {
 		return frm_getData(this, changedOnly)
 	}
 
+
+	#originalData
 	setData(data) {
+		this.#originalData = data
 		frm_setData(this, data)
 	}
+
+	getData() {
+		return frm_getData(this) // data current form
+	}
+
+	getOriginalData() {
+		return this.#originalData // data saat diset pertama kali dari setData
+	}
+
+
+
 
 	addEventListener(event, callback) {
 		this.Element.addEventListener(event, callback)
