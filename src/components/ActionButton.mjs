@@ -1,6 +1,7 @@
 
 export default class ActionButton {
 	
+	#ids = []
 	#elements = []
 	constructor(id, actionname=null) {
 		this.Listener = new EventTarget()
@@ -26,6 +27,10 @@ export default class ActionButton {
 		// setup button yang diasosiasikan untuk action ini		
 		this.#elements.forEach(element => {
 
+			// id
+			const id = element.id
+			this.#ids.push(id) 
+
 			// disable tab
 			element.setAttribute('tabindex', '-1')
 
@@ -42,14 +47,21 @@ export default class ActionButton {
 	#disabled = false
 	get disabled() { return this.#disabled }
 	set disabled(disable) {
-		this.#disabled = disable
-		this.#elements.forEach(element => {
-			if (disable) {
-				element.setAttribute('disabled', true)
-			} else {
-				element.removeAttribute('disabled')
+			if (!disable && this.#suspended) {
+				// jika suspended, tombol tidak bisa dinyalakan
+				console.warn('suspended action button cannot be enabled!', this.#ids)
+				return
 			}
-		})
+
+			this.#disabled = disable
+			this.#elements.forEach(element => {
+				if (disable) {
+					element.setAttribute('disabled', true)
+				} else {
+					element.removeAttribute('disabled')
+				}
+			})
+		
 	}
 
 	#hidden = false
@@ -83,4 +95,19 @@ export default class ActionButton {
 		}
 		this.#elements[0].click()
 	}
+
+
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.disabled = true
+		} 
+		this.#suspended = s
+	}
+
+	isSuspended() {
+		return this.#suspended
+	}
+
+
 }
