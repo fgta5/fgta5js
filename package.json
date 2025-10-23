@@ -1,6 +1,6 @@
 {
   "name": "fgta5js",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "fgta5js libary",
   "type": "module",
   "main": "rollup.config.js",
