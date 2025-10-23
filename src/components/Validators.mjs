@@ -7,17 +7,17 @@ export function getInvalidMessage(name, input, defaultMessage) {
 }
 
 
-export function parseFunctionParam(paramString) {
-	const [fnName, ...fnParams] = paramString.split(":");
-	const fnParamsString = fnParams.length > 0 ? fnParams.join(":") : null;
-	
-	return {
-		fnName,
-		fnParams: fnParamsString !== null 
-			? (!isNaN(fnParamsString) ? Number(fnParamsString) : fnParamsString) 
-			: null
-	};
+const customValidator = {}
+
+export function getCustomValidator(name) {
+	return customValidator[name]
 }
+
+export function addCustomValidator(name, fn) {
+	customValidator[name] = fn
+}
+
+
 
 
 export function required(value) {
@@ -26,6 +26,18 @@ export function required(value) {
 	}
 	return true;
 }
+
+export function valueIs(value, data) {
+	const fixedStr = data.replace(/'/g, '"');
+	const arrValid = JSON.parse(fixedStr);
+	if (!arrValid.includes(value)) {
+		return false
+	}
+
+	return true
+	
+}
+
 
 export function minlength(value, minLength) {
 	if (minLength == null || minLength === 0) {

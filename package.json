@@ -1,18 +1,23 @@
 {
   "name": "fgta5js",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "fgta5js libary",
   "type": "module",
   "main": "rollup.config.js",
   "scripts": {
     "test": "node ./server-dev.js",
-    "xx-prebuild": "rimraf dist && node version.js",
+    "prebuild": "rimraf dist && node version.js",
     "x-prebuild": "rimraf dist",
-    "build": "rollup -c rollup-fgta5js.js"
+    "build": "rollup -c rollup-fgta5js.mjs"
   },
   "author": "agung nugroho",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "rimraf": "^6.0.1",
+    "serve-favicon": "^2.5.0",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.2",
@@ -22,13 +27,6 @@
     "postcss": "^8.5.1",
     "rollup": "^4.46.2",
     "rollup-plugin-postcss": "^4.0.2"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0",
-    "rimraf": "^6.0.1",
-    "serve-favicon": "^2.5.0"
   },
   "repository": {
     "type": "git",

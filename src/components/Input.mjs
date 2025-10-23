@@ -244,7 +244,7 @@ function input_isChanged(self) {
 
 function input_getErrorValidation(self, fnName) {
 	const validatorData = self.Validators[fnName]
-	const fnValidate = $validators[fnName];
+	const fnValidate = $validators[fnName] ?? $validators.getCustomValidator(fnName);
 	const fnParams = validatorData.param;
 	const fnMessage = validatorData.message;
 	const input = self.Nodes.Input
@@ -383,14 +383,28 @@ function input_readValidators(self) {
 
 	var validator = self.Nodes.Input.getAttribute('validator')
 	if (validator != null && validator.trim() !== '') {
-		validator = validator.split(',')
+		validator = validator.split(';')
 		for (var i=0; i<validator.length; i++) {
 			var str = validator[i].trim()
-			var { fnName, fnParams } = $fgta5.Validators.parseFunctionParam(str)
+			var { fnName, fnParams } = parseFunctionParam(self, str)
 			self.addValidator(fnName, fnParams, self.InvalidMessages[fnName])
 		}
 	}
 }
+
+
+function parseFunctionParam(self, paramString) {
+	const [fnName, ...fnParams] = paramString.split(":");
+	const fnParamsString = fnParams.length > 0 ? fnParams.join(":") : null;
+	
+	return {
+		fnName,
+		fnParams: fnParamsString !== null 
+			? (!isNaN(fnParamsString) ? Number(fnParamsString) : fnParamsString) 
+			: null
+	};
+}
+
 
 function input_markAsRequired(self, required) {
 	var attrname = 'required'

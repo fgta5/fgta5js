@@ -56,7 +56,8 @@ export default class ApiEndpoint {
 		const options = {
 			method,
 			headers,
-			body
+			body,
+			credentials: 'include'
 		}
 
 		const opt = Object.assign({ signal }, options)
