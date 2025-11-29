@@ -16,7 +16,7 @@ const button_icon = `<svg transform="translate(0 3)" width="12" height="12" stro
  * https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
  */
 
-const ChangeEvent = (data) => { return new CustomEvent('change', data) }
+const ChangeEvent = (data) => { return new CustomEvent('changed', data) }
 
 
 export default class Datepicker extends Input {

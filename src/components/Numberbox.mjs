@@ -1,7 +1,7 @@
 import Input from "./Input.mjs"
 
 
-const ChangeEvent = (data)=>{ return new CustomEvent('change', data) }
+const ChangeEvent = (data)=>{ return new CustomEvent('changed', data) }
 
 
 export default class Numberbox extends Input {
@@ -311,6 +311,7 @@ function nmb_displayBlur(self, e) {
 	var input = self.Nodes.Input
 	
 	if (self.InEditMode) {
+		// console.log('numberbox: blurEvent')
 		var num = Number(display.value)
 		if (isNaN(num)) {
 			self.Listener.dispatchEvent(ChangeEvent({detail: {invalid:true}}))

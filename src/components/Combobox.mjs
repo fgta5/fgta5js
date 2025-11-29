@@ -86,6 +86,11 @@ export default class Combobox extends Input {
 	} 
 
 	setSelected(value, text) {
+		if (value==null) {
+			text = ''
+			cbo_clear(this)
+		}
+		
 		if (text===undefined || text===null) {
 			text = value
 		}
@@ -104,7 +109,13 @@ export default class Combobox extends Input {
 		cbo_setOptions(this, data)
 	}
 
-	
+	#selectedChanged = false
+	_setSelectedChanged(ischanged) {
+		this.#selectedChanged = ischanged
+	}
+	isSelectedChanged() {
+		return this.#selectedChanged
+	}
 
 	#iswaiting = false
 	isWaiting() { return this.#iswaiting }
@@ -430,6 +441,9 @@ function isMobileDevice() {
 
 
 function cbo_selectRow(self, tr, td, value, text, data) {
+		const lastSelected = self.value	
+	
+	
 		// reset dulu jika ada option yang terpilih sebelumnya
 		cbo_resetSelected(self)
 
@@ -444,7 +458,11 @@ function cbo_selectRow(self, tr, td, value, text, data) {
 			self.Nodes.Display.value = text
 		}
 
-
+		if (value!=lastSelected) {
+			self._setSelectedChanged(true)
+		} else {
+			self._setSelectedChanged(false)
+		}
 		
 		cbo_userSelectValue(self, value, text, data)
 }
@@ -851,6 +869,8 @@ function cbo_search(self, searchtext, limit, offset) {
 function cbo_buttonClick(self, e) {
 	const dialog = self.Nodes.Dialog
 
+
+	console.log('combobox click')
 	if (self.Form!=null) {
 		var editmode = self.Nodes.Button.getAttribute(ATTR_EDITMODE)
 		if (editmode!=="true") {
@@ -903,6 +923,8 @@ function cbo_buttonClick(self, e) {
 	// tampilkan modal dialog untuk options
 	dialog.showModal()
 	dialog.setAttribute(ATTR_SHOWED, 'true')
+
+	document.body.style.overflow = 'hidden'
 
 
 	// handler tombol untuk menutup dialog pilihan combobox
@@ -983,6 +1005,7 @@ function cbo_resetSelected(self) {
 
 
 function cbo_dialogClose(self) {
+	document.body.style.overflow = 'unset'
 	// kembalikan yang saat ini di select ke baris semula
 	// const dialog = self.Nodes.Dialog
 	// const selected = dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
@@ -1001,3 +1024,5 @@ function cbo_dialogClose(self) {
 	// 	}
 	// }
 }
+
+

@@ -21,6 +21,24 @@ export default class Input extends Component {
 	get placeholder() { return this.Element.getAttribute('placeholder') }
 	set placeholder(v) { this.Element.setAttribute('placeholder', v) }
 
+	get visible() {
+		if (this.Nodes.Container.classList.contains('hidden')) {
+			return false;	
+		} else {
+			return true;	
+		}
+	}
+
+	set visible(v) {
+		if (v) {
+			this.Nodes.Container.classList.add('hidden')
+		} else {
+			this.Nodes.Container.classList.remove('hidden')
+		}
+
+	}
+
+
 	#_form
 	get Form() { return this.#_form }
 	bindForm(form) { this.#_form = form }
@@ -33,6 +51,11 @@ export default class Input extends Component {
 	
 	#invalidMessages = {}
 	get InvalidMessages() { return this.#invalidMessages }
+
+	setInvalidMessage(name, message) {
+		this.#invalidMessages[name] = message
+	}
+
 	_readValidators() {
 		let input = this.Element
 		var prefix = 'invalid-message'
