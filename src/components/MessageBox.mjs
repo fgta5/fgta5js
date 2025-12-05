@@ -135,7 +135,14 @@ async function msgbox_show(message, config) {
 
 
 async function msgbox_error(message) {
-	return await msgbox_show(message, {iconSvg: ICON_ERROR})
+	const needAuthMessage = 'authentication is needed to access resource'
+	await msgbox_show(message, {iconSvg: ICON_ERROR})
+
+	if (message==needAuthMessage) {
+		const currentUrl = window.location.href;
+		location.href = `/login?nexturl=${currentUrl}`
+	}
+	return 'ok'
 }
 
 async function msgbox_info(message) {

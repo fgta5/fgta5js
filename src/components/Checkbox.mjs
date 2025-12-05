@@ -23,10 +23,28 @@ export default class Checkbox extends Input {
 	}
 
 
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.Element.disabled = true
+			chk_setDisabled(this, true)
+		} 
+		this.#suspended = s
+	}
+
+	isSuspended() {
+		return this.#suspended
+	}
+
 	get disabled() { return chk_getDisabled(this) }
-	set disabled(v) { 
-		this.Element.disabled = v 
-		chk_setDisabled(this, v)
+	set disabled(disable) { 
+		if (!disable && this.#suspended) {
+			console.warn('suspended checkbox cannot be enabled!', this.Id)
+			return
+		}
+		
+		this.Element.disabled = disable
+		chk_setDisabled(this, disable)
 	}
 
 

@@ -31,10 +31,29 @@ export default class Timepicker extends Input {
 	get value() { return tpck_getValue(this) }
 	set value(v) { tpck_setValue(this, v) }
 
+
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.Element.disabled = true
+			tpck_setDisabled(this, true)
+		} 
+		this.#suspended = s
+	}
+
+	isSuspended() {
+		return this.#suspended
+	}
+
+
 	get disabled() { return this.Element.disabled }
-	set disabled(v) { 
-		this.Element.disabled = v 
-		tpck_setDisabled(this, v)
+	set disabled(disable) { 
+		if (!disable && this.#suspended) {
+			console.warn('suspended timepicker cannot be enabled!', this.Id)
+			return
+		}
+		this.Element.disabled = disable
+		tpck_setDisabled(this, disable)
 	}
 
 	#_ineditmode = true

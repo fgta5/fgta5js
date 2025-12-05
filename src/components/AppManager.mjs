@@ -432,17 +432,21 @@ async function appmgr_openModule(self, module) {
 			mask.close()
 		}
 
+		const needAuthMessage = 'authentication is needed to access resource'
 		fetch(url)
 			.then(response => {
 				if (!response.ok) {
-					throw new Error(`HTTP Error: ${response.status}`);
+					const err = new Error(`HTTP Error: ${response.status}`);
+					err.status = response.status
+					throw err
 				}
 				newframe.src = url
 				iframes.appendChild(newframe)
 				self.Nodes.IFrames.classList.remove(CLS_HIDDEN)
-			}).catch(error => {
-				console.error(error)
-				$fgta5.MessageBox.error(error)
+			}).catch(err => {
+				const errMessage = err.status==401 ? needAuthMessage : err.message
+				console.error(errMessage)
+				$fgta5.MessageBox.error(errMessage)
 				mask.close()
 			});
 	} else {	

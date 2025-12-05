@@ -75,9 +75,24 @@ export default class ApiEndpoint {
 					sessionStorage.removeItem('login_nexturl');
 					errorMessage = 'authentication is needed to access resource'
 				} 
-				const err = new Error(errorMessage)
+
+				let apiErrorMessage = errorMessage
+				let apiErrorCode = status
+
+				try {
+					const jsonPart = errorMessage.split(' : ')[1];
+					const obj = JSON.parse(jsonPart);
+					let { code, message } = obj;    // appName, moduleName,
+					apiErrorMessage = message
+					apiErrorCode = code
+				} catch (err) {
+					apiErrorMessage = errorMessage
+					apiErrorCode = 1
+				}
+
+				const err = new Error(apiErrorMessage)
 				err.status = status
-				err.code = response.code || 1
+				err.code = apiErrorCode || 1
 				throw err
 			}
 

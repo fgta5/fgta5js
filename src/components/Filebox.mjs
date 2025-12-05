@@ -34,10 +34,31 @@ export default class Filebox extends Input {
 		}
 	}
 
+
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.Element.disabled = true
+			flb_setDisabled(this, true)
+		} 
+		this.#suspended = s
+	}
+
+	isSuspended() {
+		return this.#suspended
+	}
+
+
+
 	get disabled() { return this.Element.disabled }
-	set disabled(v) { 
-		this.Element.disabled = v 
-		flb_setDisabled(this, v)
+	set disabled(disable) { 
+		if (!disable && this.#suspended) {
+			console.warn('suspended filebox cannot be enabled!', this.Id)
+			return
+		}
+
+		this.Element.disabled = disable
+		flb_setDisabled(this, disable)
 	}
 
 	#_ineditmode = true

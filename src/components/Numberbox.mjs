@@ -25,12 +25,27 @@ export default class Numberbox extends Input {
 	set value(v) { nmb_setValue(this, v) }
 		
 		
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.Element.disabled = true
+			nmb_setDisabled(this, true)
+		} 
+		this.#suspended = s
+	}
 
+	isSuspended() {
+		return this.#suspended
+	}
 
 	get disabled() { return this.Element.disabled }
-	set disabled(v) { 
-		this.Element.disabled = v 
-		nmb_setDisabled(this, v)
+	set disabled(disable) { 
+		if (!disable && this.#suspended) {
+			console.warn('suspended numberbox cannot be enabled!', this.Id)
+			return
+		}
+		this.Element.disabled = disable
+		nmb_setDisabled(this, disable)
 	}
 
 	#_ineditmode = true
@@ -59,6 +74,11 @@ export default class Numberbox extends Input {
 		super.reset()
 		nmb_Reset(this)
 	}
+
+	isChanged() { 
+		return nmb_isChanged(this)
+	}
+
 
 	setError(msg) {
 		super.setError(msg)
@@ -350,6 +370,21 @@ function nmb_acceptChanges(self) {
 function nmb_Reset(self) {
 	self.value = self.getLastValue()
 }
+
+function nmb_isChanged(self) {
+	// bandingkan nilai last value dan input value
+	const lastValue = Number(self.Nodes.LastValue.value.replace(/,/g, ""));
+	const currentValue = Number(self.Nodes.Input.value.replace(/,/g, ""));
+
+
+	if (currentValue != lastValue) {
+		console.log(`Input '${self.Id}' is changed from '${lastValue}' to '${currentValue}'`)
+		return true
+	} else {
+		return false
+	}
+}
+
 
 function nmb_setError(self, msg) {
 	var display = self.Nodes.Display

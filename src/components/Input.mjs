@@ -8,6 +8,7 @@ export default class Input extends Component {
 		this._readValidators()
 	}
 	
+
 	/* mengembalikan nama class contructor, misalnya 'Textbox' */
 	get type() { return this.constructor.name }
 
@@ -15,8 +16,28 @@ export default class Input extends Component {
 	get value() { return this.Element.value }
 	set value(v) { this.Element.value = v }
 
+
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.Element.disabled = true
+		} 
+		this.#suspended = s
+	}
+
+	isSuspended() {
+		return this.#suspended
+	}
+	
+
 	get disabled() { return this.Element.disabled }
-	set disabled(v) { this.Element.disabled = v }
+	set disabled(disable) { 
+		if (!disable && this.#suspended) {
+			console.warn('suspended input cannot be enabled!', this.Id)
+			return
+		}
+		this.Element.disabled = disable
+	}
 
 	get placeholder() { return this.Element.getAttribute('placeholder') }
 	set placeholder(v) { this.Element.setAttribute('placeholder', v) }
@@ -37,6 +58,9 @@ export default class Input extends Component {
 		}
 
 	}
+
+
+
 
 
 	#_form

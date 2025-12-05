@@ -330,7 +330,8 @@
 	transition: box-shadow 0.3s ease-in-out; /* Transisi bayangan */
 	display: flex;
     align-items: center;
-	
+	font-size: 1.2em;
+	font-weight: bold;
 }
 
 .fgta5-combobox-dialog-head > button {

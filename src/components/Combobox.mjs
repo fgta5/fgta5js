@@ -42,12 +42,32 @@ export default class Combobox extends Input {
 	get text() { return  cbo_getText(this) }
 	set text(v) { throw Error('Text is readonly') }
 
-	get disabled() { return this.Element.disabled }
-	set disabled(v) { 
-		this.Element.disabled = v 
-		cbo_setDisabled(this, v)
+	#suspended = false
+	suspend(s) {
+		if (s) {
+			this.Element.disabled = true
+			cbo_setDisabled(this, true)
+		} 
+		this.#suspended = s
 	}
 
+	isSuspended() {
+		return this.#suspended
+	}
+
+
+	get disabled() { return this.Element.disabled }
+	set disabled(disable) { 
+		if (!disable && this.#suspended) {
+			console.warn('suspended combobox cannot be enabled!', this.Id)
+			return
+		}
+
+		this.Element.disabled = disable
+		cbo_setDisabled(this, disable)
+	}
+
+	
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
 	setEditingMode(ineditmode) {
