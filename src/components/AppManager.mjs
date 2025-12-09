@@ -433,7 +433,7 @@ async function appmgr_openModule(self, module) {
 		}
 
 		const needAuthMessage = 'authentication is needed to access resource'
-		fetch(url)
+		fetch(url, {method: 'GET', credentials: 'include'})
 			.then(response => {
 				if (!response.ok) {
 					const err = new Error(`HTTP Error: ${response.status}`);
