@@ -1,6 +1,7 @@
 import Input from "./Input.mjs"
 
 
+const ChangedEvent = (data)=>{ return new CustomEvent('changed', data) }
 const CheckedEvent = (data)=>{ return new CustomEvent('checked', data) }
 const UnCheckedEvent = (data)=>{ return new CustomEvent('unchecked', data) }
 
@@ -217,11 +218,24 @@ function chk_checkedChanged(self) {
 		input.removeAttribute('changed')
 	}
 
+
 	if (input.checked) {
-		self.Listener.dispatchEvent(CheckedEvent({}))
+		self.Listener.dispatchEvent(CheckedEvent({
+			sender: self,
+			detail: {}
+		}))
 	} else {
-		self.Listener.dispatchEvent(UnCheckedEvent({}))
+		self.Listener.dispatchEvent(UnCheckedEvent({
+			sender: self,
+			detail: {}
+		}))
 	}
+
+	self.Listener.dispatchEvent(ChangedEvent({
+		sender: self,
+		detail: {checked: input.checked}
+	}))	
+
 }
 
 

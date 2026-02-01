@@ -98,7 +98,7 @@ export default class ActionButton {
 
 
 	#suspended = false
-	suspend(s) {
+	suspend(s=true) {
 		if (s) {
 			this.disabled = true
 		} 

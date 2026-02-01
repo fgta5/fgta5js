@@ -1,6 +1,5 @@
 import ICONS from './Icons.mjs'
 import Component from "./Component.mjs"
-import Section from './Section.mjs'
 
 const CLS_BUTTONHEAD = 'fgta5-button-head'
 
@@ -28,6 +27,26 @@ export default class App extends Component {
 	showFooter(show) {
 		app_showFooter(this, show)
 	}
+
+
+	setMenuIcon(url) {
+		app_setMenuIcon(this, url)
+	}
+
+	finalize() {
+		console.log('application loaded.')
+		window.parent.postMessage({
+			action: Component.ACTION_APPLICATIONLOADED
+		}, '*')
+		window.parent.applicationLoaded(this);
+	}
+}
+
+
+function app_setMenuIcon(self, url) {
+	const el = document.getElementById('fgta5-appmanager-btn-menu')
+	el.innerHTML = ''
+	el.style.backgroundImage = `url(${url})`
 }
 
 function app_construct(self) {
@@ -55,14 +74,6 @@ function app_construct(self) {
 		Main: main,
 		Footer: footer
 	}
-
-	window.addEventListener("load", (event) => {
-		console.log('application loaded.')
-		window.parent.postMessage({
-			action: Component.ACTION_APPLICATIONLOADED
-		}, '*')
-
-	})
 
 	window.addEventListener("message", (evt) => {
 		const args = evt.data
@@ -107,6 +118,7 @@ function app_createHeader(self, head) {
 	divright.appendChild(btnmenu)
 
 
+	btnmenu.id = 'fgta5-appmanager-btn-menu'
 	if (!Component.isInContainer()) {
 		// jika tidak di dalam container,  
 		// sembunyikan tombol home dan menu

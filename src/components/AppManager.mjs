@@ -48,6 +48,7 @@ const removeFromFavouriteEvent = (data) => { return new CustomEvent('removefavou
 let current_dragged_modulename
 let current_drag_action
 let drop_valid = false
+let iconMenuUrl
 
 export default class AppManager extends Component {
 	constructor(id) {
@@ -72,6 +73,10 @@ export default class AppManager extends Component {
 
 	setMenu(data) {
 		appmgr_setMenu(this, data)
+	}
+
+	setMenuIcon(url) {
+		appmgr_setMenuIcon(this, url)
 	}
 
 	showMenu() {
@@ -102,6 +107,14 @@ export default class AppManager extends Component {
 	}
 }
 
+function appmgr_setMenuIcon(self, url) {
+	const el = document.getElementById('fgta5-appmanager-btn-menu')
+	el.innerHTML = ''
+	el.style.backgroundImage = `url(${url})`
+	iconMenuUrl = url
+
+}
+
 function appmgr_construct(self) {
 	console.log('constructiong application manager')
 
@@ -123,6 +136,7 @@ function appmgr_construct(self) {
 
 	title.innerHTML = 'Application Manager' // default title, nanti diganti dengan SetTitle
 
+	btnmenu.id = "fgta5-appmanager-btn-menu"
 
 	head.classList.add('fgta5-app-head')
 	head.appendChild(title)
@@ -151,6 +165,14 @@ function appmgr_construct(self) {
 		MenuResetButton: MenuResetButton,
 		TrashBox: trahsbox,
 		Title: title
+	}
+
+
+	window.applicationLoaded = (app) => {
+		const currentUrl = new URL(window.location.href);
+		if (iconMenuUrl!=null) {
+			app.setMenuIcon(currentUrl.origin + iconMenuUrl)
+		}
 	}
 
 }

@@ -48,10 +48,28 @@ export default class Textbox extends Input {
 function txt_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
-	const input = self.Nodes.Input
+	// const input = self.Nodes.Input
 	const wrapinput = document.createElement('div')
 	const label = document.querySelector(`label[for="${id}"]`)
-	
+	let input
+
+	const mtl = self.Nodes.Input.getAttribute('multiline')
+	if (mtl!=null) {
+		console.log('textbox is multiline')
+		input = document.createElement('textarea')
+		for (const attr of self.Nodes.Input.attributes) {
+			// skip atribut yang tidak cocok untuk textarea (opsional)
+			if (attr.name === "type") continue; 
+			input.setAttribute(attr.name, attr.value);
+		}
+		input.value = self.Nodes.Input.value
+		self.Nodes.Input.replaceWith(input);
+		self.Nodes.Input = input
+		self.Element = input
+	} else {
+		input = self.Nodes.Input
+	}
+
 
 	// setup container, (harus di awal seblum yang lain-lain)
 	// diperlukan untuk menampung semua element yang akan ditampilkan
