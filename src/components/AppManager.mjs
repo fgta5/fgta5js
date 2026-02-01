@@ -213,6 +213,7 @@ function appmgr_createHeadButton(self, svg, fn_click) {
 }
 
 function appmgr_setTitle(self, title) {
+	document.title = title
 	self.Nodes.Title.innerHTML = title
 }
 
