@@ -38,7 +38,11 @@ export default class App extends Component {
 		window.parent.postMessage({
 			action: Component.ACTION_APPLICATIONLOADED
 		}, '*')
-		window.parent.applicationLoaded(this);
+
+		if (typeof window.parent.applicationLoaded==='function') {
+			window.parent.applicationLoaded(this);
+		}
+		
 	}
 }
 
