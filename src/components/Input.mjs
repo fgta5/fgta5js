@@ -7,7 +7,7 @@ export default class Input extends Component {
 		input_construct(this, id)
 		this._readValidators()
 	}
-	
+
 
 	/* mengembalikan nama class contructor, misalnya 'Textbox' */
 	get type() { return this.constructor.name }
@@ -21,17 +21,17 @@ export default class Input extends Component {
 	suspend(s) {
 		if (s) {
 			this.Element.disabled = true
-		} 
+		}
 		this.#suspended = s
 	}
 
 	isSuspended() {
 		return this.#suspended
 	}
-	
+
 
 	get disabled() { return this.Element.disabled }
-	set disabled(disable) { 
+	set disabled(disable) {
 		if (!disable && this.#suspended) {
 			console.warn('suspended input cannot be enabled!', this.Id)
 			return
@@ -44,9 +44,9 @@ export default class Input extends Component {
 
 	get visible() {
 		if (this.Nodes.Container.classList.contains('hidden')) {
-			return false;	
+			return false;
 		} else {
-			return true;	
+			return true;
 		}
 	}
 
@@ -69,10 +69,10 @@ export default class Input extends Component {
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	setEditingMode(ineditmode) { 
-		this.#_ineditmode = ineditmode 
+	setEditingMode(ineditmode) {
+		this.#_ineditmode = ineditmode
 	}
-	
+
 	#invalidMessages = {}
 	get InvalidMessages() { return this.#invalidMessages }
 
@@ -100,19 +100,19 @@ export default class Input extends Component {
 	acceptChanges() {
 		input_acceptChanges(this)
 	}
-	
+
 	reset() {
 		input_reset(this)
 	}
-	
-	isChanged() { 
+
+	isChanged() {
 		return input_isChanged(this)
 	}
 
 	#lasterror
 	_setLastError(msg) {
 		this.#lasterror = msg
-	}	
+	}
 
 	getLastError() {
 		return this.#lasterror
@@ -129,7 +129,7 @@ export default class Input extends Component {
 	#lastvalue
 	getLastValue() {
 		return input_getLastValue(this)
-	} 
+	}
 
 
 	getBindingData() {
@@ -141,9 +141,9 @@ export default class Input extends Component {
 		}
 	}
 
-	validate() { 
+	validate() {
 		// console.log(`Validating input '${this.Id}'`)
-		return input_validate(this) 
+		return input_validate(this)
 	}
 
 	#_validators = {}
@@ -157,7 +157,7 @@ export default class Input extends Component {
 	removeValidator(str) {
 		if (this.#_validators[str] !== undefined) {
 			delete this.#_validators[str]
-		}			
+		}
 	}
 	clearValidators() {
 		this.#_validators = {}
@@ -175,11 +175,11 @@ export default class Input extends Component {
 			decrdiv.classList.add('fgta5-entry-description')
 			decrdiv.innerHTML = description
 			this.Nodes.Container.appendChild(decrdiv)
-		}		
+		}
 	}
 
 	#isrequired = false
-	isRequired() { return this.#isrequired}
+	isRequired() { return this.#isrequired }
 	markAsRequired(r) {
 		this.#isrequired = r
 		input_markAsRequired(this, r)
@@ -209,7 +209,7 @@ function input_construct(self, id) {
 	const container = document.createElement('div')
 	const lastvalue = document.createElement('input')
 
-	lastvalue.setAttribute('type', 'hidden') 
+	lastvalue.setAttribute('type', 'hidden')
 	lastvalue.classList.add('fgta5-entry-lastvalue')
 
 	container.classList.add('fgta5-entry-container')
@@ -231,19 +231,28 @@ function input_construct(self, id) {
 }
 
 
+
 function input_setError(self, msg) {
+
+
 	var errdiv = self.Nodes.Container.querySelector('.fgta5-entry-error')
-	if (msg!== null && msg !== '') {
+	if (msg !== null && msg !== '') {
 		self.Nodes.Input.setAttribute('invalid', 'true')
+		if (self.Nodes.Display != null) {
+			self.Nodes.Display.setAttribute('invalid', 'true')
+		}
 		if (!errdiv) {
-			 errdiv = document.createElement('div')
-			 errdiv.classList.add('fgta5-entry-error')
-			 self.Nodes.Container.insertBefore(errdiv, self.Nodes.InputWrapper.nextSibling)
+			errdiv = document.createElement('div')
+			errdiv.classList.add('fgta5-entry-error')
+			self.Nodes.Container.insertBefore(errdiv, self.Nodes.InputWrapper.nextSibling)
 		}
 		errdiv.innerHTML = msg
 		self._setLastError(msg)
 	} else {
 		self.Nodes.Input.removeAttribute('invalid')
+		if (self.Nodes.Display != null) {
+			self.Nodes.Display.removeAttribute('invalid')
+		}
 		if (errdiv) {
 			errdiv.remove()
 		}
@@ -303,19 +312,34 @@ function input_getErrorValidation(self, fnName) {
 			throw err
 		}
 
-		var valid = fnValidate(input.value, fnParams)
+
+		var charcase = self.Nodes.Input.getAttribute('character-case')
+		var value = input.value
+		if (charcase == 'lowercase') {
+			value = value.toLowerCase()
+		} else if (charcase == 'uppercase') {
+			value = value.toUpperCase()
+		}
+
+
+		if (self.type=='Numberbox' && fnName=='maxlength') {
+			value = self.Nodes.Display.value
+			value = value.replace(/[.,]/g, "");
+		}
+
+		var valid = fnValidate(value, fnParams)
 		if (!valid) {
 			var defmsg = self.InvalidMessages['default']
-			if (fnMessage!=null) {
+			if (fnMessage != null) {
 				throw new Error(fnMessage)
 			} else if (defmsg != null) {
 				throw new Error(defmsg)
 			} else {
-				throw new Error( `Invalid value '${input.value}' for '${input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
+				throw new Error(`Invalid value '${input.value}' for '${input.getInputCaption()}' using validator '${fnName}(${fnParams ?? ''})'`)
 			}
 		}
 		return null
-	} catch(err) {
+	} catch (err) {
 		return err
 	}
 }
@@ -327,9 +351,9 @@ function input_validate(self) {
 	// baru kemudian loop validasi yang lain, tapi kemudian skip required karena telah dieksekusi
 
 	const vnamereq = 'required'
-	if (self.Validators[vnamereq]!=null) {
+	if (self.Validators[vnamereq] != null) {
 		var err = input_getErrorValidation(self, vnamereq) // prioritas utama untuk validasi
-		if (err!=null) {
+		if (err != null) {
 			self.setError(err.message)
 			return false
 		}
@@ -337,11 +361,11 @@ function input_validate(self) {
 
 	// lanjutkan untuk validasi berikutnya
 	for (const fnName in self.Validators) {
-		if (fnName==vnamereq) {
+		if (fnName == vnamereq) {
 			continue
 		}
-		var err = input_getErrorValidation(self, fnName) 
-		if (err!=null) {
+		var err = input_getErrorValidation(self, fnName)
+		if (err != null) {
 			self.setError(err.message)
 			return false
 		}
@@ -393,11 +417,11 @@ function input_readValidators(self) {
 	var min = self.Nodes.Input.getAttribute(attrname)
 	if (min != null) {
 		var msg = self.InvalidMessages[attrname]
-		if (cname=="Datepicker") {
+		if (cname == "Datepicker") {
 			var mindate = new Date(min)
 			clearTime(mindate)
 			self.addValidator('mindate', mindate, msg)
-		} else if (cname=="Timepicker") {
+		} else if (cname == "Timepicker") {
 			var mintime = min
 			self.addValidator('mintime', mintime, msg)
 		} else {
@@ -412,11 +436,11 @@ function input_readValidators(self) {
 	var max = self.Nodes.Input.getAttribute(attrname)
 	if (max != null) {
 		var msg = self.InvalidMessages[attrname]
-		if (cname=="Datepicker") {
+		if (cname == "Datepicker") {
 			var maxdate = new Date(max)
 			clearTime(maxdate)
 			self.addValidator('maxdate', maxdate, msg)
-		} else if (cname=="Timepicker") {
+		} else if (cname == "Timepicker") {
 			var maxtime = max
 			self.addValidator('maxtime', maxtime, msg)
 		} else {
@@ -431,7 +455,7 @@ function input_readValidators(self) {
 	var validator = self.Nodes.Input.getAttribute('validator')
 	if (validator != null && validator.trim() !== '') {
 		validator = validator.split(';')
-		for (var i=0; i<validator.length; i++) {
+		for (var i = 0; i < validator.length; i++) {
 			var str = validator[i].trim()
 			var { fnName, fnParams } = parseFunctionParam(self, str)
 			self.addValidator(fnName, fnParams, self.InvalidMessages[fnName])
@@ -443,11 +467,11 @@ function input_readValidators(self) {
 function parseFunctionParam(self, paramString) {
 	const [fnName, ...fnParams] = paramString.split(":");
 	const fnParamsString = fnParams.length > 0 ? fnParams.join(":") : null;
-	
+
 	return {
 		fnName,
-		fnParams: fnParamsString !== null 
-			? (!isNaN(fnParamsString) ? Number(fnParamsString) : fnParamsString) 
+		fnParams: fnParamsString !== null
+			? (!isNaN(fnParamsString) ? Number(fnParamsString) : fnParamsString)
 			: null
 	};
 }
@@ -456,7 +480,7 @@ function parseFunctionParam(self, paramString) {
 function input_markAsRequired(self, required) {
 	var attrname = 'required'
 	var label = self.Nodes.Label;
-	if (label!=null && label !=undefined) {
+	if (label != null && label != undefined) {
 		if (required) {
 			self.Nodes.Label.setAttribute(attrname, '')
 			self.Nodes.Input.setAttribute(attrname, '')

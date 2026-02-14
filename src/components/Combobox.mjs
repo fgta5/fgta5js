@@ -717,6 +717,8 @@ function cbo_userSelectValue(self, value, text, data) {
 	// trigger event
 	const changed = cbo_markChanged(self)
 
+	self.validate()
+
 	self.Listener.dispatchEvent(SelectedEvent({
 		sender: self,
 		detail: {value, text, data, changed, sender: self}
