@@ -98,11 +98,15 @@ export default class ActionButton {
 
 
 	#suspended = false
-	suspend(s=true) {
-		if (s) {
-			this.disabled = true
-		} 
-		this.#suspended = s
+	suspend(doSuspend=true, keepState=false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				this.disabled = true
+			} else {
+				this.disabled = false
+			}
+		}
 	}
 
 	isSuspended() {

@@ -1,7 +1,7 @@
-
 .fgta5-messagebox-dialog {
 	border: none;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	/* Shadow */
 	padding: 0px;
 	min-height: 100px;
 	min-width: 270px;
@@ -9,7 +9,8 @@
 }
 
 .fgta5-messagebox-dialog::backdrop {
-	background-color: rgba(0, 0, 0, 0.6); /* Masking gelap */
+	background-color: rgba(0, 0, 0, 0.6);
+	/* Masking gelap */
 }
 
 .fgta5-messagebox-title {
@@ -37,7 +38,7 @@
 	height: 32px;
 	width: 100%;
 	text-align: center;
-	transform: translateY(12px); 
+	transform: translateY(12px);
 }
 
 .fgta5-messagebox-button {
@@ -45,3 +46,22 @@
 	padding: 5px 3px;
 }
 
+.fgta5-messagebox-questdiv {
+	margin: 5px 0 5px 0;
+	text-align: center;
+	width: 100%;
+}
+
+.fgta5-messagebox-input {
+	margin: 5px 0 5px 0;
+	text-align: center;
+	width: 100%;
+}
+
+.fgta5-messagebox-inputerrmsg {
+	margin: 5px 0 5px 0;
+	text-align: center;
+	width: 100%;
+	color: red;
+	font-size: 0.9rem;
+}

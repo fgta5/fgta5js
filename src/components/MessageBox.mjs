@@ -32,7 +32,7 @@ const ICON_WARNING = `<svg width="32" height="32" version="1.1" viewBox="0 0 8.4
 
 export class MessageBoxButton {
 	Text = 'button'
-	
+
 	constructor(text) {
 		this.Text = text
 	}
@@ -40,15 +40,16 @@ export class MessageBoxButton {
 }
 
 export class MessageBox {
-	static ButtonOkCancel = Object.freeze({ok:new MessageBoxButton('Ok'), cancel:new MessageBoxButton('Cancel')})
-	static ButtonYesNo = Object.freeze({yes:new MessageBoxButton('Yes'), no:new MessageBoxButton('No')})
-	static ButtonYesNoCancel = Object.freeze({yes:new MessageBoxButton('Yes'), no:new MessageBoxButton('No'), cancel:new MessageBoxButton('Cancel')})
+	static ButtonOkCancel = Object.freeze({ ok: new MessageBoxButton('Ok'), cancel: new MessageBoxButton('Cancel') })
+	static ButtonYesNo = Object.freeze({ yes: new MessageBoxButton('Yes'), no: new MessageBoxButton('No') })
+	static ButtonYesNoCancel = Object.freeze({ yes: new MessageBoxButton('Yes'), no: new MessageBoxButton('No'), cancel: new MessageBoxButton('Cancel') })
 
-	static async show (message, config) { return await msgbox_show(message, config) }
+	static async show(message, config) { return await msgbox_show(message, config) }
 	static async error(message) { return await msgbox_error(message) }
 	static async info(message) { return await msgbox_info(message) }
 	static async warning(message) { return await msgbox_warning(message) }
 	static async confirm(message, buttons) { return await msgbox_confirm(message, buttons) }
+	static async ask(message) { return await msgbox_ask(message) }
 }
 
 
@@ -57,28 +58,28 @@ export class MessageBox {
 
 function createMessageDialog(message, config) {
 	const dialog = document.createElement('dialog')
-    dialog.classList.add('fgta5-messagebox-dialog')
+	dialog.classList.add('fgta5-messagebox-dialog')
 
 	dialog.addEventListener('close', (evt) => {
 		dialog.parentNode.removeChild(dialog)
 	});
-	
 
-    if (config.title) {
+
+	if (config.title) {
 		dialog.divTitle = document.createElement('div')
 		dialog.divTitle.classList.add('fgta5-messagebox-title')
 		dialog.divTitle.innerHTML = config.title
 		dialog.appendChild(dialog.divTitle)
-    }
+	}
 
-	 if (config.iconSvg!==undefined) {
+	if (config.iconSvg !== undefined) {
 		var iconcss = iconsCss[config.iconcss] ? iconsCss[config.iconcss] : config.iconcss
 		dialog.divIcon = document.createElement('div')
 		dialog.divIcon.classList.add('fgta5-messagebox-icon')
 		// dialog.divIcon.style.backgroundImage = `url:("data:image/svg+xml,${encodeURIComponent(config.iconSvg)}")`
 		dialog.divIcon.innerHTML = config.iconSvg
 		dialog.appendChild(dialog.divIcon)
-	} else if (config.iconcss!=undefined) {
+	} else if (config.iconcss != undefined) {
 		var iconcss = iconsCss[config.iconcss] ? iconsCss[config.iconcss] : config.iconcss
 		dialog.divIcon = document.createElement('div')
 		dialog.divIcon.classList.add('fgta5-messagebox-icon')
@@ -94,18 +95,18 @@ function createMessageDialog(message, config) {
 	dialog.divButtons = document.createElement('div')
 	dialog.divButtons.classList.add('fgta5-messagebox-buttonsbar')
 	dialog.appendChild(dialog.divButtons)
-	
+
 	document.body.appendChild(dialog)
 	return dialog
 }
 
 
 async function msgbox_show(message, config) {
-	
+
 	if (config === undefined) config = {}
 
 	var dialog = createMessageDialog(message, config)
-	return new Promise((resolve)=>{
+	return new Promise((resolve) => {
 		if (config.buttons) {
 			for (const [key, btn] of Object.entries(config.buttons)) {
 				const btnEl = document.createElement('button')
@@ -114,7 +115,7 @@ async function msgbox_show(message, config) {
 				btnEl.addEventListener('click', () => {
 					dialog.close()
 					resolve(key)
-					
+
 				})
 				dialog.divButtons.appendChild(btnEl)
 			}
@@ -126,9 +127,9 @@ async function msgbox_show(message, config) {
 				dialog.close()
 				resolve('ok')
 			})
-			dialog.divButtons.appendChild(btnOk) 
+			dialog.divButtons.appendChild(btnOk)
 		}
-	
+
 		dialog.showModal()
 	});
 }
@@ -136,9 +137,9 @@ async function msgbox_show(message, config) {
 
 async function msgbox_error(message) {
 	const needAuthMessage = 'authentication is needed to access resource'
-	await msgbox_show(message, {iconSvg: ICON_ERROR})
+	await msgbox_show(message, { iconSvg: ICON_ERROR })
 
-	if (message==needAuthMessage) {
+	if (message == needAuthMessage) {
 		const currentUrl = window.location.href;
 		location.href = `/login?nexturl=${currentUrl}`
 	}
@@ -146,16 +147,61 @@ async function msgbox_error(message) {
 }
 
 async function msgbox_info(message) {
-	return await msgbox_show(message, {iconSvg: ICON_INFO})
+	return await msgbox_show(message, { iconSvg: ICON_INFO })
 }
 async function msgbox_warning(message) {
-	return await msgbox_show(message, {iconSvg: ICON_WARNING})
+	return await msgbox_show(message, { iconSvg: ICON_WARNING })
 }
 async function msgbox_confirm(message, buttons) {
-	buttons = buttons===undefined ? MessageBox.ButtonOkCancel : buttons 
+	buttons = buttons === undefined ? MessageBox.ButtonOkCancel : buttons
 
 	return await msgbox_show(message, {
 		iconSvg: ICON_QUESTION,
 		buttons: buttons
 	})
+}
+
+async function msgbox_ask(message) {
+	var dialog = createMessageDialog(message, {
+		iconSvg: ICON_QUESTION,
+	})
+
+	const input = document.createElement('input')
+	input.classList.add('fgta5-messagebox-input')
+	input.maxLength = 256
+	dialog.divContent.appendChild(input)
+
+	const errormessage = document.createElement('div')
+	errormessage.classList.add('fgta5-messagebox-inputerrmsg')
+	dialog.divContent.appendChild(errormessage)
+
+	return new Promise((resolve) => {
+		for (const [key, btn] of Object.entries(MessageBox.ButtonOkCancel)) {
+			const btnEl = document.createElement('button')
+			btnEl.classList.add('fgta5-messagebox-button')
+			btnEl.innerHTML = btn.Text
+			btnEl.addEventListener('click', () => {
+				if (key == 'ok') {
+					const answer = input.value
+					if (answer.trim() == '') {
+						errormessage.innerHTML = 'jawaban tidak boleh kosong'
+						console.warn(errormessage.innerHTML)
+						input.focus()
+						return
+					}
+					dialog.close()
+					resolve(answer)
+				} else {
+					dialog.close()
+					resolve(null)
+				}
+
+
+
+			})
+			dialog.divButtons.appendChild(btnEl)
+		}
+		dialog.showModal()
+	});
+
 }
