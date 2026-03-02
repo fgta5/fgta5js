@@ -37,18 +37,26 @@ export default class Combobox extends Input {
 	}
 
 	get value() { return cbo_getValue(this) }
-	set value(v) {  throw Error('Value is readonly') }
+	set value(v) { throw Error('Value is readonly') }
 
-	get text() { return  cbo_getText(this) }
+	get text() { return cbo_getText(this) }
 	set text(v) { throw Error('Text is readonly') }
 
 	#suspended = false
-	suspend(s) {
-		if (s) {
-			this.Element.disabled = true
-			cbo_setDisabled(this, true)
-		} 
-		this.#suspended = s
+	suspend(doSuspend = true, keepState = false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				cbo_setDisabled(this, true)
+			} else {
+				cbo_setDisabled(this, false)
+			}
+		}
+		// if (s) {
+		// 	this.Element.disabled = true
+		// 	cbo_setDisabled(this, true)
+		// }
+		// this.#suspended = s
 	}
 
 	isSuspended() {
@@ -57,7 +65,7 @@ export default class Combobox extends Input {
 
 
 	get disabled() { return this.Element.disabled }
-	set disabled(disable) { 
+	set disabled(disable) {
 		if (!disable && this.#suspended) {
 			console.warn('suspended combobox cannot be enabled!', this.Id)
 			return
@@ -67,7 +75,7 @@ export default class Combobox extends Input {
 		cbo_setDisabled(this, disable)
 	}
 
-	
+
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
 	setEditingMode(ineditmode) {
@@ -83,7 +91,7 @@ export default class Combobox extends Input {
 		super.acceptChanges()
 		cbo_acceptChanges(this)
 	}
-	
+
 	reset() {
 		cbo_reset(this)
 	}
@@ -99,19 +107,19 @@ export default class Combobox extends Input {
 
 	getLastValue() {
 		return cbo_getLastValue(this)
-	} 
+	}
 
 	getLastText() {
 		return cbo_getLastText(this)
-	} 
+	}
 
 	setSelected(value, text) {
-		if (value==null) {
+		if (value == null) {
 			text = ''
 			cbo_clear(this)
 		}
-		
-		if (text===undefined || text===null) {
+
+		if (text === undefined || text === null) {
 			text = value
 		}
 		cbo_setSelected(this, value, text)
@@ -140,10 +148,10 @@ export default class Combobox extends Input {
 	#iswaiting = false
 	isWaiting() { return this.#iswaiting }
 	wait(iswaiting) {
-		this.#iswaiting = iswaiting===undefined ? true : iswaiting
+		this.#iswaiting = iswaiting === undefined ? true : iswaiting
 		cbo_wait(this, iswaiting)
 	}
-	
+
 	// untuk keperluan abort fetch data yang dibatalkan
 	// apabila belum selesai tapi dialog sudah ditutup
 	AbortHandler = null
@@ -191,12 +199,12 @@ function cbo_construct(self, id) {
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
 	container.appendChild(lasttext)
-	container.appendChild(dialog) 
+	container.appendChild(dialog)
 
 
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
+	self.Nodes.Label = label
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 	self.Nodes.Dialog = dialog
@@ -205,24 +213,24 @@ function cbo_construct(self, id) {
 
 	// setup container
 	container.setAttribute('fgta5-component', 'Combobox')
-	if (input.style.width!='') {
+	if (input.style.width != '') {
 		container.style.width = input.style.width
 	}
-	if (input.style.marginTop!='') {
+	if (input.style.marginTop != '') {
 		container.style.marginTop = input.style.marginTop
 		input.style.marginTop = ''
 	}
-	if (input.style.marginBottom!='') {
+	if (input.style.marginBottom != '') {
 		container.style.marginBottom = input.style.marginBottom
-		input.style.marginBottom=''
+		input.style.marginBottom = ''
 	}
-	if (input.style.marginLeft!='') {
+	if (input.style.marginLeft != '') {
 		container.style.marginLeft = input.style.marginLeft
-		input.style.marginLeft=''
+		input.style.marginLeft = ''
 	}
-	if (input.style.marginRight!='') {
+	if (input.style.marginRight != '') {
 		container.style.marginRight = input.style.marginRight
-		input.style.marginRight=''
+		input.style.marginRight = ''
 	}
 
 
@@ -233,7 +241,7 @@ function cbo_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.setAttribute('type', 'hidden')
 	input.getInputCaption = () => {
-		if (label!=null) {
+		if (label != null) {
 			return label.innerHTML
 		} else {
 			return input.getAttribute('placeholder')
@@ -257,24 +265,24 @@ function cbo_construct(self, id) {
 	display.setAttribute('fgta5-component', 'Combobox')
 	display.setAttribute('placeholder', input.getAttribute('placeholder'))
 	display.setAttribute('tabindex', '-1')
-	
+
 	display.required = input.required
 
 	const dis = input.getAttribute('disabled')
-	if (dis!=null) {
+	if (dis != null) {
 		cbo_setDisabled(self, true)
 	}
 
 	const tabIndex = input.getAttribute('data-tabindex')
-	if (tabIndex!=null) {
+	if (tabIndex != null) {
 		button.setAttribute('tabindex', tabIndex)
 	}
 
 	// setup button
 	button.setAttribute('type', 'button')
-	button.classList.add('fgta5-entry-button-combobox')	
+	button.classList.add('fgta5-entry-button-combobox')
 	button.innerHTML = icon_cbo_button
-	button.addEventListener('click', (e)=>{
+	button.addEventListener('click', (e) => {
 		cbo_buttonClick(self, e)
 	})
 
@@ -283,7 +291,7 @@ function cbo_construct(self, id) {
 	lasttext.setAttribute('type', 'hidden')
 
 	// setup label
-	if (label!=null) {
+	if (label != null) {
 		label.setAttribute('for', display.id)
 		label.classList.add('fgta5-entry-label')
 	}
@@ -296,11 +304,11 @@ function cbo_construct(self, id) {
 	}
 
 	// dialog
-	if (datalist!=null) {
+	if (datalist != null) {
 		self.HasStaticOption = true
 	}
 	cbo_createDialog(self, dialog)
-	dialog.addEventListener("cancel", (e)=>{
+	dialog.addEventListener("cancel", (e) => {
 		dialog.setAttribute(ATTR_REMOVING, 'true')
 		e.preventDefault()
 		setTimeout(() => {
@@ -309,24 +317,24 @@ function cbo_construct(self, id) {
 			dialog.removeAttribute(ATTR_SHOWED)
 			cbo_closed(self)
 		}, 200);
-    });
+	});
 
-	dialog.addEventListener('close', (evt)=>{
+	dialog.addEventListener('close', (evt) => {
 		cbo_dialogClose(self)
 	})
 
-	
+
 
 	// datalist
-	if (datalist!=null) {
+	if (datalist != null) {
 		datalist.remove()
 		var opt = cbo_createStaticOptions(self, dialog, datalist)
-		if (opt.default!=null) {
+		if (opt.default != null) {
 			input.value = opt.default.value
 			display.value = opt.default.text
 		}
 
-		if (opt.count>0) {
+		if (opt.count > 0) {
 			self.HasStaticOption = true
 		}
 	} else {
@@ -341,13 +349,13 @@ function cbo_construct(self, id) {
 	// set input description
 	self._setupDescription()
 	self._setLastValue(input.value, display.value)
-	
+
 }
 
 
 function cbo_getValue(self) {
 	var input = self.Nodes.Input
-	if (input.value=='') {
+	if (input.value == '') {
 		return null
 	} else {
 		return input.value
@@ -364,13 +372,13 @@ function cbo_newData(self, initialdata) {
 	var display = self.Nodes.Display
 
 
-	if (initialdata===undefined) {
+	if (initialdata === undefined) {
 		input.value = ''
 		display.value = ''
-	} else if (typeof initialdata==='string') {
+	} else if (typeof initialdata === 'string') {
 		input.value = initialdata
 		display.value = initialdata
-	} else if (initialdata!=null) {
+	} else if (initialdata != null) {
 		input.value = initialdata.value
 		display.value = initialdata.text
 	} else {
@@ -392,7 +400,7 @@ function cbo_acceptChanges(self) {
 
 function cbo_reset(self) {
 	var lastValue = self.getLastValue()
-	var lastText =  self.getLastText()
+	var lastText = self.getLastText()
 
 	console.log('reset:', lastValue, lastText)
 	self.Nodes.Input.value = lastValue
@@ -419,10 +427,10 @@ function cbo_setDisabled(self, v) {
 
 function cbo_markSelected(self, tr) {
 	tr.setAttribute(ATTR_SELECTED, '')
-	
-	setTimeout(()=>{
+
+	setTimeout(() => {
 		let d = tr.getAttribute('data-none')
- 		if (d=='') {
+		if (d == '') {
 			// taruh paling atas
 			// TODO: geser TR di awal tbody
 		} else {
@@ -430,12 +438,12 @@ function cbo_markSelected(self, tr) {
 			const dialog = self.Nodes.Dialog
 			const tbody = dialog.getElementsByTagName('tbody')[0]
 			const none = tbody.querySelector('tr[data-none]')
-			if (none!=null) {
-				none.after(tr)	
+			if (none != null) {
+				none.after(tr)
 			}
 		}
 	}, 100)
-	
+
 }
 
 
@@ -461,30 +469,30 @@ function isMobileDevice() {
 
 
 function cbo_selectRow(self, tr, td, value, text, data) {
-		const lastSelected = self.value	
-	
-	
-		// reset dulu jika ada option yang terpilih sebelumnya
-		cbo_resetSelected(self)
+	const lastSelected = self.value
 
-		// tandai baris yang sekarang dilih
-		cbo_markSelected(self, tr)
 
-		self.Nodes.Input.value = value
-		if (value=='' && text=='none') {
-			console.log('none dipilih')
-			self.Nodes.Display.value = ''
-		} else {
-			self.Nodes.Display.value = text
-		}
+	// reset dulu jika ada option yang terpilih sebelumnya
+	cbo_resetSelected(self)
 
-		if (value!=lastSelected) {
-			self._setSelectedChanged(true)
-		} else {
-			self._setSelectedChanged(false)
-		}
-		
-		cbo_userSelectValue(self, value, text, data)
+	// tandai baris yang sekarang dilih
+	cbo_markSelected(self, tr)
+
+	self.Nodes.Input.value = value
+	if (value == '' && text == 'none') {
+		console.log('none dipilih')
+		self.Nodes.Display.value = ''
+	} else {
+		self.Nodes.Display.value = text
+	}
+
+	if (value != lastSelected) {
+		self._setSelectedChanged(true)
+	} else {
+		self._setSelectedChanged(false)
+	}
+
+	cbo_userSelectValue(self, value, text, data)
 }
 
 function cbo_createOptionRow(self, value, text, data) {
@@ -501,7 +509,7 @@ function cbo_createOptionRow(self, value, text, data) {
 
 
 
-	td.addEventListener('dblclick', (e)=>{
+	td.addEventListener('dblclick', (e) => {
 		if (isMobileDevice()) {
 			return
 		}
@@ -509,7 +517,7 @@ function cbo_createOptionRow(self, value, text, data) {
 		cbo_selectRow(self, tr, td, value, text, data)
 	})
 
-	td.addEventListener('click', (e)=>{
+	td.addEventListener('click', (e) => {
 		// click hanya untuk mobile
 		if (!isMobileDevice()) {
 			return
@@ -547,25 +555,25 @@ function cbo_createOptionRow(self, value, text, data) {
 
 
 	// tandai baris pilihan ini jika merupakan opsi yang dipilih user saat ini
-	var valueselected=self.value??''
-	if (value==valueselected) {
+	var valueselected = self.value ?? ''
+	if (value == valueselected) {
 		cbo_markSelected(self, tr)
 	}
 
 
 	return tr
-} 
+}
 
 function cbo_createStaticOptions(self, dialog, datalist) {
 	const options = datalist.getElementsByTagName("option");
-	
+
 	const thead = dialog.getElementsByTagName('thead')[0]
 	const tbody = dialog.getElementsByTagName('tbody')[0]
 	const tfoot = dialog.getElementsByTagName('tfoot')[0]
 	var defaultOption = null
-	
-	thead.style.display='none'
-	tfoot.style.display='none'
+
+	thead.style.display = 'none'
+	tfoot.style.display = 'none'
 
 
 	// jika tidak harus diisi,
@@ -582,10 +590,10 @@ function cbo_createStaticOptions(self, dialog, datalist) {
 	for (let option of options) {
 		i++
 		let text = option.textContent || option.innerText
-		let value = (option.value==null || option.value=='') ? text : option.value
+		let value = (option.value == null || option.value == '') ? text : option.value
 
 		var def = option.getAttribute('default')
-		if (def!=null) {
+		if (def != null) {
 			defaultOption = {
 				value: value,
 				text: text
@@ -594,7 +602,7 @@ function cbo_createStaticOptions(self, dialog, datalist) {
 
 		var idx = tbody.rows.length - 1
 		var tr = cbo_createOptionRow(self, value, text, { option: option })
-		
+
 		tr.setAttribute(ATTR_INDEX, idx)
 		tbody.appendChild(tr)
 	}
@@ -608,7 +616,7 @@ function cbo_createStaticOptions(self, dialog, datalist) {
 
 function cbo_createDialog(self, dialog) {
 	dialog.classList.add('fgta5-combobox-dialog')
-	
+
 
 
 	// buat header dialog
@@ -625,29 +633,40 @@ function cbo_createDialog(self, dialog) {
 
 
 
-	
+
 	// filtering
 	if (!self.HasStaticOption) {
+		let paused = false
+
 		var srccontainer = document.createElement('div')
 		var srcinput = document.createElement('input')
 		var srcbuton = document.createElement('button')
 		var btnnext = document.createElement('a')
 
-		
+
 		srcinput.setAttribute('placeholder', 'Search')
 		srcinput.setAttribute('maxlength', 30)
-		srcinput.addEventListener('keypress', (evt)=>{
-			if (evt.key==="Enter") {
+		srcinput.addEventListener('keypress', (evt) => {
+			if (evt.key === "Enter") {
 				srcbuton.click()
 			}
 		})
-		
+
 		srcbuton.setAttribute('type', 'type')
 		srcbuton.innerHTML = 'Submit'
-		srcbuton.addEventListener('click', (evt)=>{
+		srcbuton.addEventListener('click', (evt) => {
 			var searchtext = srcinput.value
 			var limit = DEF_LIMIT
 			var offset = 0
+
+			if (paused) {
+				return
+			}
+
+			paused = true
+			setTimeout(() => {
+				paused = false
+			}, 500)
 
 			btnnext.searchtext = searchtext
 			cbo_resetSelected(self)
@@ -672,8 +691,8 @@ function cbo_createDialog(self, dialog) {
 	var tbody = document.createElement('tbody')
 	var tfoot = document.createElement('tfoot')
 	dialog.appendChild(table)
-	
-	
+
+
 	table.appendChild(tbody)
 	table.appendChild(tfoot)
 	table.appendChild(thead)
@@ -686,7 +705,7 @@ function cbo_createDialog(self, dialog) {
 		btnnext.innerHTML = 'next data'
 		btnnext.style.display = 'none'
 		btnnext.setAttribute('href', 'javascript:void(0)')
-		btnnext.addEventListener('click', (evt)=>{
+		btnnext.addEventListener('click', (evt) => {
 			// ketiak, eh ketika tombol next di klik
 			var searchtext = btnnext.searchtext
 			var limit = btnnext.limit
@@ -698,7 +717,7 @@ function cbo_createDialog(self, dialog) {
 		dialog.setNext = (nextoffset, limit) => {
 			btnnext.nextoffset = nextoffset
 			btnnext.limit = limit
-			if (nextoffset!=null && nextoffset!=0) {
+			if (nextoffset != null && nextoffset != 0) {
 				btnnext.style.display = 'inline-block'
 			} else {
 				btnnext.style.display = 'none'
@@ -708,9 +727,9 @@ function cbo_createDialog(self, dialog) {
 		dialog.setNext = (nextoffset, limit) => {
 			console.log('not implemented')
 		}
-	}	
-	
-	
+	}
+
+
 }
 
 function cbo_userSelectValue(self, value, text, data) {
@@ -721,7 +740,7 @@ function cbo_userSelectValue(self, value, text, data) {
 
 	self.Listener.dispatchEvent(SelectedEvent({
 		sender: self,
-		detail: {value, text, data, changed, sender: self}
+		detail: { value, text, data, changed, sender: self }
 	}))
 
 	// tutup
@@ -733,12 +752,12 @@ function cbo_userSelectValue(self, value, text, data) {
 }
 
 function cbo_markChanged(self) {
-	if (self.Form==null) {
+	if (self.Form == null) {
 		return
 	}
 
 	var display = self.Nodes.Display
-	if (self.value!=self.getLastValue()) {
+	if (self.value != self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 		return true
 	} else {
@@ -750,7 +769,7 @@ function cbo_markChanged(self) {
 
 function cbo_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
-	if (lastvalue=='') {
+	if (lastvalue == '') {
 		return null
 	} else {
 		return lastvalue
@@ -764,7 +783,7 @@ function cbo_getLastText(self) {
 
 function cbo_clearOptions(self, tbody) {
 	const dialog = self.Nodes.Dialog
-	if (tbody==undefined || tbody==null) {
+	if (tbody == undefined || tbody == null) {
 		tbody = dialog.getElementsByTagName('tbody')[0]
 	}
 
@@ -772,12 +791,12 @@ function cbo_clearOptions(self, tbody) {
 }
 
 function cbo_addOptions(self, data, tbody) {
-	if (data==undefined || data==null) {
+	if (data == undefined || data == null) {
 		return
 	}
 
 	const dialog = self.Nodes.Dialog
-	if (tbody==undefined || tbody==null) {
+	if (tbody == undefined || tbody == null) {
 		tbody = dialog.getElementsByTagName('tbody')[0]
 	}
 
@@ -792,7 +811,7 @@ function cbo_setOptions(self, data) {
 
 	// hapus dulu datanya
 	cbo_clearOptions(self, tbody)
-	
+
 	// cek apakah tidak required
 	// jika tidak required, tambahkan none di paling atas
 	if (!self.isRequired()) {
@@ -805,7 +824,7 @@ function cbo_setOptions(self, data) {
 }
 
 function cbo_closed(self) {
-	if (typeof self.abortHandler==='function') {
+	if (typeof self.abortHandler === 'function') {
 		self.abortHandler()
 	}
 }
@@ -814,7 +833,7 @@ function cbo_closed(self) {
 function cbo_clear(self) {
 	const dialog = self.Nodes.Dialog
 	var selectedTr = dialog.querySelectorAll(`table tr[${ATTR_SELECTED}]`)
-	selectedTr.forEach(tr=>{
+	selectedTr.forEach(tr => {
 		tr.removeAttribute(ATTR_SELECTED)
 	})
 }
@@ -823,19 +842,21 @@ function cbo_search(self, searchtext, limit, offset) {
 	const dialog = self.Nodes.Dialog
 	const tbody = dialog.getElementsByTagName('tbody')[0]
 
+	// const trace = new Error().stack;
+	// console.log(trace);
 
 	// required atau nggak
 	var addNoneIfNotRequired = () => {
 		var none = tbody.querySelector('tr[data-none]')
 		if (self.isRequired()) {
 			// hilangkan none
-			if (none!=null) {
+			if (none != null) {
 				none.remove()
 			}
-			
+
 		} else {
 			// tambahkan none jika belum ada
-			if (none==null) {
+			if (none == null) {
 				var tr = cbo_createOptionRow(self, '', 'none', {})
 				tr.setAttribute('data-none', '')
 				tr.setAttribute(ATTR_INDEX, 0)
@@ -846,7 +867,7 @@ function cbo_search(self, searchtext, limit, offset) {
 	}
 
 	var execute_selecting = true
-	if (offset==0) {
+	if (offset == 0) {
 		var prevselected = dialog.querySelector(`table tr[${ATTR_SELECTED}]`)
 		if (prevselected != null) {
 			// kalau sudah ada yang dipilih sebelumnya
@@ -858,7 +879,7 @@ function cbo_search(self, searchtext, limit, offset) {
 			dialog.setNext(null)
 		}
 	}
-	
+
 
 
 	if (execute_selecting) {
@@ -872,7 +893,7 @@ function cbo_search(self, searchtext, limit, offset) {
 				sender: self,
 				dialog: dialog,
 				searchtext: searchtext,
-				limit: limit, 
+				limit: limit,
 				offset: offset,
 				addRow: (value, text, data) => {
 					var idx = tbody.rows.length - 1
@@ -893,9 +914,9 @@ function cbo_buttonClick(self, e) {
 
 
 	console.log('combobox click')
-	if (self.Form!=null) {
+	if (self.Form != null) {
 		var editmode = self.Nodes.Button.getAttribute(ATTR_EDITMODE)
-		if (editmode!=="true") {
+		if (editmode !== "true") {
 			return
 		}
 	}
@@ -924,9 +945,9 @@ function cbo_buttonClick(self, e) {
 		cbo_search(self, searchtext, limit, offset)
 
 		// set focus pada input search
-		setTimeout(()=>{
+		setTimeout(() => {
 			var inputsearch = dialog.querySelector(".fgta5-combobox-dialog-filter input")
-			if (inputsearch!=null) {
+			if (inputsearch != null) {
 				inputsearch.value = ''
 				inputsearch.focus()
 			}
@@ -936,7 +957,7 @@ function cbo_buttonClick(self, e) {
 	}
 
 	// set jika dalam waktu 1 detik masih dalam posisi waiting, munculkan mask
-	setTimeout(()=>{
+	setTimeout(() => {
 		if (self.isWaiting()) {
 			dialog.mask = $fgta5.Modal.createMask()
 		}
@@ -951,8 +972,8 @@ function cbo_buttonClick(self, e) {
 
 	// handler tombol untuk menutup dialog pilihan combobox
 	var btnClose = dialog.querySelector('.fgta5-combobox-dialog-head > button')
-	if (btnClose.onclick==null) {
-		btnClose.onclick=(e) => {
+	if (btnClose.onclick == null) {
+		btnClose.onclick = (e) => {
 			dialog.setAttribute(ATTR_REMOVING, 'true')
 			setTimeout(() => {
 				dialog.close()
@@ -970,7 +991,7 @@ function cbo_wait(self, iswaiting) {
 	const dialog = self.Nodes.Dialog
 	var tbody = dialog.getElementsByTagName('tbody')[0]
 
-	iswaiting = iswaiting===undefined ? true : iswaiting
+	iswaiting = iswaiting === undefined ? true : iswaiting
 	if (iswaiting) {
 		var tr = document.createElement('tr')
 		var td = document.createElement('td')
@@ -980,14 +1001,14 @@ function cbo_wait(self, iswaiting) {
 		tr.appendChild(td)
 		tbody.appendChild(tr)
 
-		
+
 	} else {
 		var el = tbody.querySelector('[data-waiting]')
-		if (el!=null) {
+		if (el != null) {
 			el.remove()
 		}
 
-		if (dialog.mask!=null) {
+		if (dialog.mask != null) {
 			dialog.mask.close()
 			delete dialog.mask
 		}
@@ -1002,23 +1023,23 @@ function cbo_resetSelected(self) {
 	if (prevselected != null) {
 
 		// kemablikan ke urutan sesuai index
-		const idx = prevselected.getAttribute(ATTR_INDEX)	
-		if (idx!='' && idx!=null) {
+		const idx = prevselected.getAttribute(ATTR_INDEX)
+		if (idx != '' && idx != null) {
 			const index = Number(idx)
 			const tbody = prevselected.closest('tbody')
 			const trs = tbody.querySelectorAll('tr')
 			for (var tr of trs) {
 				var rowidx = tr.getAttribute(ATTR_INDEX) ?? 0
 				var rowindex = Number(rowidx)
-				if (rowindex==0) continue
-				if (rowindex==index) continue
+				if (rowindex == 0) continue
+				if (rowindex == index) continue
 
-				if (index<rowindex) {
+				if (index < rowindex) {
 					tr.insertAdjacentElement("beforebegin", prevselected);
 					break
 				}
 			}
-		}	
+		}
 
 		// remove status selected
 		prevselected.removeAttribute(ATTR_SELECTED)

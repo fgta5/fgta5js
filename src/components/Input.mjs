@@ -18,11 +18,20 @@ export default class Input extends Component {
 
 
 	#suspended = false
-	suspend(s) {
-		if (s) {
-			this.Element.disabled = true
+	suspend(doSuspend = true, keepState = false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				this.Element.disabled = true
+			} else {
+				this.Element.disabled = false
+			}
 		}
-		this.#suspended = s
+
+		// if (s) {
+		// 	this.Element.disabled = true
+		// }
+		// this.#suspended = s
 	}
 
 	isSuspended() {
@@ -322,7 +331,7 @@ function input_getErrorValidation(self, fnName) {
 		}
 
 
-		if (self.type=='Numberbox' && fnName=='maxlength') {
+		if (self.type == 'Numberbox' && fnName == 'maxlength') {
 			value = self.Nodes.Display.value
 			value = value.replace(/[.,]/g, "");
 		}

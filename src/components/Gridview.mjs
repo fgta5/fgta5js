@@ -30,10 +30,10 @@ const nextDataEvent = (data) => { return new CustomEvent('nextdata', data) }
 export default class Gridview extends Component {
 	constructor(id) {
 		super(id)
-		
+
 		var el = this.Element
-		if (el!=undefined) {
-			if (el.tagName.toLowerCase()!='table' ) {
+		if (el != undefined) {
+			if (el.tagName.toLowerCase() != 'table') {
 				throw new Error(`element '${id}' is not table`)
 			}
 			grv_construct(this)
@@ -80,8 +80,9 @@ export default class Gridview extends Component {
 
 
 
-	rowRender(tr) {
-		grv_rowRender(this, tr)
+	rowRender(tr, args) {
+		console.log('ROOOOW RENDEeEEEEERRRR')
+		grv_rowRender(this, tr, args)
 	}
 
 	removeSelected(onFinished) {
@@ -109,7 +110,7 @@ export default class Gridview extends Component {
 		this.Nodes.Tbody.innerHTML = ''
 	}
 
-	setNext(nextoffset, limit)  {
+	setNext(nextoffset, limit) {
 		grv_setNext(this, nextoffset, limit)
 	}
 
@@ -118,7 +119,7 @@ export default class Gridview extends Component {
 	}
 
 	#criteria = {}
-	get Criteria() { return this.#criteria } 
+	get Criteria() { return this.#criteria }
 	setCriteria(criteria) {
 		this.#criteria = criteria
 	}
@@ -130,8 +131,8 @@ export default class Gridview extends Component {
 		this.#currentRow = tr
 		grv_setCurentRow(this, tr)
 	}
-	
-	
+
+
 
 	previousRecord() {
 		grv_previousRecord(this)
@@ -145,7 +146,7 @@ export default class Gridview extends Component {
 
 function grv_previousRecord(self) {
 	const currentRow = self.CurrentRow
-	if (currentRow==null) {
+	if (currentRow == null) {
 		// set row pertama sebagai current row
 		console.log('set current row to first row')
 		const tbody = self.Nodes.Tbody
@@ -162,7 +163,7 @@ function grv_previousRecord(self) {
 
 function grv_nextRecord(self) {
 	const currentRow = self.CurrentRow
-	if (currentRow==null) {
+	if (currentRow == null) {
 		// set row pertama sebagai current row
 		console.log('set current row to first row')
 		const tbody = self.Nodes.Tbody
@@ -181,11 +182,11 @@ function grv_setCurentRow(self, tr) {
 	// kosongkan atribute terpilih	
 	const tbody = self.Nodes.Tbody
 	const rows = tbody.querySelectorAll('tr[data-currentrow]')
-	rows.forEach(tr=>{
+	rows.forEach(tr => {
 		tr.removeAttribute('data-currentrow')
 	})
 
-	if (tr!=null) {
+	if (tr != null) {
 		// set atribut terpilih untuk tr
 		tr.setAttribute('data-currentrow', '')
 		if (!isElementInViewport(tr)) {
@@ -197,7 +198,7 @@ function grv_setCurentRow(self, tr) {
 function grv_removeRow(self, tr) {
 	const tbody = self.Nodes.Tbody
 	tr.remove()
-	if (tbody.children.length==0) {
+	if (tbody.children.length == 0) {
 		self.CurrentRow = null
 	}
 }
@@ -217,14 +218,14 @@ function grv_construct(self) {
 	var thead = tbl.querySelector('thead')
 	var tbody = document.createElement('tbody')
 	var tfoot = document.createElement('tfoot')
-	
-	
+
+
 	// tambahkan tbody dan tfoot sebelum thead
 	tbl.prepend(tfoot)
 	tbl.prepend(tbody)
 
 	// tambahkan referensi elemen 
-	self.Formatters =  {}
+	self.Formatters = {}
 	self.Listener = new EventTarget()
 	self.Nodes = {
 		Table: tbl,
@@ -237,10 +238,10 @@ function grv_construct(self) {
 	// setup table
 	tbl.classList.add('fgta5-gridview')
 	tbl.setAttribute('cellspacing', 0)
-	
+
 
 	// baca kolom
-	const {headrow, columns, key} =grv_getColumns(self)
+	const { headrow, columns, key } = grv_getColumns(self)
 	self.setColumnData(columns)
 	self.setKey(key)
 
@@ -248,7 +249,7 @@ function grv_construct(self) {
 	headrow.remove()
 	grv_setupHeader(self, columns)
 
-	
+
 
 
 	// const columns = grv_getColumns()
@@ -280,13 +281,13 @@ function grv_getColumns(self) {
 		var cssclass = th.getAttribute('class')
 		var cssstyle = th.getAttribute('style')
 		var html = th.innerHTML
-		
-		
+
+
 
 		// baca tipe column
-		if (rowselector!=null) {
+		if (rowselector != null) {
 			column.type = TYPE_ROWSELECTOR
-		} else if (autonumber!=null) {
+		} else if (autonumber != null) {
 			column.type = TYPE_AUTONUMBER
 		} else {
 			column.type = TYPE_STANDARD
@@ -296,9 +297,9 @@ function grv_getColumns(self) {
 		column.cssclass = cssclass
 		column.cssstyle = cssstyle
 		column.binding = binding
-		column.name = name 
+		column.name = name
 		column.formatter = formatter
-		column.textalign = textalign=='' ? 'left' : textalign
+		column.textalign = textalign == '' ? 'left' : textalign
 		column.sorting = sorting
 		column.html = html
 
@@ -329,14 +330,14 @@ function grv_setupHeader(self, columns) {
 		th.classList.add('fgta5-gridview-head')
 		th.setAttribute(ATTR_TEXTALIGN, column.textalign)
 
-		if (column.type==TYPE_ROWSELECTOR) {
+		if (column.type == TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
-			chk.addEventListener('change', (evt)=>{ grv_headerCheckboxChange(self, evt)})
-			
+			chk.addEventListener('change', (evt) => { grv_headerCheckboxChange(self, evt) })
+
 			th.appendChild(chk)
 			th.setAttribute(ATTR_ROWSELECTOR, '')
 
-		} else if (column.type==TYPE_AUTONUMBER) {
+		} else if (column.type == TYPE_AUTONUMBER) {
 			th.setAttribute(ATTR_AUTONUMBER, '')
 			th.innerHTML = column.html
 		} else {
@@ -350,7 +351,7 @@ function grv_setupHeader(self, columns) {
 				sortbtn.innerHTML = ICONS.UNSORT
 				sortbtn.setAttribute(ATTR_SORTING, '')
 				sortbtn.setAttribute(ATTR_BINDING, column.binding)
-				sortbtn.addEventListener('click', (evt)=>{ grv_sort(self, sortbtn) })
+				sortbtn.addEventListener('click', (evt) => { grv_sort(self, sortbtn) })
 
 				var text = document.createElement('div')
 				text.innerHTML = column.html
@@ -366,10 +367,10 @@ function grv_setupHeader(self, columns) {
 				var text = document.createTextNode(column.html)
 				th.appendChild(text)
 			}
-		
-			
-			
-			
+
+
+
+
 		}
 
 		tr.appendChild(th)
@@ -381,7 +382,7 @@ function grv_setupHeader(self, columns) {
 
 
 function setAttributeIfNotNull(el, attrname, attrvalue) {
-	if (attrvalue!=null) {
+	if (attrvalue != null) {
 		el.setAttribute(attrname, attrvalue)
 	}
 }
@@ -444,23 +445,26 @@ function grv_updateRow(self, tr, data) {
 	const tds = tr.querySelectorAll('td')
 	tds.forEach(td => {
 		const name = td.getAttribute('data-name')
-		if (name!=null && data[name]!==undefined) {
+		if (name != null && data[name] !== undefined) {
 			// ambil formater column	
-			let value =  data[name]
+			let value = data[name]
 			const func = self.Formatters[name]
-			if (typeof func==='function') {
+			if (typeof func === 'function') {
 				value = func(data[name])
-			} 
+			}
 			td.innerHTML = value
-		}	
+		}
 	})
-	grv_rowRender(self, tr)
+	grv_rowRender(self, tr, {
+		rowevent: 'update',
+		data: data
+	})
 }
 
 
 
 function grv_addRow(self, row, tbody) {
-	if (tbody===undefined) {
+	if (tbody === undefined) {
 		tbody = self.Nodes.Tbody
 	}
 
@@ -468,9 +472,9 @@ function grv_addRow(self, row, tbody) {
 	tr.classList.add('fgta5-gridview-row')
 
 	var key = self.Key
-	if (key!=null) {
+	if (key != null) {
 		var keyvalue = row[key]
-		if (keyvalue!=null) {
+		if (keyvalue != null) {
 			tr.setAttribute(ATTR_ROWKEY, key)
 			tr.setAttribute(ATTR_ROWKEYVALUE, keyvalue)
 		}
@@ -485,40 +489,40 @@ function grv_addRow(self, row, tbody) {
 		setAttributeIfNotNull(td, ATTR_BINDING, column.binding)
 		setAttributeIfNotNull(td, ATTR_FORMATTER, column.formatter)
 		setAttributeIfNotNull(td, ATTR_TEXTALIGN, column.textalign)
-	
+
 
 		td.classList.add('fgta5-gridview-cell')
-	
-		if (column.type==TYPE_ROWSELECTOR) {
+
+		if (column.type == TYPE_ROWSELECTOR) {
 			var chk = createCheckbox()
-			chk.addEventListener('change', (evt)=>{ grv_rowCheckboxChange(self, evt) })
+			chk.addEventListener('change', (evt) => { grv_rowCheckboxChange(self, evt) })
 			td.appendChild(chk)
 			td.setAttribute(ATTR_ROWSELECTOR, '')
-		} else if (column.type==TYPE_AUTONUMBER) {
+		} else if (column.type == TYPE_AUTONUMBER) {
 			var linenumber = grv_getLastLineNumber(self)
 
 			linenumber++
 			td.setAttribute(ATTR_AUTONUMBER, '')
 			td.setAttribute(ATTR_LINENUMBER, linenumber)
 			td.innerHTML = linenumber
-			td.addEventListener('click', (evt)=>{ grv_cellClick(self, td, tr) })
-			td.addEventListener('dblclick', (evt)=>{ grv_cellDblClick(self, td, tr) })
+			td.addEventListener('click', (evt) => { grv_cellClick(self, td, tr) })
+			td.addEventListener('dblclick', (evt) => { grv_cellDblClick(self, td, tr) })
 		} else {
 
 			let value = row[column.binding]
 			td.setAttribute(ATTR_VALUE, value)
 
-			if (column.formatter!=null) {
+			if (column.formatter != null) {
 				try {
 					// 	eval(`value=${column.formatter}`)
 					let func = self.Formatters[column.name]
-					if (func===undefined) {
+					if (func === undefined) {
 						func = grv_createFunction(column.formatter)
 						if (typeof func === 'function') {
 							self.Formatters[column.name] = func
 						}
-					} 
-					
+					}
+
 					if (typeof func === 'function') {
 						value = func(value)
 					}
@@ -528,30 +532,33 @@ function grv_addRow(self, row, tbody) {
 			}
 
 
-			if (value!=null) {
+			if (value != null) {
 				td.innerHTML = value
 			} else {
 				td.innerHTML = ''
 			}
 
-			td.addEventListener('click', (evt)=>{ grv_cellClick(self, td, tr) })
-			td.addEventListener('dblclick', (evt)=>{ grv_cellDblClick(self, td, tr) })
+			td.addEventListener('click', (evt) => { grv_cellClick(self, td, tr) })
+			td.addEventListener('dblclick', (evt) => { grv_cellDblClick(self, td, tr) })
 		}
 
-		
-	
+
+
 		tr.appendChild(td)
 	}
 
-	grv_rowRender(self, tr)
+	grv_rowRender(self, tr, {
+		rowevent: 'add',
+		data: row
+	})
 
-	if (tbody.children.length==0) {
+	if (tbody.children.length == 0) {
 		self.CurrentRow = tr
 	}
 
 
 	tbody.appendChild(tr)
-	
+
 	return tr
 }
 
@@ -559,20 +566,23 @@ function grv_addRow(self, row, tbody) {
 function grv_cellClick(self, td, tr) {
 	self.CurrentRow = tr
 	self.Listener.dispatchEvent(cellClickEvent({
-		detail: {tr: tr, td: td}
+		detail: { tr: tr, td: td }
 	}))
 }
 
 function grv_cellDblClick(self, td, tr) {
 	self.CurrentRow = tr
 	self.Listener.dispatchEvent(cellDblClickEvent({
-		detail: {tr: tr, td: td}
+		detail: { tr: tr, td: td }
 	}))
 }
 
-function grv_rowRender(self, tr) {
+function grv_rowRender(self, tr, args) {
 	self.Listener.dispatchEvent(rowRenderEvent({
-		detail: {tr: tr}
+		detail: {
+			tr: tr,
+			args: args
+		}
 	}))
 }
 
@@ -580,15 +590,15 @@ function grv_sort(self, btn) {
 	var sorting = btn.getAttribute(ATTR_SORTING)
 	var binding = btn.getAttribute(ATTR_BINDING)
 	var th = btn.closest('th')
-	
+
 	th.setAttribute(ATTR_BINDING, binding)
 
-	if (sorting==null || sorting=='') {
+	if (sorting == null || sorting == '') {
 		// ubah ke ascending
 		th.setAttribute(ATTR_SORTING, 'asc')
 		btn.setAttribute(ATTR_SORTING, 'asc')
 		btn.innerHTML = ICONS.SORTASC
-	} else if (sorting=='asc') {
+	} else if (sorting == 'asc') {
 		// ubah ke desc
 		th.setAttribute(ATTR_SORTING, 'desc')
 		btn.setAttribute(ATTR_SORTING, 'desc')
@@ -609,7 +619,7 @@ function grv_sort(self, btn) {
 		detail: {
 			sort: sort,
 			criteria: criteria
-		
+
 		}
 	}))
 
@@ -618,7 +628,7 @@ function grv_sort(self, btn) {
 
 function grv_getSelected(self) {
 	var chks = self.Nodes.Tbody.querySelectorAll(`tr td[${ATTR_ROWSELECTOR}] input[type="checkbox"]:checked`);
-	if (chks.length==0) {
+	if (chks.length == 0) {
 		return []
 	}
 
@@ -634,8 +644,8 @@ function grv_getSelected(self) {
 
 function grv_removeSelected(self, onFinished) {
 	var chks = self.Nodes.Tbody.querySelectorAll(`tr td[${ATTR_ROWSELECTOR}] input[type="checkbox"]:checked`);
-	if (chks.length==0) {
-		if (typeof onFinished==='function') {
+	if (chks.length == 0) {
+		if (typeof onFinished === 'function') {
 			onFinished()
 		}
 		return
@@ -644,8 +654,8 @@ function grv_removeSelected(self, onFinished) {
 
 	for (var chk of chks) {
 		let tr = chk.closest('tr')
-		tr.MarkProcessing = (p)=>{
-			if (p===true || p===undefined) {
+		tr.MarkProcessing = (p) => {
+			if (p === true || p === undefined) {
 				tr.setAttribute(ATTR_ROWPROCESSING, '')
 			} else {
 				tr.removeAttribute(ATTR_ROWPROCESSING)
@@ -683,20 +693,20 @@ function grv_hasRowPendingProcess(self) {
 
 function grv_setNext(self, nextoffset, limit) {
 	var nextoffsetcontainer = self.Nodes.Tfoot.querySelector('tr[data-nextoffset]')
-	if (nextoffsetcontainer!=null) {
+	if (nextoffsetcontainer != null) {
 		nextoffsetcontainer.remove()
 	}
-	
-	
 
-	if (nextoffset!=null) {
+
+
+	if (nextoffset != null) {
 		var tr = document.createElement('tr')
 		var td = document.createElement('td')
 		var next = document.createElement('a')
 
 		next.innerHTML = 'load next data'
 		next.setAttribute('href', 'javascript:void(0)')
-		next.addEventListener('click', (evt)=>{
+		next.addEventListener('click', (evt) => {
 			self.Listener.dispatchEvent(nextDataEvent({
 				detail: {
 					criteria: self.Criteria,
@@ -706,22 +716,22 @@ function grv_setNext(self, nextoffset, limit) {
 				}
 			}))
 		})
-	
+
 		var colspan = self.Nodes.Tbody.rows[0].cells.length
 		td.setAttribute('colspan', colspan)
 		td.setAttribute('align', 'center')
 		td.setAttribute('data-nextoffset', '')
 		td.appendChild(next)
-		
+
 		tr.setAttribute('data-nextoffset', '')
 		tr.appendChild(td)
 		self.Nodes.Tfoot.appendChild(tr)
-	
-	} 
+
+	}
 }
 
-function  grv_getSort(self, tr) {
-	if (tr==null) {
+function grv_getSort(self, tr) {
+	if (tr == null) {
 		tr = self.Nodes.Thead.querySelector(`tr[${ATTR_MAINHEADROW}]`)
 	}
 
@@ -739,12 +749,12 @@ function  grv_getSort(self, tr) {
 
 function grv_getLastLineNumber(self) {
 	var lastrow = self.Nodes.Tbody.querySelector('tr:last-child td[autonumber]')
-	if (lastrow==null) {
+	if (lastrow == null) {
 		return 0
 	}
 
 	var lastlinenumber = lastrow.getAttribute(ATTR_LINENUMBER)
-	if (lastlinenumber==null) {
+	if (lastlinenumber == null) {
 		return 0
 	}
 
@@ -753,15 +763,15 @@ function grv_getLastLineNumber(self) {
 
 
 function grv_createFunction(expression) {
-    const match = expression.match(/(\w+)\(([^)]+)\)/);
-    if (!match) return null;
+	const match = expression.match(/(\w+)\(([^)]+)\)/);
+	if (!match) return null;
 
-    const [, funcName, args] = match;
-    const parsedArgs = args.split(",").map(arg => parseFloat(arg.trim()));
+	const [, funcName, args] = match;
+	const parsedArgs = args.split(",").map(arg => parseFloat(arg.trim()));
 
-    if (funcName === "decimal") {
-        return (v) => grv_formatDecimal(v, parsedArgs[1]);
-    } else if (funcName === 'int') {
+	if (funcName === "decimal") {
+		return (v) => grv_formatDecimal(v, parsedArgs[1]);
+	} else if (funcName === 'int') {
 		return (v) => grv_formatInteger(v)
 	} else if (funcName === 'checkmark') {
 		return (v) => grv_formatCheckmark(v)
@@ -769,14 +779,14 @@ function grv_createFunction(expression) {
 		return (v) => grv_formatDateIso(v)
 	} else if (funcName === 'datelong') {
 		return (v) => grv_formatDateLong(v)
-	} else if (funcName === 'dateshort' || funcName=== 'date') {
+	} else if (funcName === 'dateshort' || funcName === 'date') {
 		return (v) => grv_formatDateShort(v)
 	}
-    return null;
+	return null;
 }
 
 
-function grv_formatDecimal (value, precision)  { 
+function grv_formatDecimal(value, precision) {
 	const formatterFixed = new Intl.NumberFormat('en-US', {
 		minimumFractionDigits: precision,
 		maximumFractionDigits: precision
@@ -784,7 +794,7 @@ function grv_formatDecimal (value, precision)  {
 	return formatterFixed.format(value)
 }
 
-function grv_formatInteger (value)  { 
+function grv_formatInteger(value) {
 	const formatterFixed = new Intl.NumberFormat('en-US', {
 		minimumFractionDigits: 0,
 		maximumFractionDigits: 0,
@@ -797,15 +807,15 @@ function grv_formatCheckmark(value) {
 	const yes = ICONS.YES
 	const no = ICONS.NO
 
-	if (value===undefined || value===null) {
+	if (value === undefined || value === null) {
 		return no
 	}
 
-	if (value===false) {
+	if (value === false) {
 		return no
 	}
 
-	if (value=='0' || value=='' ||value=='-' || value==0) {
+	if (value == '0' || value == '' || value == '-' || value == 0) {
 		return no
 	}
 
@@ -821,14 +831,14 @@ function grv_formatDateIso(value) {
 function grv_formatDateLong(value) {
 	const dt = new Date(value)
 	const options = { day: '2-digit', month: 'short', year: 'numeric' };
-	const formattedDate = dt.toLocaleDateString('en-ID', options).replace('.', ''); 
+	const formattedDate = dt.toLocaleDateString('en-ID', options).replace('.', '');
 	return formattedDate
 }
 
 function grv_formatDateShort(value) {
 	const dt = new Date(value)
 	const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-	const formattedDate = dt.toLocaleDateString('en-ID', options).replace('.', ''); 
+	const formattedDate = dt.toLocaleDateString('en-ID', options).replace('.', '');
 	return formattedDate
 }
 

@@ -1,7 +1,7 @@
 import Input from "./Input.mjs"
 
 
-const ChangeEvent = (data)=>{ return new CustomEvent('changed', data) }
+const ChangeEvent = (data) => { return new CustomEvent('changed', data) }
 
 
 export default class Numberbox extends Input {
@@ -23,15 +23,24 @@ export default class Numberbox extends Input {
 
 	get value() { return nmb_getValue(this) }
 	set value(v) { nmb_setValue(this, v) }
-		
-		
+
+
 	#suspended = false
-	suspend(s) {
-		if (s) {
-			this.Element.disabled = true
-			nmb_setDisabled(this, true)
-		} 
-		this.#suspended = s
+	suspend(doSuspend = true, keepState = false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				nmb_setDisabled(this, true)
+			} else {
+				nmb_setDisabled(this, false)
+			}
+		}
+
+		// if (s) {
+		// 	this.Element.disabled = true
+		// 	nmb_setDisabled(this, true)
+		// }
+		// this.#suspended = s
 	}
 
 	isSuspended() {
@@ -39,7 +48,7 @@ export default class Numberbox extends Input {
 	}
 
 	get disabled() { return this.Element.disabled }
-	set disabled(disable) { 
+	set disabled(disable) {
 		if (!disable && this.#suspended) {
 			console.warn('suspended numberbox cannot be enabled!', this.Id)
 			return
@@ -57,7 +66,7 @@ export default class Numberbox extends Input {
 
 
 	newData(initialvalue) {
-		if (initialvalue===undefined || initialvalue===null) {
+		if (initialvalue === undefined || initialvalue === null) {
 			initialvalue = 0
 		}
 		super.newData(initialvalue)
@@ -67,7 +76,7 @@ export default class Numberbox extends Input {
 	acceptChanges() {
 		super.acceptChanges()
 		nmb_acceptChanges(this)
-		
+
 	}
 
 	reset() {
@@ -75,7 +84,7 @@ export default class Numberbox extends Input {
 		nmb_Reset(this)
 	}
 
-	isChanged() { 
+	isChanged() {
 		return nmb_isChanged(this)
 	}
 
@@ -88,7 +97,7 @@ export default class Numberbox extends Input {
 
 	getLastValue() {
 		return nmb_getLastValue(this)
-	} 
+	}
 
 
 	focus() {
@@ -128,7 +137,7 @@ function nmb_construct(self, id) {
 
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
+	self.Nodes.Label = label
 	self.Nodes.Display = display
 
 
@@ -138,10 +147,10 @@ function nmb_construct(self, id) {
 
 	// setup wrapper
 	wrapinput.classList.add('fgta5-entry-input-wrapper')
-	
-	
+
+
 	// precission and step
-	const {precision, step} = getPrecission(self.Element.getAttribute('precision'))
+	const { precision, step } = getPrecission(self.Element.getAttribute('precision'))
 	self.formatterFixed.minimumFractionDigits = precision
 	self.formatterFixed.maximumFractionDigits = precision  // minimum dan maksimum jumlah angka di belakang koma di set sama
 
@@ -150,12 +159,12 @@ function nmb_construct(self, id) {
 
 	// setup input
 	input.classList.add('fgta5-entry-input')
-	input.maxlength = input.getAttribute('maxlength') 
+	input.maxlength = input.getAttribute('maxlength')
 	input.precision = precision
 	input.setAttribute('type', 'hidden')
 	input.setAttribute('step', step)
 	input.getInputCaption = () => { return label.innerHTML }
-	
+
 
 	// setup display
 	display.id = self.Id + '-display'
@@ -171,24 +180,24 @@ function nmb_construct(self, id) {
 	display.setAttribute('type', 'text')
 	display.setAttribute('fgta5-component', 'Numberbox')
 	display.setAttribute('autocomplete', 'off')
-	
+
 
 	const tabIndex = input.getAttribute('data-tabindex')
-	if (tabIndex!=null) {
+	if (tabIndex != null) {
 		display.setAttribute('tabindex', tabIndex)
 	}
 
 	const dis = input.getAttribute('disabled')
-	if (dis!=null) {
+	if (dis != null) {
 		nmb_setDisabled(self, true)
 	}
 
-	const digitgrouping = input.getAttribute('digitgrouping') 
-	if (digitgrouping!=null) {
-		if (digitgrouping.toLowerCase()==='false') {
-			self.formatterFixed.useGrouping=false
+	const digitgrouping = input.getAttribute('digitgrouping')
+	if (digitgrouping != null) {
+		if (digitgrouping.toLowerCase() === 'false') {
+			self.formatterFixed.useGrouping = false
 		} else {
-			self.formatterFixed.useGrouping=true
+			self.formatterFixed.useGrouping = true
 		}
 	}
 
@@ -214,15 +223,15 @@ function nmb_construct(self, id) {
 
 
 	// internal event listener
-	display.addEventListener('focus', (e)=>{
+	display.addEventListener('focus', (e) => {
 		nmb_displayFocus(self, e)
 	})
 
-	display.addEventListener('blur', (e)=>{
+	display.addEventListener('blur', (e) => {
 		nmb_displayBlur(self, e)
 	})
 
-	display.addEventListener("input", (e)=>{
+	display.addEventListener("input", (e) => {
 		if (display.value !== lastvalue.value) {
 			display.setAttribute('changed', 'true')
 		} else {
@@ -230,10 +239,10 @@ function nmb_construct(self, id) {
 		}
 	})
 
-	display.addEventListener("keydown", (e)=>{
+	display.addEventListener("keydown", (e) => {
 		if (display.type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
-        	e.preventDefault();
-    	}
+			e.preventDefault();
+		}
 	})
 
 
@@ -242,7 +251,7 @@ function nmb_construct(self, id) {
 	if (maxlegth !== null && maxlegth.trim() !== '') {
 		maxlegth = parseInt(maxlegth.trim())
 		if (!isNaN(maxlegth) && maxlegth > 0) {
-			display.addEventListener('beforeinput', (e)=>{
+			display.addEventListener('beforeinput', (e) => {
 				if (e.target.value.length >= maxlegth && e.inputType !== "deleteContentBackward" && e.inputType !== "deleteContentForward") {
 					e.preventDefault()
 				}
@@ -323,10 +332,10 @@ function nmb_setEditingMode(self, ineditmode) {
 function nmb_displayFocus(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
-	
+
 	if (self.InEditMode) {
 		display.setAttribute('type', 'number')
-	
+
 		var num = Number(input.value)
 		display.value = num
 	}
@@ -335,23 +344,23 @@ function nmb_displayFocus(self, e) {
 function nmb_displayBlur(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
-	
+
 	if (self.InEditMode) {
 		// console.log('numberbox: blurEvent')
 		var num = Number(display.value)
 		if (isNaN(num)) {
-			self.Listener.dispatchEvent(ChangeEvent({detail: {invalid:true}}))
+			self.Listener.dispatchEvent(ChangeEvent({ detail: { invalid: true } }))
 			self.setError('Invalid number')
 		} else {
 			self.setError(null)
-			
+
 			input.value = num
 			var invalid = !self.validate()
 			var formattedValue = nmb_formatValue(self, num)
 			display.setAttribute('type', 'text')
 			display.value = formattedValue
 
-			self.Listener.dispatchEvent(ChangeEvent({detail: {invalid:invalid, value:num, formatted:formattedValue}}))
+			self.Listener.dispatchEvent(ChangeEvent({ detail: { invalid: invalid, value: num, formatted: formattedValue } }))
 		}
 
 	}
@@ -360,9 +369,9 @@ function nmb_displayBlur(self, e) {
 
 function nmb_formatValue(self, value) {
 	const formatter = new Intl.NumberFormat('en-US', {
-			minimumFractionDigits: self.formatterFixed.minimumFractionDigits,
-			maximumFractionDigits: self.formatterFixed.minimumFractionDigits,
-			useGrouping: self.formatterFixed.useGrouping
+		minimumFractionDigits: self.formatterFixed.minimumFractionDigits,
+		maximumFractionDigits: self.formatterFixed.minimumFractionDigits,
+		useGrouping: self.formatterFixed.useGrouping
 	});
 
 	const formattedValue = formatter.format(value)
@@ -394,7 +403,7 @@ function nmb_isChanged(self) {
 
 function nmb_setError(self, msg) {
 	var display = self.Nodes.Display
-	if (msg!== null && msg !== '') {
+	if (msg !== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
 	} else {
 		display.removeAttribute('invalid')
@@ -405,8 +414,8 @@ function nmb_setError(self, msg) {
 function nmb_markChanged(self) {
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
-	
-	if (self.value!=self.getLastValue()) {
+
+	if (self.value != self.getLastValue()) {
 		input.setAttribute('changed', 'true')
 		display.setAttribute('changed', 'true')
 	} else {

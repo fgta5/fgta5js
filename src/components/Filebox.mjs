@@ -17,17 +17,17 @@ export default class Filebox extends Input {
 
 	#value = ''
 	set value(v) { this.#value = v }
-	get value() { 
-		if (this.Element.files.length===0) {
+	get value() {
+		if (this.Element.files.length === 0) {
 			return this.#value
 		} else {
 			return this.Element.files[0].name
 		}
 	}
-	
+
 
 	get file() {
-		if (this.Element.files.length===0) {
+		if (this.Element.files.length === 0) {
 			return 0
 		} else {
 			return this.Element.files[0]
@@ -36,12 +36,21 @@ export default class Filebox extends Input {
 
 
 	#suspended = false
-	suspend(s) {
-		if (s) {
-			this.Element.disabled = true
-			flb_setDisabled(this, true)
-		} 
-		this.#suspended = s
+	suspend(doSuspend = true, keepState = false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				flb_setDisabled(this, true)
+			} else {
+				flb_setDisabled(this, false)
+			}
+		}
+
+		// if (s) {
+		// 	this.Element.disabled = true
+		// 	flb_setDisabled(this, true)
+		// }
+		// this.#suspended = s
 	}
 
 	isSuspended() {
@@ -51,7 +60,7 @@ export default class Filebox extends Input {
 
 
 	get disabled() { return this.Element.disabled }
-	set disabled(disable) { 
+	set disabled(disable) {
 		if (!disable && this.#suspended) {
 			console.warn('suspended filebox cannot be enabled!', this.Id)
 			return
@@ -80,7 +89,7 @@ export default class Filebox extends Input {
 		flb_Reset(this)
 	}
 
-	isChanged() { 
+	isChanged() {
 		return flb_isChanged(this)
 	}
 
@@ -99,22 +108,22 @@ export default class Filebox extends Input {
 		flb_setDownloadLink(this, linktext, url)
 	}
 
-	validate() { 
-		return flb_validate(this) 
+	validate() {
+		return flb_validate(this)
 	}
 
 	focus() {
 		this.Nodes.Display.focus()
-	}	
+	}
 }
 
 
 function flb_validate(self) {
 	if (self.isRequired()) {
-		if (self.Nodes.Display.value=='') {
+		if (self.Nodes.Display.value == '') {
 			// return false
 			var err = self.getErrorValidation('required') // prioritas utama untuk validasi
-			if (err!=null) {
+			if (err != null) {
 				self.setError(err.message)
 			} else {
 				self.setError('file harus diisi')
@@ -128,31 +137,33 @@ function flb_validate(self) {
 	}
 }
 
-function flb_setDownloadLink(self, linktext=null, url=null) {
+function flb_setDownloadLink(self, linktext = null, url = null) {
 	const downloadLink = self.Nodes.DownloadLink
-	
-	if (linktext==null) {
+
+	if (linktext == null) {
 		// sembunyikan link
 		downloadLink.classList.add('hidden')
 		downloadLink.innerHTML = 'download'
 		downloadLink.onclick = null
-		downloadLink.removeAttribute('href')	
-	} else {{
-		// munculkan link
-		downloadLink.classList.remove('hidden')
-		downloadLink.innerHTML = linktext
-		if (typeof url==='function') {
-			downloadLink.removeAttribute('target', '_blank')
-			downloadLink.setAttribute('href', 'javascript:void(0)')
-			downloadLink.onclick = () => {
-				url()
-			}	
-		} else {
-			downloadLink.setAttribute('target', '_blank')
-			downloadLink.setAttribute('href', url)
-			downloadLink.onclick = null
+		downloadLink.removeAttribute('href')
+	} else {
+		{
+			// munculkan link
+			downloadLink.classList.remove('hidden')
+			downloadLink.innerHTML = linktext
+			if (typeof url === 'function') {
+				downloadLink.removeAttribute('target', '_blank')
+				downloadLink.setAttribute('href', 'javascript:void(0)')
+				downloadLink.onclick = () => {
+					url()
+				}
+			} else {
+				downloadLink.setAttribute('target', '_blank')
+				downloadLink.setAttribute('href', url)
+				downloadLink.onclick = null
+			}
 		}
-	}}	
+	}
 
 }
 
@@ -170,12 +181,12 @@ function flb_construct(self, id) {
 	// setup container, (harus di awal seblum yang lain-lain)
 	// diperlukan untuk menampung semua element yang akan ditampilkan
 	input.parentNode.insertBefore(container, input)
-	
+
 
 	downloadLink.innerHTML = 'download'
 	downloadLink.classList.add('fgta5-entry-download-link')
 	downloadLink.classList.add('hidden')
-	
+
 
 
 
@@ -187,12 +198,12 @@ function flb_construct(self, id) {
 	container.appendChild(wrapinput)
 	container.appendChild(downloadLink)
 	container.appendChild(lastvalue)
-	
+
 
 
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
+	self.Nodes.Label = label
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 	self.Nodes.DownloadLink = downloadLink
@@ -215,20 +226,20 @@ function flb_construct(self, id) {
 	display.classList.add('fgta5-entry-display')
 	display.classList.add('fgta5-entry-display-filebox')
 	var placeholder = input.getAttribute('placeholder')
-	if (placeholder!=null && placeholder !='') {
+	if (placeholder != null && placeholder != '') {
 		display.setAttribute('placeholder', placeholder)
 	}
 	var cssclass = input.getAttribute('class')
-	if (cssclass!=null && cssclass !='') {
+	if (cssclass != null && cssclass != '') {
 		display.setAttribute('class', cssclass)
 	}
 	var cssstyle = input.getAttribute('style')
-	if (cssstyle!=null && cssstyle !='') {
+	if (cssstyle != null && cssstyle != '') {
 		display.setAttribute('style', cssstyle)
 	}
 
 	const tabIndex = input.getAttribute('data-tabindex')
-	if (tabIndex!=null) {
+	if (tabIndex != null) {
 		display.setAttribute('tabindex', tabIndex)
 	}
 
@@ -241,18 +252,18 @@ function flb_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-filebox')
 	input.getInputCaption = () => {
-		if (label!=null) {
+		if (label != null) {
 			return label.innerHTML
 		} else {
 			return input.getAttribute('placeholder')
 		}
 	}
 
-	
+
 	// picker button
 	button.id = self.Id + '-button'
 	button.insertAdjacentHTML("beforeend", button_icon)
-	button.classList.add('fgta5-entry-button-filebox')	
+	button.classList.add('fgta5-entry-button-filebox')
 
 	// label
 	label.setAttribute('for', button.id)
@@ -277,7 +288,7 @@ function flb_construct(self, id) {
 	self._setupDescription()
 
 
-	input.addEventListener('change', (e)=>{
+	input.addEventListener('change', (e) => {
 		flb_changed(self)
 	})
 
@@ -337,7 +348,7 @@ function flb_changed(self) {
 
 function flb_markChanged(self) {
 	var display = self.Nodes.Display
-	if (self.value!=self.getLastValue()) {
+	if (self.value != self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 	} else {
 		display.removeAttribute('changed')
@@ -348,7 +359,7 @@ function flb_markChanged(self) {
 
 function flb_setError(self, msg) {
 	var display = self.Nodes.Display
-	if (msg!== null && msg !== '') {
+	if (msg !== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
 	} else {
 		display.removeAttribute('invalid')
@@ -367,11 +378,11 @@ function flb_Reset(self) {
 	// newFileInput.addEventListener('change', (e)=>{
 	// 	flb_changed(self)
 	// })
-	
+
 	// self.Nodes.Input.replaceWith(newFileInput)
 	// self.Nodes.Input = newFileInput
 	self.Nodes.Input.value = ''
-	
+
 	var lastvalue = self.getLastValue()
 	self.Nodes.Display.value = lastvalue
 	self.acceptChanges()
@@ -381,10 +392,10 @@ function flb_acceptChanges(self) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	var currentvalue = ''
-	if (input.files.length>0) {
+	if (input.files.length > 0) {
 		currentvalue = input.files[0].name
 	}
-	
+
 	self._setLastValue(currentvalue)
 	input.removeAttribute('changed')
 	display.removeAttribute('changed')
@@ -395,7 +406,7 @@ function flb_acceptChanges(self) {
 function flb_isChanged(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	var currentvalue = self.value
-	if (currentvalue!=lastvalue) {
+	if (currentvalue != lastvalue) {
 		console.log(`Input '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true
 	} else {

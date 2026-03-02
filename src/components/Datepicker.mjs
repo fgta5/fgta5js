@@ -30,9 +30,9 @@ export default class Datepicker extends Input {
 	set value(v) { dtp_setValue(this, v) }
 
 
-	get min() { 
-		if (this.Element.min!="") {
-			var dt = new Date(this.Element.min );
+	get min() {
+		if (this.Element.min != "") {
+			var dt = new Date(this.Element.min);
 			return dt
 		} else {
 			return null
@@ -46,8 +46,8 @@ export default class Datepicker extends Input {
 		}
 	}
 
-	get max() { 
-		if (this.Element.max!="") {
+	get max() {
+		if (this.Element.max != "") {
 			var dt = new Date(this.Element.max);
 			return dt
 		} else {
@@ -65,12 +65,21 @@ export default class Datepicker extends Input {
 
 
 	#suspended = false
-	suspend(s) {
-		if (s) {
-			this.Element.disabled = true
-			dtp_setDisabled(this, true)
-		} 
-		this.#suspended = s
+	suspend(doSuspend = true, keepState = false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				dtp_setDisabled(this, true)
+			} else {
+				dtp_setDisabled(this, false)
+			}
+		}
+
+		// if (s) {
+		// 	this.Element.disabled = true
+		// 	dtp_setDisabled(this, true)
+		// } 
+		// this.#suspended = s
 	}
 
 	isSuspended() {
@@ -80,7 +89,7 @@ export default class Datepicker extends Input {
 
 
 	get disabled() { return this.Element.disabled }
-	set disabled(disable) { 
+	set disabled(disable) {
 		if (!disable && this.#suspended) {
 			console.warn('suspended datepicker cannot be enabled!', this.Id)
 			return
@@ -102,7 +111,7 @@ export default class Datepicker extends Input {
 
 
 	newData(initialvalue) {
-		if (initialvalue===undefined || initialvalue===null) {
+		if (initialvalue === undefined || initialvalue === null) {
 			initialvalue = ''
 		}
 		// super.newData(initialvalue)
@@ -112,7 +121,7 @@ export default class Datepicker extends Input {
 	acceptChanges() {
 		super.acceptChanges()
 		dtp_acceptChanges(this)
-		
+
 	}
 
 	reset() {
@@ -127,12 +136,12 @@ export default class Datepicker extends Input {
 
 	getLastValue() {
 		return dtp_getLastValue(this)
-	} 
+	}
 
 
 	focus() {
 		this.Nodes.Display.focus()
-	}	
+	}
 }
 
 function dtp_construct(self, id) {
@@ -162,35 +171,35 @@ function dtp_construct(self, id) {
 
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
+	self.Nodes.Label = label
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 
-	
+
 
 
 	// setup container
 	container.setAttribute('fgta5-component', 'Datepicker')
-	if (input.style.width!='') {
+	if (input.style.width != '') {
 		container.style.width = input.style.width
 	}
-	if (input.style.marginTop!='') {
+	if (input.style.marginTop != '') {
 		container.style.marginTop = input.style.marginTop
 		input.style.marginTop = ''
 	}
-	if (input.style.marginBottom!='') {
+	if (input.style.marginBottom != '') {
 		container.style.marginBottom = input.style.marginBottom
-		input.style.marginBottom=''
+		input.style.marginBottom = ''
 	}
-	if (input.style.marginLeft!='') {
+	if (input.style.marginLeft != '') {
 		container.style.marginLeft = input.style.marginLeft
-		input.style.marginLeft=''
+		input.style.marginLeft = ''
 	}
-	if (input.style.marginRight!='') {
+	if (input.style.marginRight != '') {
 		container.style.marginRight = input.style.marginRight
-		input.style.marginRight=''
+		input.style.marginRight = ''
 	}
-		
+
 
 
 
@@ -207,7 +216,7 @@ function dtp_construct(self, id) {
 	display.classList.add('fgta5-entry-display')
 	display.classList.add('fgta5-entry-display-datepicker')
 	var placeholder = input.getAttribute('placeholder')
-	if (placeholder!=null && placeholder !='') {
+	if (placeholder != null && placeholder != '') {
 		display.setAttribute('placeholder', placeholder)
 	}
 	// var cssclass = input.getAttribute('class')
@@ -220,7 +229,7 @@ function dtp_construct(self, id) {
 	// }
 
 	const tabIndex = input.getAttribute('data-tabindex')
-	if (tabIndex!=null) {
+	if (tabIndex != null) {
 		display.setAttribute('tabindex', tabIndex)
 	}
 
@@ -235,13 +244,13 @@ function dtp_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-datepicker')
 	input.getInputCaption = () => {
-		if (label!=null) {
+		if (label != null) {
 			return label.innerHTML
 		} else {
 			return input.getAttribute('placeholder')
 		}
 	}
-	
+
 	for (var classname of nonFgtaClasses) {
 		// console.log(classname)
 		input.classList.remove(classname)
@@ -254,18 +263,18 @@ function dtp_construct(self, id) {
 	// picker button
 	button.id = self.Id + '-button'
 	button.insertAdjacentHTML("beforeend", button_icon)
-	button.classList.add('fgta5-entry-button-datepicker')	
+	button.classList.add('fgta5-entry-button-datepicker')
 
 
 	// label
-	if (label!=null) {
+	if (label != null) {
 		label.setAttribute('for', button.id)
 		label.classList.add('fgta5-entry-label')
 	}
 
 
 	const dis = input.getAttribute('disabled')
-	if (dis!=null) {
+	if (dis != null) {
 		dtp_setDisabled(self, true)
 	}
 
@@ -284,14 +293,14 @@ function dtp_construct(self, id) {
 		self.acceptChanges()
 	}
 
-	
+
 	// set input description
 	self._setupDescription()
 
 
 
 	// internal event
-	input.addEventListener('change', (e)=>{
+	input.addEventListener('change', (e) => {
 		dtp_changed(self)
 	})
 
@@ -304,7 +313,7 @@ function dtp_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var inputwrap = self.Nodes.InputWrapper
 	var button = self.Nodes.Button
-	
+
 	if (v) {
 		display.disabled = true
 		inputwrap.setAttribute('disabled', 'true')
@@ -337,20 +346,24 @@ function dtp_setEditingMode(self, ineditmode) {
 
 
 function dtp_getValue(self) {
-	if (self.Nodes.Input.value=='') {
+	if (self.Nodes.Input.value == '') {
 		return null
 	} else {
-		return dtp_getIsoDateValue(self.Nodes.Input.value) 
+		return dtp_getIsoDateValue(self.Nodes.Input.value)
 	}
 }
 
 
+function getIsoString(d) {
+	return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+};
+
 function dtp_setValue(self, dt) {
 	try {
 
-		if (dt!=null) {
+		if (dt != null) {
 			if (dt instanceof Date) {
-				const isoformat = dt.toISOString()
+				const isoformat = getIsoString(dt)  //dt.toISOString()
 				const isodate = isoformat.slice(0, 10)
 				self.Nodes.Input.value = isodate
 			} else {
@@ -360,7 +373,7 @@ function dtp_setValue(self, dt) {
 		} else {
 			self.Nodes.Input.value = null
 		}
-		
+
 
 		dtp_setDisplay(self, dt)
 		dtp_markChanged(self)
@@ -383,7 +396,7 @@ function dtp_acceptChanges(self) {
 
 function dtp_reset(self) {
 	var lastvalue = self.getLastValue()
-	if (lastvalue==null) {
+	if (lastvalue == null) {
 		self.value = ''
 	} else {
 		self.value = lastvalue
@@ -398,13 +411,13 @@ function dtp_changed(self) {
 	try {
 		self.Listener.dispatchEvent(ChangeEvent({
 			sender: self,
-			detail: {value:  input.value, sender: self}
+			detail: { value: input.value, sender: self }
 		}))
 	} catch (err) {
 		console.error(err.message)
 	}
-	
-	
+
+
 	dtp_markChanged(self)
 	if (self.InEditMode) {
 		self.setError(null)
@@ -415,11 +428,11 @@ function dtp_changed(self) {
 
 function dtp_getIsoDateValue(v) {
 	var dt
-	if (typeof v==='string') {
+	if (typeof v === 'string') {
 		dt = new Date(v)
 	} else if (v instanceof Date) {
 		dt = v
-	} 
+	}
 	return dt.toISOString().split("T")[0]
 }
 
@@ -432,12 +445,12 @@ function dtp_getIsoDateValue(v) {
 
 
 function dtp_markChanged(self) {
-	if (self.Form==null) {
+	if (self.Form == null) {
 		return
 	}
 
 	var display = self.Nodes.Display
-	if (self.value!=self.getLastValue()) {
+	if (self.value != self.getLastValue()) {
 		display.setAttribute('changed', 'true')
 	} else {
 		display.removeAttribute('changed')
@@ -446,12 +459,12 @@ function dtp_markChanged(self) {
 
 function dtp_setDisplay(self, dtiso) {
 	var display = self.Nodes.Display
-	if (dtiso=='') {
+	if (dtiso == '') {
 		display.value = ''
 	} else {
 		const date = new Date(dtiso);
 		const options = { day: '2-digit', month: 'short', year: 'numeric' };
-		const formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
+		const formattedDate = date.toLocaleDateString('en-ID', options).replace('.', '');
 		display.value = formattedDate
 	}
 }
@@ -459,7 +472,7 @@ function dtp_setDisplay(self, dtiso) {
 
 function dtp_setError(self, msg) {
 	var display = self.Nodes.Display
-	if (msg!== null && msg !== '') {
+	if (msg !== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
 	} else {
 		display.removeAttribute('invalid')
@@ -468,7 +481,7 @@ function dtp_setError(self, msg) {
 
 function dtp_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
-	if (lastvalue=='') {
+	if (lastvalue == '') {
 		return null
 	} else {
 		return lastvalue

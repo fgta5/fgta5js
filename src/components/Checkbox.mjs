@@ -1,9 +1,9 @@
 import Input from "./Input.mjs"
 
 
-const ChangedEvent = (data)=>{ return new CustomEvent('changed', data) }
-const CheckedEvent = (data)=>{ return new CustomEvent('checked', data) }
-const UnCheckedEvent = (data)=>{ return new CustomEvent('unchecked', data) }
+const ChangedEvent = (data) => { return new CustomEvent('changed', data) }
+const CheckedEvent = (data) => { return new CustomEvent('checked', data) }
+const UnCheckedEvent = (data) => { return new CustomEvent('unchecked', data) }
 
 /*
 * reference:
@@ -25,12 +25,22 @@ export default class Checkbox extends Input {
 
 
 	#suspended = false
-	suspend(s) {
-		if (s) {
-			this.Element.disabled = true
-			chk_setDisabled(this, true)
-		} 
-		this.#suspended = s
+	suspend(doSuspend = true, keepState = false) {
+		this.#suspended = doSuspend
+		if (!keepState) {
+			if (doSuspend) {
+				chk_setDisabled(this, true)
+			} else {
+				chk_setDisabled(this, false)
+			}
+		}
+
+
+		// if (s) {
+		// 	this.Element.disabled = true
+		// 	chk_setDisabled(this, true)
+		// } 
+		// this.#suspended = s
 	}
 
 	isSuspended() {
@@ -38,12 +48,12 @@ export default class Checkbox extends Input {
 	}
 
 	get disabled() { return chk_getDisabled(this) }
-	set disabled(disable) { 
+	set disabled(disable) {
 		if (!disable && this.#suspended) {
 			console.warn('suspended checkbox cannot be enabled!', this.Id)
 			return
 		}
-		
+
 		this.Element.disabled = disable
 		chk_setDisabled(this, disable)
 	}
@@ -63,9 +73,9 @@ export default class Checkbox extends Input {
 
 	getLastValue() {
 		return chk_getLastValue(this)
-	} 
+	}
 
-	isChanged() { 
+	isChanged() {
 		return chk_isChanged(this)
 	}
 
@@ -104,9 +114,9 @@ function chk_construct(self, id) {
 
 
 	// tambahkan referensi elemen ke Nodes
-	self.Nodes.Label = label 
-	
-	
+	self.Nodes.Label = label
+
+
 	// setup container
 	container.setAttribute('fgta5-component', 'Checkbox')
 
@@ -114,15 +124,15 @@ function chk_construct(self, id) {
 	input.classList.add('fgta5-checkbox-input')
 
 	const tabIndex = input.getAttribute('data-tabindex')
-	if (tabIndex!=null) {
+	if (tabIndex != null) {
 		input.setAttribute('tabindex', tabIndex)
 	}
 
-	
+
 	// setup checkbox label untuk menampung checkbox
 	checkboxlabel.classList.add('fgta5-checkbox')
-	
-	
+
+
 	// ganti original label tag menjadi div 
 	// karena label di form harus mereferensi ke input
 	// sedangkan label di checkbox kita fungsikan sebagai text pada checkbox untuk di klik
@@ -140,13 +150,13 @@ function chk_construct(self, id) {
 
 
 	const dis = input.getAttribute('disabled')
-	if (dis!=null) {
+	if (dis != null) {
 		chk_setDisabled(self, true)
 	}
 
 	// tambahkan event listener internal
 	input.addEventListener('change', (event) => {
-		chk_checkedChanged(self)		
+		chk_checkedChanged(self)
 	});
 
 }
@@ -167,7 +177,7 @@ function chk_setDisabled(self, v) {
 	var input = self.Nodes.Input
 
 	var editmode = input.getAttribute('editmode')
-	var ineditmode = ((editmode==null || editmode=='' || editmode=='false')) ? false : true
+	var ineditmode = ((editmode == null || editmode == '' || editmode == 'false')) ? false : true
 
 	if (v) {
 		input.setAttribute('permanent-disabled', 'true')
@@ -176,7 +186,7 @@ function chk_setDisabled(self, v) {
 		input.removeAttribute('permanent-disabled')
 		input.parentNode.removeAttribute('permanent-disabled')
 		if (!ineditmode) {
-			input.disabled = true	
+			input.disabled = true
 		}
 	}
 }
@@ -186,7 +196,7 @@ function chk_setEditingMode(self, ineditmode) {
 	var input = self.Nodes.Input
 	var attrval = ineditmode ? 'true' : 'false'
 	var permdisattr = input.getAttribute('permanent-disabled')
-	var permanentDisabled = ((permdisattr==null || permdisattr=='' || permdisattr=='false')) ? false : true
+	var permanentDisabled = ((permdisattr == null || permdisattr == '' || permdisattr == 'false')) ? false : true
 
 	input.setAttribute('editmode', attrval)
 	if (ineditmode) {
@@ -202,7 +212,7 @@ function chk_setEditingMode(self, ineditmode) {
 
 function chk_setLastValue(self, v) {
 	var lastvalue = 1
-	if (v==='off' || v==='0' || v===0 || v===false) {
+	if (v === 'off' || v === '0' || v === 0 || v === false) {
 		lastvalue = 0
 	}
 	self.Nodes.LastValue.value = lastvalue
@@ -233,8 +243,8 @@ function chk_checkedChanged(self) {
 
 	self.Listener.dispatchEvent(ChangedEvent({
 		sender: self,
-		detail: {checked: input.checked}
-	}))	
+		detail: { checked: input.checked }
+	}))
 
 }
 
@@ -242,7 +252,7 @@ function chk_checkedChanged(self) {
 function chk_isChanged(self) {
 	var lastvalue = self.getLastValue()
 	var currentvalue = self.value
-	if (currentvalue!=lastvalue) {
+	if (currentvalue != lastvalue) {
 		// console.log(`Checkbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true
 	} else {
@@ -253,7 +263,7 @@ function chk_isChanged(self) {
 
 
 function chk_getBoolValue(v) {
-	if (v===0||v==='0'||v===false||v===undefined) {
+	if (v === 0 || v === '0' || v === false || v === undefined) {
 		return false
 	} else {
 		return true
@@ -299,7 +309,7 @@ function chk_NewData(self, initialvalue) {
 
 function chk_markChanged(self) {
 	var input = self.Nodes.Input
-	if (self.value!=self.getLastValue()) {
+	if (self.value != self.getLastValue()) {
 		input.setAttribute('changed', 'true')
 	} else {
 		input.removeAttribute('changed')
