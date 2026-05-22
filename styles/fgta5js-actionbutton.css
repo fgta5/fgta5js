@@ -31,6 +31,7 @@
 
 .action-button:disabled {
 	filter: grayscale(1) opacity(0.4);
+	cursor: default;
 }
 
 .action-button:not(:disabled):hover {
