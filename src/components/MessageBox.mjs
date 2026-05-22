@@ -49,6 +49,7 @@ export class MessageBox {
 	static async info(message) { return await msgbox_info(message) }
 	static async warning(message) { return await msgbox_warning(message) }
 	static async confirm(message, buttons) { return await msgbox_confirm(message, buttons) }
+	static async confirmAndWarn(message, buttons) { return await msgbox_confirmAndWarn(message, buttons) }
 	static async ask(message) { return await msgbox_ask(message) }
 }
 
@@ -157,6 +158,15 @@ async function msgbox_confirm(message, buttons) {
 
 	return await msgbox_show(message, {
 		iconSvg: ICON_QUESTION,
+		buttons: buttons
+	})
+}
+
+async function msgbox_confirmAndWarn(message, buttons) {
+	buttons = buttons === undefined ? MessageBox.ButtonOkCancel : buttons
+
+	return await msgbox_show(message, {
+		iconSvg: ICON_WARNING,
 		buttons: buttons
 	})
 }
