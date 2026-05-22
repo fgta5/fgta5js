@@ -1,24 +1,26 @@
 
 export default class ActionButton {
-	
+
 	#ids = []
 	#elements = []
-	constructor(id, actionname=null) {
+	#atributes = []
+
+	constructor(id, actionname = null) {
 		this.Listener = new EventTarget()
 
 
 		// pertama ambil element dengan id. 
 		// Jika ada element pertama akan berisi element dengan id tersebut
 		// berukutnya akan dicari element dengan data-action
-		if (id!=null) {
+		if (id != null) {
 			const el = document.getElementById(id)
-			if (el!=null) {
+			if (el != null) {
 				this.#elements.push(el)
-			} 
+			}
 		}
-	
-		if (actionname!=null) {
-			const selector = (id==null) ? `[data-action="${actionname}"]` : `[data-action="${actionname}"]:not(#${id})`
+
+		if (actionname != null) {
+			const selector = (id == null) ? `[data-action="${actionname}"]` : `[data-action="${actionname}"]:not(#${id})`
 			const elements = document.querySelectorAll(selector)
 			this.#elements = [...this.#elements, ...Array.from(elements)]
 		}
@@ -29,13 +31,13 @@ export default class ActionButton {
 
 			// id
 			const id = element.id
-			this.#ids.push(id) 
+			this.#ids.push(id)
 
 			// disable tab
 			element.setAttribute('tabindex', '-1')
 
 			// handle default event click, yang berfungsi untuk mengamabkan tombol saat disable / hidden
-			element.addEventListener('click', (evt)=>{
+			element.addEventListener('click', (evt) => {
 				if (this.#disabled || this.#hidden) {
 					console.warn('action is not allowed!')
 					evt.stopImmediatePropagation()
@@ -44,29 +46,34 @@ export default class ActionButton {
 		})
 	}
 
+
+	get Elements() {
+		return this.#elements
+	}
+
 	#disabled = false
 	get disabled() { return this.#disabled }
 	set disabled(disable) {
-			if (!disable && this.#suspended) {
-				// jika suspended, tombol tidak bisa dinyalakan
-				console.warn('suspended action button cannot be enabled!', this.#ids)
-				return
-			}
+		if (!disable && this.#suspended) {
+			// jika suspended, tombol tidak bisa dinyalakan
+			console.warn('suspended action button cannot be enabled!', this.#ids)
+			return
+		}
 
-			this.#disabled = disable
-			this.#elements.forEach(element => {
-				if (disable) {
-					element.setAttribute('disabled', true)
-				} else {
-					element.removeAttribute('disabled')
-				}
-			})
-		
+		this.#disabled = disable
+		this.#elements.forEach(element => {
+			if (disable) {
+				element.setAttribute('disabled', true)
+			} else {
+				element.removeAttribute('disabled')
+			}
+		})
+
 	}
 
 	#hidden = false
 	isHidden() { return this.#hidden }
-	hide(hidden=true) {
+	hide(hidden = true) {
 		this.#elements.forEach(element => {
 			if (hidden) {
 				element.classList.add('hidden')
@@ -81,11 +88,11 @@ export default class ActionButton {
 			element.innerHTML = text
 		})
 	}
-	
+
 	addEventListener(event, callback) {
 		this.#elements.forEach(element => {
 			element.addEventListener(event, callback)
-		})		
+		})
 	}
 
 
@@ -98,7 +105,7 @@ export default class ActionButton {
 
 
 	#suspended = false
-	suspend(doSuspend=true, keepState=false) {
+	suspend(doSuspend = true, keepState = false) {
 		this.#suspended = doSuspend
 		if (!keepState) {
 			if (doSuspend) {
@@ -113,5 +120,23 @@ export default class ActionButton {
 		return this.#suspended
 	}
 
+
+	setAttribute(name, value) {
+		this.#atributes[name] = value
+		this.#elements.forEach(element => {
+			element.setAttribute(name, value)
+		})
+	}
+
+	getAttribute(name) {
+		return this.#atributes[name]
+	}
+
+	removeAttribute(name) {
+		delete this.#atributes[name]
+		this.#elements.forEach(element => {
+			element.removeAttribute(name)
+		})
+	}
 
 }
