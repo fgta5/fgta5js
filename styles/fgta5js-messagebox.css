@@ -69,3 +69,26 @@
 	color: red;
 	font-size: 0.9rem;
 }
+
+
+
+
+
+@media screen and (min-width: 501px) {
+	.fgta5-messagebox-icon {
+		margin-top: 1rem;
+	}
+
+
+	.fgta5-messagebox-content {
+		padding: 2rem 3rem 1rem 3rem;
+	}
+
+	.fgta5-messagebox-buttonsbar {
+		padding: 1rem 1rem 1rem 1rem;
+	}
+
+}
+
+
+@media screen and (max-width: 500px) {}
