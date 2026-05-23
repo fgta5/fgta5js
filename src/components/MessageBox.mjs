@@ -27,22 +27,41 @@ const ICON_WARNING = `<svg width="32" height="32" version="1.1" viewBox="0 0 8.4
 <path transform="matrix(.20595 0 0 .1924 3.8511 -.31824)" d="m1.875 9.1397 18.269 31.643-18.269-1e-6h-18.269l9.1345-15.821z" fill="#ff7f2a"/>
 <path d="m4.751 6.4121q0 0.20413-0.14691 0.34641-0.14691 0.14227-0.35911 0.14227-0.21547 0-0.36564-0.14227-0.15017-0.14227-0.15017-0.34641 0-0.20104 0.15017-0.34022 0.15017-0.13918 0.36564-0.13918 0.2122 0 0.35911 0.13918 0.14691 0.13918 0.14691 0.34022z" fill="#fff" stroke-width=".16269"/>
 <path d="m4.8197 3.7022q0 0.098082-0.022286 0.19403-0.022286 0.093818-0.057939 0.20683l-0.31198 1.0832h-0.43232l-0.2897-1q-0.040112-0.15139-0.075767-0.26013-0.035655-0.11088-0.035655-0.22815 0-0.25373 0.16045-0.37101 0.1649-0.11727 0.46351-0.11727 0.29415 0 0.44569 0.10661 0.15599 0.10661 0.15599 0.38593z" fill="#fff" stroke-width=".15783"/>
-</svg>
-`
+</svg>`
+
+const ICON_CANCEL = `<?xml version="1.0" encoding="UTF-8"?>
+<svg fill="currentColor" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m20 14h-16v-4h16z"/>
+</svg>`
+
+const ICON_YES = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+<path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
+</svg>`
+
+
+const ICON_NO = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+  <path d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z"/>
+</svg>`
+
+const ICON_EMPTY = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+</svg>`
+
 
 export class MessageBoxButton {
 	Text = 'button'
+	Icon
 
-	constructor(text) {
+	constructor(text, icon = ICON_EMPTY) {
 		this.Text = text
+		this.Icon = icon
 	}
 
 }
 
 export class MessageBox {
-	static ButtonOkCancel = Object.freeze({ ok: new MessageBoxButton('Ok'), cancel: new MessageBoxButton('Cancel') })
-	static ButtonYesNo = Object.freeze({ yes: new MessageBoxButton('Yes'), no: new MessageBoxButton('No') })
-	static ButtonYesNoCancel = Object.freeze({ yes: new MessageBoxButton('Yes'), no: new MessageBoxButton('No'), cancel: new MessageBoxButton('Cancel') })
+	static ButtonOkCancel = Object.freeze({ ok: new MessageBoxButton('Ok', ICON_YES), cancel: new MessageBoxButton('Cancel', ICON_NO) })
+	static ButtonYesNo = Object.freeze({ yes: new MessageBoxButton('Yes', ICON_YES), no: new MessageBoxButton('No', ICON_NO) })
+	static ButtonYesNoCancel = Object.freeze({ yes: new MessageBoxButton('Yes', ICON_YES), no: new MessageBoxButton('No', ICON_NO), cancel: new MessageBoxButton('Cancel', ICON_CANCEL) })
 
 	static async show(message, config) { return await msgbox_show(message, config) }
 	static async error(message) { return await msgbox_error(message) }
@@ -112,7 +131,15 @@ async function msgbox_show(message, config) {
 			for (const [key, btn] of Object.entries(config.buttons)) {
 				const btnEl = document.createElement('button')
 				btnEl.classList.add('fgta5-messagebox-button')
-				btnEl.innerHTML = btn.Text
+				btnEl.classList.add('action-button')
+				btnEl.setAttribute('data-text', btn.Text)
+				btnEl.style.cursor = 'pointer'
+				btnEl.innerHTML = `
+						<span class="action-button-icon">
+							${btn.Icon}
+						</span>
+						<span class="action-button-text">${btn.Text}</span>	
+				`
 				btnEl.addEventListener('click', () => {
 					dialog.close()
 					resolve(key)
@@ -123,7 +150,15 @@ async function msgbox_show(message, config) {
 		} else {
 			const btnOk = document.createElement('button')
 			btnOk.classList.add('fgta5-messagebox-button')
-			btnOk.innerHTML = 'Ok'
+			btnOk.classList.add('action-button')
+			btnOk.setAttribute('data-text', 'Ok')
+			btnOk.style.cursor = 'pointer'
+			btnOk.innerHTML = `
+					<span class="action-button-icon">
+						${ICON_YES}
+					</span>
+					<span class="action-button-text">Ok</span>	
+			`
 			btnOk.addEventListener('click', () => {
 				dialog.close()
 				resolve('ok')

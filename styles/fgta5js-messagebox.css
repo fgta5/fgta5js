@@ -46,6 +46,10 @@
 	padding: 5px 3px;
 }
 
+.fgta5-messagebox-button.action-button {
+	background-color: #3b3b3b;
+}
+
 .fgta5-messagebox-questdiv {
 	margin: 5px 0 5px 0;
 	text-align: center;
