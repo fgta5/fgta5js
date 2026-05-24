@@ -8,26 +8,25 @@
     "test": "node ./server-dev.js",
     "prebuild": "rimraf dist && node version.js",
     "x-prebuild": "rimraf dist",
-    "build": "rollup -c rollup-fgta5js.mjs",
-    "demo-server": "node ./src/demo/server.js"
+    "build": "rollup -c rollup-fgta5js.mjs"
   },
   "author": "agung nugroho",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "rimraf": "^6.0.1",
+    "serve-favicon": "^2.5.0",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.2",
-    "@rollup/plugin-terser": "^1.0.0",
-    "cors": "^2.8.5",
+    "@rollup/plugin-terser": "^0.4.4",
     "cssnano": "^7.0.6",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0",
     "mime": "^4.0.6",
     "postcss": "^8.5.1",
-    "rimraf": "^6.0.1",
     "rollup": "^4.46.2",
-    "rollup-plugin-postcss": "^4.0.2",
-    "serve-favicon": "^2.5.0"
+    "rollup-plugin-postcss": "^4.0.2"
   },
   "repository": {
     "type": "git",

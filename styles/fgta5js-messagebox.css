@@ -6,6 +6,13 @@
 	min-height: 100px;
 	min-width: 270px;
 	user-select: none;
+
+
+	/* tambahan agar di tengah */
+	margin: auto;
+	position: fixed;
+	inset: 0;
+	display: block;
 }
 
 .fgta5-messagebox-dialog::backdrop {

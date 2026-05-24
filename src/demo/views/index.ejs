@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>fgta5js — Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Stylesheet -->
+	<link rel="stylesheet" href="styles/demo.css" />
+</head>
+
+<body>
+	<div class="container">
+		<!-- Header / Hero Section -->
+		<header>
+			<div>
+				<h1>fgta5js</h1>
+			</div>
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Lightweight & Form-Focused
+			</div>
+			<p class="hero-description">
+				A modern JavaScript library designed to speed up web application form creation in an intuitive,
+				lightweight, and standard native HTML manner.
+			</p>
+		</header>
+
+		<main class="content-grid">
+			<!-- Philosophy Section -->
+			<section class="philosophy-card">
+				<h2>Philosophy & Core Concepts</h2>
+				<p>
+					Standard HTML forms provide the basic foundation for data input, but they still leave many practical
+					application concerns to developers. Tasks such as detecting whether data has changed, managing form
+					edit states, and performing structured validation often require repetitive custom code. fgta5js
+					extends the native form behavior to address these gaps, making form handling more consistent,
+					maintainable, and developer-friendly without abandoning the simplicity of standard HTML.
+				</p>
+				<p>
+					fgta5js was born from a simple idea: <b>building web application forms should feel natural,
+						lightweight,
+						and aligned with native HTML mechanics.</b>
+				</p>
+				<p>
+					While modern web development trends shift toward massive frameworks, complex build pipelines,
+					and heavily abstracted component models, fgta5js chooses a different path. We eliminate
+					unnecessary abstraction layers to focus on the essential needs of business applications: <b>reliable
+						form creation, data input, validation, and seamless interactions.</b>
+				</p>
+			</section>
+
+			<!-- Examples Section -->
+			<section class="examples-section">
+				<h2 class="section-title">Components & Demos</h2>
+
+				<div class="grid">
+					<!-- Form Demo Card -->
+					<a href="/form" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+								<polyline points="14 2 14 8 20 8"></polyline>
+								<line x1="16" y1="13" x2="8" y2="13"></line>
+								<line x1="16" y1="17" x2="8" y2="17"></line>
+								<polyline points="10 9 9 9 8 9"></polyline>
+							</svg>
+						</div>
+						<h3>Form Demo <span class="card-arrow">→</span></h3>
+						<p>A comprehensive form demonstration integrating various inputs, action handlers, state
+							management, and built-in validation flows.</p>
+					</a>
+
+					<!-- Textbox Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
+								<line x1="7" y1="12" x2="17" y2="12"></line>
+							</svg>
+						</div>
+						<h3>Textbox <span class="card-arrow">→</span></h3>
+						<p>Single-line text input component supporting placeholders, type-based validation, and
+							responsive event hooks.</p>
+					</a>
+
+					<!-- Numberbox Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<line x1="4" y1="9" x2="20" y2="9"></line>
+								<line x1="4" y1="15" x2="20" y2="15"></line>
+								<line x1="10" y1="3" x2="8" y2="21"></line>
+								<line x1="16" y1="3" x2="14" y2="21"></line>
+							</svg>
+						</div>
+						<h3>Numberbox <span class="card-arrow">→</span></h3>
+						<p>Numeric-only input field with thousands separators, minimum/maximum range constraints, and
+							precise decimal control.</p>
+					</a>
+
+					<!-- Datepicker Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+								<line x1="16" y1="2" x2="16" y2="6"></line>
+								<line x1="8" y1="2" x2="8" y2="6"></line>
+								<line x1="3" y1="10" x2="21" y2="10"></line>
+							</svg>
+						</div>
+						<h3>Datepicker <span class="card-arrow">→</span></h3>
+						<p>Interactive calendar-based date selector designed for seamless and precise date inputs.</p>
+					</a>
+
+					<!-- Timepicker Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="10"></circle>
+								<polyline points="12 6 12 12 16 14"></polyline>
+							</svg>
+						</div>
+						<h3>Timepicker <span class="card-arrow">→</span></h3>
+						<p>Time selector field supporting custom hour and minute intervals, optimized for user
+							experience.</p>
+					</a>
+
+					<!-- Checkbox Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<polyline points="9 11 12 14 22 4"></polyline>
+								<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+							</svg>
+						</div>
+						<h3>Checkbox <span class="card-arrow">→</span></h3>
+						<p>Modern binary or multi-option checkboxes supporting checked, unchecked, and indeterminate
+							states.</p>
+					</a>
+
+					<!-- Selector Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+							</svg>
+						</div>
+						<h3>Selector <span class="card-arrow">→</span></h3>
+						<p>Dynamic combobox dropdown with incremental text searching, recommendations, and backend data
+							loading.</p>
+					</a>
+
+					<!-- File Upload Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+								<polyline points="17 8 12 3 7 8"></polyline>
+								<line x1="12" y1="3" x2="12" y2="15"></line>
+							</svg>
+						</div>
+						<h3>File Upload <span class="card-arrow">→</span></h3>
+						<p>File selector and uploader featuring upload progress, file type constraints, and
+							drag-and-drop support.</p>
+					</a>
+
+					<!-- Application Manager Card -->
+					<a href="#" class="card">
+						<div class="card-icon-wrapper">
+							<svg viewBox="0 0 24 24">
+								<rect x="3" y="3" width="7" height="9"></rect>
+								<rect x="14" y="3" width="7" height="5"></rect>
+								<rect x="14" y="12" width="7" height="9"></rect>
+								<rect x="3" y="16" width="7" height="5"></rect>
+							</svg>
+						</div>
+						<h3>Application Manager <span class="card-arrow">→</span></h3>
+						<p>Lifecycle and routing manager for rendering multiple sub-applications dynamically within a
+							single-page view.</p>
+					</a>
+				</div>
+			</section>
+		</main>
+
+		<!-- Footer -->
+		<footer>
+			<p class="footer-text">© 2026 fgta5js. Built with a core focus on performance and simplicity.</p>
+		</footer>
+	</div>
+</body>
+
+</html>
