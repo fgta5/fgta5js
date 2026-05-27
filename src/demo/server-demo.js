@@ -21,7 +21,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 // serve static files
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
-app.use('/styles', express.static(path.join(__dirname, 'styles'))); // demo styles (first priority)
+app.use('/styles', express.static(path.join(__dirname, 'styles')));
+app.use('/fgta5/components', express.static(path.join(__dirname, '..', 'components')));
+app.use('/fgta5/styles', express.static(path.join(__dirname, '..', '..', 'styles')));
+
+
 
 
 app.get('/', (req, res) => {
@@ -31,6 +35,41 @@ app.get('/', (req, res) => {
 app.get('/form', (req, res) => {
 	res.render('demoform', {});
 });
+
+app.get('/textbox', (req, res) => {
+	res.render('doc-textbox', {});
+});
+
+app.get('/numberbox', (req, res) => {
+	res.render('doc-numberbox', {});
+});
+
+app.get('/datepicker', (req, res) => {
+	res.render('doc-datepicker', {});
+});
+
+app.get('/timepicker', (req, res) => {
+	res.render('doc-timepicker', {});
+});
+
+app.get('/checkbox', (req, res) => {
+	res.render('doc-checkbox', {});
+});
+
+app.get('/selector', (req, res) => {
+	res.render('doc-selector', {});
+});
+
+app.get('/fileupload', (req, res) => {
+	res.render('doc-fileupload', {});
+});
+
+app.get('/applicationmanager', (req, res) => {
+	res.render('doc-applicationmanager', {});
+});
+
+
+
 
 // data endpoint for combobox selecting
 app.post('/getdata', async (req, res) => {

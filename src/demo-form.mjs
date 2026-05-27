@@ -41,7 +41,7 @@ export default class Page {
 	async main(args) {
 		await main(this, args)
 	}
-		
+
 }
 
 
@@ -59,58 +59,58 @@ async function main(self, args) {
 	btn_clearerror.addEventListener('click', (evt) => { btn_clearerror_click(self, evt) });
 
 
-	if (obj_nama!=null) {
-		obj_nama.addEventListener('input', (evt)=>{
+	if (obj_nama != null) {
+		obj_nama.addEventListener('input', (evt) => {
 			// console.log('input', evt)
 		})
 
-		obj_nama.addEventListener('keydown', (evt)=>{
+		obj_nama.addEventListener('keydown', (evt) => {
 			// console.log('keydown', evt)
 		})
 	}
 
 
 
-	if (obj_disabled!=null) {
-		obj_disabled.addEventListener('checked', (evt)=>{
+	if (obj_disabled != null) {
+		obj_disabled.addEventListener('checked', (evt) => {
 			console.log('checked')
 		})
 
-		obj_disabled.addEventListener('unchecked', (evt)=>{
+		obj_disabled.addEventListener('unchecked', (evt) => {
 			console.log('unchecked')
 		})
 	}
 
 
-	if (obj_nilai!=null) {
-		obj_nilai.addEventListener('change', (evt)=>{
+	if (obj_nilai != null) {
+		obj_nilai.addEventListener('change', (evt) => {
 			console.log(evt.detail)
 		})
 
 	}
 
 
-	if (obj_tanggal!=null) {
-		obj_tanggal.addEventListener('change', (evt)=>{
+	if (obj_tanggal != null) {
+		obj_tanggal.addEventListener('change', (evt) => {
 			console.log('Tanggal berubah')
 			console.log(evt.detail)
 		})
 	}
-	
 
-	if (obj_kota!=null) {
-		obj_kota.addEventListener('change', (evt)=>{
+
+	if (obj_kota != null) {
+		obj_kota.addEventListener('change', (evt) => {
 			console.log(evt.detail)
 		})
 
-		obj_kota.addEventListener('optionformatting', (evt)=>{
+		obj_kota.addEventListener('optionformatting', (evt) => {
 			// console.log(evt.detail)
 		})
 
-		obj_kota.addEventListener('selecting', (evt)=>{
+		obj_kota.addEventListener('selecting', (evt) => {
 			obj_kota_selecting(evt)
 		})
-		
+
 	}
 
 
@@ -131,7 +131,7 @@ function obj_kota_selecting(evt) {
 	const dialog = evt.detail.dialog
 	const loader = new $fgta5.Dataloader() // cbo.CreateDataLoader()
 
-	var searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+	var searchtext = evt.detail.searchtext != null ? evt.detail.searchtext : ''
 	var args = {
 		method: 'POST',
 		headers: {
@@ -147,9 +147,9 @@ function obj_kota_selecting(evt) {
 	}
 
 
-	cbo.Wait()
-	cbo.AbortHandler = () => { loader.Abort() }	
-	loader.load('/getdata', args, (err, result)=>{
+	cbo.wait()
+	cbo.AbortHandler = () => { loader.Abort() }
+	loader.load('/getdata', args, (err, result) => {
 		console.log('loading..')
 		console.log(result)
 
@@ -157,10 +157,10 @@ function obj_kota_selecting(evt) {
 			evt.detail.addRow(row.value, row.text, row)
 		}
 		dialog.setNext(result.nextoffset, result.limit)
-		cbo.Wait(false)
+		cbo.wait(false)
 	})
-	
-	
+
+
 }
 
 async function btn_edittogle_click(self, evt) {
@@ -171,15 +171,15 @@ async function btn_edittogle_click(self, evt) {
 			return
 		}
 	}
-	
-	form.lock(!form.isLocked()) 
+
+	form.lock(!form.isLocked())
 }
 
 
 async function btn_reset_click(self, evt) {
 	if (form.isChanged()) {
 		var ret = await $fgta5.MessageBox.confirm("data pada form berubah, apakah akan reset data?")
-		if (ret=='ok') {
+		if (ret == 'ok') {
 			form.reset()
 		}
 	}
@@ -210,7 +210,7 @@ async function btn_new_click(self, evt) {
 	if (form.isChanged()) {
 		newdata = false
 		var ret = await $fgta5.MessageBox.confirm("data pada form berubah, apakah akan membuat data baru?")
-		if (ret=='ok') {
+		if (ret == 'ok') {
 			newdata = true
 		}
 	}
@@ -234,14 +234,14 @@ async function btn_new_click(self, evt) {
 
 function form_locked(self, evt) {
 	txtState.innerHTML = "View"
-	btn_reset.Disabled = true 
+	btn_reset.Disabled = true
 	btn_save.Disabled = true
 	btn_testvalidation.Disabled = true
 }
 
 function form_unlocked(self, evt) {
 	txtState.innerHTML = "Edit"
-	btn_reset.Disabled = false 
+	btn_reset.Disabled = false
 	btn_save.Disabled = false
 	btn_testvalidation.Disabled = false
 }
@@ -250,21 +250,21 @@ function form_unlocked(self, evt) {
 
 function btn_testvalidation_click(self, evt) {
 	var isValid = form.validate()
-	if (!isValid) {	
+	if (!isValid) {
 		console.warn('ada error, di default validation');
 		return
-	} 
+	}
 }
 
 function btn_testdised_click(self, evt) {
-	for (var name in form.Inputs) {	
+	for (var name in form.Inputs) {
 		var obj = form.Inputs[name]
 		obj.disabled = !obj.disabled
 	}
 }
 
 function btn_clearerror_click(self, evt) {
-	for (var name in form.Inputs) {	
+	for (var name in form.Inputs) {
 		var obj = form.Inputs[name]
 		obj.setError(null)
 	}

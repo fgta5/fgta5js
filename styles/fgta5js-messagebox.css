@@ -51,6 +51,7 @@
 .fgta5-messagebox-button {
 	min-width: 80px;
 	padding: 5px 3px;
+	color: #fff
 }
 
 .fgta5-messagebox-button.action-button {

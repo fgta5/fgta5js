@@ -1,7 +1,25 @@
 import Component from "./Component.mjs"
 
+
+/**
+ * Komponen dasar untuk menangani input form.
+ * @extends Component
+ */
 export default class Input extends Component {
-	/* Construct Input */
+	#_form
+	#_lasterror
+	#_suspended = false
+	#_ineditmode = true
+	#_isrequired = false
+	#_invalidMessages = {}
+	#_validators = {}
+	#_handlers = {}
+
+
+	/**
+	 * Membuat instansiasi dari objek Input.
+	 * @param {string} id - ID unik untuk elemen input.
+	 */
 	constructor(id) {
 		super(id)
 		input_construct(this, id)
@@ -9,17 +27,30 @@ export default class Input extends Component {
 	}
 
 
-	/* mengembalikan nama class contructor, misalnya 'Textbox' */
+	/**
+	 * Mengembalikan nama class constructor (misalnya: 'Textbox').
+	 * @type {string}
+	 */
 	get type() { return this.constructor.name }
 
 
+	/**
+	 * Mengambil atau mengatur nilai (value) dari elemen input.
+	 * @type {string|number}
+	 */
 	get value() { return this.Element.value }
 	set value(v) { this.Element.value = v }
 
 
-	#suspended = false
+
+
+	/**
+	 * Menghentikan sementara (suspend) atau mengaktifkan kembali interaksi input.
+	 * @param {boolean} [doSuspend=true] - Status suspend yang diinginkan.
+	 * @param {boolean} [keepState=false] - Jika true, tidak akan mengubah status 'disabled' pada elemen HTML.
+	 */
 	suspend(doSuspend = true, keepState = false) {
-		this.#suspended = doSuspend
+		this.#_suspended = doSuspend
 		if (!keepState) {
 			if (doSuspend) {
 				this.Element.disabled = true
@@ -27,30 +58,44 @@ export default class Input extends Component {
 				this.Element.disabled = false
 			}
 		}
-
-		// if (s) {
-		// 	this.Element.disabled = true
-		// }
-		// this.#suspended = s
 	}
 
+	/**
+	 * Memeriksa apakah input sedang dalam status suspended.
+	 * @returns {boolean} True jika sedang suspended.
+	 */
 	isSuspended() {
-		return this.#suspended
+		return this.#_suspended
 	}
 
 
+	/**
+	 * Mengambil atau mengatur status disabled pada elemen.
+	 * @type {boolean}
+	 */
 	get disabled() { return this.Element.disabled }
 	set disabled(disable) {
-		if (!disable && this.#suspended) {
+		if (!disable && this.#_suspended) {
 			console.warn('suspended input cannot be enabled!', this.Id)
 			return
 		}
 		this.Element.disabled = disable
 	}
 
+
+	/**
+	 * Mengambil atau mengatur teks placeholder input.
+	 * @type {string}
+	 */
 	get placeholder() { return this.Element.getAttribute('placeholder') }
 	set placeholder(v) { this.Element.setAttribute('placeholder', v) }
 
+
+	/**
+	 * Mengambil atau mengatur visibilitas komponen input.
+	 * Catatan: Logika set saat ini memberikan class 'hidden' jika nilai v adalah true.
+	 * @type {boolean}
+	 */
 	get visible() {
 		if (this.Nodes.Container.classList.contains('hidden')) {
 			return false;
@@ -58,7 +103,6 @@ export default class Input extends Component {
 			return true;
 		}
 	}
-
 	set visible(v) {
 		if (v) {
 			this.Nodes.Container.classList.add('hidden')
@@ -70,77 +114,154 @@ export default class Input extends Component {
 
 
 
-
-
-	#_form
+	/**
+	 * Mengambil objek Form yang terikat dengan input ini.
+	 * @type {Object}
+	 */
 	get Form() { return this.#_form }
+
+	/**
+	 * Mengikat input ini ke sebuah objek Form.
+	 * @param {Object} form - Objek form tujuan.
+	 */
 	bindForm(form) { this.#_form = form }
 
-	#_ineditmode = true
+
+	/**
+	 * Memeriksa apakah input berada dalam mode edit.
+	 * @type {boolean}
+	 */
 	get InEditMode() { return this.#_ineditmode }
+
+
+	/**
+	 * Mengubah status mode edit.
+	 * @param {boolean} ineditmode - Status mode edit baru.
+	 */
 	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
 	}
 
-	#invalidMessages = {}
-	get InvalidMessages() { return this.#invalidMessages }
+	/**
+	 * Mengambil daftar pesan error/invalid yang terdaftar.
+	 * @type {Object.<string, string>}
+	 */
+	get InvalidMessages() { return this.#_invalidMessages }
 
+
+
+	/**
+	 * Menambahkan atau mengubah pesan invalid spesifik.
+	 * @param {string} name - Nama validator (key).
+	 * @param {string} message - Pesan error yang ingin ditampilkan.
+	 */
 	setInvalidMessage(name, message) {
-		this.#invalidMessages[name] = message
+		this.#_invalidMessages[name] = message
 	}
 
+
+	/**
+	 * Membaca pesan validator dari atribut elemen HTML (internal).
+	 * @private
+	 */
 	_readValidators() {
 		let input = this.Element
 		var prefix = 'invalid-message'
 		Array.from(input.attributes).forEach(attr => {
 			if (attr.name.startsWith(prefix)) {
 				var key = attr.name === prefix ? "default" : attr.name.replace(`${prefix}-`, "");
-				this.#invalidMessages[key] = attr.value;
+				this.#_invalidMessages[key] = attr.value;
 			}
 		});
 		input_readValidators(this)
 	}
 
 
+	/**
+	 * Mengisi input dengan data baru.
+	 * @param {*} initialvalue - Nilai awal data.
+	 */
 	newData(initialvalue) {
 		input_newData(this, initialvalue)
 	}
 
+
+	/**
+	 * Menerima dan mengunci perubahan data saat ini.
+	 */
 	acceptChanges() {
 		input_acceptChanges(this)
 	}
 
+
+	/**
+	 * Mengembalikan nilai input ke data awal/sebelumnya (setelah terakhir di accept changes).
+	 */
 	reset() {
 		input_reset(this)
 	}
 
+
+	/**
+	 * Memeriksa apakah nilai input telah berubah dari nilai aslinya.
+	 * @returns {boolean} True jika data berubah.
+	 */
 	isChanged() {
 		return input_isChanged(this)
 	}
 
-	#lasterror
+
+	/**
+	 * Menyimpan pesan error terakhir (internal).
+	 * @param {string} msg - Pesan error.
+	 * @private
+	 */
 	_setLastError(msg) {
-		this.#lasterror = msg
+		this.#_lasterror = msg
 	}
 
+
+	/**
+	 * Mendapatkan pesan error terakhir yang terjadi.
+	 * @returns {string} Pesan error terakhir.
+	 */
 	getLastError() {
-		return this.#lasterror
+		return this.#_lasterror
 	}
 
+
+	/**
+	 * Menyetel pesan error pada komponen input.
+	 * @param {string} msg - Pesan error.
+	 */
 	setError(msg) {
 		input_setError(this, msg)
 	}
 
+
+	/**
+	 * Menyimpan nilai terakhir komponen (internal).
+	 * @param {*} v - Nilai input.
+	 * @private
+	 */
 	_setLastValue(v) {
 		input_setLastValue(this, v)
 	}
 
-	#lastvalue
+
+	/**
+	 * Mendapatkan nilai terakhir yang tersimpan dari komponen.
+	 * @returns {*} Nilai terakhir.
+	 */
 	getLastValue() {
 		return input_getLastValue(this)
 	}
 
 
+	/**
+	 * Mengambil nama attribute 'binding' dari elemen HTML input.
+	 * @returns {string|null} Nama binding atau null jika tidak ada.
+	 */
 	getBindingData() {
 		var binding = this.Element.getAttribute('binding')
 		if (binding === null) {
@@ -150,32 +271,70 @@ export default class Input extends Component {
 		}
 	}
 
+
+	/**
+	 * Melakukan validasi pada input ini berdasarkan validator yang terpasang.
+	 * @returns {boolean} True jika input valid.
+	 */
 	validate() {
 		// console.log(`Validating input '${this.Id}'`)
 		return input_validate(this)
 	}
 
-	#_validators = {}
+
+	/**
+	 * Mendapatkan daftar validator yang aktif pada input ini.
+	 * @type {Object}
+	 */
 	get Validators() { return this.#_validators }
+
+
+
+	/**
+	 * Menambahkan fungsi validator ke dalam input.
+	 * @param {string} fnName - Nama fungsi validator.
+	 * @param {*} fnParams - Parameter untuk fungsi validator.
+	 * @param {string} message - Pesan jika validasi gagal.
+	 */
 	addValidator(fnName, fnParams, message) {
 		this.#_validators[fnName] = {
 			param: fnParams,
 			message: message
 		}
 	}
+
+
+	/**
+	 * Menghapus validator tertentu berdasarkan namanya.
+	 * @param {string} str - Nama validator yang ingin dihapus.
+	 */
 	removeValidator(str) {
 		if (this.#_validators[str] !== undefined) {
 			delete this.#_validators[str]
 		}
 	}
+
+
+	/**
+	 * Menghapus semua validator yang terpasang.
+	 */
 	clearValidators() {
 		this.#_validators = {}
 	}
+
+
+	/**
+	 * Membaca ulang validator dari elemen HTML.
+	 */
 	readValidators() {
 		input_readValidators(this)
 	}
 
 
+	/**
+	 * Membuat dan menampilkan elemen deskripsi tambahan di bawah input (internal).
+	 * @private
+	 */
 	_setupDescription() {
 		var description = this.Element.getAttribute('description')
 		if (description !== null && description.trim() !== '') {
@@ -183,30 +342,66 @@ export default class Input extends Component {
 			const decrdiv = document.createElement('div')
 			decrdiv.classList.add('fgta5-entry-description')
 			decrdiv.innerHTML = description
+			decrdiv.setAttribute("title", description)
 			this.Nodes.Container.appendChild(decrdiv)
 		}
 	}
 
-	#isrequired = false
-	isRequired() { return this.#isrequired }
+
+
+	/**
+	 * Memeriksa apakah input ini wajib diisi (required).
+	 * @returns {boolean}
+	 */
+	isRequired() { return this.#_isrequired }
+
+
+
+	/**
+	 * Menandai input apakah wajib diisi atau tidak.
+	 * @param {boolean} r - True jika wajib diisi.
+	 */
 	markAsRequired(r) {
-		this.#isrequired = r
+		this.#_isrequired = r
 		input_markAsRequired(this, r)
 	}
 
 
+
+	/**
+	 * Menambahkan event listener ke input.
+	 * @param {string} evt - Nama event (misal: 'click', 'change').
+	 * @param {Function} callback - Fungsi yang dijalankan saat event terpicu.
+	 */
 	addEventListener(evt, callback) {
 		this.Listener.addEventListener(evt, callback)
 	}
 
 
-	#handlers = {}
-	get Handlers() { return this.#handlers }
+
+	/**
+	 * Mendapatkan daftar custom handler yang terdaftar.
+	 * @type {Object}
+	 */
+	get Handlers() { return this.#_handlers }
+
+
+	/**
+	 * Mendaftarkan fungsi handler kustom.
+	 * @param {string} name - Nama handler.
+	 * @param {Function} fn - Fungsi handler.
+	 */
 	handle(name, fn) {
-		this.#handlers[name] = fn
+		this.#_handlers[name] = fn
 	}
 
 
+
+	/**
+	 * Mengambil pesan error spesifik dari salah satu fungsi validasi.
+	 * @param {string} fnName - Nama fungsi validasi.
+	 * @returns {string|null} Pesan kesalahan atau null.
+	 */
 	getErrorValidation(fnName) {
 		return input_getErrorValidation(this, fnName)
 	}
@@ -214,6 +409,13 @@ export default class Input extends Component {
 
 }
 
+
+/**
+ * Menginisialisasi komponen input, membuat elemen DOM kontainer, 
+ * serta menyiapkan objek listener dan referensi node internal.
+ * @param {Object} self - Konteks atau instans dari objek `Input` yang sedang dikonstruksi.
+ * @param {string} id - ID unik yang digunakan untuk mengidentifikasi komponen.
+ */
 function input_construct(self, id) {
 	const container = document.createElement('div')
 	const lastvalue = document.createElement('input')
@@ -240,9 +442,13 @@ function input_construct(self, id) {
 }
 
 
-
+/**
+ * Menginisialisasi komponen input, membuat elemen DOM kontainer, 
+ * serta menyiapkan listener dan node internal.
+ * @param {Object} self - Instans atau konteks objek kelas `Input` yang sedang dikonstruksi.
+ * @param {string} id - ID komponen yang digunakan untuk identifikasi.
+ */
 function input_setError(self, msg) {
-
 
 	var errdiv = self.Nodes.Container.querySelector('.fgta5-entry-error')
 	if (msg !== null && msg !== '') {
@@ -255,7 +461,7 @@ function input_setError(self, msg) {
 			errdiv.classList.add('fgta5-entry-error')
 			self.Nodes.Container.insertBefore(errdiv, self.Nodes.InputWrapper.nextSibling)
 		}
-		errdiv.innerHTML = msg
+		errdiv.innerHTML = `<div>${msg}</div>`
 		self._setLastError(msg)
 	} else {
 		self.Nodes.Input.removeAttribute('invalid')
@@ -270,30 +476,66 @@ function input_setError(self, msg) {
 }
 
 
+/**
+ * Menyimpan suatu nilai ke dalam elemen input hidden (LastValue).
+ * @param {Object} self - Konteks objek `Input`.
+ * @param {string|number} v - Nilai yang akan disimpan sebagai nilai terakhir.
+ */
 function input_setLastValue(self, v) {
 	self.Nodes.LastValue.value = v
 }
 
+
+/**
+ * Mengambil nilai yang tersimpan dari elemen input hidden (LastValue).
+ * @param {Object} self - Konteks objek `Input`.
+ * @returns {string} Nilai terakhir yang tersimpan.
+ */
 function input_getLastValue(self) {
 	return self.Nodes.LastValue.value
 }
 
+
+/**
+ * Mengisi komponen dengan data baru dan langsung mengunci perubahan tersebut.
+ * @param {Object} self - Konteks objek `Input`.
+ * @param {string|number} initialvalue - Nilai awal baru yang akan dimasukkan.
+ */
 function input_newData(self, initialvalue) {
 	self.value = initialvalue
 	self.acceptChanges()
 }
 
+
+/**
+ * Menerima dan mengunci perubahan data saat ini, menyinkronkan nilai elemen input 
+ * ke dalam penyimpanan nilai terakhir, serta membersihkan status error dan indikator perubahan.
+ * @param {Object} self - Konteks objek `Input`.
+ */
 function input_acceptChanges(self) {
+	console.log('input_acceptChanges')
 	self._setLastValue(self.Nodes.Input.value)
 	self.Nodes.Input.removeAttribute('changed')
 	self.setError(null)
 }
 
+
+/**
+ * Mengembalikan nilai elemen input ke nilai terakhir yang tersimpan (membatalkan perubahan).
+ * @param {Object} self - Konteks objek `Input`.
+ */
 function input_reset(self) {
 	self.Nodes.Input.value = self.Nodes.LastValue.value
 	self.acceptChanges()
 }
 
+
+/**
+ * Memeriksa apakah nilai input telah berubah dengan membandingkan langsung 
+ * nilai pada elemen DOM LastValue dan Input (menghindari getter/setter komponen).
+ * @param {Object} self - Konteks objek `Input`.
+ * @returns {boolean} True jika nilai saat ini berbeda dengan nilai awal/terakhir yang disimpan.
+ */
 function input_isChanged(self) {
 	// bandingkan nilai last value dan input value
 	// bandingkan langsung dari nilai yang ada di element, jangan gunakan self.getLastValue dan self.value
@@ -307,6 +549,13 @@ function input_isChanged(self) {
 }
 
 
+/**
+ * Mengeksekusi fungsi validator tertentu dan mengembalikan objek Error jika validasi gagal.
+ * Fungsi ini juga menangani transformasi character-case dan penanganan khusus untuk Numberbox.
+ * @param {Object} self - Konteks objek `Input`.
+ * @param {string} fnName - Nama fungsi validator yang akan dieksekusi.
+ * @returns {Error|null} Objek Error jika tidak valid atau terjadi gangguan, atau null jika valid.
+ */
 function input_getErrorValidation(self, fnName) {
 	const validatorData = self.Validators[fnName]
 	const fnValidate = $validators[fnName] ?? $validators.getCustomValidator(fnName);
@@ -353,7 +602,12 @@ function input_getErrorValidation(self, fnName) {
 	}
 }
 
-
+/**
+ * Menjalankan seluruh proses validasi pada komponen input.
+ * Aturan 'required' akan diprioritaskan terlebih dahulu sebelum memeriksa validator lainnya.
+ * @param {Object} self - Konteks objek `Input`.
+ * @returns {boolean} True jika lolos seluruh validasi, atau false jika ada yang gagal.
+ */
 function input_validate(self) {
 	// prioritas untama untuk proses validasi adalah required
 	// jalankan validasi required dulu,
@@ -384,13 +638,23 @@ function input_validate(self) {
 	return true
 }
 
-
+/**
+ * Mengubah informasi waktu pada objek Date menjadi jam 00:00:00 (menghapus komponen waktu).
+ * @param {Date} dt - Objek tanggal yang akan dibersihkan waktunya.
+ */
 function clearTime(dt) {
 	dt.setHours(0)
 	dt.setMinutes(0)
 	dt.setSeconds(0)
 }
 
+
+
+/**
+ * Membaca atribut-atribut HTML pada elemen input (seperti minlength, maxlength, pattern, min, max, serta custom validator)
+ * dan mendaftarkannya ke dalam daftar validator komponen.
+ * @param {Object} self - Konteks objek `Input`.
+ */
 function input_readValidators(self) {
 	const cname = self.Nodes.Input.getAttribute('fgta5-component')
 	var attrname = ''
@@ -473,6 +737,13 @@ function input_readValidators(self) {
 }
 
 
+/**
+ * Memecah string definisi validator dengan format "namaFungsi:parameter" 
+ * menjadi objek nama fungsi dan parameternya (mendukung konversi otomatis ke tipe data Number).
+ * @param {Object} self - Konteks objek `Input`.
+ * @param {string} paramString - String teks validator yang akan diparsing (misal: "maxlength:10").
+ * @returns {{fnName: string, fnParams: (string|number|null)}} Objek berisi `fnName` (nama fungsi) dan `fnParams` (parameter).
+ */
 function parseFunctionParam(self, paramString) {
 	const [fnName, ...fnParams] = paramString.split(":");
 	const fnParamsString = fnParams.length > 0 ? fnParams.join(":") : null;
@@ -486,6 +757,13 @@ function parseFunctionParam(self, paramString) {
 }
 
 
+/**
+ * Mengatur status wajib diisi (required) pada komponen. 
+ * Fungsi ini akan menambahkan/menghapus atribut 'required' pada elemen Label dan Input, 
+ * serta mendaftarkan atau menghapus validator terkait.
+ * @param {Object} self - Konteks objek `Input`.
+ * @param {boolean} required - True jika ingin menandai input sebagai wajib diisi, false jika tidak.
+ */
 function input_markAsRequired(self, required) {
 	var attrname = 'required'
 	var label = self.Nodes.Label;
