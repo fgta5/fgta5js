@@ -5,18 +5,18 @@ export default class Component {
 	Id;
 	Element;
 
-	static get ACTION_SHOWMENU()  { return 'showmenu' }
+	static get ACTION_SHOWMENU() { return 'showmenu' }
 	static get ACTION_SHOWHOME() { return 'showhome' }
 	static get ACTION_APPLICATIONLOADED() { return 'applicationloaded' }
 
 	constructor(id) {
-		if (id==undefined) {
+		if (id == undefined) {
 			console.error('id component belum didefinisikan')
 		}
 
-		const el =  document.getElementById(id)
-		if (el==null) {
-			console.error(`element dengan id: '$id' tidak ditemukan di halaman`)
+		const el = document.getElementById(id)
+		if (el == null) {
+			console.error(`element dengan id: '${id}' tidak ditemukan di halaman`)
 		}
 
 		this.Id = id
@@ -32,7 +32,7 @@ export default class Component {
 	}
 
 	static sleep(ms) {
- 		return new Promise(resolve => setTimeout(resolve, ms))
+		return new Promise(resolve => setTimeout(resolve, ms))
 	}
 
 
@@ -40,7 +40,7 @@ export default class Component {
 		return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
 	}
 
-	static 	isInContainer() {
+	static isInContainer() {
 		return window.self !== window.top;
 	}
 
@@ -51,19 +51,19 @@ function comp_createSvgButton(svg, classname, fn_click) {
 	const btn = document.createElement('a')
 	btn.innerHTML = svg
 
-	if (classname!='' && classname !=null) {
+	if (classname != '' && classname != null) {
 		btn.classList.add(classname)
 	}
-	
+
 	btn.setAttribute('tabindex', '-1')
 	btn.setAttribute('href', 'javascript:void(0)')
 
 	if (typeof fn_click === 'function') {
-		btn.addEventListener('click', (evt)=>{
+		btn.addEventListener('click', (evt) => {
 			fn_click(evt)
 		})
 	}
-	
+
 
 	return btn
 }

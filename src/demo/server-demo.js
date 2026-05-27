@@ -20,11 +20,9 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // serve static files
+app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 app.use('/styles', express.static(path.join(__dirname, 'styles'))); // demo styles (first priority)
-app.use('/styles', express.static(path.join(__dirname, '../../styles'))); // lib styles
-app.use('/src', express.static(path.join(__dirname, '../../src')));
-app.use('/fonts', express.static(path.join(__dirname, '../../fonts')));
-app.use('/images', express.static(path.join(__dirname, '../../images')));
+
 
 app.get('/', (req, res) => {
 	res.render('index', {});

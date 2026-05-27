@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist && node version.js",
     "x-prebuild": "rimraf dist",
     "build": "rollup -c rollup-fgta5js.mjs",
-    "demo-server": "node ./src/demo/server.js"
+    "demo-server": "node ./src/demo/server-demo.js"
   },
   "author": "agung nugroho",
   "license": "ISC",

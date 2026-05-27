@@ -8,13 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<!-- Library styles (direct loading) -->
-	<link rel="stylesheet" href="styles/fgta5js-root.css" />
-	<link rel="stylesheet" href="styles/fgta5js-messagebox.css" />
-	<link rel="stylesheet" href="styles/fgta5js-modal.css" />
-	<link rel="stylesheet" href="styles/fgta5js-entry.css" />
-	<link rel="stylesheet" href="styles/fgta5js-checkbox.css" />
-	<link rel="stylesheet" href="styles/fgta5js-gridview.css" />
-	<link rel="stylesheet" href="styles/fgta5js-appmanager.css" />
+	<link rel="stylesheet" href="styles/fgta5js-v1.9.2.min.css" />
 
 	<!-- Core Demo stylesheet -->
 	<link rel="stylesheet" href="styles/demo.css" />
@@ -22,7 +16,7 @@
 
 <body>
 	<!-- Entry script for the library -->
-	<script type="module" src="./src/main.mjs"></script>
+	<script type="module" src="scripts/fgta5js-v1.9.2.min.js"></script>
 
 	<div class="container">
 		<!-- Back to Overview link -->
@@ -132,12 +126,9 @@
 						<!-- Disabled checkbox (styled inline nicely) -->
 						<div class="demo-input-field" field="obj_disabled"
 							style="justify-content: center; align-items: flex-start;">
-							<label for="obj_disabled"
-								style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem;">
-								<input id="obj_disabled" fgta5-component="Checkbox" type="checkbox"
-									binding="isdisabled">
-								Is Account Disabled
-							</label>
+							<label for="obj_disabled">Account Is Disabled</label>
+							<input id="obj_disabled" fgta5-component="Checkbox" type="checkbox" binding="isdisabled">
+
 						</div>
 
 						<!-- Alamat Input -->
@@ -207,7 +198,7 @@
 
 	<!-- Loader & Binding Modules -->
 	<script type="module">
-		import Page from './src/demo-form.mjs'
+		import Page from '/scripts/demoform.mjs'
 
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();
