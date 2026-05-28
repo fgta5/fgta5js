@@ -112,10 +112,11 @@
 
 
 								<div class="playground-controls">
-									<button id="btn_toggle_edit">Toggle Edit State</button>
-									<button id="btn_set_val">Set to "FERRINE"</button>
-									<button id="btn_focus">Focus Input</button>
-									<button id="btn_reset_last">Commit / Commit Save</button>
+									<button id="btn_toggle_edit" class="demo-button">Toggle Edit State</button>
+									<button id="btn_set_val" class="demo-button">Set to "FERRINE"</button>
+									<button id="btn_focus" class="demo-button">Focus Input</button>
+									<button id="btn_commit" class="demo-button">Commit / Save</button>
+									<button id="btn_reset" class="demo-button">Reset</button>
 								</div>
 							</div>
 
@@ -339,7 +340,13 @@
 				txt.focus();
 			});
 
-			document.getElementById('btn_reset_last').addEventListener('click', () => {
+
+			document.getElementById('btn_commit').addEventListener('click', () => {
+				form.acceptChanges()
+				updateStats();
+			})
+
+			document.getElementById('btn_reset').addEventListener('click', () => {
 				// Commit changes to set lastvalue equal to current value
 				form.reset()
 				updateStats();
