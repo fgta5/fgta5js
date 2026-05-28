@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Input Base Component (Abstract Class) — fgta5js Documentation</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Library styles: Production -->
+	<link rel="stylesheet" href="styles/fgta5js-v1.9.2.min.css" />
+
+	<!-- Core Demo stylesheet & Docs overrides -->
+	<link rel="stylesheet" href="styles/demo.css" />
+	<link rel="stylesheet" href="styles/documentation.css" />
+
+	<script>
+		window.$validators = {}
+	</script>
+</head>
+
+<body>
+	<!-- Register fgta5 global components namespace -->
+	<script type="module" src="scripts/fgta5js-v1.9.2.min.js"></script>
+
+	<div class="container">
+		<!-- Back link -->
+		<a href="/" class="back-link">
+			<svg viewBox="0 0 24 24">
+				<line x1="19" y1="12" x2="5" y2="12"></line>
+				<polyline points="12 19 5 12 12 5"></polyline>
+			</svg>
+			Back to Overview
+		</a>
+
+		<!-- Header -->
+		<header style="text-align: left; margin-bottom: 2.5rem;">
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Abstract Base Class
+			</div>
+			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Input</h1>
+			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+				The core abstract base class for all form input components in fgta5js. It implements state management,
+				validation hooks, change tracking, and UI interaction states.
+			</p>
+		</header>
+
+		<!-- Main Documentation Layout -->
+		<div class="doc-layout">
+			<!-- Sidebar -->
+			<aside class="doc-sidebar">
+				<div class="doc-nav-card">
+					<h4>Contents</h4>
+					<ul class="doc-nav-list">
+						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
+						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
+						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
+						<li class="doc-nav-item"><a href="#internal-fns">Internal Functions</a></li>
+					</ul>
+				</div>
+			</aside>
+
+			<!-- Content Area -->
+			<main class="doc-content">
+				<!-- Overview Section -->
+				<section id="overview" class="doc-section">
+					<h2>Overview</h2>
+					<p>
+						The <code>Input</code> class is an abstract class that extends <code>Component</code>. It serves
+						as the foundation for specific form controls such as <a
+							href="/textbox"><code>Textbox</code></a>, <a href="/numberbox"><code>Numberbox</code></a>,
+						<code>Datepicker</code>,
+						<code>Combobox</code>, and more.
+					</p>
+					<p>
+						Instead of handling low-level DOM states manually for every field, subclasses inherit a unified
+						state tracking pipeline that handles change detection (comparing current value against the last
+						accepted state value), edit mode lockouts, error state displays, and extensible validator
+						arrays.
+					</p>
+				</section>
+
+				<!-- Properties Section -->
+				<section id="properties" class="doc-section">
+					<h2>Properties</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Type</th>
+									<th>Access</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>type</code></td>
+									<td><code>String</code></td>
+									<td>Read-only</td>
+									<td>Returns the constructor name of the active class instance (e.g.,
+										<code>"Textbox"</code>).
+									</td>
+								</tr>
+								<tr>
+									<td><code>value</code></td>
+									<td><code>String | Number | Boolean</code></td>
+									<td>Read/Write</td>
+									<td>Gets or sets the raw element value directly from the underlying DOM element.
+									</td>
+								</tr>
+								<tr>
+									<td><code>disabled</code></td>
+									<td><code>Boolean</code></td>
+									<td>Read/Write</td>
+									<td>Gets or sets whether the component is disabled. Blocks modification and logs
+										warning if input is currently suspended.</td>
+								</tr>
+								<tr>
+									<td><code>placeholder</code></td>
+									<td><code>String</code></td>
+									<td>Read/Write</td>
+									<td>Gets or sets the HTML placeholder attribute of the input.</td>
+								</tr>
+								<tr>
+									<td><code>visible</code></td>
+									<td><code>Boolean</code></td>
+									<td>Read/Write</td>
+									<td>Gets or sets whether the wrapper container is hidden. (Toggles the CSS class
+										<code>"hidden"</code>).
+									</td>
+								</tr>
+								<tr>
+									<td><code>Form</code></td>
+									<td><code>Form</code></td>
+									<td>Read-only</td>
+									<td>Gets the bound <code>Form</code> instance if this control is registered inside a
+										parent Form.</td>
+								</tr>
+								<tr>
+									<td><code>InEditMode</code></td>
+									<td><code>Boolean</code></td>
+									<td>Read-only</td>
+									<td>Returns whether the input is in editable state. Change using
+										<code>setEditingMode(bool)</code>.
+									</td>
+								</tr>
+								<tr>
+									<td><code>InvalidMessages</code></td>
+									<td><code>Object.&lt;string, string&gt;</code></td>
+									<td>Read-only</td>
+									<td>Returns key-value mapping of validators and their respective fail messages.</td>
+								</tr>
+								<tr>
+									<td><code>Validators</code></td>
+									<td><code>Object</code></td>
+									<td>Read-only</td>
+									<td>Returns the object containing all currently configured validation rules.</td>
+								</tr>
+								<tr>
+									<td><code>Handlers</code></td>
+									<td><code>Object</code></td>
+									<td>Read-only</td>
+									<td>Returns registered custom event/behavior handlers.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Methods Section -->
+				<section id="methods" class="doc-section">
+					<h2>Methods</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Method</th>
+									<th>Arguments</th>
+									<th>Returns</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>constructor(id)</code></td>
+									<td><code>(id: String)</code></td>
+									<td><code>void</code></td>
+									<td>Initializes DOM structures, creates error wrappers, reads validation attributes,
+										and registers custom base listeners.</td>
+								</tr>
+								<tr>
+									<td><code>suspend(doSuspend, keepState)</code></td>
+									<td><code>(doSuspend: Boolean = true, keepState: Boolean = false)</code></td>
+									<td><code>void</code></td>
+									<td>Suspends input control. Disables UI interactions unless <code>keepState</code>
+										is true.</td>
+								</tr>
+								<tr>
+									<td><code>isSuspended()</code></td>
+									<td><code>()</code></td>
+									<td><code>Boolean</code></td>
+									<td>Checks if component is suspended.</td>
+								</tr>
+								<tr>
+									<td><code>bindForm(form)</code></td>
+									<td><code>(form: Form)</code></td>
+									<td><code>void</code></td>
+									<td>Tethers this component to a parent <code>Form</code> class instance.</td>
+								</tr>
+								<tr>
+									<td><code>setEditingMode(ineditmode)</code></td>
+									<td><code>(ineditmode: Boolean)</code></td>
+									<td><code>void</code></td>
+									<td>Sets editing mode. Standard inputs use this to add/remove <code>readonly</code>
+										attributes and reset validation errors.</td>
+								</tr>
+								<tr>
+									<td><code>setInvalidMessage(name, message)</code></td>
+									<td><code>(name: String, message: String)</code></td>
+									<td><code>void</code></td>
+									<td>Configures custom messages mapping to specific validator rules.</td>
+								</tr>
+								<tr>
+									<td><code>newData(initialvalue)</code></td>
+									<td><code>(initialvalue: Any)</code></td>
+									<td><code>void</code></td>
+									<td>Seeds the input with new default content, setting it as the clean baseline.</td>
+								</tr>
+								<tr>
+									<td><code>acceptChanges()</code></td>
+									<td><code>()</code></td>
+									<td><code>void</code></td>
+									<td>Saves the current value as the new baseline state and clears the modification
+										flags and error indicators.</td>
+								</tr>
+								<tr>
+									<td><code>reset()</code></td>
+									<td><code>()</code></td>
+									<td><code>void</code></td>
+									<td>Rolls back the input's current value to the last saved baseline state.</td>
+								</tr>
+								<tr>
+									<td><code>isChanged()</code></td>
+									<td><code>()</code></td>
+									<td><code>Boolean</code></td>
+									<td>Returns true if the current input value differs from the last saved state.</td>
+								</tr>
+								<tr>
+									<td><code>getLastError()</code></td>
+									<td><code>()</code></td>
+									<td><code>String | null</code></td>
+									<td>Returns the last error message set on this field, or null if it is valid.</td>
+								</tr>
+								<tr>
+									<td><code>setError(msg)</code></td>
+									<td><code>(msg: String | null)</code></td>
+									<td><code>void</code></td>
+									<td>Applies visual error boundaries on wrapper elements and appends/removes detailed
+										helper text.</td>
+								</tr>
+								<tr>
+									<td><code>getLastValue()</code></td>
+									<td><code>()</code></td>
+									<td><code>Any</code></td>
+									<td>Returns the baseline value.</td>
+								</tr>
+								<tr>
+									<td><code>getBindingData()</code></td>
+									<td><code>()</code></td>
+									<td><code>String | null</code></td>
+									<td>Reads the <code>binding</code> attribute from HTML input. Used to pair inputs to
+										specific data keys.</td>
+								</tr>
+								<tr>
+									<td><code>validate()</code></td>
+									<td><code>()</code></td>
+									<td><code>Boolean</code></td>
+									<td>Performs active rules check in order of priority (required first, followed by
+										other active validators).</td>
+								</tr>
+								<tr>
+									<td><code>addValidator(fnName, fnParams, message)</code></td>
+									<td><code>(fnName: String, fnParams: Any, message: String)</code></td>
+									<td><code>void</code></td>
+									<td>Appends a validation check structure (e.g. <code>minlength</code>,
+										<code>pattern</code>) to the validators stack.
+									</td>
+								</tr>
+								<tr>
+									<td><code>removeValidator(str)</code></td>
+									<td><code>(str: String)</code></td>
+									<td><code>void</code></td>
+									<td>Removes a specific rule by name.</td>
+								</tr>
+								<tr>
+									<td><code>clearValidators()</code></td>
+									<td><code>()</code></td>
+									<td><code>void</code></td>
+									<td>Clears the validation queue completely.</td>
+								</tr>
+								<tr>
+									<td><code>readValidators()</code></td>
+									<td><code>()</code></td>
+									<td><code>void</code></td>
+									<td>Reads attributes from DOM element to register validators.</td>
+								</tr>
+								<tr>
+									<td><code>isRequired()</code></td>
+									<td><code>()</code></td>
+									<td><code>Boolean</code></td>
+									<td>Checks if the field is flagged as required.</td>
+								</tr>
+								<tr>
+									<td><code>markAsRequired(r)</code></td>
+									<td><code>(r: Boolean)</code></td>
+									<td><code>void</code></td>
+									<td>Updates UI labels and internal validation status with asterisk indicator
+										classes.</td>
+								</tr>
+								<tr>
+									<td><code>addEventListener(evt, callback)</code></td>
+									<td><code>(evt: String, callback: Function)</code></td>
+									<td><code>void</code></td>
+									<td>Binds listeners to custom component states.</td>
+								</tr>
+								<tr>
+									<td><code>handle(name, fn)</code></td>
+									<td><code>(name: String, fn: Function)</code></td>
+									<td><code>void</code></td>
+									<td>Registers custom handler callbacks.</td>
+								</tr>
+								<tr>
+									<td><code>getErrorValidation(fnName)</code></td>
+									<td><code>(fnName: String)</code></td>
+									<td><code>Error | null</code></td>
+									<td>Runs a specific validator test against current input value. Returns error object
+										if it fails.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Internal Functions Section -->
+				<section id="internal-fns" class="doc-section">
+					<h2>Internal Functions</h2>
+					<p>These module-scoped helper functions perform low-level operations directly on the state objects,
+						avoiding standard getter/setter overrides from subclass overrides.</p>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Function</th>
+									<th>Arguments</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>input_construct</code></td>
+									<td><code>(self: Input, id: String)</code></td>
+									<td>Creates helper elements (such as container divs and hidden inputs to store the
+										baseline value) and sets up the listener instance.</td>
+								</tr>
+								<tr>
+									<td><code>input_setError</code></td>
+									<td><code>(self: Input, msg: String | null)</code></td>
+									<td>Manipulates DOM tree to inject error nodes below input wrappers and toggle the
+										<code>invalid</code> attributes.
+									</td>
+								</tr>
+								<tr>
+									<td><code>input_setLastValue</code></td>
+									<td><code>(self: Input, v: Any)</code></td>
+									<td>Stores a baseline string inside the hidden input element.</td>
+								</tr>
+								<tr>
+									<td><code>input_getLastValue</code></td>
+									<td><code>(self: Input)</code></td>
+									<td>Reads the baseline string from the hidden input.</td>
+								</tr>
+								<tr>
+									<td><code>input_newData</code></td>
+									<td><code>(self: Input, initialvalue: Any)</code></td>
+									<td>Updates value and locks changes immediately.</td>
+								</tr>
+								<tr>
+									<td><code>input_acceptChanges</code></td>
+									<td><code>(self: Input)</code></td>
+									<td>Synchronizes current value to last-saved element, clearing change styling.</td>
+								</tr>
+								<tr>
+									<td><code>input_reset</code></td>
+									<td><code>(self: Input)</code></td>
+									<td>Restores the input element to value stored inside the last-value element.</td>
+								</tr>
+								<tr>
+									<td><code>input_isChanged</code></td>
+									<td><code>(self: Input)</code></td>
+									<td>Compares current element value with baseline element value directly.</td>
+								</tr>
+								<tr>
+									<td><code>input_getErrorValidation</code></td>
+									<td><code>(self: Input, fnName: String)</code></td>
+									<td>Checks value against validation rules, applying uppercase/lowercase casting
+										where appropriate.</td>
+								</tr>
+								<tr>
+									<td><code>input_validate</code></td>
+									<td><code>(self: Input)</code></td>
+									<td>Runs full validation queue, setting error messages if validation fails.</td>
+								</tr>
+								<tr>
+									<td><code>input_readValidators</code></td>
+									<td><code>(self: Input)</code></td>
+									<td>Extracts validation attributes like <code>minlength</code>,
+										<code>maxlength</code>, <code>pattern</code>, <code>min</code>, <code>max</code>
+										from DOM.
+									</td>
+								</tr>
+								<tr>
+									<td><code>input_markAsRequired</code></td>
+									<td><code>(self: Input, required: Boolean)</code></td>
+									<td>Sets required attributes and registers/removes standard required validation
+										rule.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</main>
+		</div>
+
+		<!-- Footer -->
+		<footer>
+			<p class="footer-text">© 2026 fgta5js. Built with a core focus on performance and simplicity.</p>
+		</footer>
+	</div>
+</body>
+
+</html>

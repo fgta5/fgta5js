@@ -36,6 +36,11 @@ app.get('/form', (req, res) => {
 	res.render('demoform', {});
 });
 
+
+app.get('/input', (req, res) => {
+	res.render('doc-input', {});
+});
+
 app.get('/textbox', (req, res) => {
 	res.render('doc-textbox', {});
 });

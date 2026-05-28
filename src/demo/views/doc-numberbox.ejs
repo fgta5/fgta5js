@@ -31,7 +31,11 @@
 
 		<!-- Header -->
 		<header style="text-align: left; margin-bottom: 2.5rem;">
-			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem;">Numberbox</h1>
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Component
+			</div>
+			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Numberbox</h1>
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
 				A specialized numeric entry field class that supports thousands separator formatting, custom decimal
 				precision, constraints, and read-only mode state management.
@@ -60,6 +64,11 @@
 				<!-- Overview Section -->
 				<section id="overview" class="doc-section">
 					<h2>Overview</h2>
+					<div class="doc-callout">
+						<strong>Inheritance Notice:</strong> Class <code>Numberbox</code> inherits all of its core state
+						tracking, validation logic, editing mode configurations, and event handlers from the abstract
+						base class <a href="/input"><code>Input</code></a>.
+					</div>
 					<p>
 						The <code>Numberbox</code> class handles formatted number entries within the
 						<code>fgta5js</code> framework.
@@ -127,7 +136,8 @@
 				<section id="html-markup" class="doc-section">
 					<h2>HTML Markup</h2>
 					<p>Define numeric inputs in your markup. Set attributes like <code>precision</code>,
-						<code>min</code>, and <code>max</code> to control behavior.</p>
+						<code>min</code>, and <code>max</code> to control behavior.
+					</p>
 
 					<pre><code><span class="hl-comment">&lt;!-- Numeric Input with 2 Decimal Digits --&gt;</span>
 &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"demo-input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_score"</span>&gt;
@@ -159,7 +169,8 @@
 									<td><code>InEditMode</code></td>
 									<td><code>Boolean</code></td>
 									<td>Gets the current edit/readonly state of the component (Read-only). Set using
-										<code>setEditingMode()</code>.</td>
+										<code>setEditingMode()</code>.
+									</td>
 								</tr>
 								<tr>
 									<td><code>disabled</code></td>
@@ -257,7 +268,8 @@
 									<td><code>digitgrouping</code></td>
 									<td><code>"true" | "false"</code></td>
 									<td>Specifies whether thousands separators (commas) should be formatted. Default is
-										<code>"true"</code>.</td>
+										<code>"true"</code>.
+									</td>
 								</tr>
 								<tr>
 									<td><code>min</code></td>

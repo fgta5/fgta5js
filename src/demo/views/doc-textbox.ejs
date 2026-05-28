@@ -39,7 +39,11 @@
 
 		<!-- Header -->
 		<header style="text-align: left; margin-bottom: 2.5rem;">
-			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem;">Textbox</h1>
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Component
+			</div>
+			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Textbox</h1>
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
 				The base text entry field class supporting automatic casing, placeholder handling, validation, and
 				read-only mode state management.
@@ -68,6 +72,11 @@
 				<!-- Overview Section -->
 				<section id="overview" class="doc-section">
 					<h2>Overview</h2>
+					<div class="doc-callout">
+						<strong>Inheritance Notice:</strong> Class <code>Textbox</code> inherits all of its core state
+						tracking, validation logic, editing mode configurations, and event handlers from the abstract
+						base class <a href="/input"><code>Input</code></a>.
+					</div>
 					<p>
 						The <code>Textbox</code> class provides standard single-line and multi-line text input
 						capabilities within the <code>fgta5js</code> framework.
@@ -294,7 +303,6 @@
 			const txt = form.Inputs.playground_textbox
 
 			form.render()
-			// window.txt = txt; // Allow console debugging
 
 			// UI state update elements
 			const stateValue = document.getElementById('state_value');
@@ -316,8 +324,7 @@
 
 			// Setup button control listeners
 			document.getElementById('btn_toggle_edit').addEventListener('click', () => {
-				const ineditmode = txt.InEditMode
-				txt.setEditingMode(!ineditmode);
+				form.lock(txt.InEditMode)
 				updateStats();
 			});
 
@@ -334,7 +341,7 @@
 
 			document.getElementById('btn_reset_last').addEventListener('click', () => {
 				// Commit changes to set lastvalue equal to current value
-				txt._setLastValue(txt.value);
+				form.reset()
 				updateStats();
 			});
 

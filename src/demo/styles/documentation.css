@@ -258,3 +258,48 @@ pre code {
     gap: 1.5rem;
   }
 }
+
+/* Extra premium styling for playground buttons & state display */
+.playground-controls .demo-button {
+  transition: transform 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.playground-controls .demo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.12);
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+  color: var(--primary-light-text);
+}
+
+.playground-controls .demo-button:active {
+  transform: translateY(0);
+}
+
+/* Premium Alert / Callout Boxes */
+.doc-callout {
+  background: rgba(79, 70, 229, 0.05);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.925rem;
+  color: var(--text-secondary);
+}
+.doc-callout code {
+  background-color: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+}
+.doc-callout a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px dashed var(--primary);
+  transition: var(--transition-smooth);
+}
+.doc-callout a:hover {
+  color: var(--accent-purple);
+  border-bottom-color: var(--accent-purple);
+}
+
+
