@@ -94,17 +94,20 @@
 							<!-- Interactive Component instance -->
 							<div class="playground-left">
 								<div class="demo-input-field" field="playground_numberbox" style="flex: 1 1 100%;">
-									<label for="playground_numberbox">Score / Score Amount</label>
-									<input id="playground_numberbox" fgta5-component="Numberbox"
-										placeholder="Enter a number..." autocomplete="off" precision="2" min="10"
-										max="1000" required>
+									<form id="myform" locked="true">
+										<label for="playground_numberbox">Score / Score Amount</label>
+										<input id="playground_numberbox" fgta5-component="Numberbox"
+											placeholder="Enter a number..." autocomplete="off" precision="2" min="10"
+											max="1000" required>
+									</form>
 								</div>
 
 								<div class="playground-controls">
-									<button id="btn_toggle_edit">Toggle Edit State</button>
-									<button id="btn_set_val">Set to 250.75</button>
-									<button id="btn_focus">Focus Input</button>
-									<button id="btn_reset_last">Commit / Commit Save</button>
+									<button id="btn_toggle_edit" class="demo-button">Toggle Edit State</button>
+									<button id="btn_set_val" class="demo-button">Set to 250.75</button>
+									<button id="btn_focus" class="demo-button">Focus Input</button>
+									<button id="btn_commit" class="demo-button">Commit / Save</button>
+									<button id="btn_reset" class="demo-button">Reset</button>
 								</div>
 							</div>
 
@@ -139,11 +142,17 @@
 						<code>min</code>, and <code>max</code> to control behavior.
 					</p>
 
-					<pre><code><span class="hl-comment">&lt;!-- Numeric Input with 2 Decimal Digits --&gt;</span>
-&lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"demo-input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_score"</span>&gt;
-  &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_score"</span>&gt;Score&lt;/<span class="hl-tag">label</span>&gt;
-  &lt;<span class="hl-tag">input</span> <span class="hl-attr">id</span>=<span class="hl-string">"obj_score"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Numberbox"</span> <span class="hl-attr">precision</span>=<span class="hl-string">"2"</span> <span class="hl-attr">min</span>=<span class="hl-string">"0"</span> <span class="hl-attr">max</span>=<span class="hl-string">"100"</span> <span class="hl-attr">required</span>&gt;
-&lt;/<span class="hl-tag">div</span>&gt;</code></pre>
+					<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span>&gt;
+  <span class="hl-comment">&lt;!-- Numeric Input with 2 Decimal Digits --&gt;</span>
+  &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"demo-input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_score"</span>&gt;
+    &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_score"</span>&gt;Score&lt;/<span class="hl-tag">label</span>&gt;
+    &lt;<span class="hl-tag">input</span> <span class="hl-attr">id</span>=<span class="hl-string">"obj_score"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Numberbox"</span> <span class="hl-attr">precision</span>=<span class="hl-string">"2"</span> <span class="hl-attr">min</span>=<span class="hl-string">"0"</span> <span class="hl-attr">max</span>=<span class="hl-string">"100"</span> <span class="hl-attr">required</span>&gt;
+  &lt;/<span class="hl-tag">div</span>&gt;
+&lt;/<span class="hl-tag">form</span>&gt;</code></pre>
+
+					<p>Initialize and render the form in JavaScript:</p>
+					<pre><code><span class="hl-keyword">const</span> form = <span class="hl-keyword">new</span> <span class="hl-class">$fgta5.Form</span>(<span class="hl-string">'myform'</span>);
+form.<span class="hl-function">render</span>()</code></pre>
 				</section>
 
 				<!-- Properties Section -->
@@ -308,8 +317,10 @@
 	<script type="module">
 		window.addEventListener("load", async () => {
 			// Initialize component
-			const nmb = new $fgta5.Numberbox('playground_numberbox');
-			window.nmb = nmb; // Allow console debugging
+			const form = new $fgta5.Form('myform');
+			const nmb = form.Inputs.playground_numberbox
+
+			form.render()
 
 			// UI state update elements
 			const stateValue = document.getElementById('state_value');
@@ -319,9 +330,9 @@
 
 			// Sync status displays
 			const updateStats = () => {
-				stateValue.innerText = nmb.value;
+				stateValue.innerText = JSON.stringify(nmb.value);
 				stateEditMode.innerText = nmb.InEditMode ? "true" : "false";
-				stateLastValue.innerText = nmb.getLastValue();
+				stateLastValue.innerText = JSON.stringify(nmb.getLastValue());
 				stateIsChanged.innerText = nmb.isChanged() ? "true" : "false";
 			};
 
@@ -332,7 +343,7 @@
 
 			// Setup button control listeners
 			document.getElementById('btn_toggle_edit').addEventListener('click', () => {
-				nmb.setEditingMode(!nmb.InEditMode);
+				form.lock(nmb.InEditMode)
 				updateStats();
 			});
 
@@ -347,8 +358,13 @@
 				nmb.focus();
 			});
 
-			document.getElementById('btn_reset_last').addEventListener('click', () => {
-				nmb._setLastValue(nmb.value);
+			document.getElementById('btn_commit').addEventListener('click', () => {
+				form.acceptChanges()
+				updateStats();
+			});
+
+			document.getElementById('btn_reset').addEventListener('click', () => {
+				form.reset()
 				updateStats();
 			});
 
