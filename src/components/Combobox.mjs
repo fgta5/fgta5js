@@ -29,20 +29,43 @@ const ATTR_INDEX = 'data-index'
 
 const DEF_LIMIT = 30
 
+/**
+ * Kelas komponen Combobox yang mewarisi kelas base Input.
+ * Menyediakan dropdown pilihan dengan pencarian bertahap, pengambilan data dinamis, dan dialog pilihan.
+ * @extends Input
+ */
 export default class Combobox extends Input {
 
+	/**
+	 * Membuat instance dari Combobox.
+	 * @param {string} id - ID dari elemen input.
+	 */
 	constructor(id) {
 		super(id)
 		cbo_construct(this, id)
 	}
 
+	/**
+	 * Mendapatkan nilai (value/ID) yang sedang terpilih pada combobox.
+	 * @type {string}
+	 */
 	get value() { return cbo_getValue(this) }
 	set value(v) { throw Error('Value is readonly') }
 
+	/**
+	 * Mendapatkan teks tampilan yang sedang terpilih pada combobox.
+	 * @type {string}
+	 */
 	get text() { return cbo_getText(this) }
 	set text(v) { throw Error('Text is readonly') }
 
 	#suspended = false
+
+	/**
+	 * Menghentikan sementara (suspend) atau mengaktifkan kembali interaksi input.
+	 * @param {boolean} [doSuspend=true] - Status suspend yang diinginkan.
+	 * @param {boolean} [keepState=false] - Jika true, status disabled pada elemen HTML tidak diubah.
+	 */
 	suspend(doSuspend = true, keepState = false) {
 		this.#suspended = doSuspend
 		if (!keepState) {
@@ -52,18 +75,21 @@ export default class Combobox extends Input {
 				cbo_setDisabled(this, false)
 			}
 		}
-		// if (s) {
-		// 	this.Element.disabled = true
-		// 	cbo_setDisabled(this, true)
-		// }
-		// this.#suspended = s
 	}
 
+	/**
+	 * Memeriksa apakah combobox dalam status suspended.
+	 * @returns {boolean} True jika sedang suspended.
+	 */
 	isSuspended() {
 		return this.#suspended
 	}
 
 
+	/**
+	 * Mengambil atau mengatur status disabled pada combobox.
+	 * @type {boolean}
+	 */
 	get disabled() { return this.Element.disabled }
 	set disabled(disable) {
 		if (!disable && this.#suspended) {
@@ -77,42 +103,84 @@ export default class Combobox extends Input {
 
 
 	#_ineditmode = true
+
+	/**
+	 * Mendapatkan status apakah combobox sedang dalam mode edit.
+	 * @type {boolean}
+	 */
 	get InEditMode() { return this.#_ineditmode }
+
+	/**
+	 * Mengatur mode edit pada combobox.
+	 * @param {boolean} ineditmode - True untuk mengaktifkan mode edit, false untuk menonaktifkan.
+	 */
 	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
 		cbo_SetEditingMode(this, ineditmode)
 	}
 
+	/**
+	 * Mengatur atau mereset data baru untuk combobox.
+	 * @param {Object|string} initialdata - Data awal (dapat berupa objek dengan value dan text).
+	 */
 	newData(initialdata) {
 		cbo_newData(this, initialdata)
 	}
 
+	/**
+	 * Menerima dan mengunci perubahan data saat ini.
+	 */
 	acceptChanges() {
 		super.acceptChanges()
 		cbo_acceptChanges(this)
 	}
 
+	/**
+	 * Mereset nilai input ke nilai terakhir yang disimpan.
+	 */
 	reset() {
 		cbo_reset(this)
 	}
 
+	/**
+	 * Membersihkan nilai pilihan saat ini di combobox.
+	 */
 	clear() {
 		cbo_clear(this)
 	}
 
+	/**
+	 * Menyimpan nilai dan teks terakhir (internal).
+	 * @param {string} v - Nilai.
+	 * @param {string} t - Teks deskripsi.
+	 * @private
+	 */
 	_setLastValue(v, t) {
 		super._setLastValue(v)
 		cbo_setLastValue(this, v, t)
 	}
 
+	/**
+	 * Mendapatkan nilai terakhir yang disimpan dari combobox.
+	 * @returns {string} Nilai terakhir.
+	 */
 	getLastValue() {
 		return cbo_getLastValue(this)
 	}
 
+	/**
+	 * Mendapatkan teks deskripsi terakhir yang disimpan dari combobox.
+	 * @returns {string} Teks terakhir.
+	 */
 	getLastText() {
 		return cbo_getLastText(this)
 	}
 
+	/**
+	 * Menetapkan baris pilihan aktif secara langsung menggunakan value dan teks tampilan.
+	 * @param {string} value - Nilai.
+	 * @param {string} text - Teks tampilan.
+	 */
 	setSelected(value, text) {
 		if (value == null) {
 			text = ''
@@ -125,28 +193,61 @@ export default class Combobox extends Input {
 		cbo_setSelected(this, value, text)
 	}
 
+	/**
+	 * Mendapatkan informasi data display binding dari atribut HTML.
+	 * @returns {string|null} Nama field display.
+	 */
 	getDisplayBinding() {
 		return this.Nodes.Input.getAttribute('data-display')
 	}
 
+	/**
+	 * Menambahkan pilihan statis ke dalam daftar dropdown combobox.
+	 * @param {Array.<Object>} data - Daftar pilihan statis.
+	 */
 	addOptions(data) {
 		cbo_addOptions(this, data)
 	}
 
+	/**
+	 * Menetapkan ulang daftar pilihan statis pada dropdown combobox.
+	 * @param {Array.<Object>} data - Daftar pilihan statis baru.
+	 */
 	setOptions(data) {
 		cbo_setOptions(this, data)
 	}
 
 	#selectedChanged = false
+
+	/**
+	 * Menandai status perubahan pada combobox (internal).
+	 * @param {boolean} ischanged - Status perubahan.
+	 * @private
+	 */
 	_setSelectedChanged(ischanged) {
 		this.#selectedChanged = ischanged
 	}
+
+	/**
+	 * Memeriksa apakah pilihan combobox telah berubah.
+	 * @returns {boolean} True jika berubah.
+	 */
 	isSelectedChanged() {
 		return this.#selectedChanged
 	}
 
 	#iswaiting = false
+
+	/**
+	 * Memeriksa apakah combobox sedang dalam status menunggu/memuat data.
+	 * @returns {boolean} True jika menunggu.
+	 */
 	isWaiting() { return this.#iswaiting }
+
+	/**
+	 * Mengaktifkan atau menonaktifkan indikator menunggu pada combobox.
+	 * @param {boolean} [iswaiting=true] - Status menunggu.
+	 */
 	wait(iswaiting) {
 		this.#iswaiting = iswaiting === undefined ? true : iswaiting
 		cbo_wait(this, iswaiting)
@@ -161,6 +262,9 @@ export default class Combobox extends Input {
 
 
 
+	/**
+	 * Fokus ke elemen input display combobox.
+	 */
 	focus() {
 		this.Nodes.Display.focus()
 	}

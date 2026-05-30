@@ -9,23 +9,50 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 
+/**
+ * Kelas komponen Filebox yang mewarisi kelas base Input.
+ * Menyediakan dukungan input file kustom dengan preview nama file, tautan unduhan, dan validasi file wajib diisi.
+ * @extends Input
+ */
 export default class Filebox extends Input {
+	#_value = ''
+	#_suspended = false
+	#_ineditmode = true
+
+
+	/**
+	 * Membuat instance dari Filebox.
+	 * @param {string} id - ID dari elemen input.
+	 */
 	constructor(id) {
 		super(id)
 		flb_construct(this, id)
 	}
 
-	#value = ''
-	set value(v) { this.#value = v }
+
+	/**
+	 * Mengatur nama file.
+	 * @param {string} v - Nama file.
+	 */
+	set value(v) { this.#_value = v }
+
+	/**
+	 * Mendapatkan nama file saat ini.
+	 * @type {string}
+	 */
 	get value() {
 		if (this.Element.files.length === 0) {
-			return this.#value
+			return this.#_value
 		} else {
 			return this.Element.files[0].name
 		}
 	}
 
 
+	/**
+	 * Mendapatkan objek file mentah (File) yang terpilih.
+	 * @type {File|number}
+	 */
 	get file() {
 		if (this.Element.files.length === 0) {
 			return 0
@@ -35,9 +62,14 @@ export default class Filebox extends Input {
 	}
 
 
-	#suspended = false
+
+	/**
+	 * Menghentikan sementara (suspend) atau mengaktifkan kembali interaksi input.
+	 * @param {boolean} [doSuspend=true] - Status suspend yang diinginkan.
+	 * @param {boolean} [keepState=false] - Jika true, status disabled pada elemen HTML tidak diubah.
+	 */
 	suspend(doSuspend = true, keepState = false) {
-		this.#suspended = doSuspend
+		this.#_suspended = doSuspend
 		if (!keepState) {
 			if (doSuspend) {
 				flb_setDisabled(this, true)
@@ -45,23 +77,25 @@ export default class Filebox extends Input {
 				flb_setDisabled(this, false)
 			}
 		}
-
-		// if (s) {
-		// 	this.Element.disabled = true
-		// 	flb_setDisabled(this, true)
-		// }
-		// this.#suspended = s
 	}
 
+	/**
+	 * Memeriksa apakah filebox dalam status suspended.
+	 * @returns {boolean} True jika sedang suspended.
+	 */
 	isSuspended() {
-		return this.#suspended
+		return this.#_suspended
 	}
 
 
 
+	/**
+	 * Mengambil atau mengatur status disabled pada filebox.
+	 * @type {boolean}
+	 */
 	get disabled() { return this.Element.disabled }
 	set disabled(disable) {
-		if (!disable && this.#suspended) {
+		if (!disable && this.#_suspended) {
 			console.warn('suspended filebox cannot be enabled!', this.Id)
 			return
 		}
@@ -70,54 +104,101 @@ export default class Filebox extends Input {
 		flb_setDisabled(this, disable)
 	}
 
-	#_ineditmode = true
+
+	/**
+	 * Mendapatkan status apakah filebox sedang dalam mode edit.
+	 * @type {boolean}
+	 */
 	get InEditMode() { return this.#_ineditmode }
+
+	/**
+	 * Mengatur mode edit pada filebox.
+	 * @param {boolean} ineditmode - True untuk mengaktifkan mode edit, false untuk menonaktifkan.
+	 */
 	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
 		flb_setEditingMode(this, ineditmode)
 	}
 
+	/**
+	 * Mengatur data baru (membersihkan file terpilih).
+	 */
 	newData() {
 		flb_newData(this)
 	}
 
+	/**
+	 * Menerima dan mengunci perubahan file saat ini.
+	 */
 	acceptChanges() {
 		flb_acceptChanges(this)
 	}
 
+	/**
+	 * Mereset nilai input file ke nilai terakhir yang disimpan.
+	 */
 	reset() {
 		flb_Reset(this)
 	}
 
+	/**
+	 * Memeriksa apakah nilai filebox telah berubah.
+	 * @returns {boolean} True jika berubah.
+	 */
 	isChanged() {
 		return flb_isChanged(this)
 	}
 
+	/**
+	 * Menyetel pesan error pada komponen filebox.
+	 * @param {string} msg - Pesan error.
+	 */
 	setError(msg) {
 		super.setError(msg)
 		flb_setError(this, msg)
 	}
 
 
+	/**
+	 * Mengatur tampilan teks nama file di display.
+	 * @param {string} value - Nama file.
+	 */
 	setDisplay(value) {
 		flb_setDisplay(this, value)
 	}
 
 
+	/**
+	 * Mengonfigurasi tautan unduhan untuk file yang sudah diunggah sebelumnya.
+	 * @param {string} linktext - Teks tautan yang akan ditampilkan.
+	 * @param {string|Function} url - URL tujuan unduhan atau handler fungsi klik.
+	 */
 	setDownloadLink(linktext, url) {
 		flb_setDownloadLink(this, linktext, url)
 	}
 
+	/**
+	 * Melakukan proses validasi file (apabila required).
+	 * @returns {boolean} True jika valid.
+	 */
 	validate() {
 		return flb_validate(this)
 	}
 
+	/**
+	 * Fokus ke elemen input display filebox.
+	 */
 	focus() {
 		this.Nodes.Display.focus()
 	}
 }
 
 
+/**
+ * Memvalidasi apakah file telah dipilih (apabila required).
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @returns {boolean} True jika valid.
+ */
 function flb_validate(self) {
 	if (self.isRequired()) {
 		if (self.Nodes.Display.value == '') {
@@ -137,6 +218,12 @@ function flb_validate(self) {
 	}
 }
 
+/**
+ * Mengonfigurasi tautan download pada filebox.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @param {string} [linktext=null] - Teks link.
+ * @param {string|Function} [url=null] - URL link atau callback klik.
+ */
 function flb_setDownloadLink(self, linktext = null, url = null) {
 	const downloadLink = self.Nodes.DownloadLink
 
@@ -168,6 +255,11 @@ function flb_setDownloadLink(self, linktext = null, url = null) {
 }
 
 
+/**
+ * Membangun dan menginisialisasi elemen komponen Filebox.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @param {string} id - ID dari elemen input.
+ */
 function flb_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
@@ -295,11 +387,21 @@ function flb_construct(self, id) {
 
 }
 
+/**
+ * Mengatur tampilan teks nama file di display.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @param {string} value - Nama file.
+ */
 function flb_setDisplay(self, value) {
 	var display = self.Nodes.Display
 	display.value = value
 }
 
+/**
+ * Mengatur status disabled pada elemen display dan button.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @param {boolean} v - True jika disabled.
+ */
 function flb_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var button = self.Nodes.Button
@@ -313,6 +415,11 @@ function flb_setDisabled(self, v) {
 }
 
 
+/**
+ * Mengatur elemen input dan display berdasarkan status mode edit.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @param {boolean} ineditmode - True jika mode edit aktif.
+ */
 function flb_setEditingMode(self, ineditmode) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
@@ -331,6 +438,10 @@ function flb_setEditingMode(self, ineditmode) {
 }
 
 
+/**
+ * Menangani trigger perubahan internal dari elemen input file.
+ * @param {Object} self - Konteks objek `Filebox`.
+ */
 function flb_changed(self) {
 	var input = self.Nodes.Input
 
@@ -346,6 +457,10 @@ function flb_changed(self) {
 	}
 }
 
+/**
+ * Menandai komponen apakah mengalami perubahan.
+ * @param {Object} self - Konteks objek `Filebox`.
+ */
 function flb_markChanged(self) {
 	var display = self.Nodes.Display
 	if (self.value != self.getLastValue()) {
@@ -357,6 +472,11 @@ function flb_markChanged(self) {
 
 
 
+/**
+ * Menyetel tampilan atribut error.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @param {string} msg - Pesan error.
+ */
 function flb_setError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg !== null && msg !== '') {
@@ -366,6 +486,10 @@ function flb_setError(self, msg) {
 	}
 }
 
+/**
+ * Mengisi filebox dengan data baru (membersihkan pilihan).
+ * @param {Object} self - Konteks objek `Filebox`.
+ */
 function flb_newData(self) {
 	self.Nodes.Input.value = ''
 	self.Nodes.Display.value = ''
@@ -373,6 +497,10 @@ function flb_newData(self) {
 }
 
 
+/**
+ * Mereset nilai input file ke nilai terakhir yang disimpan.
+ * @param {Object} self - Konteks objek `Filebox`.
+ */
 function flb_Reset(self) {
 	// let newFileInput = self.Nodes.Input.cloneNode();
 	// newFileInput.addEventListener('change', (e)=>{
@@ -388,6 +516,10 @@ function flb_Reset(self) {
 	self.acceptChanges()
 }
 
+/**
+ * Mengunci perubahan saat ini pada filebox.
+ * @param {Object} self - Konteks objek `Filebox`.
+ */
 function flb_acceptChanges(self) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
@@ -403,6 +535,11 @@ function flb_acceptChanges(self) {
 }
 
 
+/**
+ * Memeriksa apakah nilai filebox telah berubah.
+ * @param {Object} self - Konteks objek `Filebox`.
+ * @returns {boolean} True jika berubah.
+ */
 function flb_isChanged(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	var currentvalue = self.value

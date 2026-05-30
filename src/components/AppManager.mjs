@@ -50,7 +50,16 @@ let current_drag_action
 let drop_valid = false
 let iconMenuUrl
 
+/**
+ * Kelas manager aplikasi (AppManager) yang mewarisi kelas base Component.
+ * Menangani siklus hidup sub-aplikasi di dalam iframe, navigasi menu, program favorit, profil pengguna, dan event handler utama.
+ * @extends Component
+ */
 export default class AppManager extends Component {
+	/**
+	 * Membuat instance dari AppManager.
+	 * @param {string} id - ID dari elemen manager aplikasi.
+	 */
 	constructor(id) {
 		super(id)
 		appmgr_construct(this)
@@ -61,52 +70,106 @@ export default class AppManager extends Component {
 	RootIcons
 
 	#modules = {}
+
+	/**
+	 * Mendapatkan daftar seluruh modul program yang terdaftar di sistem.
+	 * @type {Object.<string, Object>}
+	 */
 	get Modules() { return this.#modules }
 
 
 	#title
+
+	/**
+	 * Mendapatkan judul utama dari aplikasi saat ini.
+	 * @type {string}
+	 */
 	get Title() { return this.#title }
+
+	/**
+	 * Mengubah judul utama aplikasi dan judul pada tab browser.
+	 * @param {string} title - Judul aplikasi baru.
+	 */
 	setTitle(title) {
 		this.#title = title
 		appmgr_setTitle(this, title)
 	}
 
+	/**
+	 * Menyusun menu navigasi utama berdasarkan data konfigurasi menu.
+	 * @param {Array.<Object>} data - Struktur menu beserta group direktori dan program.
+	 */
 	setMenu(data) {
 		appmgr_setMenu(this, data)
 	}
 
+	/**
+	 * Mengubah gambar ikon tombol menu utama pada header aplikasi.
+	 * @param {string} url - URL path gambar ikon menu.
+	 */
 	setMenuIcon(url) {
 		appmgr_setMenuIcon(this, url)
 	}
 
+	/**
+	 * Menampilkan laci/menu navigasi utama di samping layar.
+	 */
 	showMenu() {
-		appmgr_showMenu(this)	
+		appmgr_showMenu(this)
 	}
 
-	
 
+
+	/**
+	 * Memuat daftar program favorit yang disimpan oleh pengguna ke halaman utama.
+	 * @param {Array.<string>} data - Daftar nama/ID modul program favorit.
+	 */
 	setFavourite(data) {
 		appmgr_setFavourite(this, data)
 	}
 
+	/**
+	 * Membuka program/modul baru ke dalam panel tampilan (iframe) utama.
+	 * @param {Object} module - Data modul target yang akan dibuka.
+	 */
 	async openModule(module) {
 		await appmgr_openModule(this, module)
 		appmgr_closeMenu(this)
 	}
 
 	#userdata
+
+	/**
+	 * Mendapatkan profil data pengguna yang sedang aktif saat ini.
+	 * @type {Object}
+	 */
 	get User() { return this.#userdata }
+
+	/**
+	 * Menyimpan profil dan menampilkan nama panggilan pengguna yang sedang aktif.
+	 * @param {Object} data - Objek profil pengguna berisi nama displayname, dll.
+	 */
 	setUser(data) {
 		this.#userdata = data
 		appmgr_setUser(this, data)
 	}
-	
 
+
+	/**
+	 * Menambahkan event listener kustom ke manager aplikasi.
+	 * @param {string} evt - Nama event (seperti 'logout', 'openingmodule', dsb).
+	 * @param {Function} callback - Callback handler event.
+	 */
 	addEventListener(evt, callback) {
 		this.Listener.addEventListener(evt, callback)
 	}
 }
 
+/**
+ * Mengubah ikon menu utama pada header aplikasi.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {string} url - URL ikon baru.
+ */
 function appmgr_setMenuIcon(self, url) {
 	const el = document.getElementById('fgta5-appmanager-btn-menu')
 	el.innerHTML = ''
@@ -115,21 +178,25 @@ function appmgr_setMenuIcon(self, url) {
 
 }
 
+/**
+ * Membangun struktur awal DOM elemen untuk header, nav, iframe-container, profil, dan sidebar menu.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_construct(self) {
 	console.log('constructiong application manager')
 
 	const title = document.createElement('span')
-	const main = self.Element  
+	const main = self.Element
 	const head = document.createElement('header')
 	const iframes = document.createElement('div')
 	const nav = document.createElement('nav')
 	const favourite = main.querySelector(`div[${ATTR_FAVOURITE}]`)
 	const trahsbox = document.createElement('div')
 	const currentuser = main.querySelector(`div[${ATTR_CURRENTUSER}]`)
-	const btnmenu = appmgr_createHeadButton(self, ICONS.MENU, ()=>{
+	const btnmenu = appmgr_createHeadButton(self, ICONS.MENU, () => {
 		appmgr_showMenu(self)
 	})
-	
+
 	main.after(head)
 	head.after(iframes)
 	iframes.after(nav)
@@ -145,8 +212,8 @@ function appmgr_construct(self) {
 	main.classList.add('fgta5-app-main')
 	nav.classList.add('fgta5-appmanager-nav')
 
-	const {Opened} = appmgr_createOpenedBoard(self, main)
-	const {MenuBoard, MenuFooter, ProfileButton, LogoutButton, MenuResetButton} = appmgr_createMenuBoard(self, nav)
+	const { Opened } = appmgr_createOpenedBoard(self, main)
+	const { MenuBoard, MenuFooter, ProfileButton, LogoutButton, MenuResetButton } = appmgr_createMenuBoard(self, nav)
 
 
 	self.Listener = new EventTarget()
@@ -159,7 +226,7 @@ function appmgr_construct(self) {
 		Opened: Opened,
 		Currentuser: currentuser,
 		MenuBoard: MenuBoard,
-		MenuFooter: MenuFooter, 
+		MenuFooter: MenuFooter,
 		ProfileButton: ProfileButton,
 		LogoutButton: LogoutButton,
 		MenuResetButton: MenuResetButton,
@@ -170,24 +237,28 @@ function appmgr_construct(self) {
 
 	window.applicationLoaded = (app) => {
 		const currentUrl = new URL(window.location.href);
-		if (iconMenuUrl!=null) {
+		if (iconMenuUrl != null) {
 			app.setMenuIcon(currentUrl.origin + iconMenuUrl)
 		}
 	}
 
 }
 
+/**
+ * Mendengarkan pesan postMessage dari sub-app yang berjalan di dalam iframe.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_listenMessage(self) {
 	window.addEventListener("message", (evt) => {
-		if (evt.data.action!=undefined) {
+		if (evt.data.action != undefined) {
 			var action = evt.data.action
-			if (action==Component.ACTION_SHOWMENU) {
+			if (action == Component.ACTION_SHOWMENU) {
 				appmgr_showMenu(self)
-			} else if (action==Component.ACTION_SHOWHOME) {
+			} else if (action == Component.ACTION_SHOWHOME) {
 				appmgr_showHome(self)
-			} else if (action==Component.ACTION_APPLICATIONLOADED) {
+			} else if (action == Component.ACTION_APPLICATIONLOADED) {
 				// applikasi client di iframe terbuka
-			} else if (action=='REDIRECT_TO_LOGIN') {
+			} else if (action == 'REDIRECT_TO_LOGIN') {
 				// ke halaman login
 				const nexturl = window.location.href // login dari container akan diredirect kembali ke container
 				const nextmodule = evt.data.nexturl // next url yang dikirim dari client adalah url untuk module
@@ -199,7 +270,7 @@ function appmgr_listenMessage(self) {
 
 
 	window.history.pushState(null, "", window.location.href);
-	window.addEventListener("popstate", function(evt) {
+	window.addEventListener("popstate", function (evt) {
 		evt.preventDefault()
 		window.history.pushState(null, "", window.location.href);
 	});
@@ -208,21 +279,39 @@ function appmgr_listenMessage(self) {
 
 
 
+/**
+ * Membuat elemen tombol kustom berbasis SVG pada area header.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {string} svg - String markup SVG.
+ * @param {Function} fn_click - Handler fungsi klik.
+ * @returns {HTMLButtonElement} Elemen tombol baru.
+ */
 function appmgr_createHeadButton(self, svg, fn_click) {
-	return Component.createSvgButton(svg, CLS_BUTTONHEAD, fn_click )
+	return Component.createSvgButton(svg, CLS_BUTTONHEAD, fn_click)
 }
 
+/**
+ * Menyimpan dan mengganti judul utama aplikasi pada header serta tab browser.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {string} title - String judul baru.
+ */
 function appmgr_setTitle(self, title) {
 	document.title = title
 	self.Nodes.Title.innerHTML = title
 }
 
 
+/**
+ * Membangun elemen DOM papan menu sidebar berisi pencarian modul, tombol profile, logout, dan home.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {HTMLElement} nav - Elemen wadah navigasi sidebar.
+ * @returns {Object} Referensi elemen-elemen kontrol menu.
+ */
 function appmgr_createMenuBoard(self, nav) {
 	const menuhead = document.createElement('div')
-	const btnmenureset = appmgr_createHeadButton(self, ICONS.MENU, ()=>{ appmgr_resetMenu(self) })
+	const btnmenureset = appmgr_createHeadButton(self, ICONS.MENU, () => { appmgr_resetMenu(self) })
 	const divcenter = document.createElement('div')
-	const btnclose = appmgr_createHeadButton(self, ICONS.CLOSE, ()=>{ appmgr_closeMenu(self) })
+	const btnclose = appmgr_createHeadButton(self, ICONS.CLOSE, () => { appmgr_closeMenu(self) })
 	const main = document.createElement('div')
 	const toppanel = document.createElement('div')
 	const toppanel_left = document.createElement('div')
@@ -231,13 +320,13 @@ function appmgr_createMenuBoard(self, nav) {
 	const txtsearch = document.createElement('input')
 	const btnsearch = document.createElement('button')
 	const btnlogout = document.createElement('a')
-	
-	
+
+
 	const menuboard = document.createElement('div')
 	const footer = document.createElement('div')
 	const divleft = document.createElement('div')
 
-	
+
 	// divleft untuk button reset
 	divleft.appendChild(btnmenureset)
 
@@ -261,12 +350,12 @@ function appmgr_createMenuBoard(self, nav) {
 	main.appendChild(toppanel)
 	main.appendChild(menuboard)
 	main.appendChild(footer)
-	main.addEventListener('scroll', ()=>{
-		 if (main.scrollTop > 10) {
+	main.addEventListener('scroll', () => {
+		if (main.scrollTop > 10) {
 			menuhead.classList.add('fgta5-fixheader-scrolled')
-		 } else {
+		} else {
 			menuhead.classList.remove('fgta5-fixheader-scrolled')
-		 }
+		}
 	})
 
 
@@ -278,16 +367,16 @@ function appmgr_createMenuBoard(self, nav) {
 
 
 	// home
-	const btnhome = Component.createSvgButton(ICONS.HOME, CLS_BUTTONMENU, ()=>{
+	const btnhome = Component.createSvgButton(ICONS.HOME, CLS_BUTTONMENU, () => {
 		appmgr_showHome(self)
 	})
 
 	// preference
-	const btnpreference = Component.createSvgButton(ICONS.SETTING, CLS_BUTTONMENU, ()=>{
+	const btnpreference = Component.createSvgButton(ICONS.SETTING, CLS_BUTTONMENU, () => {
 		appmgr_openPreference(self)
 	})
-	
-	
+
+
 	// search
 	const menusearch = document.createElement('div')
 	menusearch.classList.add('fgta5-menu-search')
@@ -297,15 +386,15 @@ function appmgr_createMenuBoard(self, nav) {
 	txtsearch.classList.add('fgta5-menu-search')
 	txtsearch.setAttribute('name', 'menusearch')
 	txtsearch.setAttribute('placeholder', 'search module')
-	txtsearch.addEventListener('keydown', (evt)=>{
-		if (evt.key=='Enter') {
+	txtsearch.addEventListener('keydown', (evt) => {
+		if (evt.key == 'Enter') {
 			appmgr_searchModule(self, txtsearch.value)
 		}
 	})
 
 	btnsearch.classList.add('fgta5-menu-search')
 	btnsearch.innerHTML = ICONS.SEARCH
-	btnsearch.addEventListener(EVT_CLICK, (evt)=>{
+	btnsearch.addEventListener(EVT_CLICK, (evt) => {
 		txtsearch.focus()
 		appmgr_searchModule(self, txtsearch.value)
 	})
@@ -314,13 +403,13 @@ function appmgr_createMenuBoard(self, nav) {
 	// user
 	const btnprofile = Component.createSvgButton(ICONS.USER, CLS_BUTTONMENU)
 	btnprofile.classList.add(CLS_HIDDEN)
-	
+
 
 	// toppanel content
 	toppanel_left.setAttribute(ATTR_GRIDAREA, 'left')
 	toppanel_left.appendChild(btnhome)
 	toppanel_left.appendChild(btnpreference)
-	
+
 	toppanel_center.setAttribute(ATTR_GRIDAREA, 'center')
 	toppanel_center.appendChild(menusearch)
 
@@ -352,9 +441,13 @@ function appmgr_createMenuBoard(self, nav) {
 		LogoutButton: btnlogout,
 		MenuResetButton: btnmenureset
 	}
-}	
+}
 
 
+/**
+ * Memunculkan sidebar menu navigasi utama.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_showMenu(self) {
 	console.log('show menu')
 	const nav = self.Nodes.Nav
@@ -362,17 +455,31 @@ function appmgr_showMenu(self) {
 	nav.setAttribute(ATTR_NAVSHOWED, '')
 }
 
+/**
+ * Menyembunyikan program yang terbuka dan kembali ke halaman beranda utama.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_showHome(self) {
 	appmgr_closeMenu(self)
 	self.Nodes.IFrames.classList.add(CLS_HIDDEN)
 }
 
+/**
+ * Menutup panel laci navigasi menu utama.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_closeMenu(self) {
 	const nav = self.Nodes.Nav
 	nav.removeAttribute(ATTR_NAVSHOWED)
 }
 
 
+/**
+ * Menangani respon event saat sub-aplikasi di dalam iframe telah selesai dimuat.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {HTMLIFrameElement} iframe - Elemen iframe sub-app.
+ * @param {Object} module - Objek konfigurasi modul yang dibuka.
+ */
 function appmgr_iframeLoaded(self, iframe, module) {
 	// client iframe kirim message ke parent window
 	// informasi bahwa client sudah selesai di load
@@ -408,6 +515,12 @@ function appmgr_iframeLoaded(self, iframe, module) {
 	appmgr_addOpenedModule(self, iframe, module)
 }
 
+/**
+ * Membuka kembali iframe sub-aplikasi yang sudah pernah dibuka sebelumnya (memunculkannya kembali).
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {HTMLIFrameElement} iframe - Elemen iframe target.
+ * @param {Object} module - Data modul.
+ */
 function appmgr_iframeReOpen(self, iframe, module) {
 	// tampilkan iframe
 	iframe.classList.remove(CLS_HIDDEN)
@@ -428,16 +541,21 @@ function appmgr_iframeReOpen(self, iframe, module) {
 
 
 
+/**
+ * Membuka program modul di dalam wadah iframe, melakukan proses otentikasi serta mematikan iframe program lainnya.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Object} module - Konfigurasi data program modul yang akan dibuka.
+ */
 async function appmgr_openModule(self, module) {
 	const iframes = self.Nodes.IFrames
 	const modulename = module.name
 
-	
+
 	console.log(module)
 
 	const qry = `iframe[${ATTR_MODULENAME}="${modulename}"]`
 	const ifr = iframes.querySelector(qry)
-	if (ifr==null) {
+	if (ifr == null) {
 		// buka iframe baru
 		const mask = $fgta5.Modal.createMask('Please wait...')
 
@@ -448,7 +566,7 @@ async function appmgr_openModule(self, module) {
 		newframe.classList.add('fgta5-iframe')
 		newframe.classList.add(CLS_HIDDEN)
 		newframe.setAttribute(ATTR_MODULENAME, modulename)
-		
+
 		newframe.onload = (evt) => {
 			appmgr_iframeLoaded(self, newframe, module)
 			newframe.classList.remove(CLS_HIDDEN)
@@ -456,7 +574,7 @@ async function appmgr_openModule(self, module) {
 		}
 
 		const needAuthMessage = 'authentication is needed to access resource'
-		fetch(url, {method: 'GET', credentials: 'include'})
+		fetch(url, { method: 'GET', credentials: 'include' })
 			.then(response => {
 				if (!response.ok) {
 					const err = new Error(`HTTP Error: ${response.status}`);
@@ -467,52 +585,57 @@ async function appmgr_openModule(self, module) {
 				iframes.appendChild(newframe)
 				self.Nodes.IFrames.classList.remove(CLS_HIDDEN)
 			}).catch(err => {
-				const errMessage = err.status==401 ? needAuthMessage : err.message
+				const errMessage = err.status == 401 ? needAuthMessage : err.message
 				console.error(errMessage)
 				$fgta5.MessageBox.error(errMessage)
 				mask.close()
 			});
-	} else {	
+	} else {
 		// tampilkan iframe
 		// hide semua iframe kecuali iframe yang akan dibuka
 		var frames = iframes.querySelectorAll('iframe')
 		for (var f of frames) {
 			var fname = f.getAttribute(ATTR_MODULENAME)
-			if (fname==modulename) {
+			if (fname == modulename) {
 				appmgr_iframeReOpen(self, f, module)
 			} else {
 				f.classList.add(CLS_HIDDEN)
 			}
-		} 
+		}
 		self.Nodes.IFrames.classList.remove(CLS_HIDDEN)
 	}
 }
 
 
-function appmgr_setFavourite(self, data)	 {
+/**
+ * Memuat dan menginisialisasi deretan shortcut program favorit pada area home.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Array.<string>} data - Daftar nama program favorit.
+ */
+function appmgr_setFavourite(self, data) {
 	// apakah div untuk favourite sudah didefinisikan
-	if (self.Nodes.Favourite==null) {
+	if (self.Nodes.Favourite == null) {
 		return
 	}
-	
+
 	const favourite = self.Nodes.Favourite
 	const title = document.createElement('div')
 	const trahscontainer = self.Nodes.TrashBox
 	const trashbox = document.createElement('div')
 	const trashicon = document.createElement('div')
 	const trashlabel = document.createElement('div')
-	
+
 	// <div class='fgta5-roundbox'>?</div>
 	title.innerHTML = `${TXT_FAVOURITE}&nbsp;&nbsp;&nbsp;&nbsp;`
 	title.classList.add('fgta5-appmanager-home-subtitle')
 
 	trashicon.setAttribute(ATTR_ICON, '')
 	trashicon.innerHTML = ICONS.TRASH
-	
+
 	trashicon.setAttribute(ATTR_LABEL, '')
 	trashlabel.innerHTML = 'Delete'
 
-	trashbox.setAttribute(ATTR_MAINBUTTON,'')
+	trashbox.setAttribute(ATTR_MAINBUTTON, '')
 	trashbox.appendChild(trashicon)
 	trashbox.appendChild(trashlabel)
 
@@ -525,13 +648,13 @@ function appmgr_setFavourite(self, data)	 {
 	favourite.before(title)
 	favourite.classList.add('fgta5-menu')
 	favourite.classList.add('fgta5-favourite')
-	favourite.addEventListener('dragover', (evt)=>{ appmgr_FavouriteDragOver(self, evt, favourite) })
-	favourite.addEventListener('dragleave', (evt)=>{ appmgr_FavouriteDragLeave(self, evt, favourite) })
-	favourite.addEventListener('drop', (evt)=>{ appmgr_FavouriteDrop(self, evt, favourite)  })
+	favourite.addEventListener('dragover', (evt) => { appmgr_FavouriteDragOver(self, evt, favourite) })
+	favourite.addEventListener('dragleave', (evt) => { appmgr_FavouriteDragLeave(self, evt, favourite) })
+	favourite.addEventListener('drop', (evt) => { appmgr_FavouriteDrop(self, evt, favourite) })
 
 	for (let modulename of data) {
 		let module = self.Modules[modulename]
-		if (module!=null) {
+		if (module != null) {
 			let mi = appmgr_createModuleIcon(self, module.data)
 			appmgr_setAsFavouriteIcon(self, mi, modulename, favourite)
 			favourite.appendChild(mi)
@@ -541,11 +664,17 @@ function appmgr_setFavourite(self, data)	 {
 
 
 
+/**
+ * Membuat elemen visual ikon program berserta event double-click/click untuk membukanya.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Object} module - Konfigurasi data modul program.
+ * @returns {HTMLDivElement} Elemen ikon program.
+ */
 function appmgr_createModuleIcon(self, module) {
 	const container = document.createElement('div')
 	const icon = document.createElement('div')
 	const text = document.createElement('div')
-	
+
 	container.setAttribute('name', module.name)
 	container.setAttribute(ATTR_MENUICONCONTAINER, '')
 	if (module.disabled) {
@@ -553,7 +682,7 @@ function appmgr_createModuleIcon(self, module) {
 	}
 
 	icon.setAttribute(ATTR_MENUICONIMAGE, '')
-	if (module.icon!=null) {
+	if (module.icon != null) {
 		icon.setAttribute(ATTR_MENUICONIMAGE, '')
 		icon.style.backgroundImage = `url('${module.icon}')`
 	} else {
@@ -569,10 +698,10 @@ function appmgr_createModuleIcon(self, module) {
 
 
 	const clickEventName = Component.isMobileDevice() ? EVT_CLICK : EVT_DBLCLICK;
-	icon.addEventListener(clickEventName, ()=>{
+	icon.addEventListener(clickEventName, () => {
 		self.openModule(module)
 		icon.style.animation = 'iconClicked 0.2s forwards'
-		setTimeout(()=>{
+		setTimeout(() => {
 			icon.style.animation = 'unset'
 			appmgr_closeMenu(self)
 		}, 300)
@@ -581,11 +710,17 @@ function appmgr_createModuleIcon(self, module) {
 }
 
 
+/**
+ * Membuat elemen visual ikon direktori/group program pada menu navigasi.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Object} group - Konfigurasi group menu.
+ * @returns {HTMLDivElement} Elemen group direktori.
+ */
 function appmgr_createGroupIcon(self, group) {
 	const container = document.createElement('div')
 	const icon = document.createElement('div')
 	const text = document.createElement('div')
-	
+
 	container.setAttribute(ATTR_MENUICONCONTAINER, '')
 	if (group.disabled) {
 		container.setAttribute('disabled', '')
@@ -593,7 +728,7 @@ function appmgr_createGroupIcon(self, group) {
 
 
 	icon.setAttribute(ATTR_MENUICONIMAGE, '')
-	if (group.icon!=null) {
+	if (group.icon != null) {
 		// tampilkan icon sesuai data
 		icon.style.backgroundImage = `url('${group.icon}')`
 	} else {
@@ -608,14 +743,14 @@ function appmgr_createGroupIcon(self, group) {
 	container.appendChild(icon)
 	container.appendChild(text)
 
-	icon.addEventListener(EVT_CLICK, ()=>{
+	icon.addEventListener(EVT_CLICK, () => {
 		icon.style.animation = 'iconClicked 0.4s forwards'
-		
-		setTimeout(()=>{
+
+		setTimeout(() => {
 			icon.style.animation = 'unset'
 		}, 400)
 
-		setTimeout(()=>{
+		setTimeout(() => {
 			appmgr_populateMenuIcons(self, group.icons, group.parent)
 		}, 200)
 	})
@@ -626,21 +761,36 @@ function appmgr_createGroupIcon(self, group) {
 }
 
 
+/**
+ * Menyiapkan menu navigasi root utama dan menampilkannya di sidebar.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Array.<Object>} data - Konfigurasi menu.
+ */
 function appmgr_setMenu(self, data) {
 	self.RootIcons = appmgr_readMenu(self, data)
 	appmgr_populateMenuIcons(self, self.RootIcons)
 }
 
 
+/**
+ * Mengembalikan tampilan menu navigasi ke menu root tingkat teratas.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_resetMenu(self) {
 	appmgr_populateMenuIcons(self, self.RootIcons)
 
 }
 
+/**
+ * Membaca rekursif konfigurasi data menu menjadi deretan elemen ikon modul/direktori.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Array.<Object>} data - Struktur menu.
+ * @returns {Array.<HTMLElement>} Array elemen ikon.
+ */
 function appmgr_readMenu(self, data) {
 	let icons = []
 	for (var node of data) {
-		if (node instanceof $fgta5.ModuleData || node.type=='program') {
+		if (node instanceof $fgta5.ModuleData || node.type == 'program') {
 			// module
 			let module = (node instanceof $fgta5.ModuleData) ? node : new $fgta5.ModuleData(node)
 			let mi = appmgr_createModuleIcon(self, module)
@@ -648,7 +798,7 @@ function appmgr_readMenu(self, data) {
 
 			// set keyword
 			var keyword
-			if (node.keyword!=null) {
+			if (node.keyword != null) {
 				keyword = `${node.name} : ${node.keyword}`
 			} else {
 				keyword = node.name
@@ -668,23 +818,29 @@ function appmgr_readMenu(self, data) {
 				icons: groupicons,
 				parent: icons
 			})
-			if (node.border!==false) {
+			if (node.border !== false) {
 				di.classList.add('fgta5-icongroup')
 			}
 			icons.push(di)
 		}
-		
+
 	}
 	return icons
 }
 
+/**
+ * Merender deretan elemen ikon baru ke dalam papan menu utama (dengan efek transisi).
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Array.<HTMLElement>} icons - Elemen ikon yang akan ditampilkan.
+ * @param {Array.<HTMLElement>} [parent] - Elemen menu level sebelumnya.
+ */
 function appmgr_populateMenuIcons(self, icons, parent) {
 	const menuboard = self.Nodes.MenuBoard
 	const menureset = self.Nodes.MenuResetButton
 
 	/* tambahkan back icon jika belum ada */
-	if (parent!=null) {
-		if (icons[0].isbackIcon!==true) {
+	if (parent != null) {
+		if (icons[0].isbackIcon !== true) {
 			var backicon = {
 				title: '',
 				icon: `data:image/svg+xml,${encodeURIComponent(ICONS.BACK)}`,
@@ -704,35 +860,40 @@ function appmgr_populateMenuIcons(self, icons, parent) {
 		menureset.classList.add(CLS_HIDDEN)
 
 	}
-	
+
 
 	menuboard.style.animation = "fadeOutLeft 0.05s forwards";
-	setTimeout(()=>{
+	setTimeout(() => {
 		menuboard.innerHTML = ''
 		menuboard.style.animation = "fadeInRight 0.3s forwards";
 		for (var icon of icons) {
 			menuboard.appendChild(icon)
 		}
 	}, 50)
-} 
+}
 
+/**
+ * Menyaring program modul berdasarkan pencocokan teks pencarian pada menu sidebar.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {string} searchtext - Teks pencarian program.
+ */
 async function appmgr_searchModule(self, searchtext) {
-	if (searchtext.trim()=='') {
-		if (self.previousSearch===undefined) {
-			self.previousSearch=''
+	if (searchtext.trim() == '') {
+		if (self.previousSearch === undefined) {
+			self.previousSearch = ''
 			return
 		}
 
-		if (searchtext==self.previousSearch) {
+		if (searchtext == self.previousSearch) {
 			return
 		}
 
-		self.previousSearch=''
+		self.previousSearch = ''
 		appmgr_resetMenu(self)
 		return
 	}
 
-	self.previousSearch=searchtext
+	self.previousSearch = searchtext
 
 	const menuboard = self.Nodes.MenuBoard
 	const modules = self.Modules
@@ -745,19 +906,24 @@ async function appmgr_searchModule(self, searchtext) {
 		if (moduleTitle.toLowerCase().includes(searchtext)) {
 			i++
 			var module = modules[modulename]
-			if (module!=null) {
+			if (module != null) {
 				var mi = appmgr_createModuleIcon(self, module.data)
 				mi.style.animation = 'dropped 0.3s forwards'
 				menuboard.appendChild(mi)
-				if (i<10) {
+				if (i < 10) {
 					await Component.sleep(100)
 				}
-				
+
 			}
 		}
 	}
 }
 
+/**
+ * Memasang data profil pengguna baru dan menampilkan menu logout serta profil user.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Object} data - Objek data pengguna.
+ */
 function appmgr_setUser(self, data) {
 	const btnprofile = self.Nodes.ProfileButton
 	const btnlogout = self.Nodes.LogoutButton
@@ -767,12 +933,12 @@ function appmgr_setUser(self, data) {
 
 	// munculkan profile icon
 	btnprofile.classList.remove(CLS_HIDDEN)
-	btnprofile.addEventListener(EVT_CLICK, (evt)=>{
+	btnprofile.addEventListener(EVT_CLICK, (evt) => {
 		appmgr_profileClick(self)
 	})
 
 
-	btnlogout.addEventListener(EVT_CLICK, (evt)=>{
+	btnlogout.addEventListener(EVT_CLICK, (evt) => {
 		appmgr_logout(self)
 	})
 	// munculkan nama di home
@@ -780,6 +946,10 @@ function appmgr_setUser(self, data) {
 
 }
 
+/**
+ * Menangani event klik tombol profil (memicu event eksternal 'openprofile').
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 function appmgr_profileClick(self) {
 	self.Listener.dispatchEvent(openProfileEvent({
 		detail: {
@@ -788,9 +958,13 @@ function appmgr_profileClick(self) {
 	}))
 }
 
+/**
+ * Membuka konfirmasi pop-up log-out lalu memicu event 'logout'.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 async function appmgr_logout(self) {
 	var ret = await $fgta5.MessageBox.confirm("are you sure to log out ?")
-	if (ret=='ok') {
+	if (ret == 'ok') {
 		self.Listener.dispatchEvent(logoutEvent({
 			detail: {
 				user: self.User,
@@ -799,6 +973,10 @@ async function appmgr_logout(self) {
 	}
 }
 
+/**
+ * Memicu event untuk membuka panel kustomisasi preferensi pengguna.
+ * @param {Object} self - Konteks objek `AppManager`.
+ */
 async function appmgr_openPreference(self) {
 	self.Listener.dispatchEvent(openPreferenceEvent({
 		detail: {
@@ -807,10 +985,16 @@ async function appmgr_openPreference(self) {
 	}))
 }
 
+/**
+ * Menyiapkan wadah visual untuk meletakkan pintasan (shortcut) program yang sedang terbuka.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {HTMLElement} main - Wadah utama area home.
+ * @returns {Object} Referensi elemen Opened.
+ */
 function appmgr_createOpenedBoard(self, main) {
 	const opened = main.querySelector(`div[${ATTR_OPENEDMODULE}]`)
 	const title = document.createElement('div')
-	
+
 
 	opened.classList.add('fgta5-openedmodule')
 
@@ -835,11 +1019,17 @@ function appmgr_createOpenedBoard(self, main) {
 	}
 }
 
+/**
+ * Menambahkan atau menggeser posisi pintasan program yang sedang aktif terbuka ke awal daftar.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {HTMLIFrameElement} iframe - Frame target sub-app.
+ * @param {Object} module - Data modul sub-app.
+ */
 function appmgr_addOpenedModule(self, iframe, module) {
 	const opened = self.Nodes.Opened
 	const id = `${C_SHORTCUT_PREFIX}-${module.name}`
 	const shortcut = document.getElementById(id)
-	if (shortcut==null) {
+	if (shortcut == null) {
 		// tambahkan di awal
 		const newshortcut = appmgr_createOpenedShortcut(self, module, iframe, id)
 		opened.prepend(newshortcut)
@@ -852,10 +1042,18 @@ function appmgr_addOpenedModule(self, iframe, module) {
 }
 
 
+/**
+ * Membuat elemen visual kartu pintasan untuk program yang aktif dengan opsi tombol tutup program.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {Object} module - Konfigurasi data modul program.
+ * @param {HTMLIFrameElement} iframe - Frame terkait sub-app.
+ * @param {string} id - ID string unik pintasan.
+ * @returns {HTMLDivElement} Elemen pintasan program terbuka.
+ */
 function appmgr_createOpenedShortcut(self, module, iframe, id) {
 	const opened = self.Nodes.Opened
 	const shortcut = document.createElement('div')
-	const icon = document.createElement('div') 
+	const icon = document.createElement('div')
 	const title = document.createElement('div')
 	const info = document.createElement('div')
 	const closebutton = document.createElement('a')
@@ -869,30 +1067,30 @@ function appmgr_createOpenedShortcut(self, module, iframe, id) {
 	shortcut.appendChild(info)
 	shortcut.appendChild(closebutton)
 
-	shortcut.addEventListener(clickEventName, async (evt)=>{ await appmgr_openModule(self, module) })
-	shortcut.addEventListener(EVT_DRAGSTART, (evt)=>{ appmgr_DragModule(self, evt, module) })
+	shortcut.addEventListener(clickEventName, async (evt) => { await appmgr_openModule(self, module) })
+	shortcut.addEventListener(EVT_DRAGSTART, (evt) => { appmgr_DragModule(self, evt, module) })
 
 
 	icon.setAttribute(ATTR_SHORTCUT_ICON, '')
-	if (module.icon!=null) {
+	if (module.icon != null) {
 		icon.style.backgroundImage = `url('${module.icon}')`
 	} else {
 		icon.innerHTML = ModuleData.ICON_DEFAULT
 	}
 
-	title.setAttribute(ATTR_SHORTCUT_TITLE, '')	
+	title.setAttribute(ATTR_SHORTCUT_TITLE, '')
 	title.innerHTML = module.title
 
 	info.setAttribute(ATTR_SHORTCUT_INFO, '')
 	info.innerHTML = 'idle'
 
 
-	var btn = Component.createSvgButton(ICONS.CLOSE, CLS_SHORTCUTBUTTONCLOSE, (evt)=>{
+	var btn = Component.createSvgButton(ICONS.CLOSE, CLS_SHORTCUTBUTTONCLOSE, (evt) => {
 		evt.stopPropagation()
 		iframe.remove()
 		shortcut.remove()
 
-		if (opened.childNodes.length==0) {
+		if (opened.childNodes.length == 0) {
 			opened.hide()
 		}
 	})
@@ -903,44 +1101,68 @@ function appmgr_createOpenedShortcut(self, module, iframe, id) {
 	return shortcut
 }
 
+/**
+ * Menyimpan nama modul yang sedang ditarik (drag-start) untuk ditambahkan ke favorit.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {DragEvent} evt - Event drag-start.
+ * @param {Object} module - Modul data yang didrag.
+ */
 function appmgr_DragModule(self, evt, module) {
 	current_drag_action = 'addtofave'
 	evt.dataTransfer.setData('modulename', module.name);
 	current_dragged_modulename = module.name
 }
 
+/**
+ * Membatasi drag-over hanya jika modul yang didrag belum ada di dalam daftar favorit.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {DragEvent} evt - Event drag-over.
+ * @param {HTMLElement} favourite - Wadah favorit.
+ */
 function appmgr_FavouriteDragOver(self, evt, favourite) {
-	if (current_drag_action=='addtofave') {
+	if (current_drag_action == 'addtofave') {
 		var exist = favourite.querySelector(`[name="${current_dragged_modulename}"]`)
-		if (exist==null) {
+		if (exist == null) {
 			evt.preventDefault()
 			favourite.setAttribute(ATTR_DRAGOVER, '')
 		}
-	} 
+	}
 	// else if (current_drag_action=='removefromfave') {
 	// 	favourite.setAttribute(ATTR_DRAGOVER, '')
 	// }
 
 }
 
+/**
+ * Membersihkan styling drag-over dari wadah favorit saat kursor meninggalkan area.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {DragEvent} evt - Event drag-leave.
+ * @param {HTMLElement} favourite - Wadah favorit.
+ */
 function appmgr_FavouriteDragLeave(self, evt, favourite) {
 	favourite.removeAttribute(ATTR_DRAGOVER)
 }
 
+/**
+ * Menangani event drop modul ke dalam daftar program favorit.
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {DragEvent} evt - Event drop.
+ * @param {HTMLElement} favourite - Wadah favorit.
+ */
 function appmgr_FavouriteDrop(self, evt, favourite) {
 	favourite.removeAttribute(ATTR_DRAGOVER)
 
 	const modulename = evt.dataTransfer.getData('modulename');
-	if (modulename=='') {
+	if (modulename == '') {
 		return
 	}
 
 
 	var exist = favourite.querySelector(`[name="${modulename}"]`)
-	if (exist==null) {
+	if (exist == null) {
 		evt.preventDefault()
 		const module = self.Modules[modulename]
-		if (module==null) {
+		if (module == null) {
 			return
 		}
 
@@ -955,51 +1177,58 @@ function appmgr_FavouriteDrop(self, evt, favourite) {
 	}
 }
 
+/**
+ * Mengaktifkan kemampuan drag-and-drop pada icon favorit agar dapat ditarik ke keranjang sampah (delete).
+ * @param {Object} self - Konteks objek `AppManager`.
+ * @param {HTMLElement} mi - Elemen visual ikon modul.
+ * @param {string} modulename - Nama program modul.
+ * @param {HTMLElement} favourite - Wadah favorit.
+ */
 function appmgr_setAsFavouriteIcon(self, mi, modulename, favourite) {
 	const trahsbox = self.Nodes.TrashBox
 	const trashbutton = trahsbox.querySelector(`[${ATTR_MAINBUTTON}]`)
 
 	mi.setAttribute(ATTR_DRAGGABLE, 'true')
-	mi.addEventListener(EVT_DRAGSTART, (evt)=>{
+	mi.addEventListener(EVT_DRAGSTART, (evt) => {
 		drop_valid = false
 		current_drag_action = 'removefromfave'
 		evt.dataTransfer.setData('modulename', modulename);
 		trahsbox.classList.remove(CLS_HIDDEN)
 	})
 
-	mi.addEventListener('dragend', (evt)=>{
-		setTimeout(()=>{
+	mi.addEventListener('dragend', (evt) => {
+		setTimeout(() => {
 			trahsbox.classList.add(CLS_HIDDEN)
 			trashbutton.removeAttribute(ATTR_DRAGOVER)
 		}, 100)
 	})
-	
 
-	trashbutton.addEventListener('dragover', (evt)=>{
-		if (current_drag_action=='removefromfave') {
+
+	trashbutton.addEventListener('dragover', (evt) => {
+		if (current_drag_action == 'removefromfave') {
 			evt.preventDefault()
 			trashbutton.setAttribute(ATTR_DRAGOVER, '')
 		}
 	})
 
-	trashbutton.addEventListener('dragleave', (evt)=>{
+	trashbutton.addEventListener('dragleave', (evt) => {
 		trashbutton.removeAttribute(ATTR_DRAGOVER)
 	})
 
-	trashbutton.addEventListener('drop', (evt)=>{
-		if (current_drag_action=='removefromfave') {
+	trashbutton.addEventListener('drop', (evt) => {
+		if (current_drag_action == 'removefromfave') {
 			const modulename = evt.dataTransfer.getData('modulename');
-			if (modulename=='') {
+			if (modulename == '') {
 				return
 			}
 
 			var icon = favourite.querySelector(`[name="${modulename}"]`)
-			if (icon!=null) {
+			if (icon != null) {
 				icon.style.animation = 'removing 0.3s forwards'
-				setTimeout(()=>{
+				setTimeout(() => {
 					icon.remove()
 				}, 300)
-				
+
 				self.Listener.dispatchEvent(removeFromFavouriteEvent({
 					detail: {
 						modulename: modulename,
@@ -1009,6 +1238,5 @@ function appmgr_setAsFavouriteIcon(self, mi, modulename, favourite) {
 			evt.preventDefault()
 			current_drag_action = ''
 		}
-	})	
+	})
 }
-

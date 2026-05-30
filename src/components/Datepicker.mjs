@@ -19,17 +19,43 @@ const button_icon = `<svg transform="translate(0 3)" width="12" height="12" stro
 const ChangeEvent = (data) => { return new CustomEvent('changed', data) }
 
 
+/**
+ * Kelas komponen Datepicker yang mewarisi kelas base Input.
+ * Menyediakan dukungan input tanggal menggunakan calendar picker dengan pemformatan tampilan lokal.
+ * @extends Input
+ */
 export default class Datepicker extends Input {
+	#_suspended = false
+	#_ineditmode = true
 
+
+
+	/**
+	 * Membuat instance dari Datepicker.
+	 * @param {string} id - ID dari elemen input.
+	 */
 	constructor(id) {
 		super(id)
 		dtp_construct(this, id)
 	}
 
+	/**
+	 * Mendapatkan nilai ISO date saat ini (YYYY-MM-DD) dari datepicker.
+	 * @type {string}
+	 */
 	get value() { return dtp_getValue(this) }
+
+	/**
+	 * Mengatur nilai datepicker.
+	 * @param {string|Date} v - Nilai tanggal baru.
+	 */
 	set value(v) { dtp_setValue(this, v) }
 
 
+	/**
+	 * Mendapatkan batas minimal tanggal yang valid.
+	 * @type {Date|null}
+	 */
 	get min() {
 		if (this.Element.min != "") {
 			var dt = new Date(this.Element.min);
@@ -38,6 +64,11 @@ export default class Datepicker extends Input {
 			return null
 		}
 	}
+
+	/**
+	 * Mengatur batas minimal tanggal yang valid.
+	 * @param {Date|string} v - Tanggal minimal.
+	 */
 	set min(v) {
 		if (v instanceof Date) {
 			this.Element.min = v.toISOString().split("T")[0]
@@ -46,6 +77,10 @@ export default class Datepicker extends Input {
 		}
 	}
 
+	/**
+	 * Mendapatkan batas maksimal tanggal yang valid.
+	 * @type {Date|null}
+	 */
 	get max() {
 		if (this.Element.max != "") {
 			var dt = new Date(this.Element.max);
@@ -54,6 +89,11 @@ export default class Datepicker extends Input {
 			return null
 		}
 	}
+
+	/**
+	 * Mengatur batas maksimal tanggal yang valid.
+	 * @param {Date|string} v - Tanggal maksimal.
+	 */
 	set max(v) {
 		if (v instanceof Date) {
 			this.Element.max = v.toISOString().split("T")[0]
@@ -64,9 +104,14 @@ export default class Datepicker extends Input {
 
 
 
-	#suspended = false
+
+	/**
+	 * Menghentikan sementara (suspend) atau mengaktifkan kembali interaksi input.
+	 * @param {boolean} [doSuspend=true] - Status suspend yang diinginkan.
+	 * @param {boolean} [keepState=false] - Jika true, status disabled pada elemen HTML tidak diubah.
+	 */
 	suspend(doSuspend = true, keepState = false) {
-		this.#suspended = doSuspend
+		this.#_suspended = doSuspend
 		if (!keepState) {
 			if (doSuspend) {
 				dtp_setDisabled(this, true)
@@ -74,23 +119,25 @@ export default class Datepicker extends Input {
 				dtp_setDisabled(this, false)
 			}
 		}
-
-		// if (s) {
-		// 	this.Element.disabled = true
-		// 	dtp_setDisabled(this, true)
-		// } 
-		// this.#suspended = s
 	}
 
+	/**
+	 * Memeriksa apakah datepicker dalam status suspended.
+	 * @returns {boolean} True jika sedang suspended.
+	 */
 	isSuspended() {
-		return this.#suspended
+		return this.#_suspended
 	}
 
 
 
+	/**
+	 * Mengambil atau mengatur status disabled pada elemen.
+	 * @type {boolean}
+	 */
 	get disabled() { return this.Element.disabled }
 	set disabled(disable) {
-		if (!disable && this.#suspended) {
+		if (!disable && this.#_suspended) {
 			console.warn('suspended datepicker cannot be enabled!', this.Id)
 			return
 		}
@@ -100,8 +147,17 @@ export default class Datepicker extends Input {
 	}
 
 
-	#_ineditmode = true
+
+	/**
+	 * Mendapatkan status apakah datepicker sedang dalam mode edit.
+	 * @type {boolean}
+	 */
 	get InEditMode() { return this.#_ineditmode }
+
+	/**
+	 * Mengatur mode edit pada datepicker.
+	 * @param {boolean} ineditmode - True untuk mengaktifkan mode edit, false untuk menonaktifkan.
+	 */
 	setEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
 		dtp_setEditingMode(this, ineditmode)
@@ -110,6 +166,10 @@ export default class Datepicker extends Input {
 
 
 
+	/**
+	 * Mengatur atau mereset data baru untuk datepicker.
+	 * @param {string} initialvalue - Nilai awal untuk datepicker.
+	 */
 	newData(initialvalue) {
 		if (initialvalue === undefined || initialvalue === null) {
 			initialvalue = ''
@@ -118,32 +178,54 @@ export default class Datepicker extends Input {
 		dtp_Newdata(this, initialvalue)
 	}
 
+	/**
+	 * Menerima dan mengunci perubahan data saat ini.
+	 */
 	acceptChanges() {
 		super.acceptChanges()
 		dtp_acceptChanges(this)
 
 	}
 
+	/**
+	 * Mereset nilai input ke nilai terakhir yang disimpan.
+	 */
 	reset() {
 		super.reset()
 		dtp_reset(this)
 	}
 
+	/**
+	 * Menyetel pesan error pada komponen datepicker.
+	 * @param {string} msg - Pesan error.
+	 */
 	setError(msg) {
 		super.setError(msg)
 		dtp_setError(this, msg)
 	}
 
+	/**
+	 * Mendapatkan nilai tanggal terakhir yang disimpan.
+	 * @returns {string|null} Nilai terakhir (ISO date string).
+	 */
 	getLastValue() {
 		return dtp_getLastValue(this)
 	}
 
 
+	/**
+	 * Fokus ke elemen input display datepicker.
+	 */
 	focus() {
 		this.Nodes.Display.focus()
 	}
 }
 
+/**
+ * Membangun dan menginisialisasi elemen komponen Datepicker.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {string} id - ID dari elemen input.
+ */
 function dtp_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
@@ -309,6 +391,11 @@ function dtp_construct(self, id) {
 
 
 
+/**
+ * Mengatur status disabled pada elemen display, inputwrapper, dan button.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {boolean} v - True jika disabled.
+ */
 function dtp_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var inputwrap = self.Nodes.InputWrapper
@@ -326,6 +413,11 @@ function dtp_setDisabled(self, v) {
 }
 
 
+/**
+ * Mengatur elemen UI berdasarkan status mode edit.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {boolean} ineditmode - True jika mode edit aktif.
+ */
 function dtp_setEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 	var input = self.Nodes.Input
@@ -345,6 +437,11 @@ function dtp_setEditingMode(self, ineditmode) {
 }
 
 
+/**
+ * Mendapatkan nilai ISO date string saat ini.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @returns {string|null} Nilai tanggal (ISO).
+ */
 function dtp_getValue(self) {
 	if (self.Nodes.Input.value == '') {
 		return null
@@ -354,10 +451,20 @@ function dtp_getValue(self) {
 }
 
 
+/**
+ * Mendapatkan representasi string ISO dari objek tanggal.
+ * @param {Date} d - Objek tanggal.
+ * @returns {string} String format YYYY-MM-DD.
+ */
 function getIsoString(d) {
 	return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
 };
 
+/**
+ * Mengatur nilai tanggal pada datepicker.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {Date|string} dt - Objek tanggal atau string tanggal.
+ */
 function dtp_setValue(self, dt) {
 	try {
 
@@ -384,16 +491,29 @@ function dtp_setValue(self, dt) {
 }
 
 
+/**
+ * Mengisi datepicker dengan nilai awal baru.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {string} initialvalue - Nilai awal baru.
+ */
 function dtp_Newdata(self, initialvalue) {
 	self.value = initialvalue
 	self.acceptChanges()
 }
 
 
+/**
+ * Mengunci perubahan saat ini pada datepicker.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ */
 function dtp_acceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')
 }
 
+/**
+ * Mereset nilai input ke nilai terakhir.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ */
 function dtp_reset(self) {
 	var lastvalue = self.getLastValue()
 	if (lastvalue == null) {
@@ -403,6 +523,10 @@ function dtp_reset(self) {
 	}
 }
 
+/**
+ * Menangani trigger perubahan internal dari elemen datepicker.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ */
 function dtp_changed(self) {
 	var input = self.Nodes.Input
 	dtp_setDisplay(self, input.value)
@@ -426,6 +550,11 @@ function dtp_changed(self) {
 }
 
 
+/**
+ * Mengambil ISO date string yang valid dari parameter.
+ * @param {Date|string} v - Input tanggal.
+ * @returns {string} String format YYYY-MM-DD.
+ */
 function dtp_getIsoDateValue(v) {
 	var dt
 	if (typeof v === 'string') {
@@ -444,6 +573,10 @@ function dtp_getIsoDateValue(v) {
 // }
 
 
+/**
+ * Menandai komponen apakah mengalami perubahan nilai.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ */
 function dtp_markChanged(self) {
 	if (self.Form == null) {
 		return
@@ -457,6 +590,11 @@ function dtp_markChanged(self) {
 	}
 }
 
+/**
+ * Memformat dan menampilkan tanggal pada elemen display.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {string} dtiso - Nilai tanggal ISO.
+ */
 function dtp_setDisplay(self, dtiso) {
 	var display = self.Nodes.Display
 	if (dtiso == '') {
@@ -470,6 +608,11 @@ function dtp_setDisplay(self, dtiso) {
 }
 
 
+/**
+ * Menyetel tampilan atribut error.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @param {string} msg - Pesan error.
+ */
 function dtp_setError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg !== null && msg !== '') {
@@ -479,6 +622,11 @@ function dtp_setError(self, msg) {
 	}
 }
 
+/**
+ * Mendapatkan nilai tanggal terakhir yang disimpan.
+ * @param {Object} self - Konteks objek `Datepicker`.
+ * @returns {string|null} Tanggal terakhir (ISO).
+ */
 function dtp_getLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	if (lastvalue == '') {
@@ -487,4 +635,3 @@ function dtp_getLastValue(self) {
 		return lastvalue
 	}
 }
-
