@@ -363,17 +363,25 @@ pre code {
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .doc-layout {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
   }
 
   .doc-sidebar {
-    position: static;
-    order: 2;
+    display: contents;
+  }
+
+  .doc-nav-card {
+    order: 1;
   }
 
   .doc-content {
-    order: 1;
+    order: 2;
+  }
+
+  .component-nav-card {
+    order: 3;
   }
 
   .playground-body {

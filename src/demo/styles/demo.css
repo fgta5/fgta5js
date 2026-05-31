@@ -616,3 +616,59 @@ footer {
 		white-space: nowrap;
 	}
 }
+
+/* Design Tips Premium Card */
+.design-tips-card {
+	background: rgba(79, 70, 229, 0.04);
+	border: 1px solid rgba(79, 70, 229, 0.1);
+	border-left: 4px solid var(--primary);
+	border-radius: 12px;
+	padding: 1.5rem;
+	margin-top: 3rem;
+	margin-bottom: 2rem;
+	display: flex;
+	gap: 1.25rem;
+	align-items: flex-start;
+	box-shadow: var(--shadow-sm);
+}
+
+.tips-icon-wrapper {
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	background-color: var(--primary-light);
+	color: var(--primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.tips-icon-wrapper svg {
+	width: 22px;
+	height: 22px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.tips-content h3 {
+	font-family: var(--font-heading);
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: var(--text-primary);
+	margin-bottom: 0.5rem;
+}
+
+.tips-content p {
+	font-size: 0.9rem;
+	line-height: 1.6;
+	color: var(--text-secondary);
+}
+
+@media (max-width: 576px) {
+	.design-tips-card {
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.25rem;
+	}
+}
