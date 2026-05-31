@@ -5,6 +5,7 @@
   grid-template-columns: 240px 1fr;
   gap: 3rem;
   margin-top: 2rem;
+  min-width: 0;
 }
 
 /* Sidebar Navigation */
@@ -155,6 +156,7 @@
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
+  min-width: 0;
 }
 
 .doc-section {
@@ -367,15 +369,16 @@ pre code {
 
   .doc-sidebar {
     position: static;
+    order: 2;
+  }
+
+  .doc-content {
+    order: 1;
   }
 
   .playground-body {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-
-  .component-nav-card {
-    display: none;
   }
 }
 
@@ -470,4 +473,60 @@ pre code {
   margin-bottom: 1rem;
   margin-top: 1.5rem;
   margin-left: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .doc-layout {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .playground-card {
+    padding: 0.875rem;
+    overflow-x: hidden;
+  }
+
+  .playground-body {
+    gap: 1rem;
+  }
+
+  .playground-right {
+    padding: 0.875rem;
+  }
+
+  .playground-controls {
+    gap: 0.375rem;
+  }
+
+  .playground-controls .demo-button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.625rem;
+    flex-grow: 1;
+    justify-content: center;
+  }
+
+  .api-table-wrapper {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    border-radius: 0;
+  }
+
+  pre {
+    padding: 1rem;
+    font-size: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 2rem !important;
+  }
+
+  .title-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    margin-top: 0.4rem;
+  }
+
+  .title-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+  }
 }
