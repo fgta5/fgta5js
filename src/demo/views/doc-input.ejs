@@ -12,6 +12,7 @@
 
 	<!-- Core Demo stylesheet & Docs overrides -->
 	<link rel="stylesheet" href="styles/demo.css" />
+	<link rel="stylesheet" href="styles/ferrine.css" />
 	<link rel="stylesheet" href="styles/documentation.css" />
 
 	<script>
@@ -25,13 +26,9 @@
 
 	<div class="container">
 		<!-- Back link -->
-		<a href="/" class="back-link">
-			<svg viewBox="0 0 24 24">
-				<line x1="19" y1="12" x2="5" y2="12"></line>
-				<polyline points="12 19 5 12 12 5"></polyline>
-			</svg>
-			Back to Overview
-		</a>
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs') %>
+		</div>
 
 		<!-- Header -->
 		<header style="text-align: left; margin-bottom: 2.5rem;">
@@ -41,7 +38,8 @@
 			</div>
 			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Input</h1>
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
-				The core abstract base class for all form input components in fgta5js. It implements state management,
+				The core abstract base class for all form input components in fgta5js. It implements state
+				management,
 				validation hooks, change tracking, and UI interaction states.
 			</p>
 		</header>
@@ -59,6 +57,7 @@
 						<li class="doc-nav-item"><a href="#internal-fns">Internal Functions</a></li>
 					</ul>
 				</div>
+				<%-include('_mnu-components.ejs')%>
 			</aside>
 
 			<!-- Content Area -->
@@ -67,15 +66,18 @@
 				<section id="overview" class="doc-section">
 					<h2>Overview</h2>
 					<p>
-						The <code>Input</code> class is an abstract class that extends <code>Component</code>. It serves
+						The <code>Input</code> class is an abstract class that extends <code>Component</code>. It
+						serves
 						as the foundation for specific form controls such as <a
 							href="/textbox"><code>Textbox</code></a>, <a href="/numberbox"><code>Numberbox</code></a>,
 						<code>Datepicker</code>,
 						<code>Combobox</code>, and more.
 					</p>
 					<p>
-						Instead of handling low-level DOM states manually for every field, subclasses inherit a unified
-						state tracking pipeline that handles change detection (comparing current value against the last
+						Instead of handling low-level DOM states manually for every field, subclasses inherit a
+						unified
+						state tracking pipeline that handles change detection (comparing current value against the
+						last
 						accepted state value), edit mode lockouts, error state displays, and extensible validator
 						arrays.
 					</p>
@@ -135,7 +137,8 @@
 									<td><code>Form</code></td>
 									<td><code>Form</code></td>
 									<td>Read-only</td>
-									<td>Gets the bound <code>Form</code> instance if this control is registered inside a
+									<td>Gets the bound <code>Form</code> instance if this control is registered
+										inside a
 										parent Form.</td>
 								</tr>
 								<tr>
@@ -150,13 +153,15 @@
 									<td><code>InvalidMessages</code></td>
 									<td><code>Object.&lt;string, string&gt;</code></td>
 									<td>Read-only</td>
-									<td>Returns key-value mapping of validators and their respective fail messages.</td>
+									<td>Returns key-value mapping of validators and their respective fail messages.
+									</td>
 								</tr>
 								<tr>
 									<td><code>Validators</code></td>
 									<td><code>Object</code></td>
 									<td>Read-only</td>
-									<td>Returns the object containing all currently configured validation rules.</td>
+									<td>Returns the object containing all currently configured validation rules.
+									</td>
 								</tr>
 								<tr>
 									<td><code>Handlers</code></td>
@@ -187,15 +192,18 @@
 									<td><code>constructor(id)</code></td>
 									<td><code>(id: String)</code></td>
 									<td><code>void</code></td>
-									<td>Initializes DOM structures, creates error wrappers, reads validation attributes,
+									<td>Initializes DOM structures, creates error wrappers, reads validation
+										attributes,
 										and registers custom base listeners.</td>
 								</tr>
 								<tr>
 									<td><code>suspend(doSuspend, keepState)</code></td>
 									<td><code>(doSuspend: Boolean = true, keepState: Boolean = false)</code></td>
 									<td><code>void</code></td>
-									<td>Suspends input control. Disables UI interactions unless <code>keepState</code>
-										is true.</td>
+									<td>Suspends input control. Disables UI interactions unless
+										<code>keepState</code>
+										is true.
+									</td>
 								</tr>
 								<tr>
 									<td><code>isSuspended()</code></td>
@@ -213,8 +221,10 @@
 									<td><code>setEditingMode(ineditmode)</code></td>
 									<td><code>(ineditmode: Boolean)</code></td>
 									<td><code>void</code></td>
-									<td>Sets editing mode. Standard inputs use this to add/remove <code>readonly</code>
-										attributes and reset validation errors.</td>
+									<td>Sets editing mode. Standard inputs use this to add/remove
+										<code>readonly</code>
+										attributes and reset validation errors.
+									</td>
 								</tr>
 								<tr>
 									<td><code>setInvalidMessage(name, message)</code></td>
@@ -226,13 +236,15 @@
 									<td><code>newData(initialvalue)</code></td>
 									<td><code>(initialvalue: Any)</code></td>
 									<td><code>void</code></td>
-									<td>Seeds the input with new default content, setting it as the clean baseline.</td>
+									<td>Seeds the input with new default content, setting it as the clean baseline.
+									</td>
 								</tr>
 								<tr>
 									<td><code>acceptChanges()</code></td>
 									<td><code>()</code></td>
 									<td><code>void</code></td>
-									<td>Saves the current value as the new baseline state and clears the modification
+									<td>Saves the current value as the new baseline state and clears the
+										modification
 										flags and error indicators.</td>
 								</tr>
 								<tr>
@@ -245,19 +257,22 @@
 									<td><code>isChanged()</code></td>
 									<td><code>()</code></td>
 									<td><code>Boolean</code></td>
-									<td>Returns true if the current input value differs from the last saved state.</td>
+									<td>Returns true if the current input value differs from the last saved state.
+									</td>
 								</tr>
 								<tr>
 									<td><code>getLastError()</code></td>
 									<td><code>()</code></td>
 									<td><code>String | null</code></td>
-									<td>Returns the last error message set on this field, or null if it is valid.</td>
+									<td>Returns the last error message set on this field, or null if it is valid.
+									</td>
 								</tr>
 								<tr>
 									<td><code>setError(msg)</code></td>
 									<td><code>(msg: String | null)</code></td>
 									<td><code>void</code></td>
-									<td>Applies visual error boundaries on wrapper elements and appends/removes detailed
+									<td>Applies visual error boundaries on wrapper elements and appends/removes
+										detailed
 										helper text.</td>
 								</tr>
 								<tr>
@@ -270,14 +285,16 @@
 									<td><code>getBindingData()</code></td>
 									<td><code>()</code></td>
 									<td><code>String | null</code></td>
-									<td>Reads the <code>binding</code> attribute from HTML input. Used to pair inputs to
+									<td>Reads the <code>binding</code> attribute from HTML input. Used to pair
+										inputs to
 										specific data keys.</td>
 								</tr>
 								<tr>
 									<td><code>validate()</code></td>
 									<td><code>()</code></td>
 									<td><code>Boolean</code></td>
-									<td>Performs active rules check in order of priority (required first, followed by
+									<td>Performs active rules check in order of priority (required first, followed
+										by
 										other active validators).</td>
 								</tr>
 								<tr>
@@ -335,7 +352,8 @@
 									<td><code>getErrorValidation(fnName)</code></td>
 									<td><code>(fnName: String)</code></td>
 									<td><code>Error | null</code></td>
-									<td>Runs a specific validator test against current input value. Returns error object
+									<td>Runs a specific validator test against current input value. Returns error
+										object
 										if it fails.</td>
 								</tr>
 							</tbody>
@@ -346,7 +364,8 @@
 				<!-- Internal Functions Section -->
 				<section id="internal-fns" class="doc-section">
 					<h2>Internal Functions</h2>
-					<p>These module-scoped helper functions perform low-level operations directly on the state objects,
+					<p>These module-scoped helper functions perform low-level operations directly on the state
+						objects,
 						avoiding standard getter/setter overrides from subclass overrides.</p>
 					<div class="api-table-wrapper">
 						<table class="api-table">
@@ -361,13 +380,15 @@
 								<tr>
 									<td><code>input_construct</code></td>
 									<td><code>(self: Input, id: String)</code></td>
-									<td>Creates helper elements (such as container divs and hidden inputs to store the
+									<td>Creates helper elements (such as container divs and hidden inputs to store
+										the
 										baseline value) and sets up the listener instance.</td>
 								</tr>
 								<tr>
 									<td><code>input_setError</code></td>
 									<td><code>(self: Input, msg: String | null)</code></td>
-									<td>Manipulates DOM tree to inject error nodes below input wrappers and toggle the
+									<td>Manipulates DOM tree to inject error nodes below input wrappers and toggle
+										the
 										<code>invalid</code> attributes.
 									</td>
 								</tr>
@@ -389,12 +410,14 @@
 								<tr>
 									<td><code>input_acceptChanges</code></td>
 									<td><code>(self: Input)</code></td>
-									<td>Synchronizes current value to last-saved element, clearing change styling.</td>
+									<td>Synchronizes current value to last-saved element, clearing change styling.
+									</td>
 								</tr>
 								<tr>
 									<td><code>input_reset</code></td>
 									<td><code>(self: Input)</code></td>
-									<td>Restores the input element to value stored inside the last-value element.</td>
+									<td>Restores the input element to value stored inside the last-value element.
+									</td>
 								</tr>
 								<tr>
 									<td><code>input_isChanged</code></td>
@@ -416,7 +439,8 @@
 									<td><code>input_readValidators</code></td>
 									<td><code>(self: Input)</code></td>
 									<td>Extracts validation attributes like <code>minlength</code>,
-										<code>maxlength</code>, <code>pattern</code>, <code>min</code>, <code>max</code>
+										<code>maxlength</code>, <code>pattern</code>, <code>min</code>,
+										<code>max</code>
 										from DOM.
 									</td>
 								</tr>
@@ -434,9 +458,7 @@
 		</div>
 
 		<!-- Footer -->
-		<footer>
-			<p class="footer-text">© 2026 fgta5js. Built with a core focus on performance and simplicity.</p>
-		</footer>
+		<%-include('_footer.ejs')%>
 	</div>
 </body>
 

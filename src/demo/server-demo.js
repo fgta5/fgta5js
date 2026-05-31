@@ -21,6 +21,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // serve static files
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/fgta5/components', express.static(path.join(__dirname, '..', 'components')));
 app.use('/fgta5/styles', express.static(path.join(__dirname, '..', '..', 'styles')));
@@ -32,8 +33,8 @@ app.get('/', (req, res) => {
 	res.render('index', {});
 });
 
-app.get('/form', (req, res) => {
-	res.render('demoform', {});
+app.get('/demo-form', (req, res) => {
+	res.render('demo-form', {});
 });
 
 
@@ -61,8 +62,8 @@ app.get('/checkbox', (req, res) => {
 	res.render('doc-checkbox', {});
 });
 
-app.get('/selector', (req, res) => {
-	res.render('doc-selector', {});
+app.get('/combobox', (req, res) => {
+	res.render('doc-combobox', {});
 });
 
 app.get('/fileupload', (req, res) => {
@@ -71,6 +72,10 @@ app.get('/fileupload', (req, res) => {
 
 app.get('/applicationmanager', (req, res) => {
 	res.render('doc-applicationmanager', {});
+});
+
+app.get('/demo-applicationmanager', (req, res) => {
+	res.render('demo-applicationmanager', {});
 });
 
 

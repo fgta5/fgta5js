@@ -9,12 +9,18 @@
 
 	<!-- Stylesheet -->
 	<link rel="stylesheet" href="styles/demo.css" />
+	<link rel="stylesheet" href="styles/ferrine.css" />
 </head>
 
 <body>
 	<div class="container">
 		<!-- Header / Hero Section -->
 		<header>
+			<div class="brand-container">
+				<a href="#">
+					<img src="images/ferrine-logo.png" alt="Ferrine Logo" class="brand-logo" />
+				</a>
+			</div>
 			<div>
 				<h1>fgta5js</h1>
 			</div>
@@ -63,7 +69,7 @@
 
 				<div class="grid">
 					<!-- Form Demo Card -->
-					<a href="/form" class="card">
+					<a href="/demo-form" class="card">
 						<div class="card-icon-wrapper">
 							<svg viewBox="0 0 24 24">
 								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -147,13 +153,13 @@
 					</a>
 
 					<!-- Selector Card -->
-					<a href="/selector" class="card">
+					<a href="/combobox" class="card">
 						<div class="card-icon-wrapper">
 							<svg viewBox="0 0 24 24">
 								<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
 							</svg>
 						</div>
-						<h3>Selector <span class="card-arrow">→</span></h3>
+						<h3>Combobox <span class="card-arrow">→</span></h3>
 						<p>Dynamic combobox dropdown with incremental text searching, recommendations, and backend data
 							loading.</p>
 					</a>
@@ -191,9 +197,7 @@
 		</main>
 
 		<!-- Footer -->
-		<footer>
-			<p class="footer-text">© 2026 fgta5js. Built with a core focus on performance and simplicity.</p>
-		</footer>
+		<%-include('_footer.ejs')%>
 	</div>
 </body>
 

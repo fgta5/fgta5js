@@ -10,32 +10,32 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) };
 const dynamicSort = (data, criteria) => {
-    return data.sort((a, b) => {
-        for (const key of Object.keys(criteria)) {
-            const order = criteria[key] === 'asc' ? 1 : -1;
-            const valueA = a[key];
-            const valueB = b[key];
+	return data.sort((a, b) => {
+		for (const key of Object.keys(criteria)) {
+			const order = criteria[key] === 'asc' ? 1 : -1;
+			const valueA = a[key];
+			const valueB = b[key];
 
-            let compare;
-            if (typeof valueA === "number" && typeof valueB === "number") {
-                // Jika kedua nilai angka, gunakan perbandingan numerik
-                compare = (valueA - valueB) * order;
-            } else {
-                // Jika bukan angka, anggap sebagai string dan gunakan localeCompare
-                compare = String(valueA).localeCompare(String(valueB)) * order;
-            }
+			let compare;
+			if (typeof valueA === "number" && typeof valueB === "number") {
+				// Jika kedua nilai angka, gunakan perbandingan numerik
+				compare = (valueA - valueB) * order;
+			} else {
+				// Jika bukan angka, anggap sebagai string dan gunakan localeCompare
+				compare = String(valueA).localeCompare(String(valueB)) * order;
+			}
 
-            if (compare !== 0) return compare; // Prioritaskan field dengan perbedaan
-        }
-        return 0; // Jika semua field sama, tidak mengubah urutan
-    });
+			if (compare !== 0) return compare; // Prioritaskan field dengan perbedaan
+		}
+		return 0; // Jika semua field sama, tidak mengubah urutan
+	});
 };
 const getRandomFactored = (min, max, factor) => {
 	factor = factor ?? 1000
-    return Math.floor(Math.random() * ((max - min) / factor + 1)) * factor + min;
+	return Math.floor(Math.random() * ((max - min) / factor + 1)) * factor + min;
 }
 const randomBitWithProbability = (probability) => {
-    return Math.random() < probability ? 1 : 0;
+	return Math.random() < probability ? 1 : 0;
 }
 
 
@@ -52,7 +52,7 @@ for (let person of data.persons) {
 app.set('view engine', 'ejs');
 
 app.use(favicon('favicon.ico'))
-app.use(express.json()); 
+app.use(express.json());
 
 
 app.use('/dist', express.static('dist'))
@@ -71,7 +71,7 @@ app.use('/:env/styles', express.static('styles'))
 
 app.use(cors());
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
 	res.render('index', {
 		title: 'Fgta5js Development',
 	});
@@ -79,14 +79,14 @@ app.get('/', function(req, res) {
 
 
 /* Debug Test */
-app.get('/debug/:page', function(req, res) {
+app.get('/debug/:page', function (req, res) {
 	const pageName = req.params.page;
 	res.render(pageName, {
 		title: pageName + ' - fgta5js Debug',
 		env: 'debug',
 		script: 'head-script-dev.ejs',
 		style: 'head-style-dev.ejs'
-	}, (err, html)=>{
+	}, (err, html) => {
 		if (err) {
 			console.error('Error rendering EJS:', err.message);
 			return res.status(404).send('Halaman tidak ditemukan');
@@ -97,14 +97,14 @@ app.get('/debug/:page', function(req, res) {
 
 
 /* Release */
-app.get('/release/:page', function(req, res) {
+app.get('/release/:page', function (req, res) {
 	const pageName = req.params.page;
 	res.render(pageName, {
 		title: pageName + ' - fgta5form Build',
 		env: 'release',
 		script: 'head-script-build.ejs',
 		style: 'head-style-build.ejs'
-	}, (err, html)=>{
+	}, (err, html) => {
 		if (err) {
 			console.error('Error rendering EJS:', err.message);
 			return res.status(404).send('Halaman tidak ditemukan');
@@ -114,10 +114,10 @@ app.get('/release/:page', function(req, res) {
 });
 
 app.post('/getdata', async (req, res) => {
-	
+
 	var test_max_row = 20
-	
-	
+
+
 	// siapkan template data untuk result
 	var jsonresult = {
 		searchtext: '',
@@ -134,27 +134,27 @@ app.post('/getdata', async (req, res) => {
 	const { searchtext, limit, offset, test_delay, test_stop_at } = req.body;
 
 
-	var test_max_row = test_stop_at!=undefined?test_stop_at : test_max_row
+	var test_max_row = test_stop_at != undefined ? test_stop_at : test_max_row
 	var endofresult = false
-	for (var i=offset; i<(offset+limit); i++) {
-		
+	for (var i = offset; i < (offset + limit); i++) {
+
 		// test maksimal data di test_max_row
-		if (i>=test_max_row) {
+		if (i >= test_max_row) {
 			endofresult = true
 			break
 		}
 
-		if (test_delay!==undefined) {
+		if (test_delay !== undefined) {
 			await sleep(test_delay)
 		}
-		
-		var nama = `${searchtext!=''?searchtext:'data'}-${i}`
+
+		var nama = `${searchtext != '' ? searchtext : 'data'}-${i}`
 		var alamat = `alamat-${nama}`
 
-		jsonresult.data.push({value:nama, text:nama, nama:nama, alamat:alamat})
+		jsonresult.data.push({ value: nama, text: nama, nama: nama, alamat: alamat })
 	}
 
-	jsonresult.nextoffset = !endofresult ? offset+limit : null
+	jsonresult.nextoffset = !endofresult ? offset + limit : null
 	jsonresult.limit = limit
 
 	res.send(JSON.stringify(jsonresult))
@@ -165,38 +165,38 @@ app.post('/getdata-persons', async (req, res) => {
 	const { searchtext, limit, offset, sort } = req.body;
 
 	var rawdata
-	if (searchtext!='' && searchtext!=null) {
- 		rawdata = data.persons.filter(person => person.nama.toLowerCase().includes(searchtext));
+	if (searchtext != '' && searchtext != null) {
+		rawdata = data.persons.filter(person => person.nama.toLowerCase().includes(searchtext));
 	} else {
 		rawdata = data.persons
 	}
-	
+
 	//console.log(sort)
 	// sort hasilnya
 	var hasil = [...rawdata]
-	if (Object.keys(sort).length>0) {
+	if (Object.keys(sort).length > 0) {
 		dynamicSort(hasil, sort)
-	} 
+	}
 
 
 
 
 	var start = offset ?? 0
-	var max_rows = limit=='' || limit==0 || limit=='0' || limit==null ? 10 : limit
+	var max_rows = limit == '' || limit == 0 || limit == '0' || limit == null ? 10 : limit
 
-	var result = {searchtext: searchtext, limit: max_rows, nextoffset: null, data:[]}
+	var result = { searchtext: searchtext, limit: max_rows, nextoffset: null, data: [] }
 	var i
-	for (i=start; i<start+max_rows; i++) {
+	for (i = start; i < start + max_rows; i++) {
 		var person = hasil[i]
-		if (person==null) {
+		if (person == null) {
 			break
 		}
 
 		result.data.push(person)
 	}
-	
+
 	var nextoffset = i
-	if (hasil[nextoffset]!=null) {
+	if (hasil[nextoffset] != null) {
 		result.nextoffset = nextoffset
 	}
 
@@ -205,5 +205,5 @@ app.post('/getdata-persons', async (req, res) => {
 
 })
 
-app.listen(3000);
-console.log('Server is listening on port 3000');
+app.listen(3020);
+console.log('Server is listening on port 3020');

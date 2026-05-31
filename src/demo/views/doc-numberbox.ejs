@@ -12,6 +12,7 @@
 
 	<!-- Core Demo stylesheet & Docs overrides -->
 	<link rel="stylesheet" href="styles/demo.css" />
+	<link rel="stylesheet" href="styles/ferrine.css" />
 	<link rel="stylesheet" href="styles/documentation.css" />
 </head>
 
@@ -21,13 +22,9 @@
 
 	<div class="container">
 		<!-- Back link -->
-		<a href="/" class="back-link">
-			<svg viewBox="0 0 24 24">
-				<line x1="19" y1="12" x2="5" y2="12"></line>
-				<polyline points="12 19 5 12 12 5"></polyline>
-			</svg>
-			Back to Overview
-		</a>
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs') %>
+		</div>
 
 		<!-- Header -->
 		<header style="text-align: left; margin-bottom: 2.5rem;">
@@ -35,7 +32,20 @@
 				<span class="badge-dot"></span>
 				Component
 			</div>
-			<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Numberbox</h1>
+
+
+			<div style="display: flex; column-gap: 1rem;">
+				<div class="title-icon-wrapper">
+					<svg viewBox="0 0 24 24">
+						<line x1="4" y1="9" x2="20" y2="9"></line>
+						<line x1="4" y1="15" x2="20" y2="15"></line>
+						<line x1="10" y1="3" x2="8" y2="21"></line>
+						<line x1="16" y1="3" x2="14" y2="21"></line>
+					</svg>
+				</div>
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Numberbox</h1>
+			</div>
+
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
 				A specialized numeric entry field class that supports thousands separator formatting, custom decimal
 				precision, constraints, and read-only mode state management.
@@ -57,6 +67,7 @@
 						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 					</ul>
 				</div>
+				<%-include('_mnu-components.ejs')%>
 			</aside>
 
 			<!-- Content Area -->
@@ -65,16 +76,20 @@
 				<section id="overview" class="doc-section">
 					<h2>Overview</h2>
 					<div class="doc-callout">
-						<strong>Inheritance Notice:</strong> Class <code>Numberbox</code> inherits all of its core state
-						tracking, validation logic, editing mode configurations, and event handlers from the abstract
+						<strong>Inheritance Notice:</strong> Class <code>Numberbox</code> inherits all of its core
+						state
+						tracking, validation logic, editing mode configurations, and event handlers from the
+						abstract
 						base class <a href="/input"><code>Input</code></a>.
 					</div>
 					<p>
 						The <code>Numberbox</code> class handles formatted number entries within the
 						<code>fgta5js</code> framework.
-						It formats input numbers with comma group separators on blur while allowing raw numeric editing
+						It formats input numbers with comma group separators on blur while allowing raw numeric
+						editing
 						on focus.
-						It handles value bounds (min/max), step values, custom floating-point precision, and read-only
+						It handles value bounds (min/max), step values, custom floating-point precision, and
+						read-only
 						toggling.
 					</p>
 				</section>
@@ -213,13 +228,15 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>setEditingMode(ineditmode)</code></td>
 									<td><code>(ineditmode: Boolean)</code></td>
-									<td>Toggles editing mode. Setting to <code>false</code> locks input, sets readonly,
+									<td>Toggles editing mode. Setting to <code>false</code> locks input, sets
+										readonly,
 										and clears errors.</td>
 								</tr>
 								<tr>
 									<td><code>suspend(doSuspend, keepState)</code></td>
 									<td><code>(doSuspend: Boolean, keepState: Boolean)</code></td>
-									<td>Suspends the component behavior and locks/disables input elements depending on
+									<td>Suspends the component behavior and locks/disables input elements depending
+										on
 										arguments.</td>
 								</tr>
 								<tr>
@@ -270,13 +287,16 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>precision</code></td>
 									<td><code>Number</code></td>
-									<td>Specifies the number of decimal digits displayed and saved (e.g. <code>2</code>
-										for currency).</td>
+									<td>Specifies the number of decimal digits displayed and saved (e.g.
+										<code>2</code>
+										for currency).
+									</td>
 								</tr>
 								<tr>
 									<td><code>digitgrouping</code></td>
 									<td><code>"true" | "false"</code></td>
-									<td>Specifies whether thousands separators (commas) should be formatted. Default is
+									<td>Specifies whether thousands separators (commas) should be formatted. Default
+										is
 										<code>"true"</code>.
 									</td>
 								</tr>
@@ -308,9 +328,7 @@ form.<span class="hl-function">render</span>()</code></pre>
 		</div>
 
 		<!-- Footer -->
-		<footer>
-			<p class="footer-text">© 2026 fgta5js. Built with a core focus on performance and simplicity.</p>
-		</footer>
+		<%-include('_footer.ejs')%>
 	</div>
 
 	<!-- Interactive page scripting -->

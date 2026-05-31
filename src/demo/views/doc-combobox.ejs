@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Datepicker Component — fgta5js Documentation</title>
+	<title>Combobox Component — fgta5js Documentation</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -45,24 +45,19 @@
 			<div style="display: flex; column-gap: 1rem;">
 				<div class="title-icon-wrapper">
 					<svg viewBox="0 0 24 24">
-						<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-						<line x1="16" y1="2" x2="16" y2="6"></line>
-						<line x1="8" y1="2" x2="8" y2="6"></line>
-						<line x1="3" y1="10" x2="21" y2="10"></line>
+						<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
 					</svg>
 				</div>
 
-				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Datepicker</h1>
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Combobox</h1>
 			</div>
 
 
 
 
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
-				A specialized calendar input class that provides standardized date selection, custom range
-				constraints
-				(min/max),
-				localized formatting display, and edit/read-only mode state management.
+				A dynamic dropdown combobox field supporting options list rendering, custom search filters, 
+				backend paging data loading, and edit/read-only mode state management.
 			</p>
 		</header>
 
@@ -90,18 +85,14 @@
 				<section id="overview" class="doc-section">
 					<h2>Overview</h2>
 					<div class="doc-callout">
-						<strong>Inheritance Notice:</strong> Class <code>Datepicker</code> inherits all of its core
-						state
-						tracking, validation logic, editing mode configurations, and event handlers from the
-						abstract
-						base class <a href="/input"><code>Input</code></a>.
+						<strong>Inheritance Notice:</strong> Class <code>Combobox</code> inherits all of its core
+						state tracking, validation logic, editing mode configurations, and event handlers from the
+						abstract base class <a href="/input"><code>Input</code></a>.
 					</div>
 					<p>
-						The <code>Datepicker</code> class integrates custom input calendars within the
-						<code>fgta5js</code> framework.
-						It formats selected dates into readable localized format strings (e.g.,
-						<code>DD MMM YYYY</code>) on blur/display
-						while submitting raw ISO dates (<code>YYYY-MM-DD</code>) programmatically.
+						The <code>Combobox</code> component manages complex option lists. It can bind to static
+						<code>&lt;datalist&gt;</code> HTML options, or perform backend asynchronous requests (using URL endpoints)
+						to support incremental searching, pagination, and heavy datasets.
 					</p>
 				</section>
 
@@ -121,19 +112,25 @@
 							<div class="playground-left">
 
 
-								<div class="demo-input-field" field="playground_datepicker" style="flex: 1 1 100%;">
+								<div class="demo-input-field" field="playground_combobox" style="flex: 1 1 100%;">
 									<form id="myform" locked="true">
-										<label for="playground_datepicker">Transaction Date</label>
-										<input id="playground_datepicker" fgta5-component="Datepicker"
-											placeholder="Select a date..." autocomplete="off" required min="2020-01-01"
-											max="2030-12-31">
+										<label for="playground_combobox">Country</label>
+										<input id="playground_combobox" fgta5-component="Combobox"
+											placeholder="Select a country..." autocomplete="off" required>
+										<datalist for="playground_combobox">
+											<option value="ID" default="true">Indonesia</option>
+											<option value="MY">Malaysia</option>
+											<option value="SG">Singapore</option>
+											<option value="TH">Thailand</option>
+											<option value="VN">Vietnam</option>
+										</datalist>
 									</form>
 								</div>
 
 
 								<div class="playground-controls">
 									<button id="btn_toggle_edit" class="demo-button">Toggle Edit State</button>
-									<button id="btn_set_val" class="demo-button">Set to "2026-05-31"</button>
+									<button id="btn_set_val" class="demo-button">Set to "SG"</button>
 									<button id="btn_focus" class="demo-button">Focus Input</button>
 									<button id="btn_commit" class="demo-button">Commit / Save</button>
 									<button id="btn_reset" class="demo-button">Reset</button>
@@ -146,6 +143,10 @@
 								<div class="playground-stat">
 									<span class="playground-stat-name">.value</span>
 									<span class="playground-stat-value" id="state_value">""</span>
+								</div>
+								<div class="playground-stat">
+									<span class="playground-stat-name">.text</span>
+									<span class="playground-stat-value" id="state_text">""</span>
 								</div>
 								<div class="playground-stat">
 									<span class="playground-stat-name">.InEditMode</span>
@@ -167,16 +168,19 @@
 				<!-- HTML Markup Section -->
 				<section id="html-markup" class="doc-section">
 					<h2>HTML Markup</h2>
-					<p>Define date inputs using standard HTML. Use <code>fgta5-component="Datepicker"</code> to
-						enable
-						binding.
+					<p>Define combobox inputs using standard HTML datalist or a data-source API URL. Use <code>fgta5-component="Combobox"</code> to
+						enable binding.
 					</p>
 
 					<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span>&gt;
-  <span class="hl-comment">&lt;!-- Datepicker Input --&gt;</span>
-  &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"demo-input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_date"</span>&gt;
-    &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_date"</span>&gt;Transaction Date&lt;/<span class="hl-tag">label</span>&gt;
-    &lt;<span class="hl-tag">input</span> <span class="hl-attr">id</span>=<span class="hl-string">"obj_date"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Datepicker"</span> <span class="hl-attr">placeholder</span>=<span class="hl-string">"Select date"</span> <span class="hl-attr">required</span>&gt;
+  <span class="hl-comment">&lt;!-- Combobox with Static Options --&gt;</span>
+  &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"demo-input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_country"</span>&gt;
+    &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_country"</span>&gt;Country&lt;/<span class="hl-tag">label</span>&gt;
+    &lt;<span class="hl-tag">input</span> <span class="hl-attr">id</span>=<span class="hl-string">"obj_country"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Combobox"</span> <span class="hl-attr">required</span>&gt;
+    &lt;<span class="hl-tag">datalist</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_country"</span>&gt;
+      &lt;<span class="hl-tag">option</span> <span class="hl-attr">value</span>=<span class="hl-string">"ID"</span> <span class="hl-attr">default</span>=<span class="hl-string">"true"</span>&gt;Indonesia&lt;/<span class="hl-tag">option</span>&gt;
+      &lt;<span class="hl-tag">option</span> <span class="hl-attr">value</span>=<span class="hl-string">"SG"</span>&gt;Singapore&lt;/<span class="hl-tag">option</span>&gt;
+    &lt;/<span class="hl-tag">datalist</span>&gt;
   &lt;/<span class="hl-tag">div</span>&gt;
 &lt;/<span class="hl-tag">form</span>&gt;</code></pre>
 
@@ -201,28 +205,17 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>value</code></td>
 									<td><code>String</code></td>
-									<td>Get or set the current date value. Returns an ISO date string format
-										(<code>YYYY-MM-DD</code>).
-									</td>
+									<td>Gets the currently selected value ID (Read-only). To modify, use <code>setSelected()</code>.</td>
 								</tr>
 								<tr>
-									<td><code>min</code></td>
-									<td><code>Date | String</code></td>
-									<td>Get or set the minimum date limit boundary.
-									</td>
-								</tr>
-								<tr>
-									<td><code>max</code></td>
-									<td><code>Date | String</code></td>
-									<td>Get or set the maximum date limit boundary.
-									</td>
+									<td><code>text</code></td>
+									<td><code>String</code></td>
+									<td>Gets the currently selected text label (Read-only). To modify, use <code>setSelected()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>InEditMode</code></td>
 									<td><code>Boolean</code></td>
-									<td>Gets the current edit/readonly state of the component (Read-only). To
-										modify,
-										use <code>setEditingMode()</code>.</td>
+									<td>Gets the current edit/readonly state of the component (Read-only). To modify, use <code>setEditingMode()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>disabled</code></td>
@@ -250,20 +243,17 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>constructor(id)</code></td>
 									<td><code>(id: String)</code></td>
-									<td>Creates and binds a new <code>Datepicker</code> instance to the HTML element
-										using
-										the specified ID.</td>
+									<td>Creates and binds a new <code>Combobox</code> instance to the HTML element using the specified ID.</td>
 								</tr>
 								<tr>
 									<td><code>setEditingMode(ineditmode)</code></td>
 									<td><code>(ineditmode: Boolean)</code></td>
-									<td>Toggles editing mode. Setting to <code>false</code> locks the component as
-										read-only and clears errors.</td>
+									<td>Toggles editing mode. Setting to <code>false</code> locks the component as read-only and clears errors.</td>
 								</tr>
 								<tr>
 									<td><code>suspend(doSuspend, keepState)</code></td>
 									<td><code>(doSuspend: Boolean, keepState: Boolean)</code></td>
-									<td>Suspends input interaction.</td>
+									<td>Suspends or reactivates input interaction.</td>
 								</tr>
 								<tr>
 									<td><code>isSuspended()</code></td>
@@ -271,26 +261,44 @@ form.<span class="hl-function">render</span>()</code></pre>
 									<td>Checks if the component is suspended.</td>
 								</tr>
 								<tr>
-									<td><code>newData(initialvalue)</code></td>
-									<td><code>(initialvalue: String)</code></td>
-									<td>Initializes the input with a new value and resets change detection states.
-									</td>
+									<td><code>newData(initialdata)</code></td>
+									<td><code>(initialdata: Object | String)</code></td>
+									<td>Initializes the input with a new selection item (e.g. <code>{value: 'SG', text: 'Singapore'}</code>).</td>
+								</tr>
+								<tr>
+									<td><code>setSelected(value, text)</code></td>
+									<td><code>(value: String, text: String)</code></td>
+									<td>Explicitly defines the active selected option value and description text.</td>
+								</tr>
+								<tr>
+									<td><code>clear()</code></td>
+									<td><code>()</code></td>
+									<td>Clears the selected choice value and display.</td>
 								</tr>
 								<tr>
 									<td><code>getLastValue()</code></td>
 									<td><code>()</code></td>
-									<td>Returns the last committed/saved value string.</td>
+									<td>Returns the last committed/saved option value string.</td>
+								</tr>
+								<tr>
+									<td><code>getLastText()</code></td>
+									<td><code>()</code></td>
+									<td>Returns the last committed/saved option label string.</td>
 								</tr>
 								<tr>
 									<td><code>isChanged()</code></td>
 									<td><code>()</code></td>
-									<td>Checks if the current <code>value</code> differs from the last saved state
-										value.</td>
+									<td>Checks if the current <code>value</code> differs from the last saved state value.</td>
+								</tr>
+								<tr>
+									<td><code>setOptions(data)</code></td>
+									<td><code>(data: Array)</code></td>
+									<td>Overrides the active list of static options programmatically.</td>
 								</tr>
 								<tr>
 									<td><code>focus()</code></td>
 									<td><code>()</code></td>
-									<td>Programmatically shifts focus onto the date field element.</td>
+									<td>Programmatically shifts focus onto the display field element.</td>
 								</tr>
 							</tbody>
 						</table>
@@ -310,16 +318,6 @@ form.<span class="hl-function">render</span>()</code></pre>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td><code>min</code></td>
-									<td><code>String (YYYY-MM-DD)</code></td>
-									<td>Lower date boundary validation constraint.</td>
-								</tr>
-								<tr>
-									<td><code>max</code></td>
-									<td><code>String (YYYY-MM-DD)</code></td>
-									<td>Upper date boundary validation constraint.</td>
-								</tr>
 								<tr>
 									<td><code>required</code></td>
 									<td>N/A</td>
@@ -346,44 +344,46 @@ form.<span class="hl-function">render</span>()</code></pre>
 		window.addEventListener("load", async () => {
 			// Initialize component
 			const form = new $fgta5.Form('myform');
-			const dtp = form.Inputs.playground_datepicker
+			const cbo = form.Inputs.playground_combobox
 
 			form.render()
 
 			// UI state update elements
 			const stateValue = document.getElementById('state_value');
+			const stateText = document.getElementById('state_text');
 			const stateEditMode = document.getElementById('state_editmode');
 			const stateLastValue = document.getElementById('state_lastvalue');
 			const stateIsChanged = document.getElementById('state_ischanged');
 
 			// Sync status displays
 			const updateStats = () => {
-				stateValue.innerText = JSON.stringify(dtp.value);
-				stateEditMode.innerText = dtp.InEditMode ? "true" : "false";
-				stateLastValue.innerText = JSON.stringify(dtp.getLastValue());
-				stateIsChanged.innerText = dtp.isChanged() ? "true" : "false";
+				stateValue.innerText = JSON.stringify(cbo.value);
+				stateText.innerText = JSON.stringify(cbo.text);
+				stateEditMode.innerText = cbo.InEditMode ? "true" : "false";
+				stateLastValue.innerText = JSON.stringify(cbo.getLastValue());
+				stateIsChanged.innerText = cbo.isChanged() ? "true" : "false";
 			};
 
 			// Listen for events
-			dtp.Listener.addEventListener('changed', updateStats);
-			dtp.Nodes.Display.addEventListener('input', updateStats);
-			dtp.Nodes.Display.addEventListener('blur', updateStats);
+			cbo.Listener.addEventListener('changed', updateStats);
+			cbo.Nodes.Display.addEventListener('input', updateStats);
+			cbo.Nodes.Display.addEventListener('blur', updateStats);
 
 			// Setup button control listeners
 			document.getElementById('btn_toggle_edit').addEventListener('click', () => {
-				form.lock(dtp.InEditMode)
+				form.lock(cbo.InEditMode)
 				updateStats();
 			});
 
 			document.getElementById('btn_set_val').addEventListener('click', () => {
-				if (dtp.InEditMode) {
-					dtp.value = "2026-05-31";
+				if (cbo.InEditMode) {
+					cbo.setSelected("SG", "Singapore");
 					updateStats();
 				}
 			});
 
 			document.getElementById('btn_focus').addEventListener('click', () => {
-				dtp.focus();
+				cbo.focus();
 			});
 
 			document.getElementById('btn_commit').addEventListener('click', () => {

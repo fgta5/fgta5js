@@ -12,6 +12,7 @@
 
 	<!-- Core Demo stylesheet -->
 	<link rel="stylesheet" href="styles/demo.css" />
+	<link rel="stylesheet" href="styles/ferrine.css" />
 </head>
 
 <body>
@@ -20,13 +21,9 @@
 
 	<div class="container">
 		<!-- Back to Overview link -->
-		<a href="/" class="back-link">
-			<svg viewBox="0 0 24 24">
-				<line x1="19" y1="12" x2="5" y2="12"></line>
-				<polyline points="12 19 5 12 12 5"></polyline>
-			</svg>
-			Back to Overview
-		</a>
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs') %>
+		</div>
 
 		<!-- Title Section -->
 		<header style="text-align: left; margin-bottom: 2.5rem;">
@@ -38,7 +35,7 @@
 
 		<main>
 			<!-- Action Buttons / Control Panel -->
-			<section class="control-panel">
+			<section class="control-panel action-control-panel">
 				<div class="control-group">
 					<button id="btn_edittogle" class="demo-button" style="background-color: rgb(255 191 12);">
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -186,9 +183,7 @@
 		</main>
 
 		<!-- Footer -->
-		<footer>
-			<p class="footer-text">© 2026 fgta5js. Built with a core focus on performance and simplicity.</p>
-		</footer>
+		<%-include('_footer.ejs')%>
 	</div>
 
 	<!-- Page Loader Mask -->

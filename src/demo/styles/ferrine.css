@@ -1,0 +1,18 @@
+.brand-container {
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 1rem;
+}
+
+.brand-logo {
+	height: 64px;
+	width: auto;
+	object-fit: contain;
+	opacity: 0.85;
+	transition: var(--transition-smooth);
+}
+
+.brand-logo:hover {
+	opacity: 1;
+	transform: scale(1.03);
+}
