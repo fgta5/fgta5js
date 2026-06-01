@@ -13,6 +13,11 @@ const sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) }
 // parse json request body
 app.use(express.json());
 
+// serve favicon
+app.get('/favicon.ico', (req, res) => {
+	res.sendFile(path.join(__dirname, 'demo', 'images', 'ferrine-icon.ico'));
+});
+
 // gunakan EJS template engine
 app.set('view engine', 'ejs');
 

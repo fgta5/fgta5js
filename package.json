@@ -3,12 +3,12 @@
   "version": "1.9.2",
   "description": "fgta5js libary",
   "type": "module",
-  "main": "rollup.config.js",
+  "main": "src/server-demo.js",
   "scripts": {
     "prebuild": "rimraf dist && node version.js",
     "x-prebuild": "rimraf dist",
     "build": "rollup -c rollup-fgta5js.mjs",
-    "server-demo": "node ./src/server-demo.js"
+    "start": "node ./src/server-demo.js"
   },
   "author": "agung nugroho",
   "license": "ISC",
