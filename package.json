@@ -5,7 +5,6 @@
   "type": "module",
   "main": "rollup.config.js",
   "scripts": {
-    "test": "node ./server-dev.js",
     "prebuild": "rimraf dist && node version.js",
     "x-prebuild": "rimraf dist",
     "build": "rollup -c rollup-fgta5js.mjs",
