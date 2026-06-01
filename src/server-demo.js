@@ -17,14 +17,18 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 
 // set direktori view
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'demo', 'views'));
 
-// serve static files
-app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/styles', express.static(path.join(__dirname, 'styles')));
-app.use('/fgta5/components', express.static(path.join(__dirname, '..', 'components')));
-app.use('/fgta5/styles', express.static(path.join(__dirname, '..', '..', 'styles')));
+
+
+// di static direcory /demo, reject akses ke file *.ejs
+app.use('/demo', (req, res, next) => {
+	if (req.path.endsWith('.ejs')) {
+		return res.status(403).send('Forbidden');
+	}
+	next();
+});
+app.use('/demo', express.static(path.join(__dirname, 'demo')));
 
 
 
@@ -72,6 +76,13 @@ app.get('/fileupload', (req, res) => {
 
 app.get('/applicationmanager', (req, res) => {
 	res.render('doc-applicationmanager', {});
+});
+
+
+// demo aplikasi, buat akses /application/<nama-module>
+app.get('/application/:module', (req, res) => {
+	const module = req.params.module;
+	res.render('demo-application', { module });
 });
 
 app.get('/demo-applicationmanager', (req, res) => {

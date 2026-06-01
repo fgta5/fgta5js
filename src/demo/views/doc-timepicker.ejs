@@ -9,13 +9,13 @@
 
 
 	<!-- Library styles: Production -->
-	<link rel="stylesheet" href="styles/fgta5js-v1.9.2.min.css" />
+	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
 
 
 	<!-- Core Demo stylesheet & Docs overrides -->
-	<link rel="stylesheet" href="styles/demo.css" />
-	<link rel="stylesheet" href="styles/ferrine.css" />
-	<link rel="stylesheet" href="styles/documentation.css" />
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
 
 
 	<script>
@@ -25,7 +25,7 @@
 
 <body>
 	<!-- Register fgta5 global components namespace -->
-	<script type="module" src="scripts/fgta5js-v1.9.2.min.js"></script>
+	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
 
 
 	<div class="container">
@@ -92,8 +92,10 @@
 					</div>
 					<p>
 						The <code>Timepicker</code> class wraps standard HTML time input elements within the
-						<code>fgta5js</code> framework. It enforces a standard time format (<code>HH:MM</code>) for input values,
-						updates a readonly display element, and handles boundaries such as <code>min</code> and <code>max</code> time limits.
+						<code>fgta5js</code> framework. It enforces a standard time format (<code>HH:MM</code>) for
+						input values,
+						updates a readonly display element, and handles boundaries such as <code>min</code> and
+						<code>max</code> time limits.
 					</p>
 				</section>
 
@@ -192,7 +194,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>value</code></td>
 									<td><code>String</code></td>
-									<td>Get or set the current time value. Returns time string in 24-hour format (<code>HH:MM</code>).</td>
+									<td>Get or set the current time value. Returns time string in 24-hour format
+										(<code>HH:MM</code>).</td>
 								</tr>
 								<tr>
 									<td><code>min</code></td>
@@ -207,7 +210,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>InEditMode</code></td>
 									<td><code>Boolean</code></td>
-									<td>Gets the current edit/readonly state of the component (Read-only). To modify, use <code>setEditingMode()</code>.</td>
+									<td>Gets the current edit/readonly state of the component (Read-only). To modify,
+										use <code>setEditingMode()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>disabled</code></td>
@@ -235,12 +239,14 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>constructor(id)</code></td>
 									<td><code>(id: String)</code></td>
-									<td>Creates and binds a new <code>Timepicker</code> instance to the HTML element using the specified ID.</td>
+									<td>Creates and binds a new <code>Timepicker</code> instance to the HTML element
+										using the specified ID.</td>
 								</tr>
 								<tr>
 									<td><code>setEditingMode(ineditmode)</code></td>
 									<td><code>(ineditmode: Boolean)</code></td>
-									<td>Toggles editing mode. Setting to <code>false</code> locks the component as read-only and clears errors.</td>
+									<td>Toggles editing mode. Setting to <code>false</code> locks the component as
+										read-only and clears errors.</td>
 								</tr>
 								<tr>
 									<td><code>suspend(doSuspend)</code></td>
@@ -255,7 +261,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>newData(initialvalue)</code></td>
 									<td><code>(initialvalue: String)</code></td>
-									<td>Initializes the input with a new value (defaults to '00:00') and resets change detection states.</td>
+									<td>Initializes the input with a new value (defaults to '00:00') and resets change
+										detection states.</td>
 								</tr>
 								<tr>
 									<td><code>getLastValue()</code></td>
@@ -265,7 +272,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>isChanged()</code></td>
 									<td><code>()</code></td>
-									<td>Checks if the current <code>value</code> differs from the last saved state value.</td>
+									<td>Checks if the current <code>value</code> differs from the last saved state
+										value.</td>
 								</tr>
 								<tr>
 									<td><code>focus()</code></td>

@@ -9,13 +9,13 @@
 
 
 	<!-- Library styles: Production -->
-	<link rel="stylesheet" href="styles/fgta5js-v1.9.2.min.css" />
+	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
 
 
 	<!-- Core Demo stylesheet & Docs overrides -->
-	<link rel="stylesheet" href="styles/demo.css" />
-	<link rel="stylesheet" href="styles/ferrine.css" />
-	<link rel="stylesheet" href="styles/documentation.css" />
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
 
 
 	<script>
@@ -25,7 +25,7 @@
 
 <body>
 	<!-- Register fgta5 global components namespace -->
-	<script type="module" src="scripts/fgta5js-v1.9.2.min.js"></script>
+	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
 
 
 	<div class="container">
@@ -56,7 +56,7 @@
 
 
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
-				A dynamic dropdown combobox field supporting options list rendering, custom search filters, 
+				A dynamic dropdown combobox field supporting options list rendering, custom search filters,
 				backend paging data loading, and edit/read-only mode state management.
 			</p>
 		</header>
@@ -91,7 +91,8 @@
 					</div>
 					<p>
 						The <code>Combobox</code> component manages complex option lists. It can bind to static
-						<code>&lt;datalist&gt;</code> HTML options, or perform backend asynchronous requests (using URL endpoints)
+						<code>&lt;datalist&gt;</code> HTML options, or perform backend asynchronous requests (using URL
+						endpoints)
 						to support incremental searching, pagination, and heavy datasets.
 					</p>
 				</section>
@@ -168,7 +169,8 @@
 				<!-- HTML Markup Section -->
 				<section id="html-markup" class="doc-section">
 					<h2>HTML Markup</h2>
-					<p>Define combobox inputs using standard HTML datalist or a data-source API URL. Use <code>fgta5-component="Combobox"</code> to
+					<p>Define combobox inputs using standard HTML datalist or a data-source API URL. Use
+						<code>fgta5-component="Combobox"</code> to
 						enable binding.
 					</p>
 
@@ -205,17 +207,20 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>value</code></td>
 									<td><code>String</code></td>
-									<td>Gets the currently selected value ID (Read-only). To modify, use <code>setSelected()</code>.</td>
+									<td>Gets the currently selected value ID (Read-only). To modify, use
+										<code>setSelected()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>text</code></td>
 									<td><code>String</code></td>
-									<td>Gets the currently selected text label (Read-only). To modify, use <code>setSelected()</code>.</td>
+									<td>Gets the currently selected text label (Read-only). To modify, use
+										<code>setSelected()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>InEditMode</code></td>
 									<td><code>Boolean</code></td>
-									<td>Gets the current edit/readonly state of the component (Read-only). To modify, use <code>setEditingMode()</code>.</td>
+									<td>Gets the current edit/readonly state of the component (Read-only). To modify,
+										use <code>setEditingMode()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>disabled</code></td>
@@ -243,12 +248,14 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>constructor(id)</code></td>
 									<td><code>(id: String)</code></td>
-									<td>Creates and binds a new <code>Combobox</code> instance to the HTML element using the specified ID.</td>
+									<td>Creates and binds a new <code>Combobox</code> instance to the HTML element using
+										the specified ID.</td>
 								</tr>
 								<tr>
 									<td><code>setEditingMode(ineditmode)</code></td>
 									<td><code>(ineditmode: Boolean)</code></td>
-									<td>Toggles editing mode. Setting to <code>false</code> locks the component as read-only and clears errors.</td>
+									<td>Toggles editing mode. Setting to <code>false</code> locks the component as
+										read-only and clears errors.</td>
 								</tr>
 								<tr>
 									<td><code>suspend(doSuspend, keepState)</code></td>
@@ -263,7 +270,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>newData(initialdata)</code></td>
 									<td><code>(initialdata: Object | String)</code></td>
-									<td>Initializes the input with a new selection item (e.g. <code>{value: 'SG', text: 'Singapore'}</code>).</td>
+									<td>Initializes the input with a new selection item (e.g.
+										<code>{value: 'SG', text: 'Singapore'}</code>).</td>
 								</tr>
 								<tr>
 									<td><code>setSelected(value, text)</code></td>
@@ -288,7 +296,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>isChanged()</code></td>
 									<td><code>()</code></td>
-									<td>Checks if the current <code>value</code> differs from the last saved state value.</td>
+									<td>Checks if the current <code>value</code> differs from the last saved state
+										value.</td>
 								</tr>
 								<tr>
 									<td><code>setOptions(data)</code></td>

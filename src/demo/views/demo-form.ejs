@@ -8,16 +8,16 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<!-- Library styles (direct loading) -->
-	<link rel="stylesheet" href="styles/fgta5js-v1.9.2.min.css" />
+	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
 
 	<!-- Core Demo stylesheet -->
-	<link rel="stylesheet" href="styles/demo.css" />
-	<link rel="stylesheet" href="styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
 </head>
 
 <body>
 	<!-- Entry script for the library -->
-	<script type="module" src="scripts/fgta5js-v1.9.2.min.js"></script>
+	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
 
 	<div class="container">
 		<!-- Back to Overview link -->
@@ -221,7 +221,7 @@
 
 	<!-- Loader & Binding Modules -->
 	<script type="module">
-		import Page from '/scripts/demoform.mjs'
+		import Page from '/demo/scripts/demo-form.mjs'
 
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();

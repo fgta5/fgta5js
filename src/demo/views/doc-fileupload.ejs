@@ -9,13 +9,13 @@
 
 
 	<!-- Library styles: Production -->
-	<link rel="stylesheet" href="styles/fgta5js-v1.9.2.min.css" />
+	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
 
 
 	<!-- Core Demo stylesheet & Docs overrides -->
-	<link rel="stylesheet" href="styles/demo.css" />
-	<link rel="stylesheet" href="styles/ferrine.css" />
-	<link rel="stylesheet" href="styles/documentation.css" />
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
 
 
 	<script>
@@ -25,7 +25,7 @@
 
 <body>
 	<!-- Register fgta5 global components namespace -->
-	<script type="module" src="scripts/fgta5js-v1.9.2.min.js"></script>
+	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
 
 
 	<div class="container">
@@ -58,7 +58,8 @@
 
 
 			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
-				A specialized file upload input component featuring filename previews, download links integration, and edit/read-only mode state management.
+				A specialized file upload input component featuring filename previews, download links integration, and
+				edit/read-only mode state management.
 			</p>
 		</header>
 
@@ -86,12 +87,15 @@
 				<section id="overview" class="doc-section">
 					<h2>Overview</h2>
 					<div class="doc-callout">
-						<strong>Inheritance Notice:</strong> Class <code>Filebox</code> (also referenced as File Upload) inherits all of its core
+						<strong>Inheritance Notice:</strong> Class <code>Filebox</code> (also referenced as File Upload)
+						inherits all of its core
 						state tracking, validation logic, editing mode configurations, and event handlers from the
 						abstract base class <a href="/input"><code>Input</code></a>.
 					</div>
 					<p>
-						The <code>Filebox</code> class wraps HTML standard file inputs within the <code>fgta5js</code> framework. It formats selected file naming displays, supports optional download anchor nodes, and enables validation tracking for mandatory files.
+						The <code>Filebox</code> class wraps HTML standard file inputs within the <code>fgta5js</code>
+						framework. It formats selected file naming displays, supports optional download anchor nodes,
+						and enables validation tracking for mandatory files.
 					</p>
 				</section>
 
@@ -114,7 +118,8 @@
 								<div class="demo-input-field" field="playground_filebox" style="flex: 1 1 100%;">
 									<form id="myform" locked="true">
 										<label for="playground_filebox">Attachment Document</label>
-										<input id="playground_filebox" fgta5-component="Filebox" required placeholder="Upload attachment file...">
+										<input id="playground_filebox" fgta5-component="Filebox" required
+											placeholder="Upload attachment file...">
 									</form>
 								</div>
 
@@ -158,7 +163,8 @@
 				<!-- HTML Markup Section -->
 				<section id="html-markup" class="doc-section">
 					<h2>HTML Markup</h2>
-					<p>Define standard file inputs using standard HTML. Set <code>fgta5-component="Filebox"</code> to enable binding.
+					<p>Define standard file inputs using standard HTML. Set <code>fgta5-component="Filebox"</code> to
+						enable binding.
 					</p>
 
 					<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span>&gt;
@@ -195,12 +201,14 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>file</code></td>
 									<td><code>File | Number</code></td>
-									<td>Gets the raw selected browser <code>File</code> instance or <code>0</code> if none selected.</td>
+									<td>Gets the raw selected browser <code>File</code> instance or <code>0</code> if
+										none selected.</td>
 								</tr>
 								<tr>
 									<td><code>InEditMode</code></td>
 									<td><code>Boolean</code></td>
-									<td>Gets the current edit/readonly state of the component (Read-only). To modify, use <code>setEditingMode()</code>.</td>
+									<td>Gets the current edit/readonly state of the component (Read-only). To modify,
+										use <code>setEditingMode()</code>.</td>
 								</tr>
 								<tr>
 									<td><code>disabled</code></td>
@@ -228,12 +236,14 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>constructor(id)</code></td>
 									<td><code>(id: String)</code></td>
-									<td>Creates and binds a new <code>Filebox</code> instance to the HTML element using the specified ID.</td>
+									<td>Creates and binds a new <code>Filebox</code> instance to the HTML element using
+										the specified ID.</td>
 								</tr>
 								<tr>
 									<td><code>setEditingMode(ineditmode)</code></td>
 									<td><code>(ineditmode: Boolean)</code></td>
-									<td>Toggles editing mode. Setting to <code>false</code> locks the component as read-only, disabling interactive file selectors and clearing errors.</td>
+									<td>Toggles editing mode. Setting to <code>false</code> locks the component as
+										read-only, disabling interactive file selectors and clearing errors.</td>
 								</tr>
 								<tr>
 									<td><code>suspend(doSuspend, keepState)</code></td>
@@ -253,7 +263,8 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>setDownloadLink(linktext, url)</code></td>
 									<td><code>(linktext: String, url: String | Function)</code></td>
-									<td>Enables rendering an anchor tag with a download link or custom click callback underneath the input fields. Pass `null` to hide the download link.</td>
+									<td>Enables rendering an anchor tag with a download link or custom click callback
+										underneath the input fields. Pass `null` to hide the download link.</td>
 								</tr>
 								<tr>
 									<td><code>getLastValue()</code></td>
@@ -263,12 +274,14 @@ form.<span class="hl-function">render</span>()</code></pre>
 								<tr>
 									<td><code>isChanged()</code></td>
 									<td><code>()</code></td>
-									<td>Checks if the current <code>value</code> differs from the last saved state value.</td>
+									<td>Checks if the current <code>value</code> differs from the last saved state
+										value.</td>
 								</tr>
 								<tr>
 									<td><code>reset()</code></td>
 									<td><code>()</code></td>
-									<td>Resets the file selector, restoring display parameters to the last saved value.</td>
+									<td>Resets the file selector, restoring display parameters to the last saved value.
+									</td>
 								</tr>
 							</tbody>
 						</table>

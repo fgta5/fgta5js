@@ -1,0 +1,41 @@
+@import url("/demo/fonts/karla.css");
+
+* {
+	font-family: "Karla";
+}
+
+
+body {
+	background-color: white;
+	overscroll-behavior-y: contain;
+	user-select: none;
+	padding: 0px;
+	margin: 0px;
+	overscroll-behavior: contain;
+	font-size: 14px;
+}
+
+input {
+	user-select: text;
+}
+
+dialog {
+	outline: none;
+}
+
+
+
+/* khusus mobile */
+@media screen and (max-width: 500px) {
+
+	html,
+	body,
+	input,
+	button {
+		font-size: 20px;
+	}
+}
+
+
+/* khusus desktop */
+@media screen and (min-width: 501px) {}

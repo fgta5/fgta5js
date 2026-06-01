@@ -147,7 +147,7 @@ function obj_kota_selecting(evt) {
 	}
 
 
-	cbo.Wait()
+	cbo.wait()
 	cbo.AbortHandler = () => { loader.Abort() }
 	loader.load('/getdata', args, (err, result) => {
 		console.log('loading..')
@@ -157,7 +157,7 @@ function obj_kota_selecting(evt) {
 			evt.detail.addRow(row.value, row.text, row)
 		}
 		dialog.setNext(result.nextoffset, result.limit)
-		cbo.Wait(false)
+		cbo.wait(false)
 	})
 
 
