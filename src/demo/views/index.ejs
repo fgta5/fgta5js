@@ -201,6 +201,103 @@
 				</div>
 			</section>
 
+			<!-- Getting Started Hero Banner -->
+			<section id="gettingstarted" class="getting-started-hero"
+				style="margin-top: 4rem; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border-radius: 24px; padding: 3.5rem 3rem; color: #ffffff; position: relative; overflow: hidden; box-shadow: 0 20px 40px -15px rgba(79, 70, 229, 0.3);">
+				<!-- Decorative light blobs -->
+				<div
+					style="position: absolute; top: -50px; right: -50px; width: 250px; height: 250px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); filter: blur(30px); pointer-events: none;">
+				</div>
+				<div
+					style="position: absolute; bottom: -100px; left: -50px; width: 300px; height: 300px; border-radius: 50%; background: rgba(255, 255, 255, 0.04); filter: blur(40px); pointer-events: none;">
+				</div>
+
+				<div
+					style="display: flex; gap: 3rem; flex-wrap: wrap; align-items: flex-start; position: relative; z-index: 2;">
+					<div style="flex: 1 1 450px;">
+						<div class="badge"
+							style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); margin-bottom: 1rem; box-shadow: none;">
+							<span class="badge-dot" style="background-color: #ffffff;"></span>
+							GETTING STARTED
+						</div>
+						<h2
+							style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; letter-spacing: -0.02em;">
+							Ready to build with fgta5js?</h2>
+						<p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.6; margin-bottom: 0;">
+							Start here to explore and learn the simplest program examples using fgta5js, and quickly
+							master form components or single-page shell application configuration.
+						</p>
+					</div>
+
+					<div style="flex: 1 1 350px; display: flex; flex-direction: column; gap: 1.25rem;">
+						<!-- Link 1 -->
+						<a href="/getting-started-form" class="hero-link-card"
+							style="display: flex; align-items: center; gap: 1.25rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: #ffffff; transition: all 0.3s ease; backdrop-filter: blur(10px);">
+							<div
+								style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.3s ease;">
+								<svg viewBox="0 0 24 24"
+									style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+									<polyline points="14 2 14 8 20 8"></polyline>
+									<line x1="16" y1="13" x2="8" y2="13"></line>
+									<line x1="16" y1="17" x2="8" y2="17"></line>
+								</svg>
+							</div>
+							<div style="flex-grow: 1;">
+								<h3
+									style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; margin: 0 0 0.25rem 0; color: #ffffff;">
+									Simplest Form Component</h3>
+								<p style="font-size: 0.85rem; margin: 0; opacity: 0.8; line-height: 1.4;">Learn from the
+									simplest Textbox example, from embedding CSS/JS assets to basic rendering.</p>
+							</div>
+							<span class="hero-link-arrow"
+								style="font-size: 1.25rem; transition: transform 0.3s ease; display: inline-block;">→</span>
+						</a>
+
+						<!-- Link 2 -->
+						<a href="/getting-started-appmanager" class="hero-link-card"
+							style="display: flex; align-items: center; gap: 1.25rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: #ffffff; transition: all 0.3s ease; backdrop-filter: blur(10px);">
+							<div
+								style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.3s ease;">
+								<svg viewBox="0 0 24 24"
+									style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+									<rect x="3" y="3" width="7" height="9"></rect>
+									<rect x="14" y="3" width="7" height="5"></rect>
+									<rect x="14" y="12" width="7" height="9"></rect>
+									<rect x="3" y="16" width="7" height="5"></rect>
+								</svg>
+							</div>
+							<div style="flex-grow: 1;">
+								<h3
+									style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; margin: 0 0 0.25rem 0; color: #ffffff;">
+									Application Manager Guide</h3>
+								<p style="font-size: 0.85rem; margin: 0; opacity: 0.8; line-height: 1.4;">Set up Single
+									Page Shell application loading.</p>
+							</div>
+							<span class="hero-link-arrow"
+								style="font-size: 1.25rem; transition: transform 0.3s ease; display: inline-block;">→</span>
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<style>
+				.hero-link-card:hover {
+					background: rgba(255, 255, 255, 0.18) !important;
+					border-color: rgba(255, 255, 255, 0.4) !important;
+					transform: translateX(6px);
+					box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+				}
+
+				.hero-link-card:hover .hero-link-arrow {
+					transform: translateX(4px);
+				}
+
+				.hero-link-card:hover div:first-child {
+					transform: scale(1.05);
+				}
+			</style>
+
 			<!-- Download Section -->
 			<section class="download-section"
 				style="margin-top: 2rem; text-align: center; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 3rem 2rem; box-shadow: var(--shadow-md);">

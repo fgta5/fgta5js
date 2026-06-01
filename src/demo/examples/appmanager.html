@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Application Manager</title>
+	<link rel="stylesheet" href="https://rawcdn.githack.com/fgta5/fgta5js/demo-server/dist/fgta5js-v1.9.2.min.css">
+</head>
+
+<body>
+	<main id="appmain">
+		<h1>Welcome,</h1>
+		<div data-currentuser></div>
+		<div data-favourite></div>
+		<div data-openedmodule></div>
+	</main>
+
+	<!-- Load library bundle -->
+	<script type="module"
+		src="https://rawcdn.githack.com/fgta5/fgta5js/demo-server/dist/fgta5js-v1.9.2.min.js"></script>
+</body>
+<script type="module">
+	const host = window.location.origin
+	window.addEventListener("load", async () => {
+		const appmgr = new $fgta5.AppManager('appmain')
+		appmgr.setTitle('My Apps Manager')
+		appmgr.setUser({ userid: '1234', displayname: 'Ferrine', profilepic: '' })
+		appmgr.setMenu([
+			new $fgta5.ModuleData({ name: 'apps1', title: 'Aplikasi 1', url: host + '/demo/examples/apps1.html' }),
+			new $fgta5.ModuleData({ name: 'apps2', title: 'Aplikasi 2', url: host + '/demo/examples/apps2.html' }),
+			new $fgta5.ModuleData({ name: 'apps3', title: 'Aplikasi 3', url: host + '/demo/examples/apps3.html' }),
+		])
+		appmgr.setFavourite(['apps1', 'apps2'])
+	})
+</script>
+
+</html>

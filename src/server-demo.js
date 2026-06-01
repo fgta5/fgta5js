@@ -83,6 +83,18 @@ app.get('/applicationmanager', (req, res) => {
 	res.render('doc-applicationmanager', {});
 });
 
+app.get('/getting-started-form', (req, res) => {
+	res.render('getting-started-form', {});
+});
+
+app.get('/getting-started-appmanager', (req, res) => {
+	res.render('getting-started-appmanager', {});
+});
+
+app.get('/getting-started-application', (req, res) => {
+	res.render('getting-started-application', {});
+});
+
 
 // demo aplikasi, buat akses /application/<nama-module>
 app.get('/application/:module', (req, res) => {
