@@ -29,11 +29,23 @@
 }
 
 .fgta5-entry-label[required]::after {
-	content: '*';
+	content: '•';
 	margin-left: 2px;
-	color: red;
+	color: rgb(239, 68, 68);
 	opacity: 1 !important;
+	font-size: 1rem;
+
 }
+
+
+@media screen and (min-width: 501px) {
+	.fgta5-entry-label[required]::after {
+		position: absolute;
+		right: -1px;
+		top: -4px;
+	}
+}
+
 
 
 .fgta5-entry-input-wrapper {

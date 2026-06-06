@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>FGTA5 Dev - Textbox</title>
+
+	<link rel="stylesheet" href="/dev/style.css">
+</head>
+
+<body>
+	<h1>Textbox</h1>
+
+
+	<div class="buttons-panel">
+		<button id="btnTogle">Togle Edit</button>
+	</div>
+	<div>
+		<form id="main_form" locked="true">
+			<div id="obj_name-container" class="input-field" field="obj_name">
+				<label for="obj_name">
+					Nama Lengkap Anda
+				</label>
+				<input id="obj_name" fgta5-component="Textbox" placeholder="name" autocomplete="off" spellcheck="false"
+					binding="auth_name" data-tabindex="2" character-case="uppercase" required
+					invalid-message-required="nama authorisasi harus diisi" autocomplete="off" spellcheck="false"
+					maxlength="30">
+			</div>
+		</form>
+	</div>
+
+
+	<script type="module" src="/fgta5/main.mjs"></script>
+	<script type="module">
+		import Page from '/dev/textbox-dev.mjs';
+		let page = new Page()
+		window.addEventListener("load", async () => {
+			// Initialize component
+			await page.main()
+		})
+	</script>
+</body>
+
+</html>

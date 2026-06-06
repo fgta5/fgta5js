@@ -1,4 +1,4 @@
-// server untuk test dan develop komponen
+// server yang akan dipublish
 
 import express from 'express';
 import { fileURLToPath } from 'node:url';
@@ -105,6 +105,42 @@ app.get('/application/:module', (req, res) => {
 app.get('/demo-applicationmanager', (req, res) => {
 	res.render('demo-applicationmanager', {});
 });
+
+
+
+
+
+
+// Development
+app.get('/dev', (req, res) => {
+	res.render(path.join(__dirname, 'dev', 'index-dev.ejs'), {});
+});
+
+app.use('/dev', (req, res, next) => {
+	if (req.path.endsWith('.ejs')) {
+		return res.status(403).send('Forbidden');
+	}
+	next();
+});
+app.use('/dev', express.static(path.join(__dirname, 'dev')));
+
+
+app.get('/dev/:module', (req, res) => {
+	const module = req.params.module;
+	res.render(path.join(__dirname, 'dev', `${module}-dev.ejs`), {});
+});
+
+
+app.get('/fgta5/main.mjs', (req, res) => {
+	res.type('application/javascript');
+	res.sendFile(path.join(__dirname, 'main.mjs'));
+});
+
+app.use('/fgta5/styles', express.static(path.join(__dirname, '..', 'styles')));
+app.use('/fgta5/components', express.static(path.join(__dirname, 'components')));
+
+
+
 
 
 
