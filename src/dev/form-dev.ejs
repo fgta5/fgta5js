@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>FGTA5 Dev - Form</title>
+
+	<link rel="stylesheet" href="/dev/style.css">
+</head>
+
+<body>
+	<h1>Form</h1>
+
+
+	<div class="buttons-panel">
+		<button id="btnTogle" class="action-button">Togle Edit</button>
+	</div>
+	<div style="width: 400px;">
+		<form id="main_form" locked="true">
+			<div id="obj_name-container" class="input-field" field="obj_name"
+				style="grid-row: 1; grid-column: 1 / span 2;">
+				<label for="obj_name">
+					Nama
+				</label>
+				<input id="obj_name" fgta5-component="Textbox" placeholder="name" autocomplete="off" spellcheck="false"
+					binding="auth_name" data-tabindex="2" character-case="uppercase" required
+					invalid-message-required="nama authorisasi harus diisi" autocomplete="off" spellcheck="false"
+					maxlength="30">
+			</div>
+
+
+			<div id="obj_disabled-container" class="input-field" field="obj_disabled"
+				style="grid-row: 1; grid-column: 3 / span 2;">
+				<label for="obj_disabled" class="fgta5-entry-label">Account Is Disabled</label>
+				<input id="obj_disabled" fgta5-component="Checkbox" type="checkbox" binding="isdisabled">
+
+			</div>
+
+
+			<div id="obj_address-container" class="input-field" field="obj_name"
+				style="grid-row: 2; grid-column: 1 / span 6;">
+				<label for="obj_address">
+					Alamat
+				</label>
+				<input id="obj_address" fgta5-component="Textbox" placeholder="name" autocomplete="off"
+					spellcheck="false" binding="auth_name" data-tabindex="2" autocomplete="off" spellcheck="false"
+					maxlength="30">
+			</div>
+
+		</form>
+	</div>
+
+
+	<script type="module" src="/fgta5/main.mjs"></script>
+	<script type="module">
+		import Page from '/dev/form-dev.mjs';
+		let page = new Page()
+		window.addEventListener("load", async () => {
+			// Initialize component
+			await page.main()
+		})
+	</script>
+</body>
+
+</html>

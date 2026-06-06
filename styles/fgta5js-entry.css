@@ -6,6 +6,14 @@
 	flex-grow: 1;
 	margin-top: auto;
 	margin-bottom: auto;
+
+
+	border-radius: 4px;
+	border-collapse: separate;
+	overflow: hidden;
+	position: relative;
+	height: auto;
+	min-height: min-content;
 }
 
 .fgta5-entry-container[fgta5-component="Datepicker"] {
@@ -24,6 +32,10 @@
 }
 
 
+.fgta5-entry-label {
+	padding-right: 12px;
+}
+
 .fgta5-entry-label[disabled] {
 	opacity: 0.5;
 }
@@ -41,7 +53,7 @@
 @media screen and (min-width: 501px) {
 	.fgta5-entry-label[required]::after {
 		position: absolute;
-		right: -1px;
+		right: 4px;
 		top: -4px;
 	}
 }
@@ -54,6 +66,7 @@
 	padding: 0;
 	display: flex;
 	position: relative;
+	border-radius: 4px;
 }
 
 .fgta5-entry-input-wrapper[editmode="true"]:focus-within {
@@ -87,6 +100,10 @@
 	flex-grow: 1;
 	width: calc(100% - 10px);
 	padding: 5px 5px 3px 5px;
+
+	border-radius: 4px;
+
+
 	/* Padding untuk kenyamanan */
 	transition: border-color 0.3s ease, background-color 0.3s linear;
 	/* Animasi transisi */
@@ -171,19 +188,14 @@
 	font-size: 0.8rem;
 	margin-top: 4px;
 	margin-bottom: 4px;
-	/* white-space: nowrap; */
-	position: relative;
 
 }
 
 .fgta5-entry-error>div {
-	/* position: absolute; */
 	background-color: rgba(255, 255, 255, 0.815);
 	padding: 5px;
 	border: 1px dashed #ccc;
-	width: 300px;
-	z-index: 10000;
-
+	right: 0;
 }
 
 .fgta5-entry-description {
