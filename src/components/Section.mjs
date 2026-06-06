@@ -20,40 +20,177 @@ const BackButtonClickEvent = (data) => { return new CustomEvent(EVT_BACKBUTTONCL
 const SectionShowingEvent = (data) => { return new CustomEvent(EVT_SECTIONSHOWING, data) }
 
 
+/**
+ * Komponen Section untuk merender dan mengelola satu halaman/bagian (section) di dalam aplikasi.
+ * Mendukung navigasi transisi geser (kiri/kanan), judul halaman, ikon, dan tombol kembali (back).
+ */
 export default class Section {
+	/**
+	 * ID unik dari section.
+	 * @type {string}
+	 * @private
+	 */
 	#id
+
+	/**
+	 * Elemen HTML dari section.
+	 * @type {HTMLElement}
+	 * @private
+	 */
 	#element
+
+	/**
+	 * Indeks urutan pemuatan section.
+	 * @type {number}
+	 * @private
+	 */
 	#index
+
+	/**
+	 * Nama section.
+	 * @type {string}
+	 * @private
+	 */
 	#name
+
+	/**
+	 * Judul dari section.
+	 * @type {string}
+	 * @private
+	 */
 	#title
+
+	/**
+	 * Section sebelumnya untuk keperluan navigasi back.
+	 * @type {Section|null}
+	 * @private
+	 */
 	#previoussection
+
+	/**
+	 * Instans SectionCarousell pembungkus yang menampung section ini.
+	 * @type {SectionCarousell}
+	 * @private
+	 */
 	#carousell
+
+	/**
+	 * Fungsi pembantu untuk mendapatkan section yang aktif saat ini.
+	 * @type {Function}
+	 * @private
+	 */
 	#fn_getActiveSection
+
+	/**
+	 * Target event kustom untuk Section.
+	 * @type {EventTarget}
+	 * @private
+	 */
 	#listener = new EventTarget()
 
+	/**
+	 * Nama atribut HTML untuk menandai section aktif.
+	 * @type {string}
+	 */
 	static get ATTR_ACTIVE() { return ATTR_ACTIVE }
+
+	/**
+	 * Konstanta arah geser ke kiri (masuk data baru).
+	 * @type {number}
+	 */
 	static get DIR_LEFT() { return DIR_LEFT }
+
+	/**
+	 * Konstanta arah geser ke kanan (navigasi kembali).
+	 * @type {number}
+	 */
 	static get DIR_RIGHT() { return DIR_RIGHT }
+
+	/**
+	 * Nama event saat tombol kembali (back) diklik.
+	 * @type {string}
+	 */
 	static get EVT_BACKBUTTONCLICK() { return EVT_BACKBUTTONCLICK }
+
+	/**
+	 * Nama event saat section mulai ditampilkan.
+	 * @type {string}
+	 */
 	static get EVT_SECTIONSHOWING() { return EVT_SECTIONSHOWING }
 
 
+	/**
+	 * Mendapatkan ID section.
+	 * @returns {string}
+	 */
 	get Id() { return this.#id } 
+
+	/**
+	 * Mendapatkan indeks section.
+	 * @returns {number}
+	 */
 	get Index() { return this.#index }
+
+	/**
+	 * Mendapatkan nama section.
+	 * @returns {string}
+	 */
 	get Name() { return this.#name }
+
+	/**
+	 * Mendapatkan judul section.
+	 * @returns {string}
+	 */
 	get Title()  { return this.#title }
+
+	/**
+	 * Mendapatkan elemen HTML section.
+	 * @returns {HTMLElement}
+	 */
 	get Element() { return this.#element }
+
+	/**
+	 * Mendapatkan section sebelumnya.
+	 * @returns {Section|null}
+	 */
 	get PreviousSection() { return this.#previoussection}
+
+	/**
+	 * Mendapatkan fungsi pemanggil section aktif.
+	 * @returns {Function}
+	 */
 	get getActiveSection() { return this.#fn_getActiveSection }
+
+	/**
+	 * Mendapatkan EventTarget listener.
+	 * @returns {EventTarget}
+	 */
 	get Listener() { return this.#listener }
+
+	/**
+	 * Mendapatkan instans SectionCarousell pembungkus.
+	 * @returns {SectionCarousell}
+	 */
 	get Carousell() { return this.#carousell } 
 
+	/**
+	 * Mengeset judul baru untuk section dan meng-update header DOM.
+	 * @param {string} v - Judul baru.
+	 */
 	set Title(v) {
 		this.#title = v
 		sec_setTitle(this, v)
 	}
 
 
+	/**
+	 * Membuat instans baru dari Section.
+	 * @param {HTMLElement} el - Elemen HTML section.
+	 * @param {Object} args - Parameter inisialisasi section.
+	 * @param {number} args.index - Indeks section.
+	 * @param {SectionCarousell} args.carousell - Instans SectionCarousell.
+	 * @param {Function} args.fn_getActiveSection - Callback untuk mendapat section yang aktif.
+	 */
 	constructor(el, args) {
 		const id = el.id
 		const name = id
@@ -83,6 +220,11 @@ export default class Section {
 
 
 
+	/**
+	 * Menampilkan section ini dengan transisi animasi geser secara asinkron.
+	 * @param {Object} [args] - Argumen transisi (misal: direction).
+	 * @param {Function} [fn_callback] - Callback yang dipanggil sesaat sebelum transisi.
+	 */
 	async show(args, fn_callback) {
 		const currSection = this.getActiveSection()
 		this.#previoussection = currSection // set current session ke previous untuk keperluan back
@@ -90,19 +232,40 @@ export default class Section {
 	}
 
 
+	/**
+	 * Section kustom tujuan ketika melakukan navigasi kembali.
+	 * @type {Section|null}
+	 */
 	sectionReturn
+
+	/**
+	 * Menetapkan section tertentu sebagai tujuan navigasi kembali.
+	 * @param {Section|null} section - Section tujuan.
+	 */
 	setSectionReturn(section) {
 		this.sectionReturn = section
 	}
 
+	/**
+	 * Mengatur ikon visual pada header section.
+	 * @param {string|null} iconUrl - URL gambar ikon, atau null untuk menggunakan ikon program default.
+	 */
 	setIconUrl(iconUrl) {
 		sec_setIconUrl(this, iconUrl)
 	}
 
+	/**
+	 * Menambahkan listener event.
+	 * @param {string} eventname - Nama event.
+	 * @param {Function} callback - Callback function.
+	 */
 	addEventListener(eventname, callback) {
 		this.Listener.addEventListener(eventname, callback)
 	}	
 
+	/**
+	 * Melakukan navigasi kembali ke section return secara terprogram.
+	 */
 	back() {
 		if (this.sectionReturn!=null) {
 			this.sectionReturn.show({direction:1})
@@ -111,6 +274,12 @@ export default class Section {
 }
 
 
+/**
+ * Mengeset gambar ikon atau ikon program default pada panel header section.
+ * @param {Section} self - Instans Section.
+ * @param {string|null} iconUrl - URL gambar ikon.
+ * @private
+ */
 function sec_setIconUrl(self, iconUrl) {
 	const iconDiv = self.Nodes.iconDiv
 	iconDiv.style.display = 'unset'
@@ -125,6 +294,12 @@ function sec_setIconUrl(self, iconUrl) {
 	}
 }
 
+/**
+ * Fungsi pembantu inisialisasi elemen HTML section, menambahkan topbar header, judul, dan tombol back.
+ * @param {Section} self - Instans Section.
+ * @param {Object} args - Parameter inisialisasi.
+ * @private
+ */
 function sec_construct(self, args) {
 	const el = self.Element
 	
@@ -183,6 +358,13 @@ function sec_construct(self, args) {
 }
 
 
+/**
+ * Menampilkan section tujuan dengan transisi efek animasi slide geser (internal helper).
+ * @param {Section} self - Instans Section.
+ * @param {Object} args - Argumen opsi transisi.
+ * @param {Function} [fn_callback] - Callback prapemrosesan.
+ * @private
+ */
 async function sec_show(self, args, fn_callback) {
 	if (typeof fn_callback==='function') {
 		await fn_callback()
@@ -259,6 +441,11 @@ async function sec_show(self, args, fn_callback) {
 }
 
 
+/**
+ * Handler internal ketika tombol kembali diklik (mengirimkan event backbuttonclick).
+ * @param {Section} self - Instans Section.
+ * @private
+ */
 function sec_backButtonClick(self) {
 	// back to self.PreviousSection
 	self.Listener.dispatchEvent(BackButtonClickEvent({
@@ -276,6 +463,12 @@ function sec_backButtonClick(self) {
 }
 
 
+/**
+ * Mengubah teks judul di panel header DOM section.
+ * @param {Section} self - Instans Section.
+ * @param {string} v - Judul baru.
+ * @private
+ */
 function sec_setTitle(self, v) {
 	self.Nodes.Title.innerHTML = v
 }

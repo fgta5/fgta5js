@@ -1,10 +1,35 @@
+/**
+ * Kelas Modal utilitas untuk menampilkan masker pemuatan (mask loader) dan progress bar secara modal di atas halaman.
+ */
 export default class Modal  {
+	/**
+	 * Menampilkan dialog modal kosong.
+	 * @param {string|HTMLElement} content - Konten yang akan dimasukkan ke dialog.
+	 * @returns {HTMLDialogElement} Elemen dialog modal baru.
+	 */
 	static show (content) { return modal_show(content) }
+
+	/**
+	 * Membuat masker pemuatan (load mask / loading spinner) modal dengan pesan kustom.
+	 * @param {string} [message] - Pesan tunggu yang ditampilkan.
+	 * @returns {HTMLDialogElement} Elemen dialog modal berisi loader mask.
+	 */
 	static createMask (message) { return modal_createMask(message) }
+
+	/**
+	 * Membuat progress bar modal untuk menampilkan progres pemrosesan bertahap.
+	 * @param {Object} [config] - Konfigurasi modal progress bar.
+	 * @returns {HTMLDialogElement} Elemen dialog modal progress bar.
+	 */
 	static createProgress (config) { return modal_createProgress(config) }
 }
 
 
+/**
+ * Helper internal untuk membuat elemen `<dialog>` modal baru yang dimasukkan ke body dan ditampilkan.
+ * @returns {HTMLDialogElement}
+ * @private
+ */
 function CreateModal() {
 	const modal = document.createElement('dialog')
 	modal.classList.add('fgta5-modal-message')
@@ -17,11 +42,23 @@ function CreateModal() {
 }
 
 
+/**
+ * Menampilkan modal dialog biasa (internal helper).
+ * @param {string|HTMLElement} content - Konten.
+ * @returns {HTMLDialogElement}
+ * @private
+ */
 function modal_show(content) {
 	const modal = CreateModal()
 	return modal
 }
 
+/**
+ * Membuat masker pemuatan dengan spinner dan teks tunggu (internal helper).
+ * @param {string} [message='Please wait ...'] - Pesan.
+ * @returns {HTMLDialogElement}
+ * @private
+ */
 function modal_createMask(message) {
 	message =  message===undefined ? 'Please wait ...' : message
 	
@@ -49,6 +86,12 @@ function modal_createMask(message) {
 }
 
 
+/**
+ * Membuat progress bar modal (internal helper).
+ * @param {Object} [config] - Konfigurasi progress bar.
+ * @returns {HTMLDialogElement}
+ * @private
+ */
 function modal_createProgress(config) {
 	if (config === undefined) config = {}
 	
@@ -123,4 +166,3 @@ function modal_createProgress(config) {
 
 	return modal
 }
-

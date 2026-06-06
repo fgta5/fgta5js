@@ -1,4 +1,6 @@
 const btnTogle = new $fgta5.ActionButton('btnTogle')
+const btnAccept = new $fgta5.ActionButton('btnAccept')
+const btnReset = new $fgta5.ActionButton('btnReset')
 
 const form = new $fgta5.Form('main_form')
 
@@ -11,6 +13,15 @@ export default class {
 
 		btnTogle.addEventListener('click', (args) => {
 			btnTogle_click(this, args)
+		})
+
+		btnAccept.addEventListener('click', (args) => {
+			btnAccept_click(this, args)
+
+		})
+
+		btnReset.addEventListener('click', (args) => {
+			btnReset_click(this, args)
 		})
 	}
 }
@@ -27,7 +38,40 @@ function update_togle_button() {
 }
 
 
-function btnTogle_click(self, args) {
+async function btnTogle_click(self, args) {
+	if (!form.isLocked() && form.isChanged()) {
+		// when form is modified
+		await $fgta5.MessageBox.warning('Data is changed, please accept changes or reset before lock');
+		return
+	}
+
+
 	form.lock(!form.isLocked())
 	update_togle_button()
+
+	if (form.isLocked()) {
+		btnAccept.suspend(true)
+		btnReset.suspend(true)
+	} else {
+		btnAccept.suspend(false)
+		btnReset.suspend(false)
+	}
+}
+
+
+async function btnAccept_click(self, args) {
+	console.log('accept')
+	form.acceptChanges()
+}
+
+
+async function btnReset_click(self, args) {
+	if (form.isChanged()) {
+		var res = await $fgta5.MessageBox.confirm('Data is changed, are you sure to reset?')
+		console.log(res)
+		if (res != 'ok') {
+			return
+		}
+		form.reset()
+	}
 }

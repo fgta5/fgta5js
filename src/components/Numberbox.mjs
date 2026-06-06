@@ -4,6 +4,18 @@ import Input from "./Input.mjs"
 const ChangeEvent = (data) => { return new CustomEvent('changed', data) }
 
 
+/* HTML Attribute
+=================
+- precision     : Menentukan jumlah digit di belakang koma (desimal) untuk format angka.
+- maxlength     : Membatasi jumlah maksimum karakter angka yang bisa dimasukkan.
+- disabled      : Menonaktifkan input angka agar tidak dapat diinteraksi.
+- digitgrouping : Mengatur apakah pemisah ribuan (koma/titik) akan digunakan (nilai: "true" | "false").
+- required      : Menandai bahwa input angka ini wajib diisi saat validasi form.
+- min           : Menentukan batas nilai angka minimum untuk validasi.
+- max           : Menentukan batas nilai angka maksimum untuk validasi.
+*/
+
+
 /**
  * Kelas komponen Numberbox yang mewarisi kelas base Input.
  * Menyediakan dukungan untuk input angka dengan pemisah ribuan, presisi desimal, dan validasi rentang nilai.

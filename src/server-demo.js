@@ -42,68 +42,33 @@ app.get('/', (req, res) => {
 	res.render('index', {});
 });
 
-app.get('/demo-form', (req, res) => {
-	res.render('demo-form', {});
-});
 
 
-app.get('/input', (req, res) => {
-	res.render('doc-input', {});
-});
-
-app.get('/textbox', (req, res) => {
-	res.render('doc-textbox', {});
-});
-
-app.get('/numberbox', (req, res) => {
-	res.render('doc-numberbox', {});
-});
-
-app.get('/datepicker', (req, res) => {
-	res.render('doc-datepicker', {});
-});
-
-app.get('/timepicker', (req, res) => {
-	res.render('doc-timepicker', {});
-});
-
-app.get('/checkbox', (req, res) => {
-	res.render('doc-checkbox', {});
-});
-
-app.get('/combobox', (req, res) => {
-	res.render('doc-combobox', {});
-});
-
-app.get('/fileupload', (req, res) => {
-	res.render('doc-fileupload', {});
-});
-
-app.get('/applicationmanager', (req, res) => {
-	res.render('doc-applicationmanager', {});
-});
-
-app.get('/getting-started-form', (req, res) => {
-	res.render('getting-started-form', {});
-});
-
-app.get('/getting-started-appmanager', (req, res) => {
-	res.render('getting-started-appmanager', {});
-});
-
-app.get('/getting-started-application', (req, res) => {
-	res.render('getting-started-application', {});
-});
 
 
-// demo aplikasi, buat akses /application/<nama-module>
+
 app.get('/application/:module', (req, res) => {
 	const module = req.params.module;
 	res.render('demo-application', { module });
 });
 
-app.get('/demo-applicationmanager', (req, res) => {
-	res.render('demo-applicationmanager', {});
+
+app.get('/demo-:module', (req, res) => {
+	const module = req.params.module;
+	res.render(`demo-${module}`, {});
+});
+
+
+app.get('/getting-started-:module', (req, res) => {
+	const module = req.params.module;
+	res.render(`getting-started-${module}`, {});
+});
+
+
+
+app.get('/:module', (req, res) => {
+	const module = req.params.module;
+	res.render(`doc-${module}`, {});
 });
 
 

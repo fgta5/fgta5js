@@ -74,9 +74,9 @@
 						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
 						<li class="doc-nav-item"><a href="#playground">Interactive Playground</a></li>
 						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
 						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
-						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 					</ul>
 				</div>
 
@@ -194,6 +194,49 @@
 form.<span class="hl-function">render</span>()</code></pre>
 				</section>
 
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Values</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>multiline</code></td>
+									<td><code>"true"</code></td>
+									<td>Transforms the input element internally into a <code>&lt;textarea&gt;</code> element to support multi-line text input.</td>
+								</tr>
+								<tr>
+									<td><code>placeholder</code></td>
+									<td><code>String</code></td>
+									<td>Helpful placeholder text displayed when the input is empty.</td>
+								</tr>
+								<tr>
+									<td><code>character-case</code></td>
+									<td><code>"uppercase" | "lowercase"</code></td>
+									<td>Automatically enforces the specified case conversion on user input and program settings.</td>
+								</tr>
+								<tr>
+									<td><code>required</code></td>
+									<td>N/A</td>
+									<td>Marks the component as required, enabling default empty validations.</td>
+								</tr>
+								<tr>
+									<td><code>data-tabindex</code></td>
+									<td><code>Number</code></td>
+									<td>Sets the native tabindex on the final rendered input component for keyboard navigation.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
 				<!-- Properties Section -->
 				<section id="properties" class="doc-section">
 					<h2>Properties</h2>
@@ -284,50 +327,6 @@ form.<span class="hl-function">render</span>()</code></pre>
 					</div>
 				</section>
 
-				<!-- HTML Attributes Section -->
-				<section id="attributes" class="doc-section">
-					<h2>HTML Attributes</h2>
-					<div class="api-table-wrapper">
-						<table class="api-table">
-							<thead>
-								<tr>
-									<th>Attribute</th>
-									<th>Values</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><code>multiline</code></td>
-									<td><code>"true"</code></td>
-									<td>Transforms the input element internally into a
-										<code>&lt;textarea&gt;</code>
-										element.
-									</td>
-								</tr>
-								<tr>
-									<td><code>character-case</code></td>
-									<td><code>"uppercase" | "lowercase"</code></td>
-									<td>Automatically enforces the specified case conversion on user input
-										and
-										program
-										settings.</td>
-								</tr>
-								<tr>
-									<td><code>required</code></td>
-									<td>N/A</td>
-									<td>Marks the component as required, enabling default empty validations.
-									</td>
-								</tr>
-								<tr>
-									<td><code>data-tabindex</code></td>
-									<td><code>Number</code></td>
-									<td>Sets the native tabindex on the final rendered input component.</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
 			</main>
 		</div>
 

@@ -19,6 +19,17 @@ const button_icon = `<svg transform="translate(0 3)" width="12" height="12" stro
 const ChangeEvent = (data) => { return new CustomEvent('changed', data) }
 
 
+/* HTML Attribute
+=================
+- placeholder   : Teks placeholder bantuan saat input tanggal masih kosong.
+- data-tabindex : Mengatur urutan tab (tabindex) navigasi keyboard pada elemen display.
+- disabled      : Menonaktifkan picker tanggal agar tidak dapat diinteraksi.
+- required      : Menandai bahwa input tanggal ini wajib diisi saat validasi form.
+- min           : Tanggal batas awal minimum yang diperbolehkan (format: YYYY-MM-DD).
+- max           : Tanggal batas akhir maksimum yang diperbolehkan (format: YYYY-MM-DD).
+*/
+
+
 /**
  * Kelas komponen Datepicker yang mewarisi kelas base Input.
  * Menyediakan dukungan input tanggal menggunakan calendar picker dengan pemformatan tampilan lokal.

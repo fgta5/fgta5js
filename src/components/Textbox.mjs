@@ -5,6 +5,17 @@ const BlurEvent = (data) => { return new CustomEvent('blur', data) }
 const KeydownEvent = (data) => { return new KeyboardEvent('keydown', data) }
 
 
+/* HTML Attribute
+=================
+- multiline      : Menentukan apakah input berupa teks multi-baris (<textarea>) jika bernilai "true" atau satu baris biasa.
+- placeholder    : Teks placeholder bantuan yang ditampilkan saat input masih kosong.
+- data-tabindex  : Mengatur urutan tab (tabindex) navigasi keyboard pada elemen input.
+- character-case : Mengatur kapitalisasi otomatis nilai teks input (nilai: "uppercase" | "lowercase").
+- required       : Menandai bahwa field input ini wajib diisi saat validasi form.
+*/
+
+
+
 /**
  * Kelas komponen Textbox yang mewarisi kelas base Input.
  * Menyediakan dukungan untuk elemen input teks satu baris (single-line) dan multi-baris (multiline), pengaturan huruf (casing), serta event kustom.

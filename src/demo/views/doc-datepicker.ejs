@@ -77,9 +77,9 @@
 						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
 						<li class="doc-nav-item"><a href="#playground">Interactive Playground</a></li>
 						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
 						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
-						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 					</ul>
 				</div>
 				<%-include('_mnu-components.ejs')%>
@@ -184,6 +184,54 @@
 					<p>Initialize and render the form in JavaScript:</p>
 					<pre><code><span class="hl-keyword">const</span> form = <span class="hl-keyword">new</span> <span class="hl-class">$fgta5.Form</span>(<span class="hl-string">'myform'</span>);
 form.<span class="hl-function">render</span>()</code></pre>
+				</section>
+
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Values</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>placeholder</code></td>
+									<td><code>String</code></td>
+									<td>Helpful placeholder text displayed when the input is empty.</td>
+								</tr>
+								<tr>
+									<td><code>disabled</code></td>
+									<td>N/A</td>
+									<td>Disables the picker tanggal, preventing any interaction.</td>
+								</tr>
+								<tr>
+									<td><code>required</code></td>
+									<td>N/A</td>
+									<td>Marks the component as required during form validation.</td>
+								</tr>
+								<tr>
+									<td><code>min</code></td>
+									<td><code>String (YYYY-MM-DD)</code></td>
+									<td>Lower date boundary validation constraint.</td>
+								</tr>
+								<tr>
+									<td><code>max</code></td>
+									<td><code>String (YYYY-MM-DD)</code></td>
+									<td>Upper date boundary validation constraint.</td>
+								</tr>
+								<tr>
+									<td><code>data-tabindex</code></td>
+									<td><code>Number</code></td>
+									<td>Sets the native tabindex on the final display element for keyboard navigation.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</section>
 
 				<!-- Properties Section -->
@@ -298,43 +346,6 @@ form.<span class="hl-function">render</span>()</code></pre>
 					</div>
 				</section>
 
-				<!-- HTML Attributes Section -->
-				<section id="attributes" class="doc-section">
-					<h2>HTML Attributes</h2>
-					<div class="api-table-wrapper">
-						<table class="api-table">
-							<thead>
-								<tr>
-									<th>Attribute</th>
-									<th>Values</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><code>min</code></td>
-									<td><code>String (YYYY-MM-DD)</code></td>
-									<td>Lower date boundary validation constraint.</td>
-								</tr>
-								<tr>
-									<td><code>max</code></td>
-									<td><code>String (YYYY-MM-DD)</code></td>
-									<td>Upper date boundary validation constraint.</td>
-								</tr>
-								<tr>
-									<td><code>required</code></td>
-									<td>N/A</td>
-									<td>Marks the component as required.</td>
-								</tr>
-								<tr>
-									<td><code>data-tabindex</code></td>
-									<td><code>Number</code></td>
-									<td>Sets the native tabindex on the final rendered input component.</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
 			</main>
 		</div>
 

@@ -9,6 +9,14 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 
+/* HTML Attribute
+=================
+- placeholder   : Teks placeholder bantuan saat file belum dipilih.
+- data-tabindex : Mengatur urutan tab (tabindex) navigasi keyboard pada elemen display.
+- disabled      : Menonaktifkan input filebox agar tidak dapat diinteraksi.
+- required      : Menandai bahwa input file ini wajib dipilih saat validasi form.
+*/
+
 /**
  * Kelas komponen Filebox yang mewarisi kelas base Input.
  * Menyediakan dukungan input file kustom dengan preview nama file, tautan unduhan, dan validasi file wajib diisi.

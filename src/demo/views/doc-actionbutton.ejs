@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ActionButton Component - fgta5js Documentation</title>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<!-- Library styles: Production -->
+	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
+
+
+	<!-- Core Demo stylesheet & Docs overrides -->
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
+
+
+	<script>
+		window.$validators = {}
+	</script>
+</head>
+
+<body>
+	<!-- Register fgta5 global components namespace -->
+	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
+
+
+	<div class="container">
+		<!-- Back link -->
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs')%>
+		</div>
+
+		<!-- Header -->
+		<header style="text-align: left; margin-bottom: 2.5rem;">
+
+
+			<div class=" badge">
+				<span class="badge-dot"></span>
+				Component
+			</div>
+
+
+			<div style="display: flex; column-gap: 1rem;">
+				<div class="title-icon-wrapper">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+						<path d="M12 8v8M8 12h8"></path>
+					</svg>
+				</div>
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">ActionButton</h1>
+			</div>
+
+
+
+			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+				A component wrapper that associates one or more native button/clickable elements with a unique ID or action name, supporting disabled states, visibility toggles, text updates, suspension, and click intercepts.
+			</p>
+		</header>
+
+		<!-- Main Documentation Layout -->
+		<div class="doc-layout">
+			<!-- Sidebar -->
+			<aside class="doc-sidebar">
+				<div class="doc-nav-card">
+					<h4>Contents</h4>
+					<ul class="doc-nav-list">
+						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
+						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
+						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
+						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
+					</ul>
+				</div>
+
+				<%-include('_mnu-components.ejs')%>
+			</aside>
+
+			<!-- Content Area -->
+			<main class="doc-content">
+				<!-- Overview Section -->
+				<section id="overview" class="doc-section">
+					<h2>Overview</h2>
+					<p>
+						The <code>ActionButton</code> class provides an elegant way to bind behavior and state (like disabling, showing/hiding, or updating labels) to one or multiple buttons at the same time. It matches the main button by its ID and optionally matches other buttons sharing the same action name via the <code>data-action</code> attribute. It enforces event intercepts so that disabled or hidden buttons reject click events.
+					</p>
+				</section>
+
+				<!-- HTML Markup Section -->
+				<section id="html-markup" class="doc-section">
+					<h2>HTML Markup</h2>
+					<p>Designate buttons using the class <code>action-button</code>, or with a specific ID and a <code>data-action</code> attribute to group them together.</p>
+
+					<pre><code>&lt;<span class="hl-tag">button</span> <span class="hl-attr">id</span>=<span class="hl-string">"btnSave"</span> <span class="hl-attr">class</span>=<span class="hl-string">"action-button"</span> <span class="hl-attr">data-action</span>=<span class="hl-string">"save"</span>&gt;
+  &lt;<span class="hl-tag">span</span> <span class="hl-attr">class</span>=<span class="hl-string">"action-button-icon"</span>&gt;💾&lt;/<span class="hl-tag">span</span>&gt;
+  &lt;<span class="hl-tag">span</span> <span class="hl-attr">class</span>=<span class="hl-string">"action-button-text"</span>&gt;Save&lt;/<span class="hl-tag">span</span>&gt;
+&lt;/<span class="hl-tag">button</span>&gt;
+
+&lt;<span class="hl-tag">button</span> <span class="hl-attr">class</span>=<span class="hl-string">"action-button"</span> <span class="hl-attr">data-action</span>=<span class="hl-string">"save"</span>&gt;
+  &lt;<span class="hl-tag">span</span> <span class="hl-attr">class</span>=<span class="hl-string">"action-button-text"</span>&gt;Another Save Button&lt;/<span class="hl-tag">span</span>&gt;
+&lt;/<span class="hl-tag">button</span>&gt;</code></pre>
+
+					<p>Initialize and attach listener in Javascript:</p>
+					<pre><code><span class="hl-keyword">import</span> ActionButton <span class="hl-keyword">from</span> <span class="hl-string">'./src/components/ActionButton.mjs'</span>;
+
+<span class="hl-keyword">const</span> btnSave = <span class="hl-keyword">new</span> <span class="hl-class">ActionButton</span>(<span class="hl-string">'btnSave'</span>, <span class="hl-string">'save'</span>);
+
+btnSave.<span class="hl-function">addEventListener</span>(<span class="hl-string">'click'</span>, (event) => {
+  console.log(<span class="hl-string">'Save clicked!'</span>);
+});</code></pre>
+				</section>
+
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Values</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>data-action</code></td>
+									<td><code>String</code></td>
+									<td>An action name keyword used to associate multiple buttons with a single <code>ActionButton</code> instance controller.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Properties Section -->
+				<section id="properties" class="doc-section">
+					<h2>Properties</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>Elements</code></td>
+									<td><code>Array&lt;HTMLElement&gt;</code></td>
+									<td>(Read-only) Returns the array of native DOM elements bound to this ActionButton instance.</td>
+								</tr>
+								<tr>
+									<td><code>disabled</code></td>
+									<td><code>Boolean</code></td>
+									<td>Gets or sets the disabled state of all associated buttons. A suspended button cannot be enabled until unsuspended.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Methods Section -->
+				<section id="methods" class="doc-section">
+					<h2>Methods</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Method</th>
+									<th>Arguments</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>constructor(id, actionname)</code></td>
+									<td><code>(id: String, actionname: String = null)</code></td>
+									<td>Creates a new instance. Resolves the element with the given ID and optionally queries other elements matching <code>data-action="actionname"</code>.</td>
+								</tr>
+								<tr>
+									<td><code>isHidden()</code></td>
+									<td><code>()</code></td>
+									<td>Returns <code>true</code> if the ActionButton has been hidden.</td>
+								</tr>
+								<tr>
+									<td><code>hide(hidden)</code></td>
+									<td><code>(hidden: Boolean = true)</code></td>
+									<td>Shows or hides all bound buttons by toggling the CSS class <code>hidden</code>.</td>
+								</tr>
+								<tr>
+									<td><code>setText(text)</code></td>
+									<td><code>(text: String)</code></td>
+									<td>Updates the inner HTML content of all associated buttons.</td>
+								</tr>
+								<tr>
+									<td><code>addEventListener(event, callback)</code></td>
+									<td><code>(event: String, callback: Function)</code></td>
+									<td>Registers an event listener callback on all bound native button elements.</td>
+								</tr>
+								<tr>
+									<td><code>click()</code></td>
+									<td><code>()</code></td>
+									<td>Triggers a programmatical click on the first associated button element, provided it is not disabled.</td>
+								</tr>
+								<tr>
+									<td><code>suspend(doSuspend, keepState)</code></td>
+									<td><code>(doSuspend: Boolean = true, keepState: Boolean = false)</code></td>
+									<td>Suspends the button action. If <code>keepState</code> is false, suspending disables the buttons and unsuspending enables them.</td>
+								</tr>
+								<tr>
+									<td><code>isSuspended()</code></td>
+									<td><code>()</code></td>
+									<td>Returns <code>true</code> if the button action is currently suspended.</td>
+								</tr>
+								<tr>
+									<td><code>setAttribute(name, value)</code></td>
+									<td><code>(name: String, value: String)</code></td>
+									<td>Applies an attribute on all bound DOM button elements and stores it in the local attributes cache.</td>
+								</tr>
+								<tr>
+									<td><code>getAttribute(name)</code></td>
+									<td><code>(name: String)</code></td>
+									<td>Retrieves the attribute value from the local attributes cache.</td>
+								</tr>
+								<tr>
+									<td><code>removeAttribute(name)</code></td>
+									<td><code>(name: String)</code></td>
+									<td>Removes the attribute from both the local cache and all bound DOM button elements.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+			</main>
+		</div>
+
+		<!-- Footer -->
+		<%-include('_footer.ejs')%>
+	</div>
+</body>
+
+</html>

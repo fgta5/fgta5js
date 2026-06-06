@@ -34,6 +34,14 @@
 
 .fgta5-entry-label {
 	padding-right: 12px;
+	-webkit-user-select: none;
+	/* Safari */
+	-moz-user-select: none;
+	/* Firefox */
+	-ms-user-select: none;
+	/* IE 10 and Older */
+	user-select: none;
+	/* Standard syntax */
 }
 
 .fgta5-entry-label[disabled] {

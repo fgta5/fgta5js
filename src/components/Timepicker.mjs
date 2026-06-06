@@ -10,11 +10,20 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 </svg>
 
 `
-
-
 /*
+ * referensi
  * https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
  */
+
+/* HTML Attribute
+=================
+- placeholder   : Teks placeholder bantuan saat input waktu masih kosong.
+- data-tabindex : Mengatur urutan tab (tabindex) navigasi keyboard pada elemen display.
+- disabled      : Menonaktifkan picker waktu agar tidak dapat diinteraksi.
+- required      : Menandai bahwa input waktu ini wajib diisi saat validasi form.
+- min           : Batas waktu minimum yang diperbolehkan (format: HH:MM).
+- max           : Batas waktu maksimum yang diperbolehkan (format: HH:MM).
+*/
 
 /**
  * Kelas komponen Timepicker yang mewarisi kelas base Input.

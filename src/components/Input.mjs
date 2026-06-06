@@ -1,6 +1,22 @@
 import Component from "./Component.mjs"
 
 
+/* HTML Attribute
+=================
+- placeholder     : Teks placeholder bantuan yang ditampilkan saat input masih kosong.
+- binding         : Nama field properti data objek yang dihubungkan ke input saat memanggil setData() atau getData().
+- description     : Teks penjelasan/petunjuk tambahan mengenai input yang diletakkan di bawah field.
+- character-case  : Mengatur kapitalisasi otomatis nilai teks input (nilai: "uppercase" | "lowercase").
+- fgta5-component : Menentukan nama kelas komponen fgta5js yang membungkus elemen ini (seperti Textbox, Numberbox, dll).
+- minlength       : Batas minimum jumlah karakter teks input untuk validasi panjang teks.
+- maxlength       : Batas maksimum jumlah karakter teks input untuk membatasi panjang input teks.
+- pattern         : Ekspresi reguler (Regex) untuk validasi format teks input.
+- min             : Batas nilai numerik minimum (pada Numberbox) atau batas tanggal awal minimum (pada Datepicker).
+- max             : Batas nilai numerik maksimum (pada Numberbox) atau batas tanggal akhir maksimum (pada Datepicker).
+- validator       : Mengaitkan fungsi validasi kustom eksternal yang terdaftar di objek global `window.$validators`.
+*/
+
+
 /**
  * Komponen dasar untuk menangani input form.
  * @extends Component

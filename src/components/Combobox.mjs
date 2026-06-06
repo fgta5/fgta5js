@@ -18,8 +18,14 @@ const icon_cbo_close = `<?xml version="1.0" encoding="UTF-8"?>
 <path d="m3.5642 20.295 16.853-16.833" fill="none" stroke-width="4"/>
 <path d="m3.5741 3.4523 16.833 16.853" fill="none" stroke-width="4"/>
 </svg>`
-
-
+/* HTML Attribute
+=================
+- data-display  : Nama field properti objek yang digunakan untuk menampilkan teks deskripsi pilihan.
+- placeholder   : Teks placeholder bantuan saat combobox belum dipilih.
+- disabled      : Menonaktifkan combobox agar tidak dapat dibuka/diinteraksi.
+- data-tabindex : Mengatur urutan tab (tabindex) navigasi keyboard pada tombol trigger.
+- required      : Menandai bahwa combobox ini wajib dipilih saat validasi form.
+*/
 
 const ATTR_EDITMODE = 'editmode'
 const ATTR_SHOWED = 'showed'

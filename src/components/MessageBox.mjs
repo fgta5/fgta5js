@@ -47,10 +47,27 @@ const ICON_EMPTY = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
 </svg>`
 
 
+/**
+ * Kelas penampung tombol pilihan pada dialog MessageBox.
+ */
 export class MessageBoxButton {
+	/**
+	 * Teks label tombol.
+	 * @type {string}
+	 */
 	Text = 'button'
+
+	/**
+	 * String HTML/SVG ikon tombol.
+	 * @type {string}
+	 */
 	Icon
 
+	/**
+	 * Membuat instans baru dari MessageBoxButton.
+	 * @param {string} text - Teks tombol.
+	 * @param {string} [icon=ICON_EMPTY] - String HTML SVG ikon.
+	 */
 	constructor(text, icon = ICON_EMPTY) {
 		this.Text = text
 		this.Icon = icon
@@ -58,24 +75,91 @@ export class MessageBoxButton {
 
 }
 
+/**
+ * Kelas utilitas MessageBox untuk menampilkan dialog pesan/alert/konfirmasi kustom yang asinkron.
+ */
 export class MessageBox {
+	/**
+	 * Kumpulan tombol standar Ok dan Cancel.
+	 * @type {Object<string, MessageBoxButton>}
+	 */
 	static ButtonOkCancel = Object.freeze({ ok: new MessageBoxButton('Ok', ICON_YES), cancel: new MessageBoxButton('Cancel', ICON_NO) })
+
+	/**
+	 * Kumpulan tombol standar Yes dan No.
+	 * @type {Object<string, MessageBoxButton>}
+	 */
 	static ButtonYesNo = Object.freeze({ yes: new MessageBoxButton('Yes', ICON_YES), no: new MessageBoxButton('No', ICON_NO) })
+
+	/**
+	 * Kumpulan tombol standar Yes, No, dan Cancel.
+	 * @type {Object<string, MessageBoxButton>}
+	 */
 	static ButtonYesNoCancel = Object.freeze({ yes: new MessageBoxButton('Yes', ICON_YES), no: new MessageBoxButton('No', ICON_NO), cancel: new MessageBoxButton('Cancel', ICON_CANCEL) })
 
+	/**
+	 * Menampilkan dialog pesan kustom secara asinkron.
+	 * @param {string} message - Isi pesan.
+	 * @param {Object} [config] - Objek konfigurasi dialog (seperti title, buttons, iconSvg).
+	 * @returns {Promise<string>} Kunci tombol yang diklik (misal 'ok', 'cancel', dll).
+	 */
 	static async show(message, config) { return await msgbox_show(message, config) }
+
+	/**
+	 * Menampilkan dialog pesan error.
+	 * @param {string} message - Pesan error.
+	 * @returns {Promise<string>} 'ok' setelah dialog ditutup.
+	 */
 	static async error(message) { return await msgbox_error(message) }
+
+	/**
+	 * Menampilkan dialog pesan informasi.
+	 * @param {string} message - Pesan informasi.
+	 * @returns {Promise<string>}
+	 */
 	static async info(message) { return await msgbox_info(message) }
+
+	/**
+	 * Menampilkan dialog pesan peringatan (warning).
+	 * @param {string} message - Pesan peringatan.
+	 * @returns {Promise<string>}
+	 */
 	static async warning(message) { return await msgbox_warning(message) }
+
+	/**
+	 * Menampilkan dialog pesan konfirmasi dengan kumpulan tombol kustom.
+	 * @param {string} message - Pesan konfirmasi.
+	 * @param {Object<string, MessageBoxButton>} [buttons] - Tombol konfirmasi.
+	 * @returns {Promise<string>} Kunci tombol yang dipilih.
+	 */
 	static async confirm(message, buttons) { return await msgbox_confirm(message, buttons) }
+
+	/**
+	 * Menampilkan dialog konfirmasi bermodel peringatan dengan ikon warning.
+	 * @param {string} message - Pesan konfirmasi.
+	 * @param {Object<string, MessageBoxButton>} [buttons] - Tombol konfirmasi.
+	 * @returns {Promise<string>} Kunci tombol yang dipilih.
+	 */
 	static async confirmAndWarn(message, buttons) { return await msgbox_confirmAndWarn(message, buttons) }
+
+	/**
+	 * Menampilkan dialog bertipe pertanyaan/input isian teks sederhana.
+	 * @param {string} message - Isi pertanyaan.
+	 * @returns {Promise<string|null>} Nilai teks yang diinputkan oleh pengguna, atau null jika dibatalkan.
+	 */
 	static async ask(message) { return await msgbox_ask(message) }
 }
 
 
 
 
-
+/**
+ * Membuat struktur DOM elemen `<dialog>` baru untuk MessageBox.
+ * @param {string} message - Isi pesan.
+ * @param {Object} config - Konfigurasi kotak pesan.
+ * @returns {HTMLDialogElement} Elemen dialog baru yang sudah dimasukkan ke body.
+ * @private
+ */
 function createMessageDialog(message, config) {
 	const dialog = document.createElement('dialog')
 	dialog.classList.add('fgta5-messagebox-dialog')
@@ -121,6 +205,13 @@ function createMessageDialog(message, config) {
 }
 
 
+/**
+ * Menampilkan pesan dialog secara asinkron (internal helper).
+ * @param {string} message - Isi pesan.
+ * @param {Object} config - Konfigurasi.
+ * @returns {Promise<string>} Kunci tombol yang ditekan.
+ * @private
+ */
 async function msgbox_show(message, config) {
 
 	if (config === undefined) config = {}
@@ -171,6 +262,12 @@ async function msgbox_show(message, config) {
 }
 
 
+/**
+ * Menampilkan dialog pesan error dan menangani redirect login apabila belum terautentikasi (internal helper).
+ * @param {string} message - Pesan error.
+ * @returns {Promise<string>} 'ok' setelah dialog ditutup.
+ * @private
+ */
 async function msgbox_error(message) {
 	const needAuthMessage = 'authentication is needed to access resource'
 	await msgbox_show(message, { iconSvg: ICON_ERROR })
@@ -182,12 +279,33 @@ async function msgbox_error(message) {
 	return 'ok'
 }
 
+/**
+ * Menampilkan pesan info (internal helper).
+ * @param {string} message - Isi pesan.
+ * @returns {Promise<string>}
+ * @private
+ */
 async function msgbox_info(message) {
 	return await msgbox_show(message, { iconSvg: ICON_INFO })
 }
+
+/**
+ * Menampilkan pesan warning (internal helper).
+ * @param {string} message - Isi pesan.
+ * @returns {Promise<string>}
+ * @private
+ */
 async function msgbox_warning(message) {
 	return await msgbox_show(message, { iconSvg: ICON_WARNING })
 }
+
+/**
+ * Menampilkan dialog konfirmasi dengan tombol standar/kustom (internal helper).
+ * @param {string} message - Isi pesan.
+ * @param {Object} buttons - Daftar tombol.
+ * @returns {Promise<string>} Kunci tombol yang dipilih.
+ * @private
+ */
 async function msgbox_confirm(message, buttons) {
 	buttons = buttons === undefined ? MessageBox.ButtonOkCancel : buttons
 
@@ -197,6 +315,13 @@ async function msgbox_confirm(message, buttons) {
 	})
 }
 
+/**
+ * Menampilkan konfirmasi warning dengan tombol standar/kustom (internal helper).
+ * @param {string} message - Isi pesan.
+ * @param {Object} buttons - Daftar tombol.
+ * @returns {Promise<string>} Kunci tombol yang dipilih.
+ * @private
+ */
 async function msgbox_confirmAndWarn(message, buttons) {
 	buttons = buttons === undefined ? MessageBox.ButtonOkCancel : buttons
 
@@ -206,6 +331,12 @@ async function msgbox_confirmAndWarn(message, buttons) {
 	})
 }
 
+/**
+ * Menampilkan prompt pertanyaan input teks sederhana (internal helper).
+ * @param {string} message - Isi pertanyaan.
+ * @returns {Promise<string|null>} Nilai teks yang diinput atau null jika batal.
+ * @private
+ */
 async function msgbox_ask(message) {
 	var dialog = createMessageDialog(message, {
 		iconSvg: ICON_QUESTION,

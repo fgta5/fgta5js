@@ -1,19 +1,44 @@
+/**
+ * Kelas Dataloader untuk menangani proses pemuatan data jarak jauh secara asinkron dengan fetch API dan dukungan pembatalan (abort).
+ */
 export default class Dataloader {
 
-#controller;
+	/**
+	 * AbortController untuk membatalkan request load.
+	 * @type {AbortController}
+	 * @private
+	 */
+	#controller;
 
+	/**
+	 * Membuat instans baru dari Dataloader.
+	 */
 	constructor() {
 		this.#controller = new AbortController();
 	}
 
+	/**
+	 * Membatalkan proses pemuatan data yang sedang berjalan.
+	 */
 	abort() {
 		this.#controller.abort();
 	}
 
+	/**
+	 * Membebaskan sumber daya.
+	 */
 	dispose() {
 		
 	}
 
+	/**
+	 * Memuat data secara asinkron dari URL tertentu.
+	 * @param {string} url - URL API/sumber data.
+	 * @param {Object} [options] - Opsi request fetch (method, headers, body, dll).
+	 * @param {Function} [loadedCallback] - Callback function setelah data selesai dimuat, dengan signature `(err, data)`.
+	 * @returns {Promise<any>} Hasil parsing data JSON dari response.
+	 * @throws {Error} Mengeluarkan error jika pemuatan gagal dan tidak ada loadedCallback yang diberikan.
+	 */
 	async load(url, options, loadedCallback) {
 		const signal = this.#controller.signal;
 

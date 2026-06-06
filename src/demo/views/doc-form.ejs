@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Form Component - fgta5js Documentation</title>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<!-- Library styles: Production -->
+	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
+
+
+	<!-- Core Demo stylesheet & Docs overrides -->
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
+
+
+	<script>
+		window.$validators = {}
+	</script>
+</head>
+
+<body>
+	<!-- Register fgta5 global components namespace -->
+	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
+
+
+	<div class="container">
+		<!-- Back link -->
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs')%>
+		</div>
+
+		<!-- Header -->
+		<header style="text-align: left; margin-bottom: 2.5rem;">
+
+
+			<div class=" badge">
+				<span class="badge-dot"></span>
+				Component
+			</div>
+
+
+			<div style="display: flex; column-gap: 1rem;">
+				<div class="title-icon-wrapper">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+						stroke-linejoin="round">
+						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+						<polyline points="14 2 14 8 20 8"></polyline>
+						<line x1="16" y1="13" x2="8" y2="13"></line>
+						<line x1="16" y1="17" x2="8" y2="17"></line>
+						<polyline points="10 9 9 9 8 9"></polyline>
+					</svg>
+				</div>
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Form</h1>
+			</div>
+
+
+
+			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+				The primary orchestrator class that manages groups of form inputs, handles locking states, handles data
+				loading and extraction, tracks changes, and performs unified validation.
+			</p>
+		</header>
+
+		<!-- Main Documentation Layout -->
+		<div class="doc-layout">
+			<!-- Sidebar -->
+			<aside class="doc-sidebar">
+				<div class="doc-nav-card">
+					<h4>Contents</h4>
+					<ul class="doc-nav-list">
+						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
+						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
+						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
+						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
+						<li class="doc-nav-item"><a href="#events">Custom Events</a></li>
+					</ul>
+				</div>
+
+				<%-include('_mnu-components.ejs')%>
+			</aside>
+
+			<!-- Content Area -->
+			<main class="doc-content">
+				<!-- Overview Section -->
+				<section id="overview" class="doc-section">
+					<h2>Overview</h2>
+					<div class="doc-callout">
+						<strong>Inheritance Notice:</strong> Class <code>Form</code> inherits from the abstract base
+						class <a href="/component"><code>Component</code></a>.
+					</div>
+					<p>
+						The <code>Form</code> component scans a given HTML form for input elements that use the
+						<code>fgta5-component</code> attribute (e.g. <code>Textbox</code>, <code>Numberbox</code>,
+						<code>Combobox</code>, etc.) and instantiates corresponding component wrappers. It provides APIs
+						to lock/unlock all inputs at once, load data, retrieve modified data, handle file uploads, and
+						validate all inputs with unified error feedback.
+					</p>
+				</section>
+
+				<!-- HTML Markup Section -->
+				<section id="html-markup" class="doc-section">
+					<h2>HTML Markup</h2>
+					<p>Define your form element and assign a unique ID. Decorate it with attributes like
+						<code>primarykey</code>, <code>locked</code>, and <code>autoid</code>, and style input
+						containers using standard fields.</p>
+
+					<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">primarykey</span>=<span class="hl-string">"obj_id"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span> <span class="hl-attr">autoid</span>=<span class="hl-string">"true"</span>&gt;
+  &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_id"</span>&gt;
+    &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_id"</span>&gt;ID&lt;/<span class="hl-tag">label</span>&gt;
+    &lt;<span class="hl-tag">input</span> <span class="hl-attr">id</span>=<span class="hl-string">"obj_id"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Textbox"</span> <span class="hl-attr">binding</span>=<span class="hl-string">"id"</span> <span class="hl-attr">disabled</span>&gt;
+  &lt;/<span class="hl-tag">div</span>&gt;
+
+  &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_name"</span>&gt;
+    &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_name"</span>&gt;Name&lt;/<span class="hl-tag">label</span>&gt;
+    &lt;<span class="hl-tag">input</span> <span class="hl-attr">id</span>=<span class="hl-string">"obj_name"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Textbox"</span> <span class="hl-attr">binding</span>=<span class="hl-string">"name"</span> <span class="hl-attr">required</span>&gt;
+  &lt;/<span class="hl-tag">div</span>&gt;
+&lt;/<span class="hl-tag">form</span>&gt;</code></pre>
+
+					<p>Initialize and render the form in Javascript:</p>
+					<pre><code><span class="hl-keyword">import</span> Form <span class="hl-keyword">from</span> <span class="hl-string">'./src/components/Form.mjs'</span>;
+
+<span class="hl-keyword">const</span> form = <span class="hl-keyword">new</span> <span class="hl-class">Form</span>(<span class="hl-string">'myform'</span>);
+form.<span class="hl-function">render</span>();
+
+<span class="hl-comment">// Unlock form to start editing</span>
+form.<span class="hl-function">lock</span>(<span class="hl-keyword">false</span>);</code></pre>
+				</section>
+
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Values</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>primarykey</code></td>
+									<td><code>String</code></td>
+									<td>Designates the ID of the input element that serves as the form's primary key identifier.</td>
+								</tr>
+								<tr>
+									<td><code>locked</code></td>
+									<td><code>"true" | "false"</code></td>
+									<td>Sets the initial edit/view lock state. When true, all component interactions are disabled.</td>
+								</tr>
+								<tr>
+									<td><code>autoid</code></td>
+									<td><code>"true" | "false"</code></td>
+									<td>Configures whether ID values are expected to be auto-generated.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Properties Section -->
+				<section id="properties" class="doc-section">
+					<h2>Properties</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>Inputs</code></td>
+									<td><code>Object</code></td>
+									<td>An object mapping element IDs to their respective component wrapper instances
+										(e.g. <code>Textbox</code>, <code>Checkbox</code>, etc.).</td>
+								</tr>
+								<tr>
+									<td><code>AutoID</code></td>
+									<td><code>Boolean</code></td>
+									<td>(Read-only) Returns <code>true</code> if the form attribute <code>autoid</code>
+										is configured to generate IDs automatically.</td>
+								</tr>
+								<tr>
+									<td><code>PrimaryKey</code></td>
+									<td><code>String</code></td>
+									<td>(Read-only) Returns the element ID representing the primary key of this form.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Methods Section -->
+				<section id="methods" class="doc-section">
+					<h2>Methods</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Method</th>
+									<th>Arguments</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>constructor(id)</code></td>
+									<td><code>(id: String)</code></td>
+									<td>Constructs the form, registers elements with <code>fgta5-component</code> into
+										the <code>Inputs</code> registry, and reads configuration attributes.</td>
+								</tr>
+								<tr>
+									<td><code>render()</code></td>
+									<td><code>()</code></td>
+									<td>Binds each child input to the form and initializes the initial form locking
+										state. Should be called after instantiation.</td>
+								</tr>
+								<tr>
+									<td><code>lock(lock)</code></td>
+									<td><code>(lock: Boolean)</code></td>
+									<td>Locks (<code>true</code>) or unlocks (<code>false</code>) all input components
+										inside the form. Dispatches appropriate custom events.</td>
+								</tr>
+								<tr>
+									<td><code>isLocked()</code></td>
+									<td><code>()</code></td>
+									<td>Returns <code>true</code> if the form is currently locked (read-only mode).</td>
+								</tr>
+								<tr>
+									<td><code>isNew()</code></td>
+									<td><code>()</code></td>
+									<td>Returns <code>true</code> if the form holds data marked as unsaved or new.</td>
+								</tr>
+								<tr>
+									<td><code>setAsNewData()</code></td>
+									<td><code>()</code></td>
+									<td>Forcefully sets the form state to indicate it contains new/unsaved data.</td>
+								</tr>
+								<tr>
+									<td><code>reset()</code></td>
+									<td><code>()</code></td>
+									<td>Resets the value of all input components back to their last committed state and
+										marks the form as not new.</td>
+								</tr>
+								<tr>
+									<td><code>clear(text)</code></td>
+									<td><code>(text: String = '')</code></td>
+									<td>Clears the raw value of all input elements in the form to the specified string.
+									</td>
+								</tr>
+								<tr>
+									<td><code>acceptChanges()</code></td>
+									<td><code>()</code></td>
+									<td>Commits the current values of all input fields as the new baseline/saved state,
+										and marks the form as not new.</td>
+								</tr>
+								<tr>
+									<td><code>isChanged()</code></td>
+									<td><code>()</code></td>
+									<td>Checks whether any registered input field has a value differing from its last
+										committed baseline.</td>
+								</tr>
+								<tr>
+									<td><code>getLastError()</code></td>
+									<td><code>()</code></td>
+									<td>Returns the last validation error message string, or
+										<code>null</code>/<code>undefined</code>.</td>
+								</tr>
+								<tr>
+									<td><code>getPrimaryInput()</code></td>
+									<td><code>()</code></td>
+									<td>Returns the input component instance that corresponds to the designated
+										<code>PrimaryKey</code>.</td>
+								</tr>
+								<tr>
+									<td><code>setData(data)</code></td>
+									<td><code>(data: Object)</code></td>
+									<td>Populates all registered inputs with values from the given data object (matching
+										by binding names) and calls <code>acceptChanges()</code>.</td>
+								</tr>
+								<tr>
+									<td><code>newData(data)</code></td>
+									<td><code>(data: Object = {})</code></td>
+									<td>Unlocks the form, marks the form as new, and initializes inputs with fields from
+										the provided data object.</td>
+								</tr>
+								<tr>
+									<td><code>getData()</code></td>
+									<td><code>()</code></td>
+									<td>Extracts and returns the current form state as a plain object mapping bindings
+										to values.</td>
+								</tr>
+								<tr>
+									<td><code>getOriginalData()</code></td>
+									<td><code>()</code></td>
+									<td>Returns the original object structure that was loaded via the most recent call
+										to <code>setData()</code>.</td>
+								</tr>
+								<tr>
+									<td><code>getDataChanged()</code></td>
+									<td><code>()</code></td>
+									<td>Returns a plain object containing only the fields that have been modified. The
+										primary key field is always included.</td>
+								</tr>
+								<tr>
+									<td><code>getFiles()</code></td>
+									<td><code>()</code></td>
+									<td>Returns an object containing files from modified <code>Filebox</code>
+										components, or <code>null</code> if none are changed.</td>
+								</tr>
+								<tr>
+									<td><code>validate()</code></td>
+									<td><code>()</code></td>
+									<td>Validates every input component in the form sequentially. Returns
+										<code>true</code> if all inputs are valid, or <code>false</code> (and stores the
+										first error).</td>
+								</tr>
+								<tr>
+									<td><code>acceptInput()</code></td>
+									<td><code>()</code></td>
+									<td>Temporarily blurs and refocuses the active element to ensure in-progress
+										keystrokes are properly recorded in the model.</td>
+								</tr>
+								<tr>
+									<td><code>addEventListener(event, callback)</code></td>
+									<td><code>(event: String, callback: Function)</code></td>
+									<td>Attaches an event handler to the underlying native form element.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Events Section -->
+				<section id="events" class="doc-section">
+					<h2>Custom Events</h2>
+					<p>The form component fires custom DOM events on the native <code>&lt;form&gt;</code> element that
+						you can listen to:</p>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Event Name</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>locked</code></td>
+									<td>Dispatched when the form is successfully locked (read-only mode enabled).</td>
+								</tr>
+								<tr>
+									<td><code>unlocked</code></td>
+									<td>Dispatched when the form is successfully unlocked (edit mode enabled).</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</main>
+		</div>
+
+		<!-- Footer -->
+		<%-include('_footer.ejs')%>
+	</div>
+</body>
+
+</html>

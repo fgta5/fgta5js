@@ -5,9 +5,11 @@ const ChangedEvent = (data) => { return new CustomEvent('changed', data) }
 const CheckedEvent = (data) => { return new CustomEvent('checked', data) }
 const UnCheckedEvent = (data) => { return new CustomEvent('unchecked', data) }
 
-/*
-* reference:
-* https://moderncss.dev/pure-css-custom-checkbox-style/
+/* HTML Attribute
+=================
+- data-tabindex       : Mengatur urutan tab (tabindex) navigasi keyboard pada elemen input checkbox.
+- disabled            : Menonaktifkan checkbox agar tidak dapat diinteraksi.
+- permanent-disabled : Menonaktifkan secara permanen meskipun form berada dalam mode edit.
 */
 
 
@@ -183,6 +185,9 @@ function chk_construct(self, id) {
 
 	// setup input
 	input.classList.add('fgta5-checkbox-input')
+	input.value = input.checked ? 'on' : 'off'
+
+
 
 	const tabIndex = input.getAttribute('data-tabindex')
 	if (tabIndex != null) {

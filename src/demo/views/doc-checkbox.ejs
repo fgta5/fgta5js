@@ -73,9 +73,9 @@
 						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
 						<li class="doc-nav-item"><a href="#playground">Interactive Playground</a></li>
 						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
 						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
-						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 					</ul>
 				</div>
 				<%-include('_mnu-components.ejs')%>
@@ -175,6 +175,44 @@
 form.<span class="hl-function">render</span>()</code></pre>
 				</section>
 
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Values</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>type</code></td>
+									<td><code>"checkbox"</code></td>
+									<td>Required configuration to define standard checkboxes.</td>
+								</tr>
+								<tr>
+									<td><code>disabled</code></td>
+									<td>N/A</td>
+									<td>Disables the checkbox, preventing user toggle interactions.</td>
+								</tr>
+								<tr>
+									<td><code>permanent-disabled</code></td>
+									<td><code>"true"</code></td>
+									<td>Permanently disables the checkbox even when the form is in edit mode.</td>
+								</tr>
+								<tr>
+									<td><code>data-tabindex</code></td>
+									<td><code>Number</code></td>
+									<td>Sets the native tabindex on the final checkbox input element for keyboard navigation.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
 				<!-- Properties Section -->
 				<section id="properties" class="doc-section">
 					<h2>Properties</h2>
@@ -270,33 +308,6 @@ form.<span class="hl-function">render</span>()</code></pre>
 					</div>
 				</section>
 
-				<!-- HTML Attributes Section -->
-				<section id="attributes" class="doc-section">
-					<h2>HTML Attributes</h2>
-					<div class="api-table-wrapper">
-						<table class="api-table">
-							<thead>
-								<tr>
-									<th>Attribute</th>
-									<th>Values</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><code>type</code></td>
-									<td><code>"checkbox"</code></td>
-									<td>Required configuration to define standard checkboxes.</td>
-								</tr>
-								<tr>
-									<td><code>data-tabindex</code></td>
-									<td><code>Number</code></td>
-									<td>Sets the native tabindex on the final rendered input component.</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
 			</main>
 		</div>
 
