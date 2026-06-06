@@ -56,6 +56,7 @@
 						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
 						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
 						<li class="doc-nav-item"><a href="#internal-fns">Internal Functions</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
 					</ul>
 				</div>
 				<%-include('_mnu-components.ejs')%>
@@ -450,6 +451,91 @@
 									<td><code>(self: Input, required: Boolean)</code></td>
 									<td>Sets required attributes and registers/removes standard required validation
 										rule.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<p>Below are the HTML attributes supported by the base <code>Input</code> class that configure
+						bindings, behaviors, and validation rules:</p>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Type / Values</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>placeholder</code></td>
+									<td><code>String</code></td>
+									<td>Helpful placeholder text displayed when the input is empty.</td>
+								</tr>
+								<tr>
+									<td><code>binding</code></td>
+									<td><code>String</code></td>
+									<td>The property name of the data object bound to the input when calling
+										<code>setData()</code> or <code>getData()</code>.
+									</td>
+								</tr>
+								<tr>
+									<td><code>description</code></td>
+									<td><code>String</code></td>
+									<td>Explanation or additional guidance text placed below the input field.</td>
+								</tr>
+								<tr>
+									<td><code>character-case</code></td>
+									<td><code>"uppercase" | "lowercase"</code></td>
+									<td>Enforces automatic case capitalization of the text input value.</td>
+								</tr>
+								<tr>
+									<td><code>fgta5-component</code></td>
+									<td><code>String</code></td>
+									<td>Specifies the name of the fgta5js component class wrapping this element (e.g.,
+										<code>Textbox</code>, <code>Numberbox</code>, etc.).
+									</td>
+								</tr>
+								<tr>
+									<td><code>minlength</code></td>
+									<td><code>Number</code></td>
+									<td>The minimum character length required for text validation.</td>
+								</tr>
+								<tr>
+									<td><code>maxlength</code></td>
+									<td><code>Number</code></td>
+									<td>The maximum character length allowed, limiting text input.</td>
+								</tr>
+								<tr>
+									<td><code>pattern</code></td>
+									<td><code>String (Regex)</code></td>
+									<td>A regular expression (Regex) pattern to validate the input text format.</td>
+								</tr>
+								<tr>
+									<td><code>min</code></td>
+									<td><code>Number | String</code></td>
+									<td>The minimum numeric value (for <code>Numberbox</code>) or the earliest date (for
+										<code>Datepicker</code>).
+									</td>
+								</tr>
+								<tr>
+									<td><code>max</code></td>
+									<td><code>Number | String</code></td>
+									<td>The maximum numeric value (for <code>Numberbox</code>) or the latest date (for
+										<code>Datepicker</code>).
+									</td>
+								</tr>
+								<tr>
+									<td><code>validator</code></td>
+									<td><code>String</code></td>
+									<td>Associates a custom external validation function registered in the global
+										<code>window.$validators</code> object.
+									</td>
 								</tr>
 							</tbody>
 						</table>
