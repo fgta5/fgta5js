@@ -79,6 +79,25 @@
 			</div>
 
 
+			<div class="input-field" field="obj_city" style="grid-row: 3; grid-column: 3/ span 2;">
+				<label for="obj_city">City</label>
+				<input id="obj_city" fgta5-component="Combobox" placeholder="Search and select city..."
+					autocomplete="off" spellcheck="false" binding="city" description="City of residence"
+					invalid-message="City is required">
+			</div>
+
+
+
+			<div class="input-field" field="obj_gender" style="grid-row: 3; grid-column: 5/ span 2;">
+				<label for="obj_gender">Gender</label>
+				<input id="obj_gender" fgta5-component="Combobox" placeholder="Search gender..." autocomplete="off"
+					spellcheck="false" binding="gender" description="Gender" required
+					invalid-message="Gender is required">
+				<datalist for="obj_gender">
+					<option value="F" default="true">Female</option>
+					<option value="M">Male</option>
+				</datalist>
+			</div>
 
 		</form>
 	</div>
