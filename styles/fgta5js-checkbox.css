@@ -4,7 +4,8 @@
   grid-template-columns: 0.9rem auto;
   gap: 0.4rem;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+
   line-height: 1.1rem;
 
   margin-top: 6px;
@@ -17,7 +18,7 @@
   -ms-user-select: none;
   /* IE 10 and Older */
   user-select: none;
-  /* Standard syntax */
+
 }
 
 .fgta5-checkbox[permanent-disabled="true"] {

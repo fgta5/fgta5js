@@ -42,7 +42,15 @@
 	/* IE 10 and Older */
 	user-select: none;
 	/* Standard syntax */
+
+	position: relative;
+
+	width: min-content;
+	margin-top: 4px;
+	font-size: 0.8rem;
+	font-weight: bold;
 }
+
 
 .fgta5-entry-label[disabled] {
 	opacity: 0.5;
@@ -55,15 +63,26 @@
 	opacity: 1 !important;
 	font-size: 1rem;
 
+	position: absolute;
+	right: 4px;
+	top: -4px;
+
 }
 
 
 @media screen and (min-width: 501px) {
-	.fgta5-entry-label[required]::after {
+	.fgta5-entry-label {
+		white-space: nowrap;
+		max-width: 80px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* .fgta5-entry-label[required]::after {
 		position: absolute;
 		right: 4px;
 		top: -4px;
-	}
+	} */
 }
 
 
@@ -474,6 +493,33 @@
 
 .fgta5-combobox-dialog-nextbutton {
 	margin: 10px 10px 50px 10px;
+	background-color: rgb(255, 255, 255);
+	color: rgb(55, 65, 81);
+	border: 1px solid rgb(209, 213, 219);
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+	transition: 0.2s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	cursor: pointer;
+}
+
+.fgta5-combobox-dialog-nextbutton:hover {
+	background-color: rgb(249, 250, 251);
+	color: rgb(17, 24, 39);
+	border-color: rgb(156, 163, 175);
+}
+
+.fgta5-combobox-dialog-nextbutton:active {
+	background-color: rgb(243, 244, 246);
+	box-shadow: none;
+	transform: translateY(2px);
 }
 
 

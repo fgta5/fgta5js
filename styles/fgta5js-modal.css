@@ -1,14 +1,21 @@
-
 .fgta5-modal-message {
 	border: none;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
+
+
+	/* Shadow */
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
 	min-width: 270px;
 	user-select: none;
 	z-index: 1000;
+	margin: auto;
+	padding: 20px;
 }
 
 .fgta5-modal-message::backdrop {
-	background-color: rgba(0, 0, 0, 0.6); /* Masking gelap */
+
+	/* Masking gelap */
+	background-color: rgba(0, 0, 0, 0.6);
 }
 
 .fgta5-modal-button {
@@ -19,7 +26,7 @@
 
 
 .fgta5-modal-progressbar-container {
-	background-color:  #ccc;
+	background-color: #ccc;
 	max-width: 500px;
 	margin: 0 auto;
 	padding: 0;

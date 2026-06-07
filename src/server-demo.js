@@ -3,6 +3,8 @@
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
+import loaderDataCity from './loader-data-city.js'
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +37,8 @@ app.use('/demo', (req, res, next) => {
 });
 app.use('/demo', express.static(path.join(__dirname, 'demo')));
 
+
+app.use('/dist', express.static(path.join(__dirname, '..', 'dist')));
 
 
 
@@ -107,6 +111,9 @@ app.use('/fgta5/components', express.static(path.join(__dirname, 'components')))
 
 
 
+app.post('/data/city', (req, res) => {
+	loaderDataCity(req, res)
+})
 
 
 

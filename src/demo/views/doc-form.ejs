@@ -10,7 +10,7 @@
 
 
 	<!-- Library styles: Production -->
-	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
+	<link rel="stylesheet" href="/dist/fgta5js-v1.9.2.min.css" />
 
 
 	<!-- Core Demo stylesheet & Docs overrides -->
@@ -26,7 +26,7 @@
 
 <body>
 	<!-- Register fgta5 global components namespace -->
-	<script type="module" src="demo/scripts/fgta5js-v1.9.2.min.js"></script>
+	<script type="module" src="/dist/fgta5js-v1.9.2.min.js"></script>
 
 
 	<div class="container">
@@ -109,7 +109,8 @@
 					<h2>HTML Markup</h2>
 					<p>Define your form element and assign a unique ID. Decorate it with attributes like
 						<code>primarykey</code>, <code>locked</code>, and <code>autoid</code>, and style input
-						containers using standard fields.</p>
+						containers using standard fields.
+					</p>
 
 					<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">primarykey</span>=<span class="hl-string">"obj_id"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span> <span class="hl-attr">autoid</span>=<span class="hl-string">"true"</span>&gt;
   &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_id"</span>&gt;
@@ -149,12 +150,14 @@ form.<span class="hl-function">lock</span>(<span class="hl-keyword">false</span>
 								<tr>
 									<td><code>primarykey</code></td>
 									<td><code>String</code></td>
-									<td>Designates the ID of the input element that serves as the form's primary key identifier.</td>
+									<td>Designates the ID of the input element that serves as the form's primary key
+										identifier.</td>
 								</tr>
 								<tr>
 									<td><code>locked</code></td>
 									<td><code>"true" | "false"</code></td>
-									<td>Sets the initial edit/view lock state. When true, all component interactions are disabled.</td>
+									<td>Sets the initial edit/view lock state. When true, all component interactions are
+										disabled.</td>
 								</tr>
 								<tr>
 									<td><code>autoid</code></td>
@@ -276,13 +279,15 @@ form.<span class="hl-function">lock</span>(<span class="hl-keyword">false</span>
 									<td><code>getLastError()</code></td>
 									<td><code>()</code></td>
 									<td>Returns the last validation error message string, or
-										<code>null</code>/<code>undefined</code>.</td>
+										<code>null</code>/<code>undefined</code>.
+									</td>
 								</tr>
 								<tr>
 									<td><code>getPrimaryInput()</code></td>
 									<td><code>()</code></td>
 									<td>Returns the input component instance that corresponds to the designated
-										<code>PrimaryKey</code>.</td>
+										<code>PrimaryKey</code>.
+									</td>
 								</tr>
 								<tr>
 									<td><code>setData(data)</code></td>
@@ -325,7 +330,8 @@ form.<span class="hl-function">lock</span>(<span class="hl-keyword">false</span>
 									<td><code>()</code></td>
 									<td>Validates every input component in the form sequentially. Returns
 										<code>true</code> if all inputs are valid, or <code>false</code> (and stores the
-										first error).</td>
+										first error).
+									</td>
 								</tr>
 								<tr>
 									<td><code>acceptInput()</code></td>

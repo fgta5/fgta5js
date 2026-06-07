@@ -763,7 +763,15 @@ function cbo_createDialog(self, dialog) {
 		})
 
 		srcbuton.setAttribute('type', 'type')
-		srcbuton.innerHTML = 'Submit'
+		srcbuton.classList.add('action-button')
+		srcbuton.innerHTML = `
+			<span class="action-button-icon">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: middle;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+			</span>
+			<span class="action-button-text">Search</span>
+		`
+
+
 		srcbuton.addEventListener('click', (evt) => {
 			var searchtext = srcinput.value
 			var limit = DEF_LIMIT
@@ -812,7 +820,10 @@ function cbo_createDialog(self, dialog) {
 		// siapkan tombol next,
 		// jikalau nanti ada data yang panjang dan perlu paging
 		btnnext.classList.add('fgta5-combobox-dialog-nextbutton')
-		btnnext.innerHTML = 'next data'
+		btnnext.innerHTML = `
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+			load more
+		`
 		btnnext.style.display = 'none'
 		btnnext.setAttribute('href', 'javascript:void(0)')
 		btnnext.addEventListener('click', (evt) => {

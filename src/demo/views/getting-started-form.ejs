@@ -9,7 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<!-- Library styles: Production -->
-	<link rel="stylesheet" href="demo/styles/fgta5js-v1.9.2.min.css" />
+	<link rel="stylesheet" href="/dist/fgta5js-v1.9.2.min.css" />
 
 	<!-- Core Demo stylesheet & Docs overrides -->
 	<link rel="stylesheet" href="demo/styles/demo.css" />
@@ -58,8 +58,9 @@
 				<!-- Block 1: Embed Script and CSS -->
 				<section id="embed-assets" class="doc-section">
 					<h2>Step 1: Embed Script and CSS</h2>
-					<p>To use fgta5js components, first include the production stylesheet and JavaScript modules via the official CDN URLs:</p>
-					
+					<p>To use fgta5js components, first include the production stylesheet and JavaScript modules via the
+						official CDN URLs:</p>
+
 					<div style="margin-bottom: 1.5rem;">
 						<h5 style="margin-bottom: 0.5rem; color: var(--text-primary);">Stylesheet URL:</h5>
 						<pre><code>https://rawcdn.githack.com/fgta5/fgta5js/demo-server/dist/fgta5js-v1.9.2.min.css</code></pre>
@@ -74,8 +75,11 @@
 				<!-- Block 2: HTML Structure -->
 				<section id="html-structure" class="doc-section">
 					<h2>Step 2: HTML Structure</h2>
-					<p>Embed the library inside the standard HTML boilerplate. Include the css stylesheet inside the <code>&lt;head&gt;</code>, the form inside the <code>&lt;body&gt;</code>, and load the module script.</p>
-					
+					<p>Embed the library inside the standard HTML boilerplate. Include the css stylesheet inside the
+						<code>&lt;head&gt;</code>, the form inside the <code>&lt;body&gt;</code>, and load the module
+						script.
+					</p>
+
 
 					<pre><code>&lt;!<span class="hl-keyword">DOCTYPE</span> html&gt;
 &lt;<span class="hl-tag">html</span> <span class="hl-attr">lang</span>=<span class="hl-string">"en"</span>&gt;
@@ -106,7 +110,8 @@
 				<!-- Block 3: Script Block -->
 				<section id="js-script" class="doc-section">
 					<h2>Step 3: Script Block</h2>
-					<p>Add the script block to initialize the components and unlock the form for editing after page load.</p>
+					<p>Add the script block to initialize the components and unlock the form for editing after page
+						load.</p>
 					<pre><code>&lt;<span class="hl-tag">script</span> <span class="hl-attr">type</span>=<span class="hl-string">"module"</span>&gt;
 	window.addEventListener("load", async () => {
 		// Initialize component
@@ -121,19 +126,26 @@
 				</section>
 
 				<!-- Live Tryout and Download Actions -->
-				<section class="doc-section" style="border-top: 1px dashed var(--border-color); padding-top: 2rem; margin-top: 1rem;">
+				<section class="doc-section"
+					style="border-top: 1px dashed var(--border-color); padding-top: 2rem; margin-top: 1rem;">
 					<div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-						<a href="/demo/examples/textbox.html" download class="demo-button" style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%); color: #ffffff; border: none; font-size: 0.875rem; padding: 0.625rem 1.25rem;">
-							<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+						<a href="/demo/examples/textbox.html" download class="demo-button"
+							style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%); color: #ffffff; border: none; font-size: 0.875rem; padding: 0.625rem 1.25rem;">
+							<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+								stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+								style="margin-right: 0.25rem;">
 								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
 								<polyline points="7 10 12 15 17 10"></polyline>
 								<line x1="12" y1="15" x2="12" y2="3"></line>
 							</svg>
 							Download textbox.html Example
 						</a>
-						
-						<a href="/demo/examples/textbox.html" target="_blank" class="demo-button" style="font-size: 0.875rem; padding: 0.625rem 1.25rem;">
-							<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+
+						<a href="/demo/examples/textbox.html" target="_blank" class="demo-button"
+							style="font-size: 0.875rem; padding: 0.625rem 1.25rem;">
+							<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+								stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+								style="margin-right: 0.25rem;">
 								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
 								<polyline points="15 3 21 3 21 9"></polyline>
 								<line x1="10" y1="14" x2="21" y2="3"></line>
@@ -144,13 +156,19 @@
 				</section>
 
 				<!-- See Also Section -->
-				<section id="see-also" class="doc-section" style="border-top: 1px dashed var(--border-color); padding-top: 2rem; margin-top: 1rem;">
+				<section id="see-also" class="doc-section"
+					style="border-top: 1px dashed var(--border-color); padding-top: 2rem; margin-top: 1rem;">
 					<h2>See Also</h2>
-					<p>Ready to orchestrate multiple modules inside a Single Page Application (SPA)? Check out our shell application configuration guide:</p>
+					<p>Ready to orchestrate multiple modules inside a Single Page Application (SPA)? Check out our shell
+						application configuration guide:</p>
 					<ul>
 						<li style="margin-left: 1.25rem; margin-bottom: 0.5rem;">
-							<a href="/getting-started-appmanager" style="color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='var(--accent-purple)';" onmouseout="this.style.color='var(--primary)';">
-								Application Manager Implementation Guide <span style="display: inline-block; transition: transform 0.2s ease;">→</span>
+							<a href="/getting-started-appmanager"
+								style="color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.2s ease;"
+								onmouseover="this.style.color='var(--accent-purple)';"
+								onmouseout="this.style.color='var(--primary)';">
+								Application Manager Implementation Guide <span
+									style="display: inline-block; transition: transform 0.2s ease;">→</span>
 							</a>
 						</li>
 					</ul>

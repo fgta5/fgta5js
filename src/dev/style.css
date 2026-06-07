@@ -56,19 +56,22 @@ body {
 	align-self: flex-start;
 }
 
+/* 
 .input-field>label {
 	margin-top: 4px;
 	font-size: 0.8rem;
 	font-weight: bold;
-	position: relative;
 
 }
 
-.input-field label.fgta5-checkbox {
+*/
+
+
+/* .input-field label.fgta5-checkbox {
 	font-size: 0.8rem;
 	font-weight: bold;
 	margin-left: 10px;
-}
+} */
 
 
 /* Small Screen */
@@ -78,28 +81,16 @@ body {
 		flex-basis: 100%;
 	}
 
+	/* 
 	.input-field>div[label],
 	.input-field>label {
 		text-align: left;
 		margin-bottom: 5px;
 		width: fit-content;
 		min-width: unset;
-	}
+	} */
 
-	.fgta5-entry-container[fgta5-component=Combobox] {
+	/* .fgta5-entry-container[fgta5-component=Combobox] {
 		width: 100%
-	}
-}
-
-
-/* Large Screen */
-@media screen and (min-width: 501px) {
-	.input-field>label {
-		text-align: right;
-		width: 80px;
-		min-width: 80px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+	} */
 }

@@ -82,7 +82,7 @@
 			<div class="input-field" field="obj_city" style="grid-row: 3; grid-column: 3/ span 2;">
 				<label for="obj_city">City</label>
 				<input id="obj_city" fgta5-component="Combobox" placeholder="Search and select city..."
-					autocomplete="off" spellcheck="false" binding="city" description="City of residence"
+					autocomplete="off" spellcheck="false" binding="city_id" description="City of residence"
 					invalid-message="City is required">
 			</div>
 
@@ -97,6 +97,28 @@
 					<option value="F" default="true">Female</option>
 					<option value="M">Male</option>
 				</datalist>
+			</div>
+
+
+			<!-- Tanggal Input -->
+			<div class="input-field" field="obj_tanggal" style="grid-row: 4; grid-column: 1/ span 2;">
+				<label for="obj_tanggal">Date</label>
+				<input id="obj_tanggal" fgta5-component="Datepicker" placeholder="Select Date..." autocomplete="off"
+					spellcheck="false" min="2025-06-02" binding="tanggal" description="Choose a date">
+			</div>
+
+			<!-- Jam Input -->
+			<div class="input-field" field="obj_jam" style="grid-row: 4; grid-column: 3/ span 2;">
+				<label for="obj_jam">Time</label>
+				<input id="obj_jam" fgta5-component="Timepicker" placeholder="Select Time..." autocomplete="off"
+					spellcheck="false" binding="jam" description="Select hours & minutes">
+			</div>
+
+
+			<!-- File Input -->
+			<div class="input-field" field="obj_file" style="grid-row: 5; grid-column: 1/ span 3;">
+				<label for="obj_file">Attach File</label>
+				<input id="obj_file" fgta5-component="Filebox" placeholder="Upload file" binding="file">
 			</div>
 
 		</form>

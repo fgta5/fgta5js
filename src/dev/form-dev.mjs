@@ -3,6 +3,7 @@ const btnAccept = new $fgta5.ActionButton('btnAccept')
 const btnReset = new $fgta5.ActionButton('btnReset')
 
 const form = new $fgta5.Form('main_form')
+const obj_city = form.Inputs.obj_city
 
 
 export default class {
@@ -11,17 +12,21 @@ export default class {
 
 		update_togle_button()
 
-		btnTogle.addEventListener('click', (args) => {
-			btnTogle_click(this, args)
+		btnTogle.addEventListener('click', (evt) => {
+			btnTogle_click(this, evt)
 		})
 
-		btnAccept.addEventListener('click', (args) => {
-			btnAccept_click(this, args)
+		btnAccept.addEventListener('click', (evt) => {
+			btnAccept_click(this, evt)
 
 		})
 
-		btnReset.addEventListener('click', (args) => {
-			btnReset_click(this, args)
+		btnReset.addEventListener('click', (evt) => {
+			btnReset_click(this, evt)
+		})
+
+		obj_city.addEventListener('selecting', (evt) => {
+			obj_city_selecting(this, evt)
 		})
 	}
 }
@@ -74,4 +79,39 @@ async function btnReset_click(self, args) {
 		}
 		form.reset()
 	}
+}
+
+
+async function obj_city_selecting(self, evt) {
+	const cbo = evt.detail.sender
+	const dialog = evt.detail.dialog
+	const loader = new $fgta5.Dataloader()
+
+	var searchtext = evt.detail.searchtext != null ? evt.detail.searchtext : ''
+	var args = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			searchtext: searchtext,
+			offset: evt.detail.offset,
+			limit: evt.detail.limit
+		})
+	}
+
+
+	cbo.wait()
+	cbo.AbortHandler = () => { loader.Abort() }
+	loader.load('/data/city', args, (err, result) => {
+		console.log('loading..')
+		console.log(result)
+
+		for (var row of result.data) {
+			evt.detail.addRow(row.city_id, row.city_name, row)
+		}
+		dialog.setNext(result.nextoffset, result.limit)
+		cbo.wait(false)
+	})
+
 }
