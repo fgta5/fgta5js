@@ -27,6 +27,9 @@ const rowRemovingEvent = (data) => { return new CustomEvent('rowremoving', data)
 const sortingEvent = (data) => { return new CustomEvent('sorting', data) }
 const nextDataEvent = (data) => { return new CustomEvent('nextdata', data) }
 
+
+const ICON_LOADNEXTDATA = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai-style-change-2"><polyline points="6 9 12 15 18 9"></polyline></svg>`
+
 /**
  * Komponen Gridview untuk merender dan mengelola data dalam bentuk tabel HTML.
  * Mendukung penomoran otomatis, seleksi baris, sorting, formatter kolom, dan pemuatan halaman (next data).
@@ -982,9 +985,11 @@ function grv_setNext(self, nextoffset, limit) {
 	if (nextoffset != null) {
 		var tr = document.createElement('tr')
 		var td = document.createElement('td')
-		var next = document.createElement('a')
+		var next = document.createElement('button')
 
-		next.innerHTML = 'load next data'
+		next.classList.add('fgta5-gridview-nextbutton')
+		next.innerHTML = `${ICON_LOADNEXTDATA}<span>load next data</span>`
+
 		next.setAttribute('href', 'javascript:void(0)')
 		next.addEventListener('click', (evt) => {
 			self.Listener.dispatchEvent(nextDataEvent({
