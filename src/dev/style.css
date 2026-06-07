@@ -16,6 +16,14 @@ body {
 }
 
 
+
+@media screen and (max-width: 500px) {
+	form {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
 @media screen and (min-width: 501px) {
 	form {
 		display: grid;
@@ -46,32 +54,12 @@ body {
 
 
 
-
-
-
-
 .input-field {
 	display: flex;
 	margin-bottom: 10px;
 	align-self: flex-start;
 }
 
-/* 
-.input-field>label {
-	margin-top: 4px;
-	font-size: 0.8rem;
-	font-weight: bold;
-
-}
-
-*/
-
-
-/* .input-field label.fgta5-checkbox {
-	font-size: 0.8rem;
-	font-weight: bold;
-	margin-left: 10px;
-} */
 
 
 /* Small Screen */
@@ -79,18 +67,6 @@ body {
 	.input-field {
 		flex-direction: column;
 		flex-basis: 100%;
+		width: 100%;
 	}
-
-	/* 
-	.input-field>div[label],
-	.input-field>label {
-		text-align: left;
-		margin-bottom: 5px;
-		width: fit-content;
-		min-width: unset;
-	} */
-
-	/* .fgta5-entry-container[fgta5-component=Combobox] {
-		width: 100%
-	} */
 }

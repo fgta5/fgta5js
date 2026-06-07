@@ -204,8 +204,8 @@ function chk_construct(self, id) {
 	// sedangkan label di checkbox kita fungsikan sebagai text pada checkbox untuk di klik
 	var replLabel = document.createElement('div')
 	replLabel.innerHTML = "&nbsp";
-	replLabel.style.display = "inline-block"
 	replLabel.setAttribute('label', '')
+	replLabel.classList.add('fgta5-checkbox-caption')
 	label.parentNode.replaceChild(replLabel, label);
 
 

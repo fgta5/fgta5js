@@ -17,6 +17,13 @@ import Component from "./Component.mjs"
 */
 
 
+
+const SVG_ERROR_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-right: 4px;">
+  <circle cx="12" cy="12" r="10"></circle>
+  <line x1="12" y1="8" x2="12" y2="12"></line>
+  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+</svg>`
+
 /**
  * Komponen dasar untuk menangani input form.
  * @extends Component
@@ -477,7 +484,7 @@ function input_setError(self, msg) {
 			errdiv.classList.add('fgta5-entry-error')
 			self.Nodes.Container.insertBefore(errdiv, self.Nodes.InputWrapper.nextSibling)
 		}
-		errdiv.innerHTML = `<div>${msg}</div>`
+		errdiv.innerHTML = `<div>${SVG_ERROR_ICON}</div><div>${msg}</div>`
 		self._setLastError(msg)
 	} else {
 		self.Nodes.Input.removeAttribute('invalid')

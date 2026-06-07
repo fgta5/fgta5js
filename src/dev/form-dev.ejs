@@ -35,7 +35,8 @@
 			<span class="action-button-text">Reset</span>
 		</button>
 	</div>
-	<div style="width: 400px;">
+	<div>
+
 		<form id="main_form" locked="true">
 			<div id="obj_name-container" class="input-field" field="obj_name"
 				style="grid-row: 1; grid-column: 1 / span 2;">
@@ -69,11 +70,11 @@
 
 
 			<div style="grid-row: 3; grid-column: 1/ span 2;">
-				<div id="obj_nilai-container" class="input-field" field="obj_nilai" style="width: 200px;">
+				<div id="obj_nilai-container" class="input-field" field="obj_nilai">
 					<label for="obj_nilai">Amount</label>
 					<input id="obj_nilai" fgta5-component="Numberbox" placeholder="Value" autocomplete="off"
-						spellcheck="false" min="50" max="200" maxlength="6" decimal="2" binding="nilai" value="100"
-						description="Enter numeric value between 50 and 200"
+						spellcheck="false" min="50" max="999999999" maxlength="12" precision="2" binding="nilai"
+						value="897123456.88" description="Enter numeric value between 50 and 200"
 						invalid-message="Value must be in range 50 to 200">
 				</div>
 			</div>
@@ -100,14 +101,14 @@
 			</div>
 
 
-			<!-- Tanggal Input -->
+
 			<div class="input-field" field="obj_tanggal" style="grid-row: 4; grid-column: 1/ span 2;">
 				<label for="obj_tanggal">Date</label>
 				<input id="obj_tanggal" fgta5-component="Datepicker" placeholder="Select Date..." autocomplete="off"
 					spellcheck="false" min="2025-06-02" binding="tanggal" description="Choose a date">
 			</div>
 
-			<!-- Jam Input -->
+
 			<div class="input-field" field="obj_jam" style="grid-row: 4; grid-column: 3/ span 2;">
 				<label for="obj_jam">Time</label>
 				<input id="obj_jam" fgta5-component="Timepicker" placeholder="Select Time..." autocomplete="off"
@@ -115,7 +116,7 @@
 			</div>
 
 
-			<!-- File Input -->
+
 			<div class="input-field" field="obj_file" style="grid-row: 5; grid-column: 1/ span 3;">
 				<label for="obj_file">Attach File</label>
 				<input id="obj_file" fgta5-component="Filebox" placeholder="Upload file" binding="file">

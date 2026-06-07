@@ -69,6 +69,10 @@ app.get('/getting-started-:module', (req, res) => {
 });
 
 
+app.get('/dev', (req, res) => {
+	res.render(path.join(__dirname, 'dev', 'index-dev.ejs'), {});
+});
+
 
 app.get('/:module', (req, res) => {
 	const module = req.params.module;
@@ -80,10 +84,7 @@ app.get('/:module', (req, res) => {
 
 
 
-// Development
-app.get('/dev', (req, res) => {
-	res.render(path.join(__dirname, 'dev', 'index-dev.ejs'), {});
-});
+
 
 app.use('/dev', (req, res, next) => {
 	if (req.path.endsWith('.ejs')) {
