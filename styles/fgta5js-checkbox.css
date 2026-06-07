@@ -105,15 +105,13 @@
 
 
 
-@media screen and (max-width: 500px) {
-  .fgta5-checkbox-caption {
-    display: none;
-  }
+.fgta5-checkbox-caption {
+  display: none;
 }
-
 
 @media screen and (min-width: 501px) {
   .fgta5-checkbox-caption {
-    display: inline-block;
+    min-width: 80px;
+    ;
   }
 }
