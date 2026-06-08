@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Application Component - fgta5js Documentation</title>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Library styles: Production -->
+	<link rel="stylesheet" href="/dist/fgta5js-v1.9.2.min.css" />
+
+	<!-- Core Demo stylesheet & Docs overrides -->
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
+
+	<script>
+		window.$validators = {}
+	</script>
+</head>
+
+<body>
+	<!-- Register fgta5 global components namespace -->
+	<script type="module" src="/dist/fgta5js-v1.9.2.min.js"></script>
+
+	<div class="container">
+		<!-- Back link -->
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs') %>
+		</div>
+
+		<!-- Header -->
+		<header style="text-align: left; margin-bottom: 2.5rem;">
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Component
+			</div>
+
+			<div style="display: flex; column-gap: 1rem;">
+				<div class="title-icon-wrapper">
+					<svg viewBox="0 0 24 24">
+						<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+					</svg>
+				</div>
+
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Application</h1>
+			</div>
+
+			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+				The root application controller component that manages core layout structures (header, content, footer), page/document titles, and handles message communications with parent container hosts.
+			</p>
+		</header>
+
+		<!-- Main Documentation Layout -->
+		<div class="doc-layout">
+			<!-- Sidebar -->
+			<aside class="doc-sidebar">
+				<div class="doc-nav-card">
+					<h4>Contents</h4>
+					<ul class="doc-nav-list">
+						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
+						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
+						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
+					</ul>
+				</div>
+				<%-include('_mnu-components.ejs')%>
+			</aside>
+
+			<!-- Content Area -->
+			<main class="doc-content">
+				<!-- Overview Section -->
+				<section id="overview" class="doc-section">
+					<h2>Overview</h2>
+					<div class="doc-callout">
+						<strong>Inheritance Notice:</strong> Class <code>App</code> inherits all of its core state tracking, rendering configurations, and event handlers from the abstract base class <a href="/components"><code>Component</code></a>.
+					</div>
+					<p>
+						The <code>App</code> class acts as the main wrapper/shell for pages in the <code>fgta5js</code> library. It automatically generates and appends standard layout headers and footers around your primary main content block.
+					</p>
+					<p>
+						It also provides a secure message channel via <code>window.postMessage</code> to coordinate views and navigation directly with the parent dashboard (such as the <code>AppManager</code> host).
+					</p>
+				</section>
+
+				<!-- HTML Markup Section -->
+				<section id="html-markup" class="doc-section">
+					<h2>HTML Markup</h2>
+					<p>Define your main application container with the <code>fgta5-component="Application"</code> attribute. The layout builder will automatically inject header and footer siblings next to this element.</p>
+
+					<pre><code>&lt;<span class="hl-tag">main</span> <span class="hl-attr">id</span>=<span class="hl-string">"myapp"</span> <span class="hl-attr">fgta5-component</span>=<span class="hl-string">"Application"</span>&gt;
+  &lt;<span class="hl-tag">h2</span>&gt;My Application Content&lt;/<span class="hl-tag">h2</span>&gt;
+  &lt;<span class="hl-tag">p</span>&gt;Standard inner HTML contents go here.&lt;/<span class="hl-tag">p</span>&gt;
+&lt;/<span class="hl-tag">main</span>&gt;</code></pre>
+
+					<p>Instantiate and start the Application in JavaScript:</p>
+					<pre><code><span class="hl-keyword">const</span> app = <span class="hl-keyword">new</span> <span class="hl-class">$fgta5.App</span>(<span class="hl-string">'myapp'</span>);
+app.<span class="hl-function">setTitle</span>(<span class="hl-string">'My Dashboard'</span>);
+app.<span class="hl-function">finalize</span>();</code></pre>
+				</section>
+
+				<!-- Properties Section -->
+				<section id="properties" class="doc-section">
+					<h2>Properties</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>Nodes</code></td>
+									<td><code>Object</code></td>
+									<td>Contains direct references to key DOM elements under keys: <code>Head</code> (header), <code>Main</code> (main application element), and <code>Footer</code> (footer element).</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Methods Section -->
+				<section id="methods" class="doc-section">
+					<h2>Methods</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Method</th>
+									<th>Arguments</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>constructor(id)</code></td>
+									<td><code>(id: String)</code></td>
+									<td>Creates and binds a new <code>App</code> instance to the HTML element. Automatically formats layout siblings.</td>
+								</tr>
+								<tr>
+									<td><code>setTitle(title)</code></td>
+									<td><code>(title: String)</code></td>
+									<td>Dynamically updates the app header title display and browser document title tab.</td>
+								</tr>
+								<tr>
+									<td><code>showFooter(show)</code></td>
+									<td><code>(show: Boolean)</code></td>
+									<td>Toggles footer section visibility and adjusts main layout attributes.</td>
+								</tr>
+								<tr>
+									<td><code>setMenuIcon(url)</code></td>
+									<td><code>(url: String)</code></td>
+									<td>Updates the background image URL for the navigation menu button.</td>
+								</tr>
+								<tr>
+									<td><code>finalize()</code></td>
+									<td><code>()</code></td>
+									<td>Notifies the parent wrapper container that the app loading phase is successfully completed.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+			</main>
+		</div>
+
+		<!-- Footer -->
+		<%-include('_footer.ejs')%>
+	</div>
+</body>
+
+</html>

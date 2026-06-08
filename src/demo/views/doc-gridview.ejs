@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Gridview Component - fgta5js Documentation</title>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Library styles: Production -->
+	<link rel="stylesheet" href="/dist/fgta5js-v1.9.2.min.css" />
+
+	<!-- Core Demo stylesheet & Docs overrides -->
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
+
+	<script>
+		window.$validators = {}
+	</script>
+</head>
+
+<body>
+	<!-- Register fgta5 global components namespace -->
+	<script type="module" src="/dist/fgta5js-v1.9.2.min.js"></script>
+
+	<div class="container">
+		<!-- Back link -->
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs') %>
+		</div>
+
+		<!-- Header -->
+		<header style="text-align: left; margin-bottom: 2.5rem;">
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Component
+			</div>
+
+			<div style="display: flex; column-gap: 1rem;">
+				<div class="title-icon-wrapper">
+					<svg viewBox="0 0 24 24">
+						<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+						<line x1="9" y1="3" x2="9" y2="21"></line>
+						<line x1="15" y1="3" x2="15" y2="21"></line>
+						<line x1="3" y1="9" x2="21" y2="9"></line>
+						<line x1="3" y1="15" x2="21" y2="15"></line>
+					</svg>
+				</div>
+
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Gridview</h1>
+			</div>
+
+			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+				A feature-rich data grid table view component for rendering, formatting, sorting, selecting, and paginating tabbed list data records within a standard HTML &lt;table&gt; structure.
+			</p>
+		</header>
+
+		<!-- Main Documentation Layout -->
+		<div class="doc-layout">
+			<!-- Sidebar -->
+			<aside class="doc-sidebar">
+				<div class="doc-nav-card">
+					<h4>Contents</h4>
+					<ul class="doc-nav-list">
+						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
+						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
+						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
+						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
+					</ul>
+				</div>
+				<%-include('_mnu-components.ejs')%>
+			</aside>
+
+			<!-- Content Area -->
+			<main class="doc-content">
+				<!-- Overview Section -->
+				<section id="overview" class="doc-section">
+					<h2>Overview</h2>
+					<div class="doc-callout">
+						<strong>Inheritance Notice:</strong> Class <code>Gridview</code> inherits all of its core state tracking, events, and rendering configurations from the abstract base class <a href="/components"><code>Component</code></a>.
+					</div>
+					<p>
+						The <code>Gridview</code> component handles data presentation in rows and columns. It automates standard chores like creating table rows, checking checkboxes, numbering items sequentially, applying formats (like dates or currencies), and rendering "load more" action buttons at the footer of your datasets.
+					</p>
+				</section>
+
+				<!-- HTML Markup Section -->
+				<section id="html-markup" class="doc-section">
+					<h2>HTML Markup</h2>
+					<p>Define your grid view inside a standard HTML <code>&lt;table&gt;</code> element, and define bindings via attributes on the template row inside the table header.</p>
+
+					<pre><code>&lt;<span class="hl-tag">table</span> <span class="hl-attr">id</span>=<span class="hl-string">"mygrid"</span>&gt;
+  &lt;<span class="hl-tag">thead</span>&gt;
+    &lt;<span class="hl-tag">tr</span> <span class="hl-attr">data-header</span>=<span class="hl-string">"true"</span> <span class="hl-attr">key</span>=<span class="hl-string">"id"</span>&gt;
+      &lt;<span class="hl-tag">th</span> <span class="hl-attr">rowselector</span>=<span class="hl-string">"true"</span>&gt;&lt;/<span class="hl-tag">th</span>&gt;
+      &lt;<span class="hl-tag">th</span> <span class="hl-attr">autonumber</span>=<span class="hl-string">"true"</span>&gt;No&lt;/<span class="hl-tag">th</span>&gt;
+      &lt;<span class="hl-tag">th</span> <span class="hl-attr">binding</span>=<span class="hl-string">"name"</span> <span class="hl-attr">sorting</span>=<span class="hl-string">"true"</span>&gt;Name&lt;/<span class="hl-tag">th</span>&gt;
+      &lt;<span class="hl-tag">th</span> <span class="hl-attr">binding</span>=<span class="hl-string">"amount"</span> <span class="hl-attr">text-align</span>=<span class="hl-string">"right"</span>&gt;Amount&lt;/<span class="hl-tag">th</span>&gt;
+    &lt;/<span class="hl-tag">tr</span>&gt;
+  &lt;/<span class="hl-tag">thead</span>&gt;
+&lt;/<span class="hl-tag">table</span>&gt;</code></pre>
+
+					<p>Instantiate and bind data in JavaScript:</p>
+					<pre><code><span class="hl-keyword">const</span> grid = <span class="hl-keyword">new</span> <span class="hl-class">$fgta5.Gridview</span>(<span class="hl-string">'mygrid'</span>);
+grid.<span class="hl-function">addRows</span>([
+  { id: '1', name: 'Product A', amount: 15000 },
+  { id: '2', name: 'Product B', amount: 24500 }
+]);</code></pre>
+				</section>
+
+				<!-- HTML Attributes Section -->
+				<section id="attributes" class="doc-section">
+					<h2>HTML Attributes</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Attribute</th>
+									<th>Target Element</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>key</code></td>
+									<td><code>&lt;tr data-header&gt;</code></td>
+									<td>Designates the unique key identifier column name inside row records (e.g., <code>id</code>).</td>
+								</tr>
+								<tr>
+									<td><code>rowselector</code></td>
+									<td><code>&lt;th&gt;</code></td>
+									<td>Marks the column to automatically render a row selector checkbox.</td>
+								</tr>
+								<tr>
+									<td><code>autonumber</code></td>
+									<td><code>&lt;th&gt;</code></td>
+									<td>Marks the column to render incremental numbers automatically.</td>
+								</tr>
+								<tr>
+									<td><code>binding</code></td>
+									<td><code>&lt;th&gt;</code></td>
+									<td>Identifies the data field property name (e.g., <code>name</code>) bound to this column.</td>
+								</tr>
+								<tr>
+									<td><code>sorting</code></td>
+									<td><code>&lt;th&gt;</code></td>
+									<td>Enables header sorting event triggers for the specific column.</td>
+								</tr>
+								<tr>
+									<td><code>text-align</code></td>
+									<td><code>&lt;th&gt;</code></td>
+									<td>Sets cell text alignment: <code>left</code>, <code>center</code>, or <code>right</code>.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Properties Section -->
+				<section id="properties" class="doc-section">
+					<h2>Properties</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>Columns</code></td>
+									<td><code>Object[]</code></td>
+									<td>List of column configuration metadata definitions parsed from the table headers (Read-only).</td>
+								</tr>
+								<tr>
+									<td><code>Key</code></td>
+									<td><code>String</code></td>
+									<td>The name of the primary key field for dataset rows.</td>
+								</tr>
+								<tr>
+									<td><code>Criteria</code></td>
+									<td><code>Object</code></td>
+									<td>Gets or sets custom search criteria filters for data request operations.</td>
+								</tr>
+								<tr>
+									<td><code>CurrentRow</code></td>
+									<td><code>HTMLTableRowElement</code></td>
+									<td>Gets or sets the currently focused active row in the grid viewport.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Methods Section -->
+				<section id="methods" class="doc-section">
+					<h2>Methods</h2>
+					<div class="api-table-wrapper">
+						<table class="api-table">
+							<thead>
+								<tr>
+									<th>Method</th>
+									<th>Arguments</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>constructor(id)</code></td>
+									<td><code>(id: String)</code></td>
+									<td>Binds the gridview controller to an HTML <code>&lt;table&gt;</code> element.</td>
+								</tr>
+								<tr>
+									<td><code>addRow(row)</code></td>
+									<td><code>(row: Object)</code></td>
+									<td>Appends a single structured data row to the grid tbody.</td>
+								</tr>
+								<tr>
+									<td><code>addRows(rows)</code></td>
+									<td><code>(rows: Object[])</code></td>
+									<td>Appends a collection of structured row records simultaneously.</td>
+								</tr>
+								<tr>
+									<td><code>updateRow(tr, data)</code></td>
+									<td><code>(tr: HTMLElement, data: Object)</code></td>
+									<td>Updates the content values on an existing table row element.</td>
+								</tr>
+								<tr>
+									<td><code>removeRow(tr)</code></td>
+									<td><code>(tr: HTMLElement)</code></td>
+									<td>Deletes a specific table row element from the grid.</td>
+								</tr>
+								<tr>
+									<td><code>getSelected()</code></td>
+									<td><code>()</code></td>
+									<td>Returns an array of key values from the checked rows.</td>
+								</tr>
+								<tr>
+									<td><code>clear()</code></td>
+									<td><code>()</code></td>
+									<td>Empties all record rows in the table body.</td>
+								</tr>
+								<tr>
+									<td><code>setNext(nextoffset, limit)</code></td>
+									<td><code>(nextoffset: Number, limit: Number)</code></td>
+									<td>Configures lazy loading button states inside the table footer.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+			</main>
+		</div>
+
+		<!-- Footer -->
+		<%-include('_footer.ejs')%>
+	</div>
+</body>
+
+</html>

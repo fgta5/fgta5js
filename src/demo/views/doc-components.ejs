@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>All Components - fgta5js Documentation</title>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Library styles: Production -->
+	<link rel="stylesheet" href="/dist/fgta5js-v1.9.2.min.css" />
+
+	<!-- Core Demo stylesheet & Docs overrides -->
+	<link rel="stylesheet" href="demo/styles/demo.css" />
+	<link rel="stylesheet" href="demo/styles/ferrine.css" />
+	<link rel="stylesheet" href="demo/styles/documentation.css" />
+</head>
+
+<body>
+	<!-- Register fgta5 global components namespace -->
+	<script type="module" src="/dist/fgta5js-v1.9.2.min.js"></script>
+
+	<div class="container">
+		<!-- Back link -->
+		<div style="display: flex; justify-content: space-between;">
+			<%-include('_backlink.ejs')%>
+		</div>
+
+		<!-- Header -->
+		<header style="text-align: left; margin-bottom: 2.5rem;">
+			<div class="badge">
+				<span class="badge-dot"></span>
+				Library Structure
+			</div>
+			<div style="display: flex; column-gap: 1rem; align-items: center;">
+				<div class="title-icon-wrapper">
+					<svg viewBox="0 0 24 24">
+						<rect x="3" y="3" width="7" height="9"></rect>
+						<rect x="14" y="3" width="7" height="5"></rect>
+						<rect x="14" y="12" width="7" height="9"></rect>
+						<rect x="3" y="16" width="7" height="5"></rect>
+					</svg>
+				</div>
+				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Components Library</h1>
+			</div>
+			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+				Below is the list of all component modules found inside the library directory <code>src/components</code>.
+			</p>
+		</header>
+
+		<!-- Main Layout -->
+		<main style="margin-top: 2rem; margin-bottom: 4rem;">
+			<section class="examples-section">
+				<div class="grid">
+					<% components.forEach(function(comp) { %>
+						<a href="<%= comp.route %>" class="card">
+							<div class="card-icon-wrapper">
+								<%- comp.icon %>
+							</div>
+							<h3><%= comp.name %> <span class="card-arrow">→</span></h3>
+							<p><%= comp.description %></p>
+						</a>
+					<% }); %>
+				</div>
+			</section>
+		</main>
+
+		<!-- Footer -->
+		<%-include('_footer.ejs')%>
+	</div>
+</body>
+
+</html>

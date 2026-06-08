@@ -1,4 +1,4 @@
-<a href="/" class="back-link">
+<a href="/" class="back-link" id="back-link-element">
 	<svg viewBox="0 0 24 24">
 		<line x1="19" y1="12" x2="5" y2="12"></line>
 		<polyline points="12 19 5 12 12 5"></polyline>
@@ -11,3 +11,22 @@
 		<img src="demo/images/ferrine-logo.png" alt="Ferrine Logo" class="brand-logo" />
 	</a>
 </div>
+
+<script>
+	(function() {
+		const referrer = document.referrer;
+		if (referrer) {
+			try {
+				const url = new URL(referrer);
+				if (url.pathname === '/components' || url.pathname === '/doc-components') {
+					const backLink = document.getElementById('back-link-element');
+					if (backLink) {
+						backLink.href = '/components';
+					}
+				}
+			} catch (e) {
+				console.error('Error parsing referrer URL', e);
+			}
+		}
+	})();
+</script>
