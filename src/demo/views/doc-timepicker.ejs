@@ -10,163 +10,163 @@
 
 
 	<!-- Library styles: Production -->
-	<link rel="stylesheet" href="/dist/fgta5js-v1.9.2.min.css" />
+	<%-include('_fgta5_css.ejs') %>
 
 
-	<!-- Core Demo stylesheet & Docs overrides -->
-	<link rel="stylesheet" href="demo/styles/demo.css" />
-	<link rel="stylesheet" href="demo/styles/ferrine.css" />
-	<link rel="stylesheet" href="demo/styles/documentation.css" />
+		<!-- Core Demo stylesheet & Docs overrides -->
+		<link rel="stylesheet" href="demo/styles/demo.css" />
+		<link rel="stylesheet" href="demo/styles/ferrine.css" />
+		<link rel="stylesheet" href="demo/styles/documentation.css" />
 
 
-	<script>
-		window.$validators = {}
-	</script>
+		<script>
+			window.$validators = {}
+		</script>
 </head>
 
 <body>
 	<!-- Register fgta5 global components namespace -->
-	<script type="module" src="/dist/fgta5js-v1.9.2.min.js"></script>
+	<%-include('_fgta5_lib.ejs') %>
 
 
-	<div class="container">
-		<!-- Back link -->
-		<div style="display: flex; justify-content: space-between;">
-			<%-include('_backlink.ejs') %>
-		</div>
-
-		<!-- Header -->
-		<header style="text-align: left; margin-bottom: 2.5rem;">
-			<div class="badge">
-				<span class="badge-dot"></span>
-				Component
+		<div class="container">
+			<!-- Back link -->
+			<div style="display: flex; justify-content: space-between;">
+				<%-include('_backlink.ejs') %>
 			</div>
 
-
-			<div style="display: flex; column-gap: 1rem;">
-				<div class="title-icon-wrapper">
-					<svg viewBox="0 0 24 24">
-						<circle cx="12" cy="12" r="10"></circle>
-						<polyline points="12 6 12 12 16 14"></polyline>
-					</svg>
+			<!-- Header -->
+			<header style="text-align: left; margin-bottom: 2.5rem;">
+				<div class="badge">
+					<span class="badge-dot"></span>
+					Component
 				</div>
 
-				<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Timepicker</h1>
-			</div>
 
+				<div style="display: flex; column-gap: 1rem;">
+					<div class="title-icon-wrapper">
+						<svg viewBox="0 0 24 24">
+							<circle cx="12" cy="12" r="10"></circle>
+							<polyline points="12 6 12 12 16 14"></polyline>
+						</svg>
+					</div>
 
-
-
-			<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
-				A specialized time input class that provides standardized time selection (HH:MM), custom limit
-				constraints (min/max), and edit/read-only mode state management.
-			</p>
-		</header>
-
-		<!-- Main Documentation Layout -->
-		<div class="doc-layout">
-			<!-- Sidebar -->
-			<aside class="doc-sidebar">
-				<div class="doc-nav-card">
-					<h4>Contents</h4>
-					<ul class="doc-nav-list">
-						<li class="doc-nav-item"><a href="#overview">Overview</a></li>
-						<li class="doc-nav-item"><a href="#playground">Interactive Playground</a></li>
-						<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
-						<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
-						<li class="doc-nav-item"><a href="#properties">Properties</a></li>
-						<li class="doc-nav-item"><a href="#methods">Methods</a></li>
-					</ul>
+					<h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; display: block;">Timepicker</h1>
 				</div>
-				<%-include('_mnu-components.ejs')%>
-			</aside>
 
-			<!-- Content Area -->
-			<main class="doc-content">
-				<!-- Overview Section -->
-				<section id="overview" class="doc-section">
-					<h2>Overview</h2>
-					<div class="doc-callout">
-						<strong>Inheritance Notice:</strong> Class <code>Timepicker</code> inherits all of its core
-						state tracking, validation logic, editing mode configurations, and event handlers from the
-						abstract base class <a href="/input"><code>Input</code></a>.
+
+
+
+				<p class="hero-description" style="margin: 0; text-align: left; font-size: 1rem;">
+					A specialized time input class that provides standardized time selection (HH:MM), custom limit
+					constraints (min/max), and edit/read-only mode state management.
+				</p>
+			</header>
+
+			<!-- Main Documentation Layout -->
+			<div class="doc-layout">
+				<!-- Sidebar -->
+				<aside class="doc-sidebar">
+					<div class="doc-nav-card">
+						<h4>Contents</h4>
+						<ul class="doc-nav-list">
+							<li class="doc-nav-item"><a href="#overview">Overview</a></li>
+							<li class="doc-nav-item"><a href="#playground">Interactive Playground</a></li>
+							<li class="doc-nav-item"><a href="#html-markup">HTML Markup</a></li>
+							<li class="doc-nav-item"><a href="#attributes">HTML Attributes</a></li>
+							<li class="doc-nav-item"><a href="#properties">Properties</a></li>
+							<li class="doc-nav-item"><a href="#methods">Methods</a></li>
+						</ul>
 					</div>
-					<p>
-						The <code>Timepicker</code> class wraps standard HTML time input elements within the
-						<code>fgta5js</code> framework. It enforces a standard time format (<code>HH:MM</code>) for
-						input values,
-						updates a readonly display element, and handles boundaries such as <code>min</code> and
-						<code>max</code> time limits.
-					</p>
-				</section>
+					<%-include('_mnu-components.ejs')%>
+				</aside>
 
-				<!-- Interactive Playground Section -->
-				<section id="playground" class="doc-section">
-					<h2>Interactive Playground</h2>
-					<p>Try interacting with the live component below and watch how the internal states change
-						dynamically.</p>
-
-					<div class="playground-card">
-						<div class="playground-header">
-							<span class="playground-title">Live Preview</span>
+				<!-- Content Area -->
+				<main class="doc-content">
+					<!-- Overview Section -->
+					<section id="overview" class="doc-section">
+						<h2>Overview</h2>
+						<div class="doc-callout">
+							<strong>Inheritance Notice:</strong> Class <code>Timepicker</code> inherits all of its core
+							state tracking, validation logic, editing mode configurations, and event handlers from the
+							abstract base class <a href="/input"><code>Input</code></a>.
 						</div>
+						<p>
+							The <code>Timepicker</code> class wraps standard HTML time input elements within the
+							<code>fgta5js</code> framework. It enforces a standard time format (<code>HH:MM</code>) for
+							input values,
+							updates a readonly display element, and handles boundaries such as <code>min</code> and
+							<code>max</code> time limits.
+						</p>
+					</section>
 
-						<div class="playground-body">
-							<!-- Interactive Component instance -->
-							<div class="playground-left">
+					<!-- Interactive Playground Section -->
+					<section id="playground" class="doc-section">
+						<h2>Interactive Playground</h2>
+						<p>Try interacting with the live component below and watch how the internal states change
+							dynamically.</p>
 
-
-								<div class="demo-input-field" field="playground_timepicker" style="flex: 1 1 100%;">
-									<form id="myform" locked="true">
-										<label for="playground_timepicker">Schedule Time</label>
-										<input id="playground_timepicker" fgta5-component="Timepicker"
-											placeholder="Select a time..." autocomplete="off" required min="08:00"
-											max="17:00">
-									</form>
-								</div>
-
-
-								<div class="playground-controls">
-									<button id="btn_toggle_edit" class="demo-button">Toggle Edit State</button>
-									<button id="btn_set_val" class="demo-button">Set to "10:30"</button>
-									<button id="btn_focus" class="demo-button">Focus Input</button>
-									<button id="btn_commit" class="demo-button">Commit / Save</button>
-									<button id="btn_reset" class="demo-button">Reset</button>
-								</div>
+						<div class="playground-card">
+							<div class="playground-header">
+								<span class="playground-title">Live Preview</span>
 							</div>
 
-							<!-- Dynamic property states monitor -->
-							<div class="playground-right">
-								<h5>Component State</h5>
-								<div class="playground-stat">
-									<span class="playground-stat-name">.value</span>
-									<span class="playground-stat-value" id="state_value">""</span>
+							<div class="playground-body">
+								<!-- Interactive Component instance -->
+								<div class="playground-left">
+
+
+									<div class="demo-input-field" field="playground_timepicker" style="flex: 1 1 100%;">
+										<form id="myform" locked="true">
+											<label for="playground_timepicker">Schedule Time</label>
+											<input id="playground_timepicker" fgta5-component="Timepicker"
+												placeholder="Select a time..." autocomplete="off" required min="08:00"
+												max="17:00">
+										</form>
+									</div>
+
+
+									<div class="playground-controls">
+										<button id="btn_toggle_edit" class="demo-button">Toggle Edit State</button>
+										<button id="btn_set_val" class="demo-button">Set to "10:30"</button>
+										<button id="btn_focus" class="demo-button">Focus Input</button>
+										<button id="btn_commit" class="demo-button">Commit / Save</button>
+										<button id="btn_reset" class="demo-button">Reset</button>
+									</div>
 								</div>
-								<div class="playground-stat">
-									<span class="playground-stat-name">.InEditMode</span>
-									<span class="playground-stat-value" id="state_editmode">true</span>
-								</div>
-								<div class="playground-stat">
-									<span class="playground-stat-name">.getLastValue()</span>
-									<span class="playground-stat-value" id="state_lastvalue">""</span>
-								</div>
-								<div class="playground-stat">
-									<span class="playground-stat-name">.isChanged()</span>
-									<span class="playground-stat-value" id="state_ischanged">false</span>
+
+								<!-- Dynamic property states monitor -->
+								<div class="playground-right">
+									<h5>Component State</h5>
+									<div class="playground-stat">
+										<span class="playground-stat-name">.value</span>
+										<span class="playground-stat-value" id="state_value">""</span>
+									</div>
+									<div class="playground-stat">
+										<span class="playground-stat-name">.InEditMode</span>
+										<span class="playground-stat-value" id="state_editmode">true</span>
+									</div>
+									<div class="playground-stat">
+										<span class="playground-stat-name">.getLastValue()</span>
+										<span class="playground-stat-value" id="state_lastvalue">""</span>
+									</div>
+									<div class="playground-stat">
+										<span class="playground-stat-name">.isChanged()</span>
+										<span class="playground-stat-value" id="state_ischanged">false</span>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
+					</section>
 
-				<!-- HTML Markup Section -->
-				<section id="html-markup" class="doc-section">
-					<h2>HTML Markup</h2>
-					<p>Define time inputs using standard HTML. Use <code>fgta5-component="Timepicker"</code> to
-						enable binding.
-					</p>
+					<!-- HTML Markup Section -->
+					<section id="html-markup" class="doc-section">
+						<h2>HTML Markup</h2>
+						<p>Define time inputs using standard HTML. Use <code>fgta5-component="Timepicker"</code> to
+							enable binding.
+						</p>
 
-					<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span>&gt;
+						<pre><code>&lt;<span class="hl-tag">form</span> <span class="hl-attr">id</span>=<span class="hl-string">"myform"</span> <span class="hl-attr">locked</span>=<span class="hl-string">"true"</span>&gt;
   <span class="hl-comment">&lt;!-- Timepicker Input --&gt;</span>
   &lt;<span class="hl-tag">div</span> <span class="hl-attr">class</span>=<span class="hl-string">"demo-input-field"</span> <span class="hl-attr">field</span>=<span class="hl-string">"obj_time"</span>&gt;
     &lt;<span class="hl-tag">label</span> <span class="hl-attr">for</span>=<span class="hl-string">"obj_time"</span>&gt;Schedule Time&lt;/<span class="hl-tag">label</span>&gt;
@@ -174,233 +174,236 @@
   &lt;/<span class="hl-tag">div</span>&gt;
 &lt;/<span class="hl-tag">form</span>&gt;</code></pre>
 
-					<p>Initialize and render the form in JavaScript:</p>
-					<pre><code><span class="hl-keyword">const</span> form = <span class="hl-keyword">new</span> <span class="hl-class">$fgta5.Form</span>(<span class="hl-string">'myform'</span>);
+						<p>Initialize and render the form in JavaScript:</p>
+						<pre><code><span class="hl-keyword">const</span> form = <span class="hl-keyword">new</span> <span class="hl-class">$fgta5.Form</span>(<span class="hl-string">'myform'</span>);
 form.<span class="hl-function">render</span>()</code></pre>
-				</section>
+					</section>
 
-				<!-- HTML Attributes Section -->
-				<section id="attributes" class="doc-section">
-					<h2>HTML Attributes</h2>
-					<div class="api-table-wrapper">
-						<table class="api-table">
-							<thead>
-								<tr>
-									<th>Attribute</th>
-									<th>Values</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><code>placeholder</code></td>
-									<td><code>String</code></td>
-									<td>Helpful placeholder text displayed when the input is empty.</td>
-								</tr>
-								<tr>
-									<td><code>disabled</code></td>
-									<td>N/A</td>
-									<td>Disables the picker waktu, preventing any interaction.</td>
-								</tr>
-								<tr>
-									<td><code>required</code></td>
-									<td>N/A</td>
-									<td>Marks the component as required during form validation.</td>
-								</tr>
-								<tr>
-									<td><code>min</code></td>
-									<td><code>String (HH:MM)</code></td>
-									<td>Lower time boundary validation constraint.</td>
-								</tr>
-								<tr>
-									<td><code>max</code></td>
-									<td><code>String (HH:MM)</code></td>
-									<td>Upper time boundary validation constraint.</td>
-								</tr>
-								<tr>
-									<td><code>data-tabindex</code></td>
-									<td><code>Number</code></td>
-									<td>Sets the native tabindex on the final display element for keyboard navigation.
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
+					<!-- HTML Attributes Section -->
+					<section id="attributes" class="doc-section">
+						<h2>HTML Attributes</h2>
+						<div class="api-table-wrapper">
+							<table class="api-table">
+								<thead>
+									<tr>
+										<th>Attribute</th>
+										<th>Values</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>placeholder</code></td>
+										<td><code>String</code></td>
+										<td>Helpful placeholder text displayed when the input is empty.</td>
+									</tr>
+									<tr>
+										<td><code>disabled</code></td>
+										<td>N/A</td>
+										<td>Disables the picker waktu, preventing any interaction.</td>
+									</tr>
+									<tr>
+										<td><code>required</code></td>
+										<td>N/A</td>
+										<td>Marks the component as required during form validation.</td>
+									</tr>
+									<tr>
+										<td><code>min</code></td>
+										<td><code>String (HH:MM)</code></td>
+										<td>Lower time boundary validation constraint.</td>
+									</tr>
+									<tr>
+										<td><code>max</code></td>
+										<td><code>String (HH:MM)</code></td>
+										<td>Upper time boundary validation constraint.</td>
+									</tr>
+									<tr>
+										<td><code>data-tabindex</code></td>
+										<td><code>Number</code></td>
+										<td>Sets the native tabindex on the final display element for keyboard
+											navigation.
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
 
-				<!-- Properties Section -->
-				<section id="properties" class="doc-section">
-					<h2>Properties</h2>
-					<div class="api-table-wrapper">
-						<table class="api-table">
-							<thead>
-								<tr>
-									<th>Property</th>
-									<th>Type</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><code>value</code></td>
-									<td><code>String</code></td>
-									<td>Get or set the current time value. Returns time string in 24-hour format
-										(<code>HH:MM</code>).</td>
-								</tr>
-								<tr>
-									<td><code>min</code></td>
-									<td><code>String</code></td>
-									<td>Get or set the minimum valid time limit boundary (<code>HH:MM</code>).</td>
-								</tr>
-								<tr>
-									<td><code>max</code></td>
-									<td><code>String</code></td>
-									<td>Get or set the maximum valid time limit boundary (<code>HH:MM</code>).</td>
-								</tr>
-								<tr>
-									<td><code>InEditMode</code></td>
-									<td><code>Boolean</code></td>
-									<td>Gets the current edit/readonly state of the component (Read-only). To modify,
-										use <code>setEditingMode()</code>.</td>
-								</tr>
-								<tr>
-									<td><code>disabled</code></td>
-									<td><code>Boolean</code></td>
-									<td>Gets or sets the component disabled state.</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
+					<!-- Properties Section -->
+					<section id="properties" class="doc-section">
+						<h2>Properties</h2>
+						<div class="api-table-wrapper">
+							<table class="api-table">
+								<thead>
+									<tr>
+										<th>Property</th>
+										<th>Type</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>value</code></td>
+										<td><code>String</code></td>
+										<td>Get or set the current time value. Returns time string in 24-hour format
+											(<code>HH:MM</code>).</td>
+									</tr>
+									<tr>
+										<td><code>min</code></td>
+										<td><code>String</code></td>
+										<td>Get or set the minimum valid time limit boundary (<code>HH:MM</code>).</td>
+									</tr>
+									<tr>
+										<td><code>max</code></td>
+										<td><code>String</code></td>
+										<td>Get or set the maximum valid time limit boundary (<code>HH:MM</code>).</td>
+									</tr>
+									<tr>
+										<td><code>InEditMode</code></td>
+										<td><code>Boolean</code></td>
+										<td>Gets the current edit/readonly state of the component (Read-only). To
+											modify,
+											use <code>setEditingMode()</code>.</td>
+									</tr>
+									<tr>
+										<td><code>disabled</code></td>
+										<td><code>Boolean</code></td>
+										<td>Gets or sets the component disabled state.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
 
-				<!-- Methods Section -->
-				<section id="methods" class="doc-section">
-					<h2>Methods</h2>
-					<div class="api-table-wrapper">
-						<table class="api-table">
-							<thead>
-								<tr>
-									<th>Method</th>
-									<th>Arguments</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><code>constructor(id)</code></td>
-									<td><code>(id: String)</code></td>
-									<td>Creates and binds a new <code>Timepicker</code> instance to the HTML element
-										using the specified ID.</td>
-								</tr>
-								<tr>
-									<td><code>setEditingMode(ineditmode)</code></td>
-									<td><code>(ineditmode: Boolean)</code></td>
-									<td>Toggles editing mode. Setting to <code>false</code> locks the component as
-										read-only and clears errors.</td>
-								</tr>
-								<tr>
-									<td><code>suspend(doSuspend)</code></td>
-									<td><code>(doSuspend: Boolean)</code></td>
-									<td>Suspends or reactivates input interaction.</td>
-								</tr>
-								<tr>
-									<td><code>isSuspended()</code></td>
-									<td><code>()</code></td>
-									<td>Checks if the component is suspended.</td>
-								</tr>
-								<tr>
-									<td><code>newData(initialvalue)</code></td>
-									<td><code>(initialvalue: String)</code></td>
-									<td>Initializes the input with a new value (defaults to '00:00') and resets change
-										detection states.</td>
-								</tr>
-								<tr>
-									<td><code>getLastValue()</code></td>
-									<td><code>()</code></td>
-									<td>Returns the last committed/saved value string.</td>
-								</tr>
-								<tr>
-									<td><code>isChanged()</code></td>
-									<td><code>()</code></td>
-									<td>Checks if the current <code>value</code> differs from the last saved state
-										value.</td>
-								</tr>
-								<tr>
-									<td><code>focus()</code></td>
-									<td><code>()</code></td>
-									<td>Programmatically shifts focus onto the time field display element.</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
+					<!-- Methods Section -->
+					<section id="methods" class="doc-section">
+						<h2>Methods</h2>
+						<div class="api-table-wrapper">
+							<table class="api-table">
+								<thead>
+									<tr>
+										<th>Method</th>
+										<th>Arguments</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>constructor(id)</code></td>
+										<td><code>(id: String)</code></td>
+										<td>Creates and binds a new <code>Timepicker</code> instance to the HTML element
+											using the specified ID.</td>
+									</tr>
+									<tr>
+										<td><code>setEditingMode(ineditmode)</code></td>
+										<td><code>(ineditmode: Boolean)</code></td>
+										<td>Toggles editing mode. Setting to <code>false</code> locks the component as
+											read-only and clears errors.</td>
+									</tr>
+									<tr>
+										<td><code>suspend(doSuspend)</code></td>
+										<td><code>(doSuspend: Boolean)</code></td>
+										<td>Suspends or reactivates input interaction.</td>
+									</tr>
+									<tr>
+										<td><code>isSuspended()</code></td>
+										<td><code>()</code></td>
+										<td>Checks if the component is suspended.</td>
+									</tr>
+									<tr>
+										<td><code>newData(initialvalue)</code></td>
+										<td><code>(initialvalue: String)</code></td>
+										<td>Initializes the input with a new value (defaults to '00:00') and resets
+											change
+											detection states.</td>
+									</tr>
+									<tr>
+										<td><code>getLastValue()</code></td>
+										<td><code>()</code></td>
+										<td>Returns the last committed/saved value string.</td>
+									</tr>
+									<tr>
+										<td><code>isChanged()</code></td>
+										<td><code>()</code></td>
+										<td>Checks if the current <code>value</code> differs from the last saved state
+											value.</td>
+									</tr>
+									<tr>
+										<td><code>focus()</code></td>
+										<td><code>()</code></td>
+										<td>Programmatically shifts focus onto the time field display element.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
 
-			</main>
+				</main>
+			</div>
+
+			<!-- Footer -->
+			<%-include('_footer.ejs')%>
 		</div>
 
-		<!-- Footer -->
-		<%-include('_footer.ejs')%>
-	</div>
+		<!-- Interactive page scripting -->
+		<script type="module">
+			window.addEventListener("load", async () => {
+				// Initialize component
+				const form = new $fgta5.Form('myform');
+				const tpk = form.Inputs.playground_timepicker
 
-	<!-- Interactive page scripting -->
-	<script type="module">
-		window.addEventListener("load", async () => {
-			// Initialize component
-			const form = new $fgta5.Form('myform');
-			const tpk = form.Inputs.playground_timepicker
+				form.render()
 
-			form.render()
+				// UI state update elements
+				const stateValue = document.getElementById('state_value');
+				const stateEditMode = document.getElementById('state_editmode');
+				const stateLastValue = document.getElementById('state_lastvalue');
+				const stateIsChanged = document.getElementById('state_ischanged');
 
-			// UI state update elements
-			const stateValue = document.getElementById('state_value');
-			const stateEditMode = document.getElementById('state_editmode');
-			const stateLastValue = document.getElementById('state_lastvalue');
-			const stateIsChanged = document.getElementById('state_ischanged');
+				// Sync status displays
+				const updateStats = () => {
+					stateValue.innerText = JSON.stringify(tpk.value);
+					stateEditMode.innerText = tpk.InEditMode ? "true" : "false";
+					stateLastValue.innerText = JSON.stringify(tpk.getLastValue());
+					stateIsChanged.innerText = tpk.isChanged() ? "true" : "false";
+				};
 
-			// Sync status displays
-			const updateStats = () => {
-				stateValue.innerText = JSON.stringify(tpk.value);
-				stateEditMode.innerText = tpk.InEditMode ? "true" : "false";
-				stateLastValue.innerText = JSON.stringify(tpk.getLastValue());
-				stateIsChanged.innerText = tpk.isChanged() ? "true" : "false";
-			};
+				// Listen for events
+				tpk.Listener.addEventListener('changed', updateStats);
+				tpk.Nodes.Display.addEventListener('input', updateStats);
+				tpk.Nodes.Display.addEventListener('blur', updateStats);
 
-			// Listen for events
-			tpk.Listener.addEventListener('changed', updateStats);
-			tpk.Nodes.Display.addEventListener('input', updateStats);
-			tpk.Nodes.Display.addEventListener('blur', updateStats);
-
-			// Setup button control listeners
-			document.getElementById('btn_toggle_edit').addEventListener('click', () => {
-				form.lock(tpk.InEditMode)
-				updateStats();
-			});
-
-			document.getElementById('btn_set_val').addEventListener('click', () => {
-				if (tpk.InEditMode) {
-					tpk.value = "10:30";
+				// Setup button control listeners
+				document.getElementById('btn_toggle_edit').addEventListener('click', () => {
+					form.lock(tpk.InEditMode)
 					updateStats();
-				}
-			});
+				});
 
-			document.getElementById('btn_focus').addEventListener('click', () => {
-				tpk.focus();
-			});
+				document.getElementById('btn_set_val').addEventListener('click', () => {
+					if (tpk.InEditMode) {
+						tpk.value = "10:30";
+						updateStats();
+					}
+				});
 
-			document.getElementById('btn_commit').addEventListener('click', () => {
-				form.acceptChanges()
+				document.getElementById('btn_focus').addEventListener('click', () => {
+					tpk.focus();
+				});
+
+				document.getElementById('btn_commit').addEventListener('click', () => {
+					form.acceptChanges()
+					updateStats();
+				});
+
+				document.getElementById('btn_reset').addEventListener('click', () => {
+					form.reset()
+					updateStats();
+				});
+
+				// Initial Sync
 				updateStats();
 			});
-
-			document.getElementById('btn_reset').addEventListener('click', () => {
-				form.reset()
-				updateStats();
-			});
-
-			// Initial Sync
-			updateStats();
-		});
-	</script>
+		</script>
 </body>
 
 </html>
