@@ -33,14 +33,14 @@
 
 .fgta5-app-footer {
 	left: 0;
-	border-top: 1px solid #eee;
+	box-sizing: border-box;
 	position: fixed;
 	bottom: 0;
 	right: 0;
 
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: start;
 
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -10px inset, rgba(0, 0, 0, 0.05) 0px 4px 6px -4px inset;
 	border-top: 1px solid rgb(226, 232, 240);
@@ -53,6 +53,7 @@
 	.fgta5-app-footer {
 		font-size: 0.7rem;
 		height: 5rem;
+		padding-top: 1.2rem;
 	}
 
 	.fgta5-app-main[data-withfooter] {
@@ -62,7 +63,8 @@
 
 @media screen and (min-width: 500px) {
 	.fgta5-app-footer {
-		height: 2.5rem;
+		height: 4rem;
+		padding-top: 0.75rem;
 	}
 
 	.fgta5-app-main[data-withfooter] {
