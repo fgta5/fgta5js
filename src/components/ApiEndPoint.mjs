@@ -127,33 +127,17 @@ export default class ApiEndpoint {
 			const response = await fetch(url, opt);
 			if (!response.ok) {
 				const status = response.status
-				const statustext = response.statusText
-				const text = await response.text();
-				let errorMessage = `${status} ${statustext} : ${text}`
+				const errorText = await response.text();
+
 				if (status == 401) {
 					// belum login, hapus session login
 					sessionStorage.removeItem('login');
 					sessionStorage.removeItem('login_nexturl');
-					errorMessage = 'authentication is needed to access resource'
 				}
 
-				let apiErrorMessage = errorMessage
-				let apiErrorCode = status
-
-				try {
-					const jsonPart = errorMessage.split(' : ').slice(1).join(' : ');
-					const obj = JSON.parse(jsonPart);
-					let { code, message } = obj;    // appName, moduleName,
-					apiErrorMessage = message
-					apiErrorCode = code
-				} catch (err) {
-					apiErrorMessage = errorMessage
-					apiErrorCode = 1
-				}
-
-				const err = new Error(apiErrorMessage)
+				const err = new Error(errorText)
 				err.status = status
-				err.code = apiErrorCode || 1
+				err.code = 1
 				throw err
 			}
 
