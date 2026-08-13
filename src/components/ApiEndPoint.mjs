@@ -17,7 +17,7 @@ export default class ApiEndpoint {
 	 */
 	#headers = {
 		'Content-Type': 'application/json'
-	}	
+	}
 
 	/**
 	 * AbortController untuk membatalkan request jika diperlukan.
@@ -52,7 +52,7 @@ export default class ApiEndpoint {
 	 * Mendapatkan metode HTTP.
 	 * @returns {string}
 	 */
-	get method() {return this.#method }
+	get method() { return this.#method }
 
 	/**
 	 * Mengatur metode HTTP request.
@@ -60,7 +60,7 @@ export default class ApiEndpoint {
 	 */
 	set method(v) {
 		this.#method = v
-	}   
+	}
 
 	/**
 	 * Membatalkan request API yang sedang berjalan.
@@ -98,12 +98,12 @@ export default class ApiEndpoint {
 		const method = this.#method
 		const headers = this.#headers
 
-		if (args==null) {
-			args={}
+		if (args == null) {
+			args = {}
 		}
 
 		let body
-		if (formData==null) {
+		if (formData == null) {
 			body = JSON.stringify(args)
 		} else {
 			delete headers['Content-Type'] // fetch akan otomatis set, jika diisi akan error boundary
@@ -129,19 +129,19 @@ export default class ApiEndpoint {
 				const status = response.status
 				const statustext = response.statusText
 				const text = await response.text();
-				let errorMessage = `${status} ${statustext}: ${text}`
-				if (status==401) {
+				let errorMessage = `${status} ${statustext} : ${text}`
+				if (status == 401) {
 					// belum login, hapus session login
 					sessionStorage.removeItem('login');
 					sessionStorage.removeItem('login_nexturl');
 					errorMessage = 'authentication is needed to access resource'
-				} 
+				}
 
 				let apiErrorMessage = errorMessage
 				let apiErrorCode = status
 
 				try {
-					const jsonPart = errorMessage.split(' : ')[1];
+					const jsonPart = errorMessage.split(' : ').slice(1).join(' : ');
 					const obj = JSON.parse(jsonPart);
 					let { code, message } = obj;    // appName, moduleName,
 					apiErrorMessage = message
@@ -158,13 +158,13 @@ export default class ApiEndpoint {
 			}
 
 			const res = await response.json();
-			if (res.code!=0) {
+			if (res.code != 0) {
 				const err = new Error(res.message)
 				err.code = res.code
 				throw err
 			}
 
-			return res.result 
+			return res.result
 		} catch (err) {
 			if (err.name === "AbortError") {
 				console.warn("Request dibatalkan!");
